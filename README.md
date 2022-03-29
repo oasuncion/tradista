@@ -1,2 +1,2 @@
 # tradista
-Tradista: the first open source Post Trading Soution
+Tradista: the first open source Post Trading Solution

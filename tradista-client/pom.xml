@@ -1,0 +1,516 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>finance.tradista.app</groupId>
+		<artifactId>parent</artifactId>
+		<version>${parent.version}</version>
+		<relativePath>../TradistaParent</relativePath>
+	</parent>
+	<groupId>finance.tradista.app</groupId>
+	<artifactId>app-client</artifactId>
+	<version>${app-client.version}</version>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>bin.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.wvengen</groupId>
+				<artifactId>proguard-maven-plugin</artifactId>
+				<version>2.2.0</version>
+				<executions>
+					<execution>
+						<id>app-client</id>
+						<configuration>
+							<proguardVersion>6.1.1</proguardVersion>
+							<proguardInclude>${basedir}/proguard.conf</proguardInclude>
+							<includeDependency>true</includeDependency>
+							<options>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ai-ejb-interface-${ai-ejb-interface.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ai-ejb-interface.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ai-model-${ai-model.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ai-model.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-common-${core-common.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-common.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/app-client-${app-client.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/app-client.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/bloomberg-interface-${bloomberg-interface.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/bloomberg-interface.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-ejb-interface-${core-ejb-interface.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-ejb-interface.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-${core-gui.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-common-${core-gui-common.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-common.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-model-${core-model.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/core-model.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-client-${fx-ejb-client.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-client.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-interface-${fx-ejb-interface.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-interface.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-gui-${fx-gui.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-gui.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-model-${fx-model.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-model.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-client-${ir-ejb-client.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-client.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-interface-${ir-ejb-interface.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-interface.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-gui-${ir-gui.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-gui.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-model-${ir-model.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-model.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-client-${mm-ejb-client.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-client.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-interface-${mm-ejb-interface.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-interface.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-gui-${fx-gui.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-gui.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-model-${mm-model.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-model.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-client-${security-ejb-client.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-client.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-interface-${security-ejb-interface.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-interface.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-gui-${security-gui.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-gui.jar
+								</option>
+								<option>
+									-injars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-model-${security-model.version}.jar
+								</option>
+								<option>
+									-outjars
+								</option>
+								<option>
+									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-model.jar
+								</option>
+							</options>
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ai-ejb-interface-${ai-ejb-interface.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ai-model-${ai-model.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/app-client-${app-client.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/bloomberg-interface-${bloomberg-interface.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-common-${core-common.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-ejb-interface-${core-ejb-interface.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-${core-gui.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-common-${core-gui-common.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-model-${core-model.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-client-${fx-ejb-client.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-interface-${fx-ejb-interface.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-gui-${fx-gui.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-model-${fx-model.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-client-${ir-ejb-client.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-interface-${ir-ejb-interface.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-gui-${ir-gui.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-model-${ir-model.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-client-${mm-ejb-client.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-interface-${mm-ejb-interface.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-gui-${mm-gui.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-model-${mm-model.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-client-${security-ejb-client.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-interface-${security-ejb-interface.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-gui-${security-gui.version}.jar</injar> -->
+							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-model-${security-model.version}.jar</injar> -->
+							<!-- <inFilter>finance/tradista/**</inFilter> -->
+							<libs>
+								<lib>${java.home}/jmods/java.base.jmod</lib>
+							</libs>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.proguard</groupId>
+						<artifactId>proguard-base</artifactId>
+						<version>6.1.1</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/ai-ejb-interface-${ai-ejb-interface.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/ai-gui-${ai-gui.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/ai-model-${ai-model.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/app-client-${app-client.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/bloomberg-interface-${bloomberg-interface.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/core-common-${core-common.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/core-ejb-interface-${core-ejb-interface.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-${core-gui.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-common-${core-gui-common.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/core-model-${core-model.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-client-${fx-ejb-client.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-interface-${fx-ejb-interface.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-gui-${fx-gui.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/fx-model-${fx-model.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-client-${ir-ejb-client.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-interface-${ir-ejb-interface.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-gui-${ir-gui.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/ir-model-${ir-model.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-client-${mm-ejb-client.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-interface-${mm-ejb-interface.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-gui-${mm-gui.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/mm-model-${mm-model.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-client-${security-ejb-client.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-interface-${security-ejb-interface.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/security-gui-${security-gui.version}.jar" />
+								<delete
+									file="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}/lib/security-model-${security-model.version}.jar" />
+
+								<zip
+									destfile="${project.build.directory}/${project.build.finalName}.zip"
+									basedir="${project.build.directory}/${project.build.finalName}-bin/${project.build.finalName}" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>finance.tradista.fx</groupId>
+			<artifactId>fx-gui</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.mm</groupId>
+			<artifactId>mm-gui</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.ir</groupId>
+			<artifactId>ir-gui</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.security</groupId>
+			<artifactId>security-gui</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.ai</groupId>
+			<artifactId>ai-gui</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.core</groupId>
+			<artifactId>core-gui</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-ejb-client-bom</artifactId>
+			<version>18.0.1.Final</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.bloomberg</groupId>
+			<artifactId>bloomberg-interface</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+</project>

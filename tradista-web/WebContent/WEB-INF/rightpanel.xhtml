@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <div class="layout-rightpanel">
+        <div class="rightpanel-wrapper">
+            <div class="section-tasks today">
+                <h5>Your Tasks Today</h5>
+                <ul>
+                    <li>
+                        <p:selectBooleanCheckbox value="true" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task done">
+                            <h6>Sales reports</h6>
+                            <span>Today</span>
+                        </div>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="true" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task done">
+                            <h6>Pay invoices</h6>
+                            <span>Today</span>
+                        </div>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="false" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task">
+                            <h6>Dinner with Tony</h6>
+                            <span>Today, 22:36</span>
+                        </div>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="false" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task">
+                            <h6>Client meeting</h6>
+                            <span>Today</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <hr/>
+
+            <div class="section-tasks upcoming">
+                <h5>Upcoming</h5>
+
+                <ul>
+                    <li>
+                        <p:selectBooleanCheckbox value="false" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task">
+                            <h6>New representative meeting</h6>
+                            <span>27 May</span>
+                        </div>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="false" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task">
+                            <h6>Flight tickets</h6>
+                            <span>28 May</span>
+                        </div>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="false" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task">
+                            <h6>Generate charts</h6>
+                            <span>29 May</span>
+                        </div>
+                    </li>
+                    <li>
+                        <p:selectBooleanCheckbox value="false" onchange="onTaskCheckboxChange(this)"/>
+                        <div class="task">
+                            <h6>Delete old files</h6>
+                            <span>30 May</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function onTaskCheckboxChange(input) {
+            if (input) {
+                var inputEl = $(input);
+                var taskEl = inputEl.closest('.ui-selectbooleancheckbox').next();
+
+                if (inputEl.is(':checked'))
+                    taskEl.addClass('done');
+                else
+                    taskEl.removeClass('done');
+            }
+        }
+    </script>
+
+</ui:composition>

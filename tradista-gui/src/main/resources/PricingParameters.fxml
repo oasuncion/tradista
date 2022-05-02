@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<?import finance.tradista.core.currency.ui.view.TradistaCurrencyComboBox?>
+<?import finance.tradista.core.index.ui.view.TradistaIndexComboBox?>
+<?import finance.tradista.core.product.ui.view.TradistaProductTypeComboBox?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.171"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.core.pricing.ui.controller.PricingParameterController">
+	<columnConstraints>
+		<ColumnConstraints />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity"
+			GridPane.halignment="RIGHT">
+			<opaqueInsets>
+				<Insets />
+			</opaqueInsets>
+		</HBox>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity">
+			<children>
+				<Label styleClass="labelBold" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity"
+					text="Pricing Parameters Set">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<Label maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" text="Load by name">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<ComboBox fx:id="pricingParam" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</ComboBox>
+				<Button fx:id="load" mnemonicParsing="false" onAction="#load"
+					text="Load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="save" mnemonicParsing="false" onAction="#save"
+					text="Save">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" mnemonicParsing="false" onAction="#copy"
+					text="Copy">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="deleteButton" mnemonicParsing="false"
+					onAction="#delete" text="Delete">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="createButton" mnemonicParsing="false"
+					onAction="#create" text="Create a new Pricing Parameter Set">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#refresh"
+					text="Refresh">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+			</children>
+		</HBox>
+		<GridPane GridPane.rowIndex="1">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<VBox>
+					<children>
+						<Label fx:id="marketDataMessage" visible="false"
+							maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+							minWidth="-Infinity">
+							<VBox.margin>
+								<Insets bottom="10.0" />
+							</VBox.margin>
+						</Label>
+						<HBox>
+							<children>
+								<Label styleClass="labelBold"
+									text="Pricing Parameters Set name :">
+									<HBox.margin>
+										<Insets right="10.0" />
+									</HBox.margin>
+								</Label>
+								<Label styleClass="labelBold" fx:id="pricingParameterName" />
+							</children>
+						</HBox>
+					</children>
+				</VBox>
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+		<TabPane fx:id="pricingParamTabPane" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="2">
+			<tabs>
+				<Tab text="Definition">
+					<content>
+						<StackPane>
+							<children>
+
+								<GridPane hgap="10.0" maxHeight="-Infinity"
+									maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+									vgap="10.0">
+									<columnConstraints>
+										<ColumnConstraints />
+										<ColumnConstraints />
+										<ColumnConstraints hgrow="SOMETIMES" />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+									</rowConstraints>
+									<children>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity">
+											<children>
+												<Label maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" text="Name" />
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="1">
+											<children>
+												<Label maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" text="Quote Set">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Label>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<ComboBox fx:id="quoteSetComboBox"
+											maxWidth="-Infinity" minHeight="-Infinity"
+											minWidth="-Infinity" GridPane.columnIndex="1"
+											GridPane.rowIndex="1" />
+										<Label fx:id="name" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.columnIndex="1" />
+									</children>
+									<padding>
+										<Insets bottom="10.0" left="10.0" right="10.0"
+											top="10.0" />
+									</padding>
+								</GridPane>
+							</children>
+						</StackPane>
+					</content>
+				</Tab>
+				<Tab text="Discount Curves">
+					<content>
+						<StackPane>
+							<children>
+								<GridPane hgap="10.0" maxHeight="-Infinity"
+									maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+									vgap="10.0">
+									<columnConstraints>
+										<ColumnConstraints />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+									</rowConstraints>
+									<children>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="1">
+											<children>
+												<TradistaCurrencyComboBox
+													fx:id="currencyComboBox">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TradistaCurrencyComboBox>
+												<ComboBox fx:id="discountCurveComboBox" />
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="2">
+											<children>
+												<Button fx:id="addDiscountCurveButton"
+													maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#addDiscountCurve" text="Add">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+												<Button maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#deleteDiscountCurve" text="Delete">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<TableView fx:id="discountCurveTable"
+											editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity">
+											<columns>
+												<TableColumn fx:id="currency" text="Currency" />
+												<TableColumn fx:id="discountCurve" text="Curve" />
+											</columns>
+										</TableView>
+									</children>
+									<padding>
+										<Insets bottom="10.0" left="10.0" right="10.0"
+											top="10.0" />
+									</padding>
+								</GridPane>
+							</children>
+						</StackPane>
+					</content>
+				</Tab>
+				<Tab text="Index Curves">
+					<content>
+						<StackPane GridPane.halignment="CENTER">
+							<children>
+								<GridPane hgap="10.0" maxHeight="-Infinity"
+									maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+									vgap="10.0">
+									<columnConstraints>
+										<ColumnConstraints />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+									</rowConstraints>
+									<children>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="1">
+											<children>
+												<TradistaIndexComboBox
+													fx:id="indexComboBox">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TradistaIndexComboBox>
+												<ComboBox fx:id="indexCurveComboBox" />
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="2">
+											<children>
+												<Button fx:id="addIndexCurveButton"
+													maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#addIndexCurve" text="Add">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+												<Button maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#deleteIndexCurve" text="Delete">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<TableView fx:id="indexCurveTable" editable="true"
+											maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.halignment="CENTER">
+											<columns>
+												<TableColumn fx:id="index" text="Index" />
+												<TableColumn fx:id="indexCurve" text="Curve" />
+											</columns>
+										</TableView>
+									</children>
+									<padding>
+										<Insets bottom="10.0" left="10.0" right="10.0"
+											top="10.0" />
+									</padding>
+								</GridPane>
+							</children>
+						</StackPane>
+					</content>
+				</Tab>
+				<Tab text="FX Curves">
+					<content>
+						<StackPane>
+							<children>
+								<GridPane hgap="10.0" maxHeight="-Infinity"
+									maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+									vgap="10.0">
+									<columnConstraints>
+										<ColumnConstraints />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+									</rowConstraints>
+									<children>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="1">
+											<children>
+												<TradistaCurrencyComboBox
+													fx:id="primaryCurrencyComboBox">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TradistaCurrencyComboBox>
+												<TradistaCurrencyComboBox
+													fx:id="quoteCurrencyComboBox">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TradistaCurrencyComboBox>
+												<ComboBox fx:id="fxCurveComboBox" />
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="2">
+											<children>
+												<Button fx:id="addFXCurveButton" maxWidth="-Infinity"
+													minHeight="-Infinity" minWidth="-Infinity"
+													mnemonicParsing="false" onAction="#addFXCurve" text="Add">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+												<Button maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#deleteFXCurve" text="Delete">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<TableView fx:id="fxCurveTable" editable="true"
+											maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity">
+											<columns>
+												<TableColumn fx:id="primaryCurrency"
+													text="Primary Currency" />
+												<TableColumn fx:id="quoteCurrency"
+													text="Quote Currency" />
+												<TableColumn fx:id="fxCurve" text="Curve" />
+											</columns>
+										</TableView>
+									</children>
+									<padding>
+										<Insets bottom="10.0" left="10.0" right="10.0"
+											top="10.0" />
+									</padding>
+								</GridPane>
+							</children>
+						</StackPane>
+					</content>
+				</Tab>
+				<Tab fx:id="unrealizedPnlCalculationTab"
+					text="Unrealized PNL Calculation" />
+				<Tab fx:id="dividendYieldCurveTab" text="Dividend Yield Curves" />
+				<Tab fx:id="fxVolatilitySurfaceTab" text="FX Volatility Surface" />
+				<Tab fx:id="equityOptionVolatilitySurfaceTab"
+					text="Equity Option Volatility Surface" />
+				<Tab fx:id="irSwapOptionVolatilitySurfaceTab"
+					text="IR Swap Option Volatility Surface" />
+				<Tab text="Pricing Parameters Set">
+					<content>
+						<StackPane>
+							<children>
+								<GridPane hgap="10.0" maxHeight="-Infinity"
+									maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+									vgap="10.0">
+									<columnConstraints>
+										<ColumnConstraints />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+									</rowConstraints>
+									<children>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="1">
+											<children>
+												<TextField fx:id="nameTextField"
+													maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TextField>
+												<TextField fx:id="valueTextField"
+													maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TextField>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="2">
+											<children>
+												<Button maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#addParam" text="Add">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+												<Button maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#deleteParam" text="Delete">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<TableView fx:id="pricingParamTable" editable="true"
+											maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity">
+											<columns>
+												<TableColumn fx:id="paramName" text="Name" />
+												<TableColumn fx:id="paramValue" text="Value" />
+											</columns>
+										</TableView>
+									</children>
+									<padding>
+										<Insets bottom="10.0" left="10.0" right="10.0"
+											top="10.0" />
+									</padding>
+								</GridPane>
+							</children>
+						</StackPane>
+					</content>
+				</Tab>
+				<Tab text="Custom Pricers">
+					<content>
+						<StackPane>
+							<children>
+								<GridPane hgap="10.0" maxHeight="-Infinity"
+									maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+									vgap="10.0">
+									<columnConstraints>
+										<ColumnConstraints />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+										<RowConstraints vgrow="SOMETIMES" />
+									</rowConstraints>
+									<children>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="1">
+											<children>
+												<TradistaProductTypeComboBox
+													fx:id="productTypeComboBox" maxWidth="-Infinity"
+													minHeight="-Infinity" minWidth="-Infinity">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TradistaProductTypeComboBox>
+												<TextField fx:id="customPricerTextField"
+													maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</TextField>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											GridPane.rowIndex="2">
+											<children>
+												<Button maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#addCustomPricer" text="Add">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+												<Button maxWidth="-Infinity" minHeight="-Infinity"
+													minWidth="-Infinity" mnemonicParsing="false"
+													onAction="#deleteCustomPricer" text="Delete">
+													<HBox.margin>
+														<Insets right="10.0" />
+													</HBox.margin>
+												</Button>
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+										</HBox>
+										<TableView fx:id="customPricerTable" editable="true"
+											maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity">
+											<columns>
+												<TableColumn fx:id="productType"
+													text="Product Type" />
+												<TableColumn fx:id="customPricer" text="Pricer" />
+											</columns>
+										</TableView>
+									</children>
+									<padding>
+										<Insets bottom="10.0" left="10.0" right="10.0"
+											top="10.0" />
+									</padding>
+								</GridPane>
+							</children>
+						</StackPane>
+					</content>
+				</Tab>
+			</tabs>
+		</TabPane>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</GridPane>

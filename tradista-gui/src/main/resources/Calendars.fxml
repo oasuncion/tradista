@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.60"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.core.calendar.ui.controller.CalendarsController">
+	<columnConstraints>
+		<ColumnConstraints />
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity">
+			<children>
+				<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Calendars">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<Label text="Load by code:">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<ComboBox fx:id="load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</ComboBox>
+				<Button mnemonicParsing="false" onAction="#load" text="Load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#save" text="Save">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#copy" text="Copy">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#clear" text="New">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+			</children>
+			<opaqueInsets>
+				<Insets />
+			</opaqueInsets>
+		</HBox>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity"
+			GridPane.halignment="CENTER" GridPane.rowIndex="1">
+			<children>
+				<GridPane hgap="10.0" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					vgap="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+					<columnConstraints>
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+					</rowConstraints>
+					<children>
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Code" />
+						<TextField fx:id="code" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnIndex="1" />
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Name"
+							GridPane.rowIndex="1" />
+						<TextField fx:id="name" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnIndex="1" GridPane.rowIndex="1" />
+						<CheckBox fx:id="monday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="Monday" GridPane.rowIndex="3" />
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Week end"
+							GridPane.rowIndex="2" />
+						<CheckBox fx:id="tuesday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="Tuesday" GridPane.rowIndex="4" />
+						<CheckBox fx:id="wednesday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="Wednesday" GridPane.rowIndex="5" />
+						<CheckBox fx:id="thursday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="Thursday" GridPane.columnIndex="1"
+							GridPane.rowIndex="3" />
+						<CheckBox fx:id="friday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="Friday" GridPane.columnIndex="1"
+							GridPane.rowIndex="4" />
+						<CheckBox fx:id="saturday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="Saturday" GridPane.columnIndex="1"
+							GridPane.rowIndex="5" />
+						<CheckBox fx:id="sunday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="Sunday" GridPane.rowIndex="6" />
+						<Label fx:id="codeLabel" visible="false"
+							GridPane.columnIndex="1" />
+					</children>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</GridPane>
+				<GridPane hgap="10.0" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					vgap="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+					<columnConstraints>
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+						<ColumnConstraints />
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+					</rowConstraints>
+					<children>
+						<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Holidays"
+							GridPane.columnIndex="2"/>
+						<ListView fx:id="holidaysList" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnIndex="2" GridPane.rowIndex="1">
+						</ListView>
+						<DatePicker fx:id="holiday" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnIndex="2" GridPane.rowIndex="2" />
+						<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnIndex="2" GridPane.rowIndex="3">
+							<children>
+								<Button maxHeight="-Infinity" maxWidth="-Infinity"
+									minHeight="-Infinity" minWidth="-Infinity"
+									mnemonicParsing="false" onAction="#addHoliday" text="Add">
+									<HBox.margin>
+										<Insets right="10.0" />
+									</HBox.margin>
+								</Button>
+								<Button maxHeight="-Infinity" maxWidth="-Infinity"
+									minHeight="-Infinity" minWidth="-Infinity"
+									mnemonicParsing="false" onAction="#deleteHoliday" text="Delete">
+									<HBox.margin>
+										<Insets right="10.0" />
+									</HBox.margin>
+								</Button>
+							</children>
+						</HBox>
+					</children>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</GridPane>
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</HBox>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</GridPane>

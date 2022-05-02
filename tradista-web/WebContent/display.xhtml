@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Display</ui:define>
+
+    <ui:define name="viewname">
+        <li>UTILITIES</li>
+        <li><i class="pi pi-chevron-right"></i></li>
+        <li>
+            <p:link outcome="/display">DISPLAY</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="card">
+                    <h:form>
+                        <h4>Display</h4>
+                        <p>Efficiently configure the display of the component with <a
+                                href="https://github.com/primefaces/primeflex">PrimeFlex</a> display utilities.</p>
+
+                        <h5>Inline</h5>
+                        <p:inputText styleClass="p-mr-2 p-d-inline"/>
+                        <p:inputText styleClass="p-d-inline"/>
+
+                        <h5>Block</h5>
+                        <p:inputText styleClass="p-mb-2 p-d-block"/>
+                        <p:inputText styleClass="p-d-block"/>
+
+                        <h5>Visible on a Small Screen</h5>
+                        <p>Resize to view.</p>
+                        <p:commandButton type="button" icon="pi pi-bars" styleClass="p-d-md-none"/>
+
+                        <h5>Hidden on a Small Screen</h5>
+                        <p>Resize to hide.</p>
+                        <p:commandButton type="button" icon="pi pi-search"
+                                         styleClass="ui-button-success p-d-none p-d-md-inline-flex"/>
+
+                        <h5>Visible to Print, Invisible for Screen</h5>
+                        <p class="p-d-none p-print-block">Only visible when printed.</p>
+
+                        <h5>Visible to Screen, Invisible for Print</h5>
+                        <p class="p-d-block p-print-none">Not available for printing.</p>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

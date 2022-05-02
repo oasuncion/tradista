@@ -1,0 +1,220 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Test Page</ui:define>
+
+	<ui:define name="viewname">Test Page</ui:define>
+
+	<ui:define name="content">
+
+
+		<!-- <h:body
+	style="color:#dddddd;
+ background-color:#4d4d4d;
+ background:-moz-radial-gradient(50% 75%,circle,#676767,#343434);
+ background:-webkit-radial-gradient(50% 75%,circle,#676767,#343434);
+ background:-o-radial-gradient(50% 75%,circle,#676767,#343434);
+ background:-ms-radial-gradient(50% 75%,circle,#676767,#343434);
+ background:radial-gradient(50% 75%,circle,#676767,#343434);">-->
+
+		<div class="card">
+		
+			<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+	
+			
+			<p:dashboard id="dashboard" model="#{dashboardView.model}"
+				class="p-grid" reordering="false">
+
+				<p:ajax event="reorder" listener="#{dashboardView.handleReorder}"
+					update="msgs" />
+
+				<p:panel id="tradeBooking" header="Trade Booking" style="height:650px">
+
+					<h:form>
+						
+							<p:messages id="messages" showDetail="true" closable="true">
+								<p:autoUpdate />
+							</p:messages>
+							<p:panelGrid columns="2">
+								
+										<p:outputLabel value="Id" class="label" />
+									
+										<p:outputLabel value="#{equityTradeView.id}" />
+									
+										<p:outputLabel value="Equity" class="label" />
+									
+										<p:selectOneMenu id="a" value="#{equityTradeView.equity}"
+											converter="#{equityTradeView.equityConverter}"
+											appendTo="@this" styleClass="TradistaOneMenu">
+											<f:selectItems value="#{equityTradeView.allEquities}" />
+										</p:selectOneMenu>
+									
+										<p:outputLabel value="Direction" class="label" />
+									
+										<p:selectOneMenu id="b" value="#{equityTradeView.direction}"
+											converter="#{equityTradeView.directionConverter}"
+											styleClass="TradistaOneMenu">
+											<f:selectItems value="#{equityTradeView.allDirections}" />
+										</p:selectOneMenu>
+									
+									
+										<p:outputLabel value="Price" class="label" />
+									
+										<p:inputNumber value="#{equityTradeView.price}" id="cc" styleClass="TradistaInput"/>
+									
+										<p:outputLabel value="Quantity" class="label" />
+									
+										<p:inputNumber value="#{equityTradeView.quantity}"
+											decimalPlaces="0" id="c" styleClass="TradistaInput" />
+									
+										<p:outputLabel value="Trade Date" class="label" />
+									
+										<p:datePicker value="#{equityTradeView.tradeDate}" id="d"
+											pattern="dd/MM/yyyy" styleClass="TradistaInput"/>
+									
+										<p:outputLabel value="Settlement Date" class="label" />
+									
+										<p:datePicker value="#{equityTradeView.settlementDate}" id="e"
+											pattern="dd/MM/yyyy" styleClass="TradistaInput"/>
+									
+										<p:outputLabel value="Currency" class="label" />
+									
+										<p:selectOneMenu id="f" value="#{equityTradeView.currency}"
+											converter="#{equityTradeView.currencyConverter}"
+											styleClass="TradistaOneMenu">
+											<f:selectItems value="#{equityTradeView.allCurrencies}" />
+										</p:selectOneMenu>
+									
+										<p:outputLabel value="Counterparty" class="label" />
+									
+										<p:selectOneMenu
+											value="#{equityTradeView.counterparty}"
+											converter="#{equityTradeView.legalEntityConverter}"
+											styleClass="TradistaOneMenu">
+											<f:selectItems value="#{equityTradeView.allCounterparties}" />
+										</p:selectOneMenu>
+									
+										<p:outputLabel value="Book" class="label" />
+									
+										<p:outputLabel value="#{equityTradeView.book}" 
+											converter="#{equityTradeView.bookConverter}" />
+									
+								<f:facet name="footer">
+									
+										<p:commandButton value="Save" styleClass="rounded-button"
+											update="@form :tradesListForm:tradesListDataTable :bookDonutChart :inventoryLineChart">
+											<f:actionListener binding="#{equityTradeView.save()}" />
+											<f:actionListener binding="#{tradesListView.loadTrades()}" />
+											<f:actionListener binding="#{bookView.loadBook()}" />
+											<f:actionListener binding="#{inventoryView.loadInventory()}" />
+										</p:commandButton>
+										<p:commandButton value="Copy" style="margin-left:10px"
+											styleClass="rounded-button"
+											update="@form :tradesListForm:tradesListDataTable :bookDonutChart :inventoryLineChart">
+											<f:actionListener binding="#{equityTradeView.copy()}" />
+											<f:actionListener binding="#{tradesListView.loadTrades()}" />
+											<f:actionListener binding="#{bookView.loadBook()}" />
+											<f:actionListener binding="#{inventoryView.loadInventory()}" />
+										</p:commandButton>
+										<p:commandButton value="New" style="margin-left:10px"
+											styleClass="rounded-button" action="#{equityTradeView.clear}"
+											update="@form" />
+										<p:outputLabel value="Load by Id" style="margin-left:10px" />
+										<p:inputText value="#{equityTradeView.idToBeLoaded}"
+											style="margin-left:10px" styleClass="TradistaInput"/>
+										<p:commandButton value="Load" style="margin-left:10px"
+											styleClass="rounded-button" action="#{equityTradeView.load}"
+											update="@form" />
+									
+								</f:facet>
+							</p:panelGrid>
+						
+					</h:form>
+				</p:panel>
+
+				<p:panel id="tradesList" header="Trades" style="height:650px">
+					<h:form id="tradesListForm">
+
+						<p:dataTable id="tradesListDataTable" var="trade"
+							value="#{tradesListView.trades}" rows="10" allowUnsorting="true"
+							sortMode="single" paginator="true"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+							rowsPerPageTemplate="5,10,{ShowAll|'All'}"
+							paginatorPosition="bottom"
+							filteredValue="#{tradesListView.filteredTrades}"
+							tableStyle="table-layout: auto;" size="small">
+							<p:column headerText="Id" sortBy="#{trade.id}" sortOrder="desc"
+								filterBy="#{trade.id}">
+								<p:outputLabel value="#{trade.id}" />
+							</p:column>
+							<p:column headerText="Equity"
+								sortBy="#{trade.product.toString()}" filterBy="#{trade.product}">
+								<p:outputLabel value="#{trade.product}" />
+							</p:column>
+							<p:column headerText="Price" sortBy="#{trade.amount}"
+								filterBy="#{trade.amount}">
+								<p:outputLabel value="#{trade.amount}">
+									<f:convertNumber maxFractionDigits="2" />
+								</p:outputLabel>
+							</p:column>
+							<p:column headerText="Quantity" sortBy="#{trade.quantity}"
+								filterBy="#{trade.quantity}">
+								<p:outputLabel value="#{trade.quantity}">
+									<f:convertNumber maxFractionDigits="0" />
+								</p:outputLabel>
+							</p:column>
+							<p:column headerText="Trade Date" sortBy="#{trade.tradeDate}"
+								filterBy="#{trade.tradeDate}">
+								<p:outputLabel value="#{trade.tradeDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="localDate" />
+								</p:outputLabel>
+							</p:column>
+							<p:column headerText="Settlement Date"
+								sortBy="#{trade.settlementDate}"
+								filterBy="#{trade.settlementDate}">
+								<p:outputLabel value="#{trade.settlementDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" type="localDate" />
+								</p:outputLabel>
+							</p:column>
+							<p:column headerText="Counterparty"
+								sortBy="#{trade.counterparty.toString()}"
+								filterBy="#{trade.counterparty}">
+								<p:outputLabel value="#{trade.counterparty}" />
+							</p:column>
+							<p:column headerText="Book" sortBy="#{trade.book.toString()}"
+								filterBy="#{trade.book}">
+								<p:outputLabel value="#{trade.book}" />
+							</p:column>
+						</p:dataTable>
+
+					</h:form>
+				</p:panel>
+				
+				<p:panel id="book" header="Book" class="p-col">
+
+
+					<p:donutChart id="bookDonutChart" model="#{bookView.donutModel}" />
+
+
+				</p:panel>
+				<p:panel id="inventory" header="Inventory" class="p-col">
+
+					<p:lineChart id="inventoryLineChart"
+						model="#{inventoryView.lineModel}" />
+
+				</p:panel>
+ 			</p:dashboard> 
+	
+		</div>
+
+
+	</ui:define>
+
+</ui:composition>
+
+
+

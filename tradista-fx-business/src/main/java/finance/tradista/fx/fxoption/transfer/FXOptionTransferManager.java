@@ -1,0 +1,241 @@
+package finance.tradista.fx.fxoption.transfer;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.pricing.util.PricerUtil;
+import finance.tradista.core.trade.model.OptionTrade.SettlementType;
+import finance.tradista.core.transfer.model.CashTransfer;
+import finance.tradista.core.transfer.model.FixingError;
+import finance.tradista.core.transfer.model.Transfer;
+import finance.tradista.core.transfer.model.TransferManager;
+import finance.tradista.core.transfer.model.TransferPurpose;
+import finance.tradista.core.transfer.service.FixingErrorBusinessDelegate;
+import finance.tradista.core.transfer.service.TransferBusinessDelegate;
+import finance.tradista.fx.fxoption.messaging.FXOptionTradeEvent;
+import finance.tradista.fx.fxoption.model.FXOptionTrade;
+
+/*
+ * Copyright 2018 Olivier Asuncion
+ * 
+ * Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.    */
+
+public class FXOptionTransferManager implements TransferManager<FXOptionTradeEvent> {
+
+	protected TransferBusinessDelegate transferBusinessDelegate;
+
+	protected FixingErrorBusinessDelegate fixingErrorBusinessDelegate;
+
+	public FXOptionTransferManager() {
+		transferBusinessDelegate = new TransferBusinessDelegate();
+		fixingErrorBusinessDelegate = new FixingErrorBusinessDelegate();
+	}
+
+	@Override
+	public void createTransfers(FXOptionTradeEvent event) throws TradistaBusinessException {
+
+		FXOptionTrade trade = event.getTrade();
+		List<Transfer> transfersToBeSaved = new ArrayList<Transfer>();
+
+		if (event.getOldTrade() != null) {
+			FXOptionTrade oldTrade = event.getOldTrade();
+			// Exercise info changed, the transfer must be canceled and
+			// recreated
+			if (oldTrade.getExerciseDate() != null && oldTrade.getSettlementType().equals(SettlementType.CASH)
+					&& trade.getExerciseDate() != null && trade.getSettlementType().equals(SettlementType.CASH)) {
+				if (!oldTrade.getExerciseDate().equals(trade.getExerciseDate())
+						|| !oldTrade.getSettlementType().equals(trade.getSettlementType())
+						|| !oldTrade.getSettlementDate().isEqual(trade.getSettlementDate())
+						|| (oldTrade.isBuy() != trade.isBuy()) || (!oldTrade.getBook().equals(trade.getBook()))) {
+					List<Transfer> transfers = transferBusinessDelegate
+							.getTransfersByTradeIdAndPurpose(oldTrade.getId(), TransferPurpose.CASH_SETTLEMENT, false);
+					// if the transfer is null, it is not normal, but the
+					// process should
+					// continue.
+					if (transfers == null || transfers.isEmpty()) {
+						// TODO logs + Errors viewable in the error report ?
+					} else {
+						transfers.get(0).setStatus(Transfer.Status.CANCELED);
+						transfersToBeSaved.add(transfers.get(0));
+					}
+					transfersToBeSaved.add(createNewCashSettlementTransfer(trade));
+
+				}
+			} else {
+				// There was no exercise before but now there is one, a transfer
+				// must be created
+				if ((oldTrade.getExerciseDate() == null || oldTrade.getSettlementType().equals(SettlementType.PHYSICAL))
+						&& trade.getExerciseDate() != null && trade.getSettlementType().equals(SettlementType.CASH)) {
+					transfersToBeSaved.add(createNewCashSettlementTransfer(trade));
+				}
+				// There was an exercise before but not anymore, the transfer
+				// must be canceled
+				if (oldTrade.getExerciseDate() != null && oldTrade.getSettlementType().equals(SettlementType.CASH)
+						&& (trade.getExerciseDate() == null
+								|| trade.getSettlementType().equals(SettlementType.PHYSICAL))) {
+					List<Transfer> transfers = transferBusinessDelegate
+							.getTransfersByTradeIdAndPurpose(oldTrade.getId(), TransferPurpose.CASH_SETTLEMENT, false);
+					// if the transfer is null, it is not normal, but the
+					// process should
+					// continue.
+					if (transfers == null || transfers.isEmpty()) {
+						// TODO logs + Errors viewable in the error report ?
+					} else {
+						transfers.get(0).setStatus(Transfer.Status.CANCELED);
+						transfersToBeSaved.add(transfers.get(0));
+					}
+				}
+			}
+			if (!oldTrade.getCurrency().equals(trade.getCurrency())
+					|| oldTrade.getAmount().compareTo(trade.getAmount()) != 0
+					|| !oldTrade.getSettlementDate().isEqual(trade.getSettlementDate())
+					|| (oldTrade.isBuy() != trade.isBuy()) || (!oldTrade.getBook().equals(trade.getBook()))) {
+				List<Transfer> transfers = transferBusinessDelegate.getTransfersByTradeIdAndPurpose(oldTrade.getId(),
+						TransferPurpose.PREMIUM, false);
+				// if the transfer is null, it is not normal, but the process
+				// should
+				// continue.
+				if (transfers == null || transfers.isEmpty()) {
+					// TODO logs + Errors viewable in the error report ?
+				} else {
+					transfers.get(0).setStatus(Transfer.Status.CANCELED);
+					transfersToBeSaved.add(transfers.get(0));
+				}
+				transfersToBeSaved.add(createNewPremiumTransfer(trade));
+
+			}
+		} else {
+			if (trade.getExerciseDate() != null && trade.getSettlementType().equals(SettlementType.CASH)) {
+				transfersToBeSaved.add(createNewCashSettlementTransfer(trade));
+			}
+			transfersToBeSaved.add(createNewPremiumTransfer(trade));
+		}
+		if (!transfersToBeSaved.isEmpty()) {
+			transferBusinessDelegate.saveTransfers(transfersToBeSaved);
+		}
+	}
+
+	private CashTransfer createNewCashSettlementTransfer(FXOptionTrade trade) throws TradistaBusinessException {
+		CashTransfer cashSettlementTransfer = new CashTransfer();
+		cashSettlementTransfer.setCreationDateTime(LocalDateTime.now());
+		cashSettlementTransfer.setFixingDateTime(trade.getExerciseDate().atStartOfDay());
+		cashSettlementTransfer.setSettlementDate(trade.getUnderlyingSettlementDate());
+		cashSettlementTransfer.setPurpose(TransferPurpose.CASH_SETTLEMENT);
+		cashSettlementTransfer.setStatus(Transfer.Status.UNKNOWN);
+		cashSettlementTransfer.setTrade(trade);
+		cashSettlementTransfer.setBook(trade.getBook());
+		cashSettlementTransfer.setCurrency(trade.getUnderlying().getCurrencyOne());
+
+		return cashSettlementTransfer;
+	}
+
+	private CashTransfer createNewPremiumTransfer(FXOptionTrade trade) throws TradistaBusinessException {
+		CashTransfer premiumTransfer = new CashTransfer();
+		premiumTransfer.setCreationDateTime(LocalDateTime.now());
+		premiumTransfer.setFixingDateTime(LocalDateTime.now());
+		premiumTransfer.setSettlementDate(trade.getSettlementDate());
+		premiumTransfer.setPurpose(TransferPurpose.PREMIUM);
+		premiumTransfer.setStatus(Transfer.Status.KNOWN);
+		premiumTransfer.setTrade(trade);
+		premiumTransfer.setBook(trade.getBook());
+		premiumTransfer.setAmount(trade.getAmount());
+		premiumTransfer.setCurrency(trade.getCurrency());
+		if (trade.isBuy()) {
+			premiumTransfer.setDirection(Transfer.Direction.PAY);
+		} else {
+			premiumTransfer.setDirection(Transfer.Direction.RECEIVE);
+		}
+
+		return premiumTransfer;
+	}
+
+	@Override
+	public void fixCashTransfer(CashTransfer transfer, long quoteSetId) throws TradistaBusinessException {
+		/**
+		 * We will calculate the cash settlement after exercise of the option. It is the
+		 * primary amount of the underlying * (fx rate as of Exercise date - strike)
+		 */
+		FXOptionTrade fxOptionTrade = (FXOptionTrade) transfer.getTrade();
+		BigDecimal fxRate = PricerUtil.getFXClosingRate(fxOptionTrade.getUnderlying().getCurrency(),
+				fxOptionTrade.getUnderlying().getCurrencyOne(), fxOptionTrade.getExerciseDate(), quoteSetId);
+		if (fxRate == null) {
+			FixingError fixingError = new FixingError();
+			fixingError.setCashTransfer(transfer);
+			fixingError.setErrorDate(LocalDateTime.now());
+			String errorMsg = String.format(
+					"Transfer %n cannot be fixed. Impossible to get the %s/%s FX closing rate as of %tD in QuoteSet %s.",
+					transfer.getId(), fxOptionTrade.getUnderlying().getCurrency(),
+					fxOptionTrade.getUnderlying().getCurrencyOne(), transfer.getFixingDateTime(), quoteSetId);
+			fixingError.setMessage(errorMsg);
+			fixingError.setStatus(finance.tradista.core.error.model.Error.Status.UNSOLVED);
+			List<FixingError> errors = new ArrayList<FixingError>(1);
+			errors.add(fixingError);
+			fixingErrorBusinessDelegate.saveFixingErrors(errors);
+			throw new TradistaBusinessException(errorMsg);
+		}
+		BigDecimal ratesDiff = fxOptionTrade.getStrike().subtract(fxRate);
+		BigDecimal amount = fxOptionTrade.getUnderlying().getAmountOne().multiply(ratesDiff);
+		if (amount.signum() == 0) {
+			// No transfer
+			transferBusinessDelegate.deleteTransfer(transfer.getId());
+			return;
+			// TODO add a warn somewhere ?
+		}
+		Transfer.Direction direction;
+		if (fxOptionTrade.isBuy()) {
+			if (fxOptionTrade.isCall()) {
+				if (amount.signum() > 0) {
+					direction = Transfer.Direction.RECEIVE;
+				} else {
+					direction = Transfer.Direction.PAY;
+					amount = amount.negate();
+				}
+			} else {
+				if (amount.signum() > 0) {
+					direction = Transfer.Direction.PAY;
+				} else {
+					direction = Transfer.Direction.RECEIVE;
+					amount = amount.negate();
+				}
+			}
+		} else {
+			if (fxOptionTrade.isCall()) {
+				if (amount.signum() > 0) {
+					direction = Transfer.Direction.PAY;
+				} else {
+					direction = Transfer.Direction.RECEIVE;
+					amount = amount.negate();
+				}
+			} else {
+				if (amount.signum() > 0) {
+					direction = Transfer.Direction.RECEIVE;
+				} else {
+					direction = Transfer.Direction.PAY;
+					amount = amount.negate();
+				}
+			}
+		}
+		transfer.setDirection(direction);
+		transfer.setAmount(amount);
+		transferBusinessDelegate.saveTransfer(transfer);
+	}
+
+}

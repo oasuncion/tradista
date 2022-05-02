@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.60"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.core.exchange.ui.controller.ExchangesController">
+	<columnConstraints>
+		<ColumnConstraints />
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1">
+			<children>
+				<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Exchanges">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<Label text="Load by code:">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<ComboBox fx:id="load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</ComboBox>
+				<Button mnemonicParsing="false" onAction="#load" text="Load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#save" text="Save">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#copy" text="Copy">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#clear" text="New">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#refresh"
+					text="Refresh">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+			</children>
+			<opaqueInsets>
+				<Insets />
+			</opaqueInsets>
+		</HBox>
+		<GridPane hgap="10.0" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			vgap="10.0" GridPane.columnIndex="1"
+			GridPane.halignment="CENTER" GridPane.rowIndex="1">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="-Infinity" />
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="-Infinity" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Code" />
+				<TextField fx:id="code" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					GridPane.columnIndex="1" />
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Name"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="name" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<CheckBox fx:id="isOtc" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					mnemonicParsing="false" text="Is OTC" GridPane.rowIndex="3" />
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Calendar"
+					GridPane.rowIndex="2" />
+				<ComboBox fx:id="calendar" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Label fx:id="codeLabel" visible="false"
+					GridPane.columnIndex="1" />
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</GridPane>

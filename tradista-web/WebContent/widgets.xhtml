@@ -1,0 +1,810 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Widgets</ui:define>
+
+    <ui:define name="viewname">
+        <li>UTILITIES</li>
+        <li><i class="pi pi-angle-right"/></li>
+        <li>
+            <p:link outcome="/widgets">WIDGETS</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="head">
+        <h:outputScript name="js/chart.js" library="demo" />
+        <script type="text/javascript">
+            $(function () {
+                var testimonials = $('.testimonials-content');
+                $('.point').on('click', function (e) {
+                    var point = $(this);
+
+                    point.siblings('.active-point').removeClass('active-point');
+                    point.addClass('active-point');
+
+                    if (point.hasClass('point-1')) {
+                        testimonials.css('transform', 'translate3d(0, 0, 0)');
+                    } else if (point.hasClass('point-2')) {
+                        testimonials.css('transform', 'translate3d(-100%, 0, 0)');
+                    } else if (point.hasClass('point-3')) {
+                        testimonials.css('transform', 'translate3d(-200%, 0, 0)');
+                    }
+
+                    e.preventDefault();
+                });
+
+                var dataSet = [
+                    [2, 7, 20, 9, 16, 9, 5],
+                    [2, 4, 9, 20, 16, 12, 20],
+                ];
+                var dataSet2 = [
+                    [2, 17, 7, 15, 4, 20, 8],
+                    [2, 2, 20, 4, 17, 16, 12]
+                ];
+
+                $('#order-tabs-container > .order-tab').on('click', function() {
+                    var el = $(this);
+                    el.addClass('order-tab-active').siblings('.order-tab-active').removeClass('order-tab-active');
+                    ordersChart.data.datasets[0].data = dataSet[parseInt(el.data('index'))];
+                    ordersChart.data.datasets[1].data = dataSet2[parseInt(el.data('index'))];
+                    ordersChart.data.datasets[0].label = el.data('label');
+                    ordersChart.data.datasets[0].borderColor = el.data('stroke');
+                    ordersChart.update();
+                });
+
+                var ordersChart = new Chart(document.getElementById("order-chart").getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September"],
+                        datasets: [{
+                            label: 'Revenue',
+                            data:     [31, 83, 69, 29, 62, 25, 59, 26, 46],
+                            borderColor: [
+                                '#00acac',
+                            ],
+                            borderWidth: 2,
+                            fill: false,
+                            borderDash:[3,6],
+                        }, {
+                            label: 'Cost',
+                            data:     [67, 98, 27, 88, 38, 3, 22, 60, 56],
+                            borderColor: [
+                                '#f1b263',
+                            ],
+                            backgroundColor: [
+                                'rgba(241, 178, 99, .07)',
+                            ],
+                            borderWidth: 2,
+                            fill: true,
+                            pointRadius: 3,
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: '#A0A7B5'
+                            }
+                        },
+                        responsive: true,
+                        hover: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    fontColor: '#A0A7B5'
+                                },
+                                gridLines: {
+                                    color:  'rgba(160, 167, 181, .3)',
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    fontColor: '#A0A7B5'
+                                },
+                                gridLines: {
+                                    color:  'rgba(160, 167, 181, .3)',
+                                }
+                            }],
+                        }
+                    }
+                });
+
+                var likeChart = new Chart(document.getElementById("like-chart").getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                        datasets: [{
+                            label: 'Like',
+                            data: [20, 40, 20, 70, 20, 49, 30],
+                            backgroundColor:'#f16383',
+                            borderWidth: 0,
+                            fill: false,
+                        }, {
+                            label: 'Dislike',
+                            data: [5, 19,10, 10, 22, 14, 10],
+                            backgroundColor: '#f1b263',
+                            borderWidth: 0,
+                            fill: false,
+                        },
+                        {
+                            label: 'View',
+                            data: [45, 80, 70, 90, 30, 90, 50],
+                            backgroundColor:'#02acac',
+                            borderWidth: 0,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontColor: '#c3ccdd'
+                            }
+                        },
+                        responsive: true,
+                        hover: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                display: false,
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                display: false,
+                                stacked: true
+                            }]
+                        }
+                    }
+                });
+            });
+        </script>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <div class="layout-widgets">
+                <h4>Reusable CSS widgets for your applications.</h4>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card overview-box-2 teal">
+                            <div class="overview-info">
+                                <h6>Revenue Status</h6>
+                                <h3>87363</h3>
+                            </div>
+                            <i class="pi pi-dollar"/>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card overview-box-2 orange">
+                            <div class="overview-info">
+                                <h6>Page View</h6>
+                                <h3>87363</h3>
+                            </div>
+                            <i class="pi pi-eye"/>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card overview-box-2 blue">
+                            <div class="overview-info">
+                                <h6>Bounce Rate</h6>
+                                <h3>87363</h3>
+                            </div>
+                            <i class="pi pi-compass"/>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card overview-box-2 pink">
+                            <div class="overview-info">
+                                <h6>Comments</h6>
+                                <h3>87363</h3>
+                            </div>
+                            <i class="pi pi-heart"/>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-4">
+                        <div class="card  overview-box-1 blue">
+                            <div class="card-header">
+                                <h6>Revenue Status</h6>
+                                <div class="header-buttons">
+                                    <a href="#"><i class="pi pi-arrow-up"/></a>
+                                </div>
+                            </div>
+                            <div class="overview-content">
+                                <h3>87363</h3>
+                                <div class="overview-graph">
+                                    <span style="height: 12px;"><span class="graph-tooltip">12</span></span>
+                                    <span style="height: 40px;"><span class="graph-tooltip">40</span></span>
+                                    <span style="height: 26px;"><span class="graph-tooltip">26</span></span>
+                                    <span style="height: 17px;"><span class="graph-tooltip">17</span></span>
+                                    <span style="height: 36px;"><span class="graph-tooltip">36</span></span>
+                                    <span style="height: 51px;"><span class="graph-tooltip">51</span></span>
+                                </div>
+                            </div>
+                            <div class="overview-footer ">
+                                <span><i class="pi pi-arrow-up"/> <span>55%</span> increase in today sales</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-4">
+                        <div class="card  overview-box-1 teal">
+                            <div class="card-header">
+                                <h6>Page View</h6>
+                                <div class="header-buttons">
+                                    <a href="#"><i class="pi pi-arrow-up"/></a>
+                                </div>
+                            </div>
+                            <div class="overview-content">
+                                <h3>5592</h3>
+                                <div class="overview-graph">
+                                    <span style="height: 30px;"><span class="graph-tooltip">30</span></span>
+                                    <span style="height: 43px;"><span class="graph-tooltip">43</span></span>
+                                    <span style="height: 48px;"><span class="graph-tooltip">48</span></span>
+                                    <span style="height: 40px;"><span class="graph-tooltip">40</span></span>
+                                    <span style="height: 352x;"><span class="graph-tooltip">52</span></span>
+                                    <span style="height: 18px;"><span class="graph-tooltip">18</span></span>
+                                </div>
+                            </div>
+                            <div class="overview-footer down">
+                                <span><i class="pi pi-arrow-down"/> <span>12%</span> decrease in today sales</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-4">
+                        <div class="card  overview-box-1 orange">
+                            <div class="card-header">
+                                <h6>Bounce Rate</h6>
+                                <div class="header-buttons">
+                                    <a href="#"><i class="pi pi-arrow-up"/></a>
+                                </div>
+                            </div>
+                            <div class="overview-content">
+                                <h3>55.95%</h3>
+                                <div class="overview-graph">
+                                    <span style="height: 20px;"><span class="graph-tooltip">20</span></span>
+                                    <span style="height: 23px;"><span class="graph-tooltip">23</span></span>
+                                    <span style="height: 52px;"><span class="graph-tooltip">52</span></span>
+                                    <span style="height: 18px;"><span class="graph-tooltip">18</span></span>
+                                    <span style="height: 28px;"><span class="graph-tooltip">28</span></span>
+                                    <span style="height: 42px;"><span class="graph-tooltip">42</span></span>
+                                </div>
+                            </div>
+                            <div class="overview-footer">
+                                <span><i class="pi pi-arrow-up"/> <span>6%</span> increase in today sales</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-8">
+                        <div class="card news">
+                            <div class="news-content">
+                                <h5>Air Quality Impacts Early Brain Development: Rats exposed to air pollution from
+                                    traffic at risk of neurodevelopmental disorders</h5>
+                                <span>Researchers at the University of California, Davis, have found a link between
+                                    traffic-related air pollution and an increased risk for changes in brain development
+                                    relevant to neurodevelopmental disorders. Their study, based on rodent models,
+                                    corroborates previous epidemiological evidence showing this association.</span>
+                                <div class="news-content-footer">
+                                    <span><span>June 17, 2020 </span>in <span class="category">Human and Animal Health</span></span>
+                                    <span>By <span>Trina Wood</span></span>
+                                </div>
+                            </div>
+                            <div class="news-image"></div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-4">
+                        <div class="card likes">
+                            <div class="card-header">
+                                <h6>Likes</h6>
+                            </div>
+                            <div class="likes-chart">
+                                <canvas id="like-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-12">
+                        <div class="card news-feed">
+                            <div class="p-grid p-nogutter">
+                                <div class="p-col-12 p-md-6 p-xl-3">
+                                    <div class="news-feed-card">
+                                        <i class="pi pi-palette"/>
+                                        <span class="title">Sotheby’s Reports $2.5 Billion in Sales</span>
+                                        <span class="news-feed-desc">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc laoreet vulputate laoreet. Maecenas sed sagittis lorem, sit amet egestas odio.
+                                        </span>
+                                        <a href="#">Learn More <i class="pi pi-chevron-right"/></a>
+                                    </div>
+                                </div>
+                                <div class="p-col-12 p-md-6 p-xl-3">
+                                    <div class="news-feed-card">
+                                        <i class="pi pi-list"/>
+                                        <span class="title">7 Things to Do This Weekend</span>
+                                        <span class="news-feed-desc">
+                                            Phasellus lacinia tortor massa, quis elementum est posuere sit amet. Donec gravida efficitur urna quis congue.
+                                        </span>
+                                        <a href="#">Learn More <i class="pi pi-chevron-right"/></a>
+                                    </div>
+                                </div>
+                                <div class="p-col-12 p-md-6 p-xl-3">
+                                    <div class="news-feed-card">
+                                        <i class="pi pi-heart"/>
+                                        <span class="title">New York Love Story: The Submarine Officer and the Beatles Cover Band</span>
+                                        <span class="news-feed-desc">
+                                            Proin blandit, neque sagittis pellentesque sodales, metus nunc mattis enim, a consequat ipsum odio sed massa.
+                                        </span>
+                                        <a href="#">Learn More <i class="pi pi-chevron-right"/></a>
+                                    </div>
+                                </div>
+                                <div class="p-col-12 p-md-6 p-xl-3">
+                                    <div class="news-feed-card">
+                                        <i class="pi pi-video"/>
+                                        <span class="title">The World’s Greatest Directors Have Their Own Streaming Lists</span>
+                                        <span class="news-feed-desc">
+                                            Fusce feugiat augue ac nunc imperdiet consectetur. Sed lobortis justo orci, sollicitudin faucibus lorem volutpat quis.
+                                        </span>
+                                        <a href="#">Learn More <i class="pi pi-chevron-right"/></a>
+                                    </div>
+                                </div>
+                            </div>
+                      
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-6">
+                        <div class="card timeline">
+                            <div class="card-header">
+                                <h6>Recent Activities</h6>
+                            </div>
+                            <ul>
+                                <li>
+                                    <span class="time">3 mins ago</span>
+                                    <div class="event-icon">
+                                        <i class="pi pi-dollar"/>
+                                    </div>
+                                    <div class="event-content">
+                                        <span class="event-title">New Sale</span>
+                                        <span>Richard Jones has purchased a blue t-shirt for $79.</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="time">3 mins ago</span>
+                                    <div class="event-icon">
+                                        <i class="pi pi-download"/>
+                                    </div>
+                                    <div class="event-content">
+                                        <span class="event-title">Withdrawal Initiated</span>
+                                        <span>Your request for withdrawal of $2500 has been initiated.</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="time">5 mins ago</span>
+                                    <div class="event-icon">
+                                        <i class="pi pi-question"/>
+                                    </div>
+                                    <div class="event-content">
+                                        <span class="event-title">Question Received</span>
+                                        <span>Jane Davis has posted a new question about your product.</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="time">1 day ago</span>
+                                    <div class="event-icon">
+                                        <i class="pi pi-comments"/>
+                                    </div>
+                                    <div class="event-content">
+                                        <span class="event-title">Comment Received</span>
+                                        <span>Claire Smith has upvoted your store along with a comment.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-6">
+                        <div class="card chat">
+                            <div class="card-header">
+                                <h6>Chat</h6>
+                            </div>
+                            <div class="chat-messages">
+                                <div class="chat-message-row">
+                                    <div class="chat-message">
+                                        <p:graphicImage name="images/pages/avatar-chat-1.png" library="poseidon-layout" />
+                                        <div class="chat-message-content">
+                                            <span>Chat message placeholder text comes here…</span>
+                                        </div>
+                                    </div>
+                                    <div class="chat-message-footer">
+                                        <h6>Shirai Subaru</h6>
+                                        <span>4 mins ago</span>
+                                    </div>
+                                </div>
+                                <div class="chat-message-row send">
+                                    <div class="chat-message">
+                                        <p:graphicImage name="images/pages/avatar-chat-2.png" library="poseidon-layout" />
+                                        <div class="chat-message-content">
+                                            <span>Chat message placeholder text comes here…</span>
+                                        </div>
+                                    </div>
+                                    <div class="chat-message-footer">
+                                        <h6>Wim Willems</h6>
+                                        <span>4 mins ago</span>
+                                    </div>
+                                </div>
+                                <div class="chat-message-row">
+                                    <div class="chat-message">
+                                        <p:graphicImage name="images/pages/avatar-chat-1.png" library="poseidon-layout" />
+                                        <div class="chat-message-content">
+                                            <span>Chat message placeholder text comes here…</span>
+                                        </div>
+                                    </div>
+                                    <div class="chat-message-footer">
+                                        <h6>Shirai Subaru</h6>
+                                        <span>4 mins ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <p:inputText placeholder="Write your message here..." />
+                            </div>
+                         
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-8">
+                        <div class="card map">
+                            <div class="map-image"></div>
+                            <div class="map-content">
+                                <div class="map-adjust">
+                                    <i class="pi pi-ellipsis-v"/>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <i class="pi pi-map-marker"/>
+                                        <div class="map-info">
+                                            <span><span>Order</span> #333 is delivered </span>
+                                            <span class="time">2 mins ago</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="pi pi-map-marker"/>
+                                        <div class="map-info">
+                                            <span><span>Order</span> #334 is delivered </span>
+                                            <span class="time">2 mins ago</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="pi pi-map-marker"/>
+                                        <div class="map-info">
+                                            <span><span>Order</span> #335 is delivered </span>
+                                            <span class="time">2 mins ago</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="pi pi-map-marker"/>
+                                        <div class="map-info">
+                                            <span><span>Order</span> #336 is delivered </span>
+                                            <span class="time">2 mins ago</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="pi pi-map-marker"/>
+                                        <div class="map-info">
+                                            <span><span>Order</span> #337 is delivered </span>
+                                            <span class="time">2 mins ago</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="pi pi-map-marker"/>
+                                        <div class="map-info">
+                                            <span><span>Order</span> #338 is delivered </span>
+                                            <span class="time">2 mins ago</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="pi pi-map-marker"/>
+                                        <div class="map-info">
+                                            <span><span>Order</span> #339 is delivered </span>
+                                            <span class="time">2 mins ago</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-xl-4">
+                        <div class="card profile">
+                            <div class="profile-header">
+                                <p:graphicImage name="images/pages/avatar-profil.png" library="poseidon-layout" />
+                            </div>
+                            <div class="profile-content">
+                                <h6>Adam Subaru</h6>
+                                <span>Delivery Master 👑</span>
+                                <p:commandButton type="button" value="Follow Adam" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12 p-md-8">
+                        <div class="card sale-graph">
+                            <div class="card-header">
+                                <h6>Top Products</h6>
+                            </div>
+                            <div id="order-tabs-container" class="order-tabs">
+                                <div class="order-tab order-tab-active" data-label="New Sales" data-index="0" data-stroke="#00acac" >
+                                    <h6>Current Week</h6>
+                                    <h3>$455.55</h3>
+                                </div>
+                                <div class="order-tab " data-label="Previous Sales" data-index="1" data-stroke="#2f8ee5">
+                                    <h6>Previous Week</h6>
+                                    <h3>$244.40</h3>
+                                </div>
+                            </div>
+                            <div class="overview-chart">
+                                <canvas id="order-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12 p-md-4" >
+                        <div class="pricing-card classic">
+                            <div class="pricing-header">
+                                <span class="price">$0.00</span>
+                                <h5>BEGINNER</h5>
+                                <span>Good starting point for startups</span>
+                            </div>
+                            <div class="pricing-content">
+                                <ul>
+                                    <li>Responsive</li>
+                                    <li>10 Support Tickets</li>
+                                    <li>Free Shipping</li>
+                                    <li class="not-included">Unlimited Space</li>
+                                    <li class="not-included">Push Messages</li>
+                                </ul>
+                                <p:commandButton type="button" value="TRY FREE" styleClass="ui-button-info"  />
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="p-col-12 p-md-6 p-xl-4">
+                        <div class="card product-list">
+                            <div class="card-header">
+                                <h6>Product List</h6>
+                            </div>
+                            <ul>
+                                <li>
+                                    <div class="product">
+                                        <p:graphicImage name="images/dashboard/image-product-1.png" library="demo" />
+                                        <div class="product-info">
+                                            <p>Nike Air X12</p>
+                                            <span>Sold <span>250</span> times</span>
+                                        </div>
+    
+                                    </div>
+                                    <i class="pi pi-arrow-up"/>
+                                </li>
+                                <li>
+                                    <div class="product">
+                                        <p:graphicImage name="images/dashboard/image-product-2.png" library="demo" />
+                                        <div class="product-info">
+                                            <p>Nike Sports Watch</p>
+                                            <span>Sold <span>189</span> times</span>
+                                        </div>
+    
+                                    </div>
+                                    <i class="pi pi-arrow-up"/>
+                                </li>
+                                <li>
+                                    <div class="product">
+                                        <p:graphicImage name="images/dashboard/image-product-3.png" library="demo" />
+                                        <div class="product-info">
+                                            <p>Heinz Yellow Mustard</p>
+                                            <span>Sold <span>24</span> times</span>
+                                        </div>
+    
+                                    </div>
+                                    <i class="pi pi-arrow-up"/>
+                                </li>
+                                <li>
+                                    <div class="product">
+                                        <p:graphicImage name="images/dashboard/image-product-4.png" library="demo" />
+                                        <div class="product-info">
+                                            <p>Beats Headphone</p>
+                                            <span>Sold <span>24</span> times</span>
+                                        </div>
+    
+                                    </div>
+                                    <i class="pi pi-arrow-down down"/>
+                                </li>
+                                <li>
+                                    <div class="product">
+                                        <p:graphicImage name="images/dashboard/image-product-5.png" library="demo" />
+                                        <div class="product-info">
+                                            <p>Black Racing Bike</p>
+                                            <span>Sold <span>24</span> times</span>
+                                        </div>
+    
+                                    </div>
+                                    <i class="pi pi-arrow-up"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-4">
+                        <div class="card sellers">
+                            <div class="card-header">
+                                <h6>Seller List</h6>
+                            </div>
+                            <ul>
+                                <li>
+                                    <div class="seller">
+                                        <p:graphicImage name="images/dashboard/seller-1.png" library="demo" />
+                                        <p>Hector Mariano</p>
+                                    </div>
+                                    <span>Tier 1</span>
+                                    <p:rating value="2" readonly="true" stars="3"/>
+                                    <p:menuButton icon="pi pi-ellipsis-v" styleClass="ui-button-secondary outlined-button " >
+                                        <p:menuitem value="View Profile" icon="pi pi-user"/>
+                                        <p:menuitem value="Update Profile" icon="pi pi-refresh"/>
+                                        <p:menuitem value="Delete Profile" icon="pi pi-trash"/>
+                                    </p:menuButton>
+                                </li>
+                                <li>
+                                    <div class="seller">
+                                        <p:graphicImage name="images/dashboard/seller-2.png" library="demo" />
+                                        <p>Maria Illescas</p>
+                                    </div>
+                                    <span>Tier 2</span>
+                                    <p:rating value="2" readonly="true" stars="3"/>
+                                    <p:menuButton icon="pi pi-ellipsis-v" styleClass="ui-button-secondary outlined-button " >
+                                        <p:menuitem value="View Profile" icon="pi pi-user"/>
+                                        <p:menuitem value="Update Profile" icon="pi pi-refresh"/>
+                                        <p:menuitem value="Delete Profile" icon="pi pi-trash"/>
+                                    </p:menuButton>
+                                </li>
+                                <li>
+                                    <div class="seller">
+                                        <p:graphicImage name="images/dashboard/seller-3.png" library="demo" />
+                                        <p>Ngô Hải Giang</p>
+                                    </div>
+                                    <span>Tier 3</span>
+                                    <p:rating value="1" readonly="true" stars="3"/>
+                                    <p:menuButton icon="pi pi-ellipsis-v" styleClass="ui-button-secondary outlined-button " >
+                                        <p:menuitem value="View Profile" icon="pi pi-user"/>
+                                        <p:menuitem value="Update Profile" icon="pi pi-refresh"/>
+                                        <p:menuitem value="Delete Profile" icon="pi pi-trash"/>
+                                    </p:menuButton>
+                                </li>
+                                <li>
+                                    <div class="seller">
+                                        <p:graphicImage name="images/dashboard/seller-4.png" library="demo" />
+                                        <p>Tamas Bunce</p>
+                                    </div>
+                                    <span>Tier 4</span>
+                                    <p:rating value="1" readonly="true" stars="3"/>
+                                    <p:menuButton icon="pi pi-ellipsis-v" styleClass="ui-button-secondary outlined-button " >
+                                        <p:menuitem value="View Profile" icon="pi pi-user"/>
+                                        <p:menuitem value="Update Profile" icon="pi pi-refresh"/>
+                                        <p:menuitem value="Delete Profile" icon="pi pi-trash"/>
+                                    </p:menuButton>
+                                </li>
+                                <li>
+                                    <div class="seller">
+                                        <p:graphicImage name="images/dashboard/avatar-conan.png" library="demo" />
+                                        <p>Conan Matusov</p>
+                                    </div>
+                                    <span>Tier 4</span>
+                                    <p:rating value="1" readonly="true" stars="3"/>
+                                    <p:menuButton icon="pi pi-ellipsis-v" styleClass="ui-button-secondary outlined-button " >
+                                        <p:menuitem value="View Profile" icon="pi pi-user"/>
+                                        <p:menuitem value="Update Profile" icon="pi pi-refresh"/>
+                                        <p:menuitem value="Delete Profile" icon="pi pi-trash"/>
+                                    </p:menuButton>
+                                </li>
+                                <li>
+                                    <div class="seller">
+                                        <p:graphicImage name="images/dashboard/leader-4.png" library="demo" />
+                                        <p>Maria Illescas</p>
+                                    </div>
+                                    <span>Tier 4</span>
+                                    <p:rating value="1" readonly="true" stars="3"/>
+                                    <p:menuButton icon="pi pi-ellipsis-v" styleClass="ui-button-secondary outlined-button " >
+                                        <p:menuitem value="View Profile" icon="pi pi-user"/>
+                                        <p:menuitem value="Update Profile" icon="pi pi-refresh"/>
+                                        <p:menuitem value="Delete Profile" icon="pi pi-trash"/>
+                                    </p:menuButton>
+                                </li>
+                                <li>
+                                    <div class="seller">
+                                        <p:graphicImage name="images/dashboard/leader-3.png" library="demo" />
+                                        <p>Su Hua</p>
+                                    </div>
+                                    <span>Tier 4</span>
+                                    <p:rating value="1" readonly="true" stars="3"/>
+                                    <p:menuButton icon="pi pi-ellipsis-v" styleClass="ui-button-secondary outlined-button " >
+                                        <p:menuitem value="View Profile" icon="pi pi-user"/>
+                                        <p:menuitem value="Update Profile" icon="pi pi-refresh"/>
+                                        <p:menuitem value="Delete Profile" icon="pi pi-trash"/>
+                                    </p:menuButton>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-4">
+                        <div class="card tasks">
+                            <div class="card-header">
+                                <h6>Tasks</h6>
+                            </div>
+                            <div>
+                                <div class="task task-1">
+                                    <div class="task-info">
+                                        <div class="task-name"><span>12</span> Orders to fulfill</div>
+                                        <i class="pi pi-tag"/>
+                                    </div>
+                                    <div class="task-progress">
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="task task-2">
+                                    <div class="task-info">
+                                        <div class="task-name"><span>40+</span> Payments to withdraw</div>
+                                        <i class="pi pi-money-bill"/>
+                                    </div>
+                                    <div class="task-progress">
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="task task-3">
+                                    <div class="task-info">
+                                        <div class="task-name"><span>4</span> Reports to revise</div>
+                                        <i class="pi pi-file"/>
+                                    </div>
+                                    <div class="task-progress">
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="task task-4">
+                                    <div class="task-info">
+                                        <div class="task-name"><span>6</span> Questions to respond</div>
+                                        <i class="pi pi-comment"/>
+                                    </div>
+                                    <div class="task-progress">
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="task task-5">
+                                    <div class="task-info">
+                                        <div class="task-name"><span>2</span> Chargebacks to review</div>
+                                        <i class="pi pi-check-square"/>
+                                    </div>
+                                    <div class="task-progress">
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="task task-1">
+                                    <div class="task-info">
+                                        <div class="task-name"><span>12</span> Orders to fulfill</div>
+                                        <i class="pi pi-tag"/>
+                                    </div>
+                                    <div class="task-progress">
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="task task-2">
+                                    <div class="task-info">
+                                        <div class="task-name"><span>40+</span> Payments to withdraw</div>
+                                        <i class="pi pi-money-bill"/>
+                                    </div>
+                                    <div class="task-progress">
+                                        <div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

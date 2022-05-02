@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>finance.tradista.app</groupId>
+		<artifactId>parent</artifactId>
+		<version>${parent.version}</version>
+		<relativePath>../TradistaParent</relativePath>
+	</parent>
+	<groupId>finance.tradista.security</groupId>
+	<artifactId>security-persistence</artifactId>
+	<version>${security-persistence.version}</version>
+	<dependencies>
+		<dependency>
+			<groupId>finance.tradista.core</groupId>
+			<artifactId>core-persistence</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.security</groupId>
+			<artifactId>security-ejb-client</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

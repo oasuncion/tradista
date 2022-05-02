@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0"
+	xmlns="http://javafx.com/javafx/8.0.60"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.core.marketdata.ui.controller.QuotesController">
+	<columnConstraints>
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<TableView fx:id="quotesTable" editable="true"
+			maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+			minWidth="-Infinity" GridPane.rowIndex="1">
+			<columns>
+				<TableColumn fx:id="quoteName" text="Name" />
+				<TableColumn fx:id="quoteDate" editable="true"
+					text="Date" />
+				<TableColumn fx:id="quoteType" editable="true"
+					text="Type" />
+				<TableColumn fx:id="quoteBid" editable="true" text="Bid" />
+				<TableColumn fx:id="quoteAsk" editable="true" text="Ask" />
+				<TableColumn fx:id="quoteOpen" editable="true"
+					text="Open" />
+				<TableColumn fx:id="quoteClose" editable="true"
+					text="Close" />
+				<TableColumn fx:id="quoteHigh" editable="true"
+					text="High" />
+				<TableColumn fx:id="quoteLow" editable="true" text="Low" />
+				<TableColumn fx:id="quoteLast" editable="true"
+					text="Last" />
+				<TableColumn fx:id="quoteEnteredDate" editable="true"
+					text="Entered Date" />
+				<TableColumn fx:id="quoteSourceName" editable="true"
+					text="Source Name" />
+			</columns>
+		</TableView>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity">
+			<children>
+				<Label text="Quote Date :">
+					<HBox.margin>
+						<Insets left="10.0" right="10.0" />
+					</HBox.margin>
+				</Label>
+				<DatePicker fx:id="selectedQuoteDate">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</DatePicker>
+				<Label text="Quote Set :">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<ComboBox fx:id="selectedQuoteSet">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</ComboBox>
+				<CheckBox fx:id="isRealTime" mnemonicParsing="false"
+					text="Real Time">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</CheckBox>
+			</children>
+			<GridPane.margin>
+				<Insets />
+			</GridPane.margin>
+		</HBox>
+	</children>
+</GridPane>

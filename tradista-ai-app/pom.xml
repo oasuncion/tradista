@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>finance.tradista.app</groupId>
+		<artifactId>parent</artifactId>
+		<version>${parent.version}</version>
+		<relativePath>../TradistaParent</relativePath>
+	</parent>
+	<groupId>finance.tradista.ai</groupId>
+	<artifactId>ai-app</artifactId>
+	<version>${ai-app.version}</version>
+	<packaging>ear</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>finance.tradista.ai</groupId>
+			<artifactId>ai-ejb</artifactId>
+			<version>1.0.0</version>
+			<type>ejb</type>
+		</dependency>
+	</dependencies>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-ear-plugin</artifactId>
+					<version>3.0.2</version>
+					<configuration>
+						<!-- I need to add this fileNameMapping tag because net.sf.tweety and 
+							net.sf.tweety.logics have artifacts with the same jar name: commons. This 
+							leads to classpath problems. -->
+						<outputFileNameMapping>@{groupId}@-@{artifactId}@-@{version}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+						<earSourceDirectory>EarContent</earSourceDirectory>
+						<generateApplicationXml>true</generateApplicationXml>
+						<version>8</version>
+						<defaultLibBundleDir>lib</defaultLibBundleDir>
+						<applicationName>ai-app</applicationName>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

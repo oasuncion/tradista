@@ -1,0 +1,10 @@
+connect 'jdbc:derby://localhost:1527/Tradista;create=true';
+run '../sql/MANDATE.sql';
+run '../sql/MANDATE_CURRENCY_ALLOCATION.sql';
+run '../sql/MANDATE_PRODUCT_TYPE_ALLOCATION.sql';
+run '../sql/AGENT.sql';
+run '../sql/ASSET_MANAGER_AGENT.sql';
+run '../sql/FOL_FORMULA.sql';
+run '../sql/FORMULA.sql';
+disconnect;
+exit;

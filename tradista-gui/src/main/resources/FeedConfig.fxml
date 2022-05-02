@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.core.marketdata.ui.controller.FeedConfigController">
+	<columnConstraints>
+		<ColumnConstraints hgrow="SOMETIMES" />
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<HBox GridPane.columnSpan="2">
+			<children>
+				<Label styleClass="labelBold" text="Feed configurations">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<Label text="Load by name :">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<ComboBox fx:id="feedConfig">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</ComboBox>
+				<Button fx:id="loadButton" mnemonicParsing="false"
+					onAction="#load" text="Load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="deleteButton" mnemonicParsing="false"
+					onAction="#delete" text="Delete">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="saveButton" mnemonicParsing="false"
+					onAction="#save" text="Save">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="copyButton" mnemonicParsing="false"
+					onAction="#copy" text="Copy">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="addButton" mnemonicParsing="false"
+					onAction="#create" text="Create a new feed configuration">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#refresh"
+					text="Refresh" />
+			</children>
+		</HBox>
+		<GridPane hgap="10.0" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			vgap="10.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints />
+				<RowConstraints />
+			</rowConstraints>
+			<children>
+				<Label text="QUOTE NAME" GridPane.halignment="CENTER" />
+				<Label text="QUOTE TYPE" GridPane.columnIndex="1"
+					GridPane.halignment="CENTER" />
+				<Label text="FIELD NAME" GridPane.columnIndex="2"
+					GridPane.halignment="CENTER" />
+				<Label text="BID" GridPane.columnIndex="3"
+					GridPane.halignment="CENTER" />
+				<Label text="ASK" GridPane.columnIndex="4"
+					GridPane.halignment="CENTER" />
+				<Label text="OPEN" GridPane.columnIndex="5"
+					GridPane.halignment="CENTER" />
+				<Label text="CLOSE" GridPane.columnIndex="6"
+					GridPane.halignment="CENTER" />
+				<Label text="HIGH" GridPane.columnIndex="7"
+					GridPane.halignment="CENTER" />
+				<Label text="LOW" GridPane.columnIndex="8"
+					GridPane.halignment="CENTER" />
+				<Label text="LAST" GridPane.columnIndex="9"
+					GridPane.halignment="CENTER" />
+				<TextField fx:id="quoteNameTextField"
+					GridPane.rowIndex="1" />
+				<ComboBox fx:id="quoteType" GridPane.columnIndex="1"
+					GridPane.rowIndex="1">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+				</ComboBox>
+				<TextField fx:id="fieldNameTextField"
+					GridPane.columnIndex="2" GridPane.rowIndex="1" />
+				<TextField fx:id="bidTextField" GridPane.columnIndex="3"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="askTextField" GridPane.columnIndex="4"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="openTextField" GridPane.columnIndex="5"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="closeTextField" GridPane.columnIndex="6"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="highTextField" GridPane.columnIndex="7"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="lowTextField" GridPane.columnIndex="8"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="lastTextField" GridPane.columnIndex="9"
+					GridPane.rowIndex="1" />
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+		<HBox GridPane.columnSpan="2" GridPane.rowIndex="4">
+			<children>
+				<Button fx:id="addFeedMappingValueButton"
+					mnemonicParsing="false" onAction="#addFeedMappingValue" text="Add">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="deleteFeedMappingValueButton"
+					mnemonicParsing="false" onAction="#deleteFeedMappingValue"
+					text="Delete" />
+			</children>
+		</HBox>
+		<TableView fx:id="feedMappingTable" editable="true"
+			GridPane.columnSpan="2" GridPane.rowIndex="5">
+			<columns>
+				<TableColumn fx:id="mappingQuoteName" text="Quote Name" />
+				<TableColumn fx:id="mappingQuoteType" text="Quote Type" />
+				<TableColumn fx:id="mappingFieldName" text="Field Name" />
+				<TableColumn fx:id="mappingBid" text="Bid" />
+				<TableColumn fx:id="mappingAsk" text="Ask" />
+				<TableColumn fx:id="mappingOpen" text="Open" />
+				<TableColumn fx:id="mappingClose" text="Close" />
+				<TableColumn fx:id="mappingHigh" text="High" />
+				<TableColumn fx:id="mappingLow" text="Low" />
+				<TableColumn fx:id="mappingLast" text="Last" />
+			</columns>
+		</TableView>
+		<Label fx:id="marketDataMessage" visible="false"
+			prefHeight="175" prefWidth="700" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			GridPane.rowIndex="1" GridPane.columnSpan="2">
+		</Label>
+		<GridPane GridPane.columnSpan="2" GridPane.rowIndex="2">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="10.0" prefWidth="100.0" />
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="10.0" prefWidth="100.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="10.0" prefHeight="30.0"
+					vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<HBox prefHeight="100.0" prefWidth="200.0"
+					GridPane.columnIndex="1">
+					<children>
+						<Label text="Feed type :">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</Label>
+						<ComboBox fx:id="feedType">
+							<items>
+								<FXCollections fx:factory="observableArrayList" />
+							</items>
+						</ComboBox>
+					</children>
+				</HBox>
+				<HBox prefHeight="100.0" prefWidth="200.0">
+					<children>
+						<Label styleClass="labelBold" text="Feed Config name :">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</Label>
+						<Label styleClass="labelBold" fx:id="feedConfigName" />
+					</children>
+				</HBox>
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</GridPane>

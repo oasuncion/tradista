@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.60"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.security.equityoption.ui.controller.EquityOptionContractSpecificationDefinitionController">
+	<columnConstraints>
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints />
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity" GridPane.rowIndex="1">
+			<children>
+				<Label fx:id="productType" styleClass="labelBold" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<Label text="Load by name">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<ComboBox fx:id="load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</ComboBox>
+				<Button mnemonicParsing="false" onAction="#load" text="Load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#save" text="Save">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#copy" text="Copy">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#clear" text="New">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#refresh"
+					text="Refresh">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+			</children>
+			<opaqueInsets>
+				<Insets />
+			</opaqueInsets>
+		</HBox>
+		<GridPane hgap="10.0" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			vgap="10.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="-Infinity" />
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="-Infinity" />
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="-Infinity" />
+				<ColumnConstraints hgrow="SOMETIMES"
+					minWidth="-Infinity" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Name" />
+				<TextField fx:id="name" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					GridPane.columnIndex="1" />
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Quantity"
+					GridPane.columnIndex="2" GridPane.rowIndex="1" />
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Style"
+					GridPane.rowIndex="1" />
+				<TextField fx:id="quantity" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					GridPane.columnIndex="3" GridPane.rowIndex="1" />
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Exchange"
+					GridPane.rowIndex="3" />
+				<ComboBox fx:id="exchange" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<ComboBox fx:id="style" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					GridPane.columnIndex="1" GridPane.rowIndex="1">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+				</ComboBox>
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Settlement type"
+					GridPane.columnIndex="2" GridPane.rowIndex="2" />
+				<ComboBox fx:id="settlementType" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					promptText="" GridPane.columnIndex="3" GridPane.rowIndex="2">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+				</ComboBox>
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity"
+					text="Settlement Date Offset" GridPane.columnIndex="2"
+					GridPane.rowIndex="3" />
+				<TextField fx:id="settlementDateOffset"
+					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity"
+					text="Multiplier"
+					GridPane.rowIndex="4" />
+				<TextField fx:id="multiplier"
+					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity"
+					text="Premium Currency" GridPane.columnIndex="2"
+					GridPane.rowIndex="4" />
+				<ComboBox fx:id="premiumCurrency" maxHeight="-Infinity"
+					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+					promptText="" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+				<Label maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity"
+					text="Maturity Dates Date Rule" GridPane.rowIndex="2" />
+				<ComboBox fx:id="maturityDatesDateRule"
+					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Label fx:id="nameLabel" visible="false"
+					GridPane.columnIndex="1" />
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</GridPane>

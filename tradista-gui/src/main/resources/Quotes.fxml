@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.112"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.core.marketdata.ui.controller.QuotesController">
+	<columnConstraints>
+		<ColumnConstraints hgrow="SOMETIMES" />
+		<ColumnConstraints hgrow="SOMETIMES" />
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<GridPane hgap="10.0" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			vgap="10.0" GridPane.rowIndex="1" GridPane.valignment="TOP">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<ComboBox fx:id="quoteSet" GridPane.columnIndex="1">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+				</ComboBox>
+				<Label text="Quote Set name" />
+				<Button fx:id="deleteQuoteSetButton" mnemonicParsing="false"
+					onAction="#deleteQuoteSet" text="Delete" GridPane.columnIndex="1"
+					GridPane.rowIndex="1" />
+				<Label text="Quote name" GridPane.rowIndex="2" />
+				<ComboBox id="quoteName" fx:id="quote"
+					GridPane.columnIndex="1" GridPane.rowIndex="2">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+				</ComboBox>
+				<Label text="Quote type" GridPane.rowIndex="3" />
+				<ComboBox fx:id="typeComboBox" GridPane.columnIndex="1"
+					GridPane.rowIndex="3" />
+				<Button fx:id="deleteQuoteButton" mnemonicParsing="false"
+					onAction="#deleteQuote" text="Delete" GridPane.columnIndex="1"
+					GridPane.rowIndex="4" />
+				<Label text="Year" GridPane.rowIndex="5" />
+				<ComboBox fx:id="year" GridPane.columnIndex="1"
+					GridPane.rowIndex="5">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+				</ComboBox>
+				<Label text="Month" GridPane.rowIndex="6" />
+				<ComboBox fx:id="month" GridPane.columnIndex="1"
+					GridPane.rowIndex="6">
+					<items>
+						<FXCollections fx:factory="observableArrayList" />
+					</items>
+				</ComboBox>
+				<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1"
+					GridPane.rowIndex="7">
+					<children>
+						<Button fx:id="load" mnemonicParsing="false"
+							onAction="#load" text="Load">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</Button>
+						<Button fx:id="save" mnemonicParsing="false"
+							onAction="#save" text="Save" />
+					</children>
+				</HBox>
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+		<TabPane tabClosingPolicy="UNAVAILABLE"
+			GridPane.columnIndex="1" GridPane.columnSpan="2"
+			GridPane.rowIndex="1">
+			<tabs>
+				<Tab text="Table">
+					<content>
+						<GridPane hgap="10.0" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							vgap="10.0">
+							<children>
+								<TableView fx:id="quotesTable" editable="true"
+									maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+									tableMenuButtonVisible="false">
+									<columns>
+										<TableColumn fx:id="quoteName" text="Name" />
+										<TableColumn fx:id="quoteDate" editable="true"
+											text="Date" />
+										<TableColumn fx:id="quoteType" editable="true"
+											text="Type" />
+										<TableColumn fx:id="quoteBid" editable="true"
+											text="Bid" />
+										<TableColumn fx:id="quoteAsk" editable="true"
+											text="Ask" />
+										<TableColumn fx:id="quoteOpen" editable="true"
+											text="Open" />
+										<TableColumn fx:id="quoteClose" editable="true"
+											text="Close" />
+										<TableColumn fx:id="quoteHigh" editable="true"
+											text="High" />
+										<TableColumn fx:id="quoteLow" editable="true"
+											text="Low" />
+										<TableColumn fx:id="quoteLast" editable="true"
+											text="Last" />
+										<TableColumn fx:id="quoteEnteredDate"
+											editable="true" text="Entered Date" />
+										<TableColumn fx:id="quoteSourceName"
+											editable="true" text="Source Name" />
+									</columns>
+								</TableView>
+							</children>
+							<padding>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+							</padding>
+							<columnConstraints>
+								<ColumnConstraints />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints />
+							</rowConstraints>
+						</GridPane>
+					</content>
+				</Tab>
+				<Tab text="Chart">
+					<content>
+						<GridPane hgap="10.0" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							vgap="10.0">
+							<children>
+								<LineChart fx:id="quotesChart">
+									<xAxis>
+										<NumberAxis side="BOTTOM" />
+									</xAxis>
+									<yAxis>
+										<NumberAxis side="LEFT" />
+									</yAxis>
+								</LineChart>
+							</children>
+							<padding>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+							</padding>
+							<columnConstraints>
+								<ColumnConstraints />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints />
+							</rowConstraints>
+						</GridPane>
+					</content>
+				</Tab>
+			</tabs>
+		</TabPane>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1"
+			GridPane.columnSpan="2" GridPane.rowIndex="2">
+			<children>
+				<Button fx:id="addQuoteSet" mnemonicParsing="false"
+					onAction="#createQuoteSet" text="Add a new quote set">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="addQuote" mnemonicParsing="false"
+					onAction="#createQuote" text="Add a new quote">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Label fx:id="marketDataMessage" visible="false"
+					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" />
+			</children>
+		</HBox>
+		<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+			<children>
+				<Label styleClass="labelBold" text="Quotes" />
+			</children>
+		</HBox>
+		<HBox alignment="CENTER_RIGHT" GridPane.columnIndex="2">
+			<children>
+				<Button mnemonicParsing="false" onAction="#refresh"
+					text="Refresh" />
+			</children>
+		</HBox>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</GridPane>

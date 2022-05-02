@@ -1,0 +1,10 @@
+connect 'jdbc:derby://localhost:1527/Azur;create=true';
+--connect 'jdbc:derby:D:\TestJFX\DB\Azur';
+drop table fol_formula;
+drop table asset_manager_agent;
+drop table agent;
+drop table mandate_product_type_allocation;
+drop table mandate_currency_allocation;
+drop table mandate;
+disconnect;
+exit;

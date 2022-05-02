@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Text</ui:define>
+
+    <ui:define name="viewname">
+        <li>UTILITIES</li>
+        <li><i class="pi pi-chevron-right"></i></li>
+        <li>
+            <p:link outcome="/text">TEXT</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="card">
+            <h5>Alignment</h5>
+            <div class="p-mb-3 p-text-left">Left</div>
+            <div class="p-mb-3 p-text-center">Center</div>
+            <div class="p-text-right">Right</div>
+
+            <h5>Wrap</h5>
+            <div class="p-mb-3 demo-container" style="width: 10rem">Long text wraps and does not overlow.</div>
+            <div class="p-mb-3 demo-container p-text-nowrap" style="width: 10rem">Long text does not wrap and overflows the parent.</div>
+            <div class="p-mb-3 demo-container p-text-nowrap p-text-truncate" style="width: 10rem">Long text does not wrap and overflows the parent.</div>
+
+            <h5>Transform</h5>
+            <div class="p-mb-3 p-text-lowercase">LOWERCASE</div>
+            <div class="p-mb-3 p-text-uppercase">uppercase</div>
+            <div class="p-text-capitalize">capitalize</div>
+
+            <h5>Style</h5>
+            <div class="p-mb-3 p-text-bold">Bold</div>
+            <div class="p-mb-3 p-text-normal">Normal</div>
+            <div class="p-mb-3 p-text-light">Light</div>
+            <div class="p-mb-3 p-text-italic">Italic</div>
+        </div>
+    </ui:define>
+
+</ui:composition>

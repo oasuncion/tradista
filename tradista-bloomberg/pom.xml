@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>finance.tradista.app</groupId>
+		<artifactId>parent</artifactId>
+		<version>${parent.version}</version>
+		<relativePath>../TradistaParent</relativePath>
+	</parent>
+	<groupId>finance.tradista.bloomberg</groupId>
+	<artifactId>bloomberg-interface</artifactId>
+	<version>${bloomberg-interface.version}</version>
+	<dependencies>
+		<!--<dependency>
+			<groupId>com.bloombergp</groupId>
+			<artifactId>blpapi</artifactId>
+			<version>3.12.1-1</version>
+		</dependency>-->
+		<dependency> <groupId>finance.tradista.bloomberg</groupId> <artifactId>bloomberg-mock-interface</artifactId> 
+			<version>1.0.0</version> </dependency>
+		<dependency>
+			<groupId>finance.tradista.core</groupId>
+			<artifactId>core-common</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

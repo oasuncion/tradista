@@ -1,0 +1,18 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <div class="layout-footer">
+        <h:link id="footerlogolink" outcome="/dashboard">
+            <p:graphicImage name="images/#{ guestPreferences.darkMode == 'light' ? 'logo-poseidon.png' : 'logo-poseidon-dark.png'}" library="poseidon-layout" />
+        </h:link>
+        <div class="social-icons">
+            <a><i class="pi pi-github"/></a>
+            <a><i class="pi pi-facebook"/></a>
+            <a><i class="pi pi-twitter"/></a>
+        </div>
+    </div>
+</ui:composition>

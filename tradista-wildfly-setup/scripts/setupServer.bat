@@ -1,0 +1,1 @@
+%WILDFLY_HOME%\bin\jboss-cli.bat --connect --file=./commands.cli

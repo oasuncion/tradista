@@ -1,0 +1,111 @@
+package finance.tradista.core.marketdata.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.TreeMap;
+
+import finance.tradista.core.legalentity.model.LegalEntity;
+
+/*
+ * Copyright 2020 Olivier Asuncion
+ * 
+ * Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.    */
+
+public abstract class GenerableCurve extends Curve<LocalDate, BigDecimal> implements Generable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -984285608945441710L;
+
+	public GenerableCurve() {
+		super();
+		points = new TreeMap<LocalDate, BigDecimal>();
+	}
+
+	public GenerableCurve(String name, LegalEntity po) {
+		super(name, po);
+		points = new TreeMap<LocalDate, BigDecimal>();
+	}
+
+	private String algorithm;
+
+	private String interpolator;
+
+	private String instance;
+	
+	private QuoteSet quoteSet;
+	
+	private List<Quote> quotes;
+	
+	private LocalDate quoteDate;
+
+	public QuoteSet getQuoteSet() {
+		return quoteSet;
+	}
+
+	public void setQuoteSet(QuoteSet quoteSet) {
+		this.quoteSet = quoteSet;
+	}
+
+	public String getInstance() {
+		return instance;
+	}
+
+	public void setInstance(String instance) {
+		this.instance = instance;
+	}
+
+	public String getAlgorithm() {
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public String getInterpolator() {
+		return interpolator;
+	}
+
+	public void setInterpolator(String interpolator) {
+		this.interpolator = interpolator;
+	}
+
+	public boolean isGenerated() {
+		return (algorithm != null);
+	}
+	
+	public List<Quote> getQuotes() {
+		return quotes;
+	}
+
+	public void setQuotes(List<Quote> quotes) {
+		this.quotes = quotes;
+	}
+
+	public LocalDate getQuoteDate() {
+		return quoteDate;
+	}
+
+	public void setQuoteDate(LocalDate quoteDate) {
+		this.quoteDate = quoteDate;
+	}
+
+}

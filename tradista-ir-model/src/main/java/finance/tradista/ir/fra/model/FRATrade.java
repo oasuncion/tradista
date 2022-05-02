@@ -1,0 +1,111 @@
+package finance.tradista.ir.fra.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import finance.tradista.core.interestpayment.model.InterestPayment;
+import finance.tradista.core.marketdata.model.Instrument;
+import finance.tradista.core.product.model.Product;
+import finance.tradista.core.tenor.model.Tenor;
+import finance.tradista.ir.irforward.model.IRForwardTrade;
+
+/*
+ * Copyright 2014 Olivier Asuncion
+ * 
+ * Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.    */
+
+public class FRATrade extends IRForwardTrade<Product> implements Instrument {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7130145836929238705L;
+
+	private BigDecimal fixedRate;
+	
+	private LocalDate startDate;
+
+	public BigDecimal getFixedRate() {
+		return fixedRate;
+	}
+
+	public void setFixedRate(BigDecimal fixedRate) {
+		this.fixedRate = fixedRate;
+	}
+
+	public static final String FRA = "FRA";
+
+	public String getProductType() {
+		return FRA;
+	}
+
+	@Override
+	public Tenor getFrequency() {
+		return Tenor.NO_TENOR;
+	}
+
+	@Override
+	public void setFrequency(Tenor frequency) {
+		// not allowed to modify the frequency for FRA..
+	}
+
+	/*
+	 * Payment in a FRA is done at the maturity date of the trade that is also the
+	 * beginning of the period considered for the interest calculation (period also
+	 * known as 'Contract period')
+	 */
+	@Override
+	public InterestPayment getInterestPayment() {
+		return InterestPayment.BEGINNING_OF_PERIOD;
+	}
+
+	@Override
+	public void setInterestPayment(InterestPayment interestPayment) {
+		// not allowed to modify the interest payment for FRA..
+	}
+
+	@Override
+	public String getInstrumentName() {
+		return FRA;
+	}
+	
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+	
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+	
+	public LocalDate getEndDate() {
+		return getMaturityDate();
+	}
+	
+	public void setEndDate(LocalDate endDate) {
+		setMaturityDate(endDate);
+	}
+	
+	public LocalDate getPaymentDate() {
+		return getSettlementDate();
+	}
+
+	public void setPaymentDate(LocalDate paymentDate) {
+		setSettlementDate(paymentDate);
+	}
+
+}

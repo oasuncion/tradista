@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane hgap="10.0" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	styleClass="root" vgap="10.0"
+	xmlns="http://javafx.com/javafx/8.0.60"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="finance.tradista.core.daterule.ui.controller.DateRulesController">
+	<columnConstraints>
+		<ColumnConstraints />
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+		<RowConstraints vgrow="SOMETIMES" />
+	</rowConstraints>
+	<children>
+		<GridPane hgap="10.0"
+			vgap="10.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" />
+				<ColumnConstraints />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+				<RowConstraints vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<GridPane fx:id="singleGrid" hgap="10.0"
+					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" vgap="10.0" GridPane.rowIndex="2"
+					GridPane.valignment="TOP">
+					<columnConstraints>
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+					</rowConstraints>
+					<children>
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity"
+							text="Date Rolling Convention" />
+						<CheckBox fx:id="january" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="January" GridPane.rowIndex="5" />
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Months"
+							GridPane.rowIndex="4" />
+						<CheckBox fx:id="february" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="February" GridPane.rowIndex="6" />
+						<CheckBox fx:id="march" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="March" GridPane.rowIndex="7" />
+						<CheckBox fx:id="july" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="July" GridPane.columnIndex="1"
+							GridPane.rowIndex="5" />
+						<CheckBox fx:id="august" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="August" GridPane.columnIndex="1"
+							GridPane.rowIndex="6" />
+						<CheckBox fx:id="september" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="September" GridPane.columnIndex="1"
+							GridPane.rowIndex="7" />
+						<CheckBox fx:id="april" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="April" GridPane.rowIndex="8" />
+						<ComboBox fx:id="drc" GridPane.columnIndex="1" />
+						<CheckBox fx:id="may" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="May" GridPane.rowIndex="9" />
+						<CheckBox fx:id="june" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="June" GridPane.rowIndex="10" />
+						<CheckBox fx:id="october" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="October" GridPane.columnIndex="1"
+							GridPane.rowIndex="8" />
+						<CheckBox fx:id="november" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="November" GridPane.columnIndex="1"
+							GridPane.rowIndex="9" />
+						<CheckBox fx:id="december" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							mnemonicParsing="false" text="December" GridPane.columnIndex="1"
+							GridPane.rowIndex="10" />
+						<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Calendars"
+							GridPane.columnSpan="2" GridPane.rowIndex="11"/>
+						<ListView fx:id="calendarsList" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnSpan="2" GridPane.rowIndex="12">
+						</ListView>
+						<ComboBox fx:id="calendar" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnSpan="2" GridPane.rowIndex="13" />
+						<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnSpan="2" GridPane.rowIndex="14">
+							<children>
+								<Button maxHeight="-Infinity" maxWidth="-Infinity"
+									minHeight="-Infinity" minWidth="-Infinity"
+									mnemonicParsing="false" onAction="#addCalendar" text="Add">
+									<HBox.margin>
+										<Insets right="10.0" />
+									</HBox.margin>
+								</Button>
+								<Button maxHeight="-Infinity" maxWidth="-Infinity"
+									minHeight="-Infinity" minWidth="-Infinity"
+									mnemonicParsing="false" onAction="#deleteCalendar"
+									text="Delete">
+									<HBox.margin>
+										<Insets right="10.0" />
+									</HBox.margin>
+								</Button>
+							</children>
+						</HBox>
+						<Label text="Day" GridPane.rowIndex="1" />
+						<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnIndex="1" GridPane.rowIndex="1">
+							<children>
+								<ComboBox fx:id="position">
+									<HBox.margin>
+										<Insets right="10.0" />
+									</HBox.margin>
+								</ComboBox>
+								<ComboBox fx:id="day" />
+							</children>
+							<opaqueInsets>
+								<Insets />
+							</opaqueInsets>
+						</HBox>
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Date Offset"
+							GridPane.rowIndex="2" />
+						<TextField fx:id="dateOffset" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							GridPane.columnIndex="1" GridPane.rowIndex="2" />
+					</children>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</GridPane>
+				<HBox>
+					<children>
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Name">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</Label>
+						<Label fx:id="nameLabel" visible="false" />
+						<TextField fx:id="name" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</TextField>
+					</children>
+					<opaqueInsets>
+						<Insets />
+					</opaqueInsets>
+				</HBox>
+				<HBox GridPane.columnIndex="1">
+					<children>
+						<Label maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Start Date">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</Label>
+						<DatePicker fx:id="startDate">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</DatePicker>
+						<Button onAction="#checkDates" text="Check Dates">
+							<HBox.margin>
+								<Insets right="10.0" />
+							</HBox.margin>
+						</Button>
+					</children>
+					<opaqueInsets>
+						<Insets />
+					</opaqueInsets>
+				</HBox>
+				<CheckBox fx:id="isSequence" mnemonicParsing="false"
+					text="Is a sequence" GridPane.rowIndex="1" />
+				<GridPane fx:id="sequenceGrid" hgap="10.0"
+					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+					minWidth="-Infinity" vgap="10.0" visible="false"
+					GridPane.rowIndex="2">
+					<columnConstraints>
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							minWidth="-Infinity" />
+						<ColumnConstraints />
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+						<RowConstraints vgrow="SOMETIMES" />
+					</rowConstraints>
+					<children>
+						<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
+							minHeight="-Infinity" minWidth="-Infinity" text="Date Rules"
+							GridPane.columnSpan="3" GridPane.rowIndex="1"/>
+						<TableView fx:id="dateRulesDurations"
+							GridPane.columnSpan="3" GridPane.rowIndex="2">
+							<columns>
+								<TableColumn fx:id="dateRuleName"
+									text="Date Rule Name" />
+								<TableColumn fx:id="dateRuleDuration"
+									text="Duration" />
+								<TableColumn fx:id="dateRuleMove" text="Move" />
+							</columns>
+						</TableView>
+						<GridPane hgap="10.0" maxHeight="-Infinity"
+							maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+							vgap="10.0" GridPane.columnSpan="3" GridPane.rowIndex="4">
+							<columnConstraints>
+								<ColumnConstraints hgrow="SOMETIMES"
+									minWidth="-Infinity" />
+								<ColumnConstraints hgrow="SOMETIMES"
+									minWidth="-Infinity" />
+								<ColumnConstraints hgrow="SOMETIMES"
+									minWidth="-Infinity" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<ComboBox fx:id="subDateRuleName"
+									GridPane.columnSpan="3" />
+								<Label text="Year" GridPane.rowIndex="1" />
+								<Label text="Month" GridPane.columnIndex="1"
+									GridPane.rowIndex="1" />
+								<Label text="Day" GridPane.columnIndex="2"
+									GridPane.rowIndex="1" />
+								<ComboBox fx:id="subDateRuleYear" GridPane.rowIndex="2" />
+								<ComboBox fx:id="subDateRuleMonth"
+									GridPane.columnIndex="1" GridPane.rowIndex="2" />
+								<ComboBox fx:id="subDateRuleDay"
+									GridPane.columnIndex="2" GridPane.rowIndex="2" />
+								<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+									minHeight="-Infinity" minWidth="-Infinity"
+									GridPane.columnSpan="3" GridPane.rowIndex="3">
+									<children>
+										<Button maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#addDateRule" text="Add">
+											<HBox.margin>
+												<Insets right="10.0" />
+											</HBox.margin>
+										</Button>
+										<Button maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#updateDateRule"
+											text="Update">
+											<HBox.margin>
+												<Insets right="10.0" />
+											</HBox.margin>
+										</Button>
+										<Button maxHeight="-Infinity" maxWidth="-Infinity"
+											minHeight="-Infinity" minWidth="-Infinity"
+											mnemonicParsing="false" onAction="#deleteDateRule"
+											text="Delete">
+											<HBox.margin>
+												<Insets right="10.0" />
+											</HBox.margin>
+										</Button>
+									</children>
+									<opaqueInsets>
+										<Insets />
+									</opaqueInsets>
+								</HBox>
+							</children>
+							<padding>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+							</padding>
+						</GridPane>
+					</children>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</GridPane>
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+		<HBox maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity">
+			<children>
+				<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" text="Date Rules">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<Label text="Load by name:">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Label>
+				<ComboBox fx:id="load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</ComboBox>
+				<Button mnemonicParsing="false" onAction="#load" text="Load">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#save" text="Save">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#copy" text="Copy">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#clear" text="New">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+				<Button mnemonicParsing="false" onAction="#refresh"
+					text="Refresh">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</Button>
+			</children>
+			<opaqueInsets>
+				<Insets />
+			</opaqueInsets>
+		</HBox>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</GridPane>

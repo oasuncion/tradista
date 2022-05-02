@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+	<bean name="TradistaScheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="quartzProperties">
+			<map>
+				<!-- the scheduler instance name is the bean name, ie TradistaScheduler -->
+				<!-- <entry key="org.quartz.scheduler.instanceName" value="TradistaScheduler" 
+					/> -->
+				<entry key="org.quartz.threadPool.threadCount" value="5" />
+				<entry key="org.quartz.scheduler.userTransactionURL"
+					value="java:jboss/UserTransaction" />
+				<entry
+					key="org.quartz.scheduler.wrapJobExecutionInUserTransaction"
+					value="false" />
+				<entry key="org.quartz.jobStore.class"
+					value="org.quartz.impl.jdbcjobstore.JobStoreCMT" />
+				<entry key="org.quartz.jobStore.driverDelegateClass"
+					value="org.quartz.impl.jdbcjobstore.StdJDBCDelegate" />
+				<entry key="org.quartz.jobStore.tablePrefix" value="QRTZ_" />
+				<entry key="org.quartz.jobStore.dataSource" value="tradistaDS" />
+				<entry key="org.quartz.jobStore.nonManagedTXDataSource"
+					value="tradistaDSNonManagedTX" />
+				<entry key="org.quartz.dataSource.tradistaDS.jndiURL"
+					value="java:/TradistaDataSource" />
+				<entry
+					key="org.quartz.dataSource.tradistaDSNonManagedTX.jndiURL"
+					value="java:/TradistaDataSourceNonManagedTX" />
+			</map>
+		</property>
+	</bean>
+	<!-- Global properties used during arithmetic operations -->
+	<bean id="mathProperties"
+		class="finance.tradista.core.common.util.MathProperties">
+		<!-- Scale, ie the number of digits after the decimal separator -->
+		<!-- ### Note ###: Derby doesn't support a scale greater then 31 digits. -->
+		<property name="scale" value="10" />
+		<!-- The rounding mode to apply after division -->
+		<!-- Possible values are UP, DOWN, CEILING, FLOOR, HALF_UP, HALF_DOWN, 
+			HALF_EVEN, UNNECESSARY -->
+		<property name="roundingMode" value="HALF_EVEN" />
+	</bean>
+	<bean id="customProperties"
+		class="finance.tradista.core.common.service.CustomProperties">
+		<!-- The name of the package for customizations -->
+		<property name="customPackage" value="tradistax" />
+	</bean>
+</beans>

@@ -1,0 +1,403 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+             
+    <ui:define name="title">Grid System</ui:define>
+
+    <ui:define name="viewname">
+        <li>UTILITIES</li>
+        <li><i class="pi pi-chevron-right"></i></li>
+        <li>
+            <p:link outcome="/grid">GRID SYSTEM</p:link>
+        </li>
+    </ui:define>
+    
+    <ui:define name="content">
+        <h4>PrimeFlex grid system is a lightweight flex based responsive layout utility optimized for mobile phones, tablets and desktops.</h4>
+
+        <div class="grid-demo">
+            <h5>Basic</h5>
+            <div class="p-grid">
+                <div class="p-col">
+                    <div class="card grid-item">
+                        1
+                    </div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">
+                        2
+                    </div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">
+                        3
+                    </div>
+                </div>
+            </div>
+    
+            <h5>Dynamic</h5>
+            <h:form>
+                <p:commandButton icon="pi pi-plus" action="#{gridDemoView.increment}" update="output" styleClass="p-mr-2" />
+                <p:commandButton icon="pi pi-minus" action="#{gridDemoView.decrease}" update="output" />
+    
+                <p:outputPanel id="output">
+                    <div class="p-grid" style="margin-top: .5em">
+                        <ui:repeat var="column" value="#{gridDemoView.columns}">
+                            <div class="p-col">
+                                <div class="card grid-item">
+                                    #{column}
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+            <h5>Reverse Direction</h5>
+            <div class="p-grid p-dir-rev">
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">3</div>
+                </div>
+            </div>
+    
+            <h5>Column Direction</h5>
+            <div class="p-grid p-dir-col">
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">3</div>
+                </div>
+            </div>
+    
+            <h5>Reverse Column Direction</h5>
+            <div class="p-grid p-dir-col-rev">
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">3</div>
+                </div>
+            </div>
+    
+            <h5>12 Column Grid</h5>
+            <div class="p-grid">
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">1</div>
+                </div>
+            </div>
+    
+            <div class="p-grid">
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-6">
+                    <div class="card grid-item">6</div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <div class="p-grid">
+                <div class="p-col-8">
+                    <div class="card grid-item">8</div>
+                </div>
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+            </div>
+    
+            <h5>MultiLine</h5>
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <div class="card grid-item">6</div>
+                </div>
+                <div class="p-col-6">
+                    <div class="card grid-item">6</div>
+                </div>
+                <div class="p-col-6">
+                    <div class="card grid-item">6</div>
+                </div>
+                <div class="p-col-6">
+                    <div class="card grid-item">6</div>
+                </div>
+            </div>
+    
+            <h5>Fixed Width Column</h5>
+            <div class="p-grid">
+                <div class="p-col-fixed" style="width:200px">
+                    <div class="card grid-item">200px</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">auto</div>
+                </div>
+            </div>
+    
+            <h5>Responsive</h5>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="card grid-item">p-col-12 p-md-6 p-lg-3</div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="card grid-item">p-col-12 p-md-6 p-lg-3</div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="card grid-item">p-col-12 p-md-6 p-lg-3</div>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-3">
+                    <div class="card grid-item">p-col-12 p-md-6 p-lg-3</div>
+                </div>
+            </div>
+    
+            <h5>Horizontal Alignment - Start</h5>
+            <div class="p-grid p-justify-start">
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-1">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Horizontal Alignment - End</h5>
+            <div class="p-grid p-justify-end">
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-1">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Horizontal Alignment - Center</h5>
+            <div class="p-grid p-justify-center">
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-1">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Horizontal Alignment - Between</h5>
+            <div class="p-grid p-justify-between">
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-1">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Horizontal Alignment - Around</h5>
+            <div class="p-grid p-justify-around">
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-1">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Horizontal Alignment - Even</h5>
+            <div class="p-grid p-justify-even">
+                <div class="p-col-2">
+                    <div class="card grid-item">2</div>
+                </div>
+                <div class="p-col-1">
+                    <div class="card grid-item">1</div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Vertical Alignment - Start</h5>
+            <div class="p-grid p-align-start vertical-container">
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Vertical Alignment - End</h5>
+            <div class="p-grid p-align-end vertical-container">
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+            
+            <h5>Vertical Alignment - Center</h5>
+            <div class="p-grid p-align-center vertical-container">
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Vertical Alignment - Stretch</h5>
+            <div class="p-grid p-align-stretch vertical-container">
+                <div class="p-col">
+                    <div class="card grid-item grid-item-stretched">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item grid-item-stretched">4</div>
+                </div>
+                <div class="p-col">
+                    <div class="card grid-item grid-item-stretched">4</div>
+                </div>
+            </div>
+    
+            <h5>Vertical Alignment - Per Column</h5>
+            <div class="p-grid">
+                <div class="p-col p-col-align-start">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col p-col-align-center">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col p-col-align-end">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Offset</h5>
+            <div class="p-grid">
+                <div class="p-col-6 p-offset-3">
+                    <div class="card grid-item">6</div>
+                </div>
+            </div>
+    
+            <div class="p-grid">
+                <div class="p-col-4">
+                    <div class="card grid-item">4</div>
+                </div>
+                <div class="p-col-4 p-offset-4">
+                    <div class="card grid-item">4</div>
+                </div>
+            </div>
+    
+            <h5>Nested</h5>
+            <div class="p-grid nested-grid">
+                <div class="p-col-8">
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <div class="card grid-item">6</div>
+                        </div>
+                        <div class="p-col-6">
+                            <div class="card grid-item">6</div>
+                        </div>
+                        <div class="p-col-12">
+                            <div class="card grid-item">12</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-4">
+                    <div class="card grid-item grid-item-stretched">4</div>
+                </div>
+            </div>
+    
+            <h5>Panels</h5>
+            <div class="p-grid">
+                <div class="p-col">
+                    <p:panel header="Header I">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </p:panel>
+                </div>
+                <div class="p-col">
+                    <p:panel header="Header II">
+                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque 
+                            ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia 
+                            voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                            Consectetur, adipisci velit, sed quia non numquam eius modi.</p>
+                    </p:panel>
+                </div>
+                <div class="p-col">
+                    <p:panel header="Header III">
+                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores 
+                            et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. 
+                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit 
+                            quo minus.</p>
+                    </p:panel>
+                </div>
+            </div>            
+        </div>
+    </ui:define>
+
+</ui:composition>

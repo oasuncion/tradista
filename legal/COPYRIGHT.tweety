@@ -1,0 +1,6 @@
+Tradista uses Tweety (v1.12): https://tweetyproject.org/
+Tweety version 1.12 released under the GNU Lesser General Public License version 3, a copy of the license can be found in LICENSE.tweety
+
+Notice about Tweety:
+All parts of the TweetyProject available on Tweety's website are licensed under the GNU Lesser General Public License version 3 (beginning with TweetyProject version 1.6, the versions before are licensed under the GNU General Public License version 3) except when this is noted otherwise. 
+Use and modification of the libraries is encouraged but please give credit by referring to this website. Please note that some libraries make also use of other third-party libraries such as Apache Commons.

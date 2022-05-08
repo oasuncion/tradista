@@ -4,7 +4,7 @@
 Tradista is a lightweight Financial Risk Management Solution enabling you to manage in a single tool your daily treasury & risk management tasks. Tradista, among other possibilities, can be used for market data analyses, pre-deal checks and trades booking, P&L management, financial inventory management and reporting.
 See more on [tradista.finance](https://www.tradista.finance)
 
-![Dashboard](./ReadmePic.png)
+![Dashboard](./ReadmePic.PNG)
 
 Tradista is a Java based application. The server is based on Wildfly and the clients are based on JavaFX and PrimeFaces.
 

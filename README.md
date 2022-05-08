@@ -6,7 +6,7 @@ See more on [tradista.finance](https://www.tradista.finance)
 
 ![Dashboard](./ReadmePic.PNG)
 
-Tradista is a Java based application. The server is based on Wildfly and the clients are based on JavaFX and PrimeFaces.
+Tradista is a Java based application. The server is based on WildFly and the clients are based on JavaFX and PrimeFaces.
 
 Tested configuration:
 - Server: WildFly 18.0.1
@@ -22,7 +22,7 @@ maven clean install
 Thanks for you interest. Ping me anytime for any question.
 I am currently working on an installer easing the test of Tradista. Stay tuned !
 
-# Dependencies:
+# Dependencies
 Tradista is made possible using powerful third party tools:
 - [Apache Commons](https://commons.apache.org/) for Maths, CSV processing and many more
 - [Apache Derby](https://db.apache.org/derby/) for the database

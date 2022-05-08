@@ -16,7 +16,7 @@ Tested configuration:
 
 Tradista can be built using Maven, build the whole application using the tradista-parent project.
 ```
-maven clean install
+mvn clean install
 ```
 
 Thanks for you interest. Ping me anytime for any question.

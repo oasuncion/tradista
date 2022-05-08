@@ -1,91 +1,25 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:po="http://primefaces.org/poseidon">
-    
-    <div class="menu-wrapper">
-        <div class="layout-menu-container">
-            <h:form id="menuform">
-                <po:menu widgetVar="PoseidonMenuWidget">
-                    <p:submenu id="om_homepage" label="Favorites" icon="pi pi-home">
-                        <p:menuitem id="om_dashboard" value="Dashboard" icon="pi pi-home" outcome="/dashboard" />
-                    </p:submenu>
-                    <p:submenu id="om_components" label="UI Kit" icon="pi pi-star">
-                        <p:menuitem id="om_formlayout" value="Form Layout" icon="pi pi-id-card" outcome="/formlayout" />
-                        <p:menuitem id="om_input" value="Input" icon="pi pi-check-square" outcome="/input" />
-                        <p:menuitem id="om_floatlabel" value="Float Label" icon="pi pi-bookmark" outcome="/floatlabel" />
-                        <p:menuitem id="om_invalidstate" value="Invalid State" icon="pi pi-exclamation-circle" outcome="/invalidstate" />
-                        <p:menuitem id="om_button" value="Button" icon="pi pi-mobile" outcome="/button" styleClass="rotated-icon"/>
-                        <p:menuitem id="om_table" value="Table" icon="pi pi-table" outcome="/table" />
-                        <p:menuitem id="om_list" value="List" icon="pi pi-list" outcome="/list" />
-                        <p:menuitem id="om_tree" value="Tree" icon="pi pi-share-alt" outcome="/tree" />
-                        <p:menuitem id="om_panel" value="Panel" icon="pi pi-tablet" outcome="/panel" />
-                        <p:menuitem id="om_overlay" value="Overlay" icon="pi pi-clone" outcome="/overlay" />
-                        <p:menuitem id="om_menu" value="Menu" icon="pi pi-bars" outcome="/menu" />
-                        <p:menuitem id="om_message" value="Message" icon="pi pi-comment" outcome="/messages" />
-                        <p:menuitem id="om_file" value="File" icon="pi pi-file" outcome="/file" />
-                        <p:menuitem id="om_chart" value="Chart" icon="pi pi-chart-bar" outcome="/charts" />
-                        <p:menuitem id="om_misc" value="Misc" icon="pi pi-circle-off" outcome="/misc" />
-                    </p:submenu>
-                    <p:separator />
-                    <p:submenu id="om_utils" label="Utilities" icon="pi pi-compass">
-                        <p:menuitem id="om_display" value="Display" icon="pi pi-desktop" outcome="/display" />
-                        <p:menuitem id="om_elevation" value="Elevation" icon="pi pi-external-link" outcome="/elevation" />
-                        <p:menuitem id="om_flexbox" value="FlexBox" icon="pi pi-directions" outcome="/flexbox" />
-                        <p:menuitem id="om_icons" value="Icons" icon="pi pi-search" outcome="/icons" />
-                        <p:menuitem id="om_text" value="Text" icon="pi pi-pencil" outcome="/text" />
-                        <p:menuitem id="om_widgets" value="Widgets" icon="pi pi-star-o" outcome="/widgets" />
-                        <p:menuitem id="om_grid" value="Grid System" icon="pi pi-th-large" outcome="/grid" />
-                        <p:menuitem id="om_spacing" value="Spacing" icon="pi pi-arrow-right" outcome="/spacing" />
-                        <p:menuitem id="om_typography" value="Typography" icon="pi pi-align-center" outcome="/typography" />
-                    </p:submenu>
-                    <p:separator />
-                    <p:submenu id="om_default" label="Pages" icon="pi pi-briefcase">
-                        <p:menuitem id="om_crud" value="Crud" icon="pi pi-pencil" outcome="/crud" />
-                        <p:menuitem id="om_calendar" value="Calendar" icon="pi pi-calendar-plus" outcome="/calendar" />
-                        <p:menuitem id="om_chronoline" value="Chronoline" icon="pi pi-calendar" outcome="/chronoline" />
-                        <p:menuitem id="om_landing" value="Landing" icon="pi pi-user-plus" outcome="/landing" />
-                        <p:menuitem id="om_login" value="Login" icon="pi pi-sign-in" outcome="/login" />
-                        <p:menuitem id="om_invoice" value="Invoice" icon="pi pi-dollar" outcome="/invoice" />
-                        <p:menuitem id="om_help" value="Help" icon="pi pi-question-circle" outcome="/help" />
-                        <p:menuitem id="om_error" value="Error" icon="pi pi-times-circle" outcome="/error" />
-                        <p:menuitem id="om_notfound" value="Not Found" icon="pi pi-exclamation-circle" outcome="/notfound" />
-                        <p:menuitem id="om_access" value="Access Denied" icon="pi pi-lock" outcome="/access" />
-                        <p:menuitem id="om_empty" value="Empty" icon="pi pi-circle-off" outcome="/empty" />
-                    </p:submenu>
-                    <p:separator />
-                    <p:submenu id="om_hierarchy" label="Hierarchy" icon="pi pi-align-left">
-                        <p:submenu id="om_sm1" label="Submenu 1" icon="pi pi-align-left">
-                            <p:submenu id="om_sm11" label="Submenu 1.1" icon="pi pi-align-left">
-                                <p:menuitem id="om_lnk111" value="Link 1.1.1" icon="pi pi-align-left" url="#" />
-                                <p:menuitem id="om_lnk112" value="Link 1.1.2" icon="pi pi-align-left" url="#" />
-                                <p:menuitem id="om_lnk113" value="Link 1.1.3" icon="pi pi-align-left" url="#" />
-                            </p:submenu>
-                            <p:submenu id="om_sm12" label="Submenu 1.2" icon="pi pi-align-left">
-                                <p:menuitem id="om_lnk121" value="Link 1.2.1" icon="pi pi-align-left" url="#" />
-                            </p:submenu>
-                        </p:submenu>
-                        <p:submenu id="om_sm2" label="Submenu 2" icon="pi pi-align-left">
-                            <p:submenu id="om_sm21" label="Submenu 2.1" icon="pi pi-align-left">
-                                <p:menuitem id="om_lnk211" value="Link 2.1.1" icon="pi pi-align-left" url="#" />
-                                <p:menuitem id="om_lnk212" value="Link 2.1.2" icon="pi pi-align-left" url="#" />
-                            </p:submenu>
-                            <p:submenu id="om_sm22" label="Submenu 2.2" icon="pi pi-align-left">
-                                <p:menuitem id="om_lnk221" value="Link 2.2.1" icon="pi pi-align-left" url="#" />
-                            </p:submenu>
-                        </p:submenu>
-                    </p:submenu>
-                    <p:separator />
-                    <p:submenu id="om_getstarted" label="Start" icon="pi pi-download">
-                        <p:menuitem id="om_buy" value="Buy Now" icon="pi pi-shopping-cart" url="https://www.primefaces.org/store" />
-                        <p:menuitem id="om_doc" value="Documentation" icon="pi pi-info-circle" outcome="/documentation"/>
-                    </p:submenu>
-                </po:menu>
-            </h:form>
-        </div> 
-    </div>
-    
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:po="http://primefaces.org/poseidon">
+
+	<div class="menu-wrapper">
+		<div class="layout-menu-container">
+			<h:form id="menuform">
+			
+				<p:menubar>
+				<p:menuitem value="Tradista" styleClass="tradista"/>
+					
+						<f:facet name="options">
+                
+                <p:commandButton icon="pi pi-power-off" action="#{menuView.logout}" />
+            </f:facet>
+				</p:menubar>
+				 <!-- <p:graphicImage name="images/Logo Couleurs Sans Fond-2.png" library="poseidon-layout" height="50" />-->
+			</h:form>
+		</div>
+	</div>
+
 </ui:composition>

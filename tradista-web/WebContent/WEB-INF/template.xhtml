@@ -86,20 +86,11 @@ font-size: 25px;
 
 	<div
 		class="layout-wrapper layout-horizontal layout-topbar-#{guestPreferences.topbarTheme}  layout-menu-horizontal  #{guestPreferences.menuMode} #{guestPreferences.orientationRTL ? 'layout-rtl' : null}">
-<!-- 		 <ui:include src="./topbar.xhtml" />  -->
-		 
- <ui:include src="./menu.xhtml" />
-		<!-- <ui:include src="./rightpanel.xhtml"></ui:include>-->
-		<!-- <ui:include src="./config.xhtml" />-->
-
-		<div class="layout-main">
-			<!--<ui:include src="./breadcrumb.xhtml" />-->
-			<div class="layout-content">
-		
+		<ui:include src="./menu.xhtml" />
+		<div class="layout-main">			
+			<div class="layout-content">		
 				<ui:insert name="content" />
 			</div>
-
-			<!--<ui:include src="./footer.xhtml" />-->
 		</div>
 		<div class="layout-mask modal-in"></div>
 	</div>

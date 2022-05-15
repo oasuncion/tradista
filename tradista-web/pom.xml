@@ -31,11 +31,31 @@
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>poseidon-theme</artifactId>
-			<version>3.0.0</version>
+			<version>4.1.0</version>
 		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>3.0.0-M1</version>
+				<configuration>
+					<groupId>org.primefaces.themes</groupId>
+					<artifactId>poseidon-theme</artifactId>
+					<version>4.1.0</version>
+					<packaging>jar</packaging>
+					<file>${basedir}/lib/poseidon-theme-4.1.0.jar</file>
+				</configuration>
+				<executions>
+					<execution>
+					<id>install-jar-lib</id>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					<phase>validate</phase>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>

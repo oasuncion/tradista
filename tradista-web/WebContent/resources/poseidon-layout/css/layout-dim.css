@@ -4024,12 +4024,12 @@ body.exception-body .ui-button:focus {
 
 html {
   height: 100%;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 body {
   font-family: "Open Sans";
-  font-size: 12px;
+  font-size: 14px;
   color: #CACFDB;
   -webkit-font-smoothing: antialiased;
   padding: 0;

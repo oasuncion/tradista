@@ -15,12 +15,14 @@ Tested configuration:
 - Build automation tool: Maven 3.6.2
 
 Tradista can be built using Maven, build the whole application using the tradista-parent project.
-```
-mvn clean install
-```
 
-Thanks for you interest. Ping me anytime for any question.
-I am currently working on an installer easing the test of Tradista. Stay tuned !
+1. Run ```mvn validate``` once to ensure that all needed dependencies are added to your local repository.
+
+2. Then run ```mvn clean install``` to build Tradista.
+
+Thanks for you interest. 
+Feel free to download the Tradista Demo Package [here](https://github.com/oasuncion/tradista-demo) to test the solution.
+Ping me anytime for any question.
 
 # Dependencies
 Tradista is made possible using powerful third party tools:

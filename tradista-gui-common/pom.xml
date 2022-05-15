@@ -6,7 +6,7 @@
 		<groupId>finance.tradista.app</groupId>
 		<artifactId>parent</artifactId>
 		<version>${parent.version}</version>
-		<relativePath>../TradistaParent</relativePath>
+		<relativePath>../tradista-parent</relativePath>
 	</parent>
 	<groupId>finance.tradista.core</groupId>
 	<artifactId>core-gui-common</artifactId>

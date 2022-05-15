@@ -6,19 +6,22 @@
 		<groupId>finance.tradista.app</groupId>
 		<artifactId>parent</artifactId>
 		<version>${parent.version}</version>
-		<relativePath>../TradistaParent</relativePath>
+		<relativePath>../tradista-parent</relativePath>
 	</parent>
 	<groupId>finance.tradista.bloomberg</groupId>
 	<artifactId>bloomberg-interface</artifactId>
 	<version>${bloomberg-interface.version}</version>
 	<dependencies>
-		<!--<dependency>
+		<dependency>
 			<groupId>com.bloombergp</groupId>
 			<artifactId>blpapi</artifactId>
 			<version>3.12.1-1</version>
+		</dependency>
+		<!--<dependency> 
+			<groupId>finance.tradista.bloomberg</groupId> 
+			<artifactId>bloomberg-mock-interface</artifactId> 
+			<version>1.0.0</version> 
 		</dependency>-->
-		<dependency> <groupId>finance.tradista.bloomberg</groupId> <artifactId>bloomberg-mock-interface</artifactId> 
-			<version>1.0.0</version> </dependency>
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-common</artifactId>

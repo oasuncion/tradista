@@ -16,12 +16,12 @@
 		<dependency>
 			<groupId>finance.tradista.mm</groupId>
 			<artifactId>mm-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${mm-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.mm</groupId>
 			<artifactId>mm-business</artifactId>
-			<version>1.0.0</version>
+			<version>${mm-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

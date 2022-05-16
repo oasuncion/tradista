@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>position-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${position-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 	</dependencies>

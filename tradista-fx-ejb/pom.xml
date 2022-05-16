@@ -16,12 +16,12 @@
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-business</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

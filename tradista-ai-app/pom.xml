@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 	</dependencies>

@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>finance.tradista.ir</groupId>
 			<artifactId>ir-model</artifactId>
-			<version>1.0.0</version>
+			<version>${ir-model.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

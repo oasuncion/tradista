@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-common</artifactId>
-			<version>1.0.0</version>
+			<version>${core-common.version}</version>
 		</dependency>
 	</dependencies>
 </project>

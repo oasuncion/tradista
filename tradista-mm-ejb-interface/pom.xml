@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>finance.tradista.mm</groupId>
 			<artifactId>mm-model</artifactId>
-			<version>1.0.0</version>
+			<version>${mm-model.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${core-persistence.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

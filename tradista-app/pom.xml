@@ -16,37 +16,37 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${core-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.mm</groupId>
 			<artifactId>mm-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${mm-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ir</groupId>
 			<artifactId>ir-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${ir-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${security-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.app</groupId>
 			<artifactId>web</artifactId>
-			<version>1.0.0</version>
+			<version>${web.version}</version>
 			<type>war</type>
 		</dependency>
 	</dependencies>

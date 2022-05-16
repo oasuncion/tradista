@@ -39,12 +39,12 @@
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${security-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-business</artifactId>
-			<version>1.0.0</version>
+			<version>${security-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

@@ -31,47 +31,47 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>position-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${position-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>transfer-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${transfer-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>marketdata-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${marketdata-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ir</groupId>
 			<artifactId>ir-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${ir-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.mm</groupId>
 			<artifactId>mm-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${mm-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${security-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${core-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly.security</groupId>

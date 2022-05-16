@@ -16,12 +16,12 @@
 		<dependency>
 			<groupId>finance.tradista.ir</groupId>
 			<artifactId>ir-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${ir-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ir</groupId>
 			<artifactId>ir-business</artifactId>
-			<version>1.0.0</version>
+			<version>${ir-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

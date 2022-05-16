@@ -350,32 +350,6 @@
 									${project.basedir}/target/${project.build.finalName}-bin/${project.build.finalName}/lib/security-model.jar
 								</option>
 							</options>
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ai-ejb-interface-${ai-ejb-interface.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ai-model-${ai-model.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/app-client-${app-client.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/bloomberg-interface-${bloomberg-interface.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-common-${core-common.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-ejb-interface-${core-ejb-interface.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-${core-gui.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-gui-common-${core-gui-common.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/core-model-${core-model.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-client-${fx-ejb-client.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-ejb-interface-${fx-ejb-interface.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-gui-${fx-gui.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/fx-model-${fx-model.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-client-${ir-ejb-client.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-ejb-interface-${ir-ejb-interface.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-gui-${ir-gui.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/ir-model-${ir-model.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-client-${mm-ejb-client.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-ejb-interface-${mm-ejb-interface.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-gui-${mm-gui.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/mm-model-${mm-model.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-client-${security-ejb-client.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-ejb-interface-${security-ejb-interface.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-gui-${security-gui.version}.jar</injar> -->
-							<!-- <injar>${project.build.finalName}-bin/${project.build.finalName}/lib/security-model-${security-model.version}.jar</injar> -->
-							<!-- <inFilter>finance/tradista/**</inFilter> -->
 							<libs>
 								<lib>${java.home}/jmods/java.base.jmod</lib>
 							</libs>
@@ -474,32 +448,32 @@
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-gui</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-gui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.mm</groupId>
 			<artifactId>mm-gui</artifactId>
-			<version>1.0.0</version>
+			<version>${mm-gui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ir</groupId>
 			<artifactId>ir-gui</artifactId>
-			<version>1.0.0</version>
+			<version>${ir-gui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-gui</artifactId>
-			<version>1.0.0</version>
+			<version>${security-gui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-gui</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-gui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-gui</artifactId>
-			<version>1.0.0</version>
+			<version>${core-gui.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly</groupId>
@@ -510,7 +484,7 @@
 		<dependency>
 			<groupId>finance.tradista.bloomberg</groupId>
 			<artifactId>bloomberg-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${bloomberg-interface.version}</version>
 		</dependency>
 	</dependencies>
 </project>

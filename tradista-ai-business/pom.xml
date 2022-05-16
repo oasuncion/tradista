@@ -26,17 +26,17 @@
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-model</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-model.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-ejb-client</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-ejb-client.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-ejb-client</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-ejb-client.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

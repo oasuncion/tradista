@@ -16,37 +16,37 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${core-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.mm</groupId>
 			<artifactId>mm-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${mm-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ir</groupId>
 			<artifactId>ir-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${ir-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${security-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>position-ejb-interface</artifactId>
-			<version>1.0.0</version>
+			<version>${position-ejb-interface.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-business</artifactId>
-			<version>1.0.0</version>
+			<version>${core-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

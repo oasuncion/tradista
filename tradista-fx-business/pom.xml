@@ -26,12 +26,12 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-business</artifactId>
-			<version>1.0.0</version>
+			<version>${core-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-ejb-client</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-ejb-client.version}</version>
 		</dependency>
 	</dependencies>
 </project>

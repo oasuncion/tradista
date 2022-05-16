@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>finance.tradista.fx</groupId>
 			<artifactId>fx-model</artifactId>
-			<version>1.0.0</version>
+			<version>${fx-model.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

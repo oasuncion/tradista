@@ -21,12 +21,12 @@
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-model</artifactId>
-			<version>1.0.0</version>
+			<version>${security-model.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-ejb-client</artifactId>
-			<version>1.0.0</version>
+			<version>${security-ejb-client.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>

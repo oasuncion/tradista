@@ -15,12 +15,12 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-gui-common</artifactId>
-			<version>1.0.0</version>
+			<version>${core-gui-common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-ejb-client</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-ejb-client.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

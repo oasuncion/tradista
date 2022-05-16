@@ -16,12 +16,12 @@
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-persistence</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-persistence.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.ai</groupId>
 			<artifactId>ai-business</artifactId>
-			<version>1.0.0</version>
+			<version>${ai-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

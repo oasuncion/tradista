@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>marketdata-ejb</artifactId>
-			<version>1.0.0</version>
+			<version>${marketdata-ejb.version}</version>
 			<type>ejb</type>
 		</dependency>
 	</dependencies>

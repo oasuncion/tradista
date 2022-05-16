@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
 			<artifactId>security-model</artifactId>
-			<version>1.0.0</version>
+			<version>${security-model.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

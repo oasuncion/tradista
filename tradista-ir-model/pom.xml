@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-model</artifactId>
-			<version>1.0.0</version>
+			<version>${core-model.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

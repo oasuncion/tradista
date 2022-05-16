@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>finance.tradista.core</groupId>
 			<artifactId>core-gui-common</artifactId>
-			<version>1.0.0</version>
+			<version>${core-gui-common.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

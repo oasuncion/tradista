@@ -7,15 +7,12 @@
 
 	<div class="menu-wrapper">
 		<div class="layout-menu-container">
-			<h:form id="menuform">
-			
+			<h:form id="menuform">			
 				<p:menubar>
-				<p:menuitem value="Tradista" styleClass="tradista"/>
-					
-						<f:facet name="options">
-                
-                <p:commandButton icon="pi pi-power-off" action="#{menuView.logout}" />
-				</f:facet>
+					<p:menuitem value="Tradista" styleClass="tradista"/>					
+					<f:facet name="options">
+						<p:commandButton icon="pi pi-power-off" action="#{menuView.logout}" />
+					</f:facet>
 				</p:menubar>
 			</h:form>
 		</div>

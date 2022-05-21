@@ -35,7 +35,7 @@
 		<dependency>
 			<groupId>net.sf.tweety.logics</groupId>
 			<artifactId>fol</artifactId>
-			<version>1.12</version>
+			<version>1.17</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.tweety.lp</groupId>

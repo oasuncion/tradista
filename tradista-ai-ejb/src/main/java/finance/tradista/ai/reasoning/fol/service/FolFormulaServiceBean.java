@@ -11,7 +11,6 @@ import javax.ejb.Stateless;
 import finance.tradista.ai.reasoning.fol.model.FolFormula;
 import finance.tradista.ai.reasoning.fol.persistence.FolFormulaSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import net.sf.tweety.commons.BeliefSet;
 import net.sf.tweety.commons.Formula;
 import net.sf.tweety.commons.ParserException;
 import net.sf.tweety.logics.fol.parser.FolParser;
@@ -63,7 +62,7 @@ public class FolFormulaServiceBean implements FolFormulaService {
 		List<FolFormula> newFormulas = Arrays.asList(formulas);
 		List<FolFormula> existingFormulas = FolFormulaSQL.getAllFolFormulas();
 		Set<net.sf.tweety.logics.fol.syntax.FolFormula> folFormulas = new HashSet<net.sf.tweety.logics.fol.syntax.FolFormula>();
-		BeliefSet<?> beliefSet = null;
+		FolBeliefSet beliefSet = null;
 		if (existingFormulas != null && !existingFormulas.isEmpty()) {
 			for (FolFormula formula : existingFormulas) {
 				folFormulas.add(formula.getFolFormula());

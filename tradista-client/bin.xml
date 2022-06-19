@@ -5,9 +5,20 @@
 	</formats>
 	<dependencySets>
 		<dependencySet>
+			<excludes>
+				<exclude>javafx*</exclude>
+			</excludes>
 			<unpack>false</unpack>
 			<scope>runtime</scope>
 			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>javafx*</include>
+			</includes>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+			<outputDirectory>lib/javafx</outputDirectory>
 		</dependencySet>
 	</dependencySets>
 	<fileSets>

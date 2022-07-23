@@ -107,6 +107,13 @@ public class PositionDefinitionBusinessDelegate {
 						"It is not possible to define a position on listed products for a specific counterparty.%n"));
 			}
 		}
+		if (positionDefinition.getProduct() != null) {
+			if (positionDefinition.getProductType() != null) {
+				if (!positionDefinition.getProduct().getProductType().equals(positionDefinition.getProductType()))
+					errMsg.append(String.format("The product %s should have the % product type.%n",
+							positionDefinition.getProduct(), positionDefinition.getProductType()));
+			}
+		}
 		if (errMsg.length() > 0) {
 			throw new TradistaBusinessException(errMsg.toString());
 		}

@@ -49,36 +49,69 @@ public class PositionDefinitionProductScopeFilteringInterceptor {
 			PositionDefinition posDef = (PositionDefinition) ic.getParameters()[0];
 			// Only object creations are controlled.
 			if (posDef.getId() == 0) {
+				StringBuilder errMsg = new StringBuilder();
 				if (posDef.getProductType() != null) {
-					if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
-						throw new TradistaBusinessException(String.format(
-								"%s is not found among the allowed product types. Please contact your administrator.",
+					if (!productBusinessDelegate.getAvailableProductTypes().contains(posDef.getProductType())) {
+						errMsg.append(String.format(
+								"%s is not found among the allowed product types. Please contact your administrator.%n",
 								posDef.getProductType()));
 					}
+				}
+				if (posDef.getProduct() != null) {
+					if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
+						errMsg.append(String.format(
+								"%s cannot be found. Please contact your administrator.",
+								posDef.getProduct()));
+					}
+				}
+				if (errMsg.length() > 0) {
+					throw new TradistaBusinessException(errMsg.toString());
 				}
 			}
 		} else if (ic.getParameters()[0] instanceof String) {
 			PositionDefinition posDef = positionDefinitionBusinessDelegate
 					.getPositionDefinitionByName((String) ic.getParameters()[0]);
 
+			StringBuilder errMsg = new StringBuilder();
 			if (posDef.getProductType() != null) {
-				if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
-					throw new TradistaBusinessException(String.format(
-							"%s is not found among the allowed product types. Please contact your administrator.",
+				if (!productBusinessDelegate.getAvailableProductTypes().contains(posDef.getProductType())) {
+					errMsg.append(String.format(
+							"%s is not found among the allowed product types. Please contact your administrator.%n",
 							posDef.getProductType()));
 				}
+			}
+			if (posDef.getProduct() != null) {
+				if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
+					errMsg.append(String.format(
+							"%s cannot be found. Please contact your administrator.",
+							posDef.getProduct()));
+				}
+			}
+			if (errMsg.length() > 0) {
+				throw new TradistaBusinessException(errMsg.toString());
 			}
 
 		} else {
 			if (ic.getParameters()[2] instanceof Long) {
 				long posId = (Long) ic.getParameters()[2];
 				PositionDefinition posDef = positionDefinitionBusinessDelegate.getPositionDefinitionById(posId);
+				StringBuilder errMsg = new StringBuilder();
 				if (posDef.getProductType() != null) {
-					if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
-						throw new TradistaBusinessException(String.format(
-								"%s is not found among the allowed product types. Please contact your administrator.",
+					if (!productBusinessDelegate.getAvailableProductTypes().contains(posDef.getProductType())) {
+						errMsg.append(String.format(
+								"%s is not found among the allowed product types. Please contact your administrator.%n",
 								posDef.getProductType()));
 					}
+				}
+				if (posDef.getProduct() != null) {
+					if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
+						errMsg.append(String.format(
+								"%s cannot be found. Please contact your administrator.",
+								posDef.getProduct()));
+					}
+				}
+				if (errMsg.length() > 0) {
+					throw new TradistaBusinessException(errMsg.toString());
 				}
 			}
 		}

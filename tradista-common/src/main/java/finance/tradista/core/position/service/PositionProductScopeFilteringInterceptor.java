@@ -51,12 +51,24 @@ public class PositionProductScopeFilteringInterceptor {
 			// Only object creations are controlled.
 			if (position.getId() == 0) {
 				PositionDefinition posDef = position.getPositionDefinition();
-				if (posDef.getProductType() != null)
-					if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
-						throw new TradistaBusinessException(String.format(
-								"%s is not found among the allowed product types. Please contact your administrator.",
+				StringBuilder errMsg = new StringBuilder();
+				if (posDef.getProductType() != null) {
+					if (!productBusinessDelegate.getAvailableProductTypes().contains(posDef.getProductType())) {
+						errMsg.append(String.format(
+								"%s is not found among the allowed product types. Please contact your administrator.%n",
 								posDef.getProductType()));
 					}
+				}
+				if (posDef.getProduct() != null) {
+					if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
+						errMsg.append(String.format(
+								"%s cannot be found. Please contact your administrator.",
+								posDef.getProduct()));
+					}
+				}
+				if (errMsg.length() > 0) {
+					throw new TradistaBusinessException(errMsg.toString());
+				}
 			}
 		} else if (ic.getParameters()[0] instanceof List<?>) {
 			List<Position> positions = (List<Position>) ic.getParameters()[0];
@@ -64,12 +76,24 @@ public class PositionProductScopeFilteringInterceptor {
 			for (Position position : positions) {
 				if (position.getId() == 0) {
 					PositionDefinition posDef = position.getPositionDefinition();
-					if (posDef.getProductType() != null)
-						if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
-							throw new TradistaBusinessException(String.format(
-									"%s is not found among the allowed product types. Please contact your administrator.",
+					StringBuilder errMsg = new StringBuilder();
+					if (posDef.getProductType() != null) {
+						if (!productBusinessDelegate.getAvailableProductTypes().contains(posDef.getProductType())) {
+							errMsg.append(String.format(
+									"%s is not found among the allowed product types. Please contact your administrator.%n",
 									posDef.getProductType()));
 						}
+					}
+					if (posDef.getProduct() != null) {
+						if (!productBusinessDelegate.getAllProducts().contains(posDef.getProduct())) {
+							errMsg.append(String.format(
+									"%s cannot be found. Please contact your administrator.",
+									posDef.getProduct()));
+						}
+					}
+					if (errMsg.length() > 0) {
+						throw new TradistaBusinessException(errMsg.toString());
+					}
 				}
 			}
 		}

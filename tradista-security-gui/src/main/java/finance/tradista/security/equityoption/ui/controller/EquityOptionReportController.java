@@ -1,5 +1,7 @@
 package finance.tradista.security.equityoption.ui.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -8,11 +10,8 @@ import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.ui.controller.TradistaControllerAdapter;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
 import finance.tradista.core.common.ui.view.TradistaAlert;
-import finance.tradista.core.trade.model.VanillaOptionTrade;
 import finance.tradista.security.equityoption.model.EquityOption;
 import finance.tradista.security.equityoption.service.EquityOptionBusinessDelegate;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,11 +19,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 /*
  * Copyright 2016 Olivier Asuncion
@@ -61,25 +57,25 @@ public class EquityOptionReportController extends TradistaControllerAdapter {
 	private TextField codeTextField;
 
 	@FXML
-	private TableView<EquityOption> report;
+	private TableView<EquityOptionProperty> report;
 
 	@FXML
-	private TableColumn<EquityOption, String> id;
+	private TableColumn<EquityOptionProperty, Number> id;
 
 	@FXML
-	private TableColumn<EquityOption, String> code;
+	private TableColumn<EquityOptionProperty, String> code;
 
 	@FXML
-	private TableColumn<EquityOption, String> equity;
+	private TableColumn<EquityOptionProperty, String> equity;
 
 	@FXML
-	private TableColumn<EquityOption, String> quantity;
+	private TableColumn<EquityOptionProperty, String> quantity;
 
 	@FXML
-	private TableColumn<EquityOption, VanillaOptionTrade.Style> style;
+	private TableColumn<EquityOptionProperty, String> style;
 
 	@FXML
-	private TableColumn<EquityOption, String> exchange;
+	private TableColumn<EquityOptionProperty, String> exchange;
 
 	private EquityOptionBusinessDelegate equityOptionBusinessDelegate;
 
@@ -88,32 +84,23 @@ public class EquityOptionReportController extends TradistaControllerAdapter {
 
 		equityOptionBusinessDelegate = new EquityOptionBusinessDelegate();
 
-		id.setCellValueFactory(new PropertyValueFactory<EquityOption, String>("id"));
-
-		code.setCellValueFactory(new PropertyValueFactory<EquityOption, String>("code"));
-
-		equity.setCellValueFactory(new PropertyValueFactory<EquityOption, String>("underlying"));
-
-		quantity.setCellValueFactory(new Callback<CellDataFeatures<EquityOption, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<EquityOption, String> p) {
-				return new ReadOnlyObjectWrapper<String>(TradistaGUIUtil.formatAmount(p.getValue().getQuantity()));
-			}
-		});
-
-		style.setCellValueFactory(new PropertyValueFactory<EquityOption, VanillaOptionTrade.Style>("style"));
-
-		exchange.setCellValueFactory(new PropertyValueFactory<EquityOption, String>("exchange"));
-
+		id.setCellValueFactory(cellData -> cellData.getValue().getId());
+		code.setCellValueFactory(cellData -> cellData.getValue().getCode());
+		equity.setCellValueFactory(cellData -> cellData.getValue().getEquity());
+		quantity.setCellValueFactory(cellData -> cellData.getValue().getQuantity());
+		style.setCellValueFactory(cellData -> cellData.getValue().getStyle());
+		exchange.setCellValueFactory(cellData -> cellData.getValue().getExchange());
 	}
 
 	@FXML
 	protected void load() {
-		ObservableList<EquityOption> data = null;
+		ObservableList<EquityOptionProperty> data = null;
 		if (!idTextField.getText().isEmpty()) {
 			EquityOption equityOption = equityOptionBusinessDelegate
 					.getEquityOptionById(Long.parseLong(idTextField.getText()));
 			if (equityOption != null) {
-				data = FXCollections.observableArrayList(equityOption);
+				EquityOptionProperty eop = new EquityOptionProperty(equityOption);
+				data = FXCollections.observableArrayList(eop);
 			}
 			report.setItems(data);
 			report.refresh();
@@ -123,11 +110,17 @@ public class EquityOptionReportController extends TradistaControllerAdapter {
 				Set<EquityOption> equityOptions = equityOptionBusinessDelegate
 						.getEquityOptionsByCode(codeTextField.getText());
 				if (equityOptions != null) {
-					data = FXCollections.observableArrayList(equityOptions);
+					if (!equityOptions.isEmpty()) {
+						List<EquityOptionProperty> eopList = new ArrayList<>(equityOptions.size());
+						for (EquityOption equityOption : equityOptions) {
+							eopList.add(new EquityOptionProperty(equityOption));
+						}
+						data = FXCollections.observableArrayList(eopList);
+					}
 				}
 				report.setItems(data);
 				report.refresh();
-			} catch (TradistaBusinessException abe) {
+			} catch (TradistaBusinessException tbe) {
 			}
 		} else {
 			if (creationDateFromDatePicker.getValue() == null && creationDateToDatePicker.getValue() == null) {
@@ -149,18 +142,24 @@ public class EquityOptionReportController extends TradistaControllerAdapter {
 	}
 
 	private void fillReport() {
-		ObservableList<EquityOption> data = null;
+		ObservableList<EquityOptionProperty> data = null;
 		Set<EquityOption> equityOptions;
 		try {
 			equityOptions = equityOptionBusinessDelegate.getEquityOptionsByCreationDate(
 					creationDateFromDatePicker.getValue(), creationDateToDatePicker.getValue());
 			if (equityOptions != null) {
-				data = FXCollections.observableArrayList(equityOptions);
+				if (!equityOptions.isEmpty()) {
+					List<EquityOptionProperty> eopList = new ArrayList<>(equityOptions.size());
+					for (EquityOption equityOption : equityOptions) {
+						eopList.add(new EquityOptionProperty(equityOption));
+					}
+					data = FXCollections.observableArrayList(eopList);
+				}
 			}
 			report.setItems(data);
 			report.refresh();
-		} catch (TradistaBusinessException abe) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}
 	}
@@ -169,8 +168,8 @@ public class EquityOptionReportController extends TradistaControllerAdapter {
 	protected void export() {
 		try {
 			TradistaGUIUtil.export(report, "EquityOptions", report.getScene().getWindow());
-		} catch (TradistaTechnicalException ate) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, ate.getMessage());
+		} catch (TradistaTechnicalException tte) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tte.getMessage());
 			alert.showAndWait();
 		}
 	}

@@ -1,5 +1,6 @@
 package finance.tradista.core.trade.ui.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 /*
  * Copyright 2014 Olivier Asuncion
@@ -60,25 +60,25 @@ public class TradeReportController extends TradistaControllerAdapter {
 	private TextField idTextField;
 
 	@FXML
-	private TableView<Trade<? extends Product>> report;
+	private TableView<TradeProperty> report;
 
 	@FXML
-	private TableColumn<Trade<? extends Product>, String> tradeDate;
+	private TableColumn<TradeProperty, String> tradeDate;
 
 	@FXML
-	private TableColumn<Trade<? extends Product>, String> productType;
+	private TableColumn<TradeProperty, String> productType;
 
 	@FXML
-	private TableColumn<Trade<? extends Product>, String> creationDate;
+	private TableColumn<TradeProperty, String> creationDate;
 
 	@FXML
-	private TableColumn<Trade<? extends Product>, String> id;
+	private TableColumn<TradeProperty, Number> id;
 
 	@FXML
-	private TableColumn<Trade<? extends Product>, String> productId;
+	private TableColumn<TradeProperty, Number> productId;
 
 	@FXML
-	private TableColumn<Trade<? extends Product>, String> counterpartyId;
+	private TableColumn<TradeProperty, String> counterparty;
 
 	private TradeBusinessDelegate tradeBusinessDelegate;
 
@@ -87,30 +87,25 @@ public class TradeReportController extends TradistaControllerAdapter {
 
 		tradeBusinessDelegate = new TradeBusinessDelegate();
 
-		id.setCellValueFactory(new PropertyValueFactory<Trade<? extends Product>, String>("id"));
-
-		tradeDate.setCellValueFactory(new PropertyValueFactory<Trade<? extends Product>, String>("tradeDate"));
-
-		productId.setCellValueFactory(new PropertyValueFactory<Trade<? extends Product>, String>("productId"));
-
-		productType.setCellValueFactory(new PropertyValueFactory<Trade<? extends Product>, String>("productType"));
-
-		creationDate.setCellValueFactory(new PropertyValueFactory<Trade<? extends Product>, String>("creationDate"));
-
-		counterpartyId.setCellValueFactory(new PropertyValueFactory<Trade<? extends Product>, String>("counterparty"));
+		id.setCellValueFactory(cellData -> cellData.getValue().getId());
+		tradeDate.setCellValueFactory(cellData -> cellData.getValue().getTradeDate());
+		productId.setCellValueFactory(cellData -> cellData.getValue().getProductId());
+		productType.setCellValueFactory(cellData -> cellData.getValue().getProductType());
+		creationDate.setCellValueFactory(cellData -> cellData.getValue().getTradeDate());
+		counterparty.setCellValueFactory(cellData -> cellData.getValue().getCounterparty());
 	}
 
-	@SuppressWarnings("unchecked")
 	@FXML
 	protected void load() {
-		ObservableList<Trade<? extends Product>> data = null;
+		ObservableList<TradeProperty> data = null;
 
 		if (!idTextField.getText().isEmpty()) {
 			try {
 				Trade<? extends Product> trade = tradeBusinessDelegate
 						.getTradeById(Long.parseLong(idTextField.getText()));
 				if (trade != null) {
-					data = FXCollections.observableArrayList(trade);
+					TradeProperty tp = new TradeProperty(trade);
+					data = FXCollections.observableArrayList(tp);
 				}
 				report.setItems(data);
 				report.refresh();
@@ -118,8 +113,8 @@ public class TradeReportController extends TradistaControllerAdapter {
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR,
 						String.format("The trade id: %s is incorrect.", idTextField.getText()));
 				alert.showAndWait();
-			} catch (TradistaBusinessException abe) {
-				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());
+			} catch (TradistaBusinessException tbe) {
+				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
 
@@ -147,13 +142,19 @@ public class TradeReportController extends TradistaControllerAdapter {
 	}
 
 	private void fillReport() {
-		ObservableList<Trade<? extends Product>> data = null;
+		ObservableList<TradeProperty> data = null;
 		try {
 			List<Trade<? extends Product>> trades = tradeBusinessDelegate.getTradesByDates(
 					creationDateFromDatePicker.getValue(), creationDateToDatePicker.getValue(),
 					tradeDateFromDatePicker.getValue(), tradeDateToDatePicker.getValue());
 			if (trades != null) {
-				data = FXCollections.observableArrayList(trades);
+				if (!trades.isEmpty()) {
+					List<TradeProperty> tpList = new ArrayList<TradeProperty>(trades.size());
+					for (Trade<? extends Product> trade : trades) {
+						tpList.add(new TradeProperty(trade));
+					}
+					data = FXCollections.observableArrayList(tpList);
+				}
 			}
 			report.setItems(data);
 			report.refresh();
@@ -162,7 +163,7 @@ public class TradeReportController extends TradistaControllerAdapter {
 			alert.showAndWait();
 		}
 	}
-	
+
 	@FXML
 	protected void export() {
 		try {

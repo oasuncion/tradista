@@ -39,7 +39,7 @@
 				<TableColumn fx:id="activeFrom" text="Active From" />
 				<TableColumn fx:id="activeTo" text="Active To" />
 				<TableColumn fx:id="isin" text="ISIN" />
-				<TableColumn fx:id="issuerId" text="Issuer Id" />
+				<TableColumn fx:id="issuer" text="Issuer" />
 			</columns>
 		</TableView>
 		<Label styleClass="labelBold" text="Equity report" GridPane.columnIndex="1"/>

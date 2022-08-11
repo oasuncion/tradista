@@ -110,11 +110,13 @@ public class EquityOptionReportController extends TradistaControllerAdapter {
 				Set<EquityOption> equityOptions = equityOptionBusinessDelegate
 						.getEquityOptionsByCode(codeTextField.getText());
 				if (equityOptions != null) {
-					List<EquityOptionProperty> eopList = new ArrayList<>(equityOptions.size());
-					for (EquityOption equityOption : equityOptions) {
-						eopList.add(new EquityOptionProperty(equityOption));
+					if (!equityOptions.isEmpty()) {
+						List<EquityOptionProperty> eopList = new ArrayList<>(equityOptions.size());
+						for (EquityOption equityOption : equityOptions) {
+							eopList.add(new EquityOptionProperty(equityOption));
+						}
+						data = FXCollections.observableArrayList(eopList);
 					}
-					data = FXCollections.observableArrayList(eopList);
 				}
 				report.setItems(data);
 				report.refresh();
@@ -146,11 +148,13 @@ public class EquityOptionReportController extends TradistaControllerAdapter {
 			equityOptions = equityOptionBusinessDelegate.getEquityOptionsByCreationDate(
 					creationDateFromDatePicker.getValue(), creationDateToDatePicker.getValue());
 			if (equityOptions != null) {
-				List<EquityOptionProperty> eopList = new ArrayList<>(equityOptions.size());
-				for (EquityOption equityOption : equityOptions) {
-					eopList.add(new EquityOptionProperty(equityOption));
+				if (!equityOptions.isEmpty()) {
+					List<EquityOptionProperty> eopList = new ArrayList<>(equityOptions.size());
+					for (EquityOption equityOption : equityOptions) {
+						eopList.add(new EquityOptionProperty(equityOption));
+					}
+					data = FXCollections.observableArrayList(eopList);
 				}
-				data = FXCollections.observableArrayList(eopList);
 			}
 			report.setItems(data);
 			report.refresh();

@@ -160,11 +160,13 @@ public class BondReportController extends TradistaControllerAdapter {
 					creationDateToDatePicker.getValue(), maturityDateFromDatePicker.getValue(),
 					maturityDateToDatePicker.getValue());
 			if (bonds != null) {
-				List<BondProperty> bpList = new ArrayList<>(bonds.size());
-				for (Bond bond : bonds) {
-					bpList.add(new BondProperty(bond));
+				if (!bonds.isEmpty()) {
+					List<BondProperty> bpList = new ArrayList<>(bonds.size());
+					for (Bond bond : bonds) {
+						bpList.add(new BondProperty(bond));
+					}
+					data = FXCollections.observableArrayList(bpList);
 				}
-				data = FXCollections.observableArrayList(bpList);
 			}
 			report.setItems(data);
 			report.refresh();
@@ -173,7 +175,7 @@ public class BondReportController extends TradistaControllerAdapter {
 			alert.showAndWait();
 		}
 	}
-	
+
 	@FXML
 	protected void export() {
 		try {

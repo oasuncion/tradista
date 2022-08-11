@@ -1,5 +1,7 @@
 package finance.tradista.security.equity.ui.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,7 +21,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 /*
  * Copyright 2016 Olivier Asuncion
@@ -62,66 +63,60 @@ public class EquityReportController extends TradistaControllerAdapter {
 	private TextField isinTextField;
 
 	@FXML
-	private TableView<Equity> report;
+	private TableView<EquityProperty> report;
 
 	@FXML
-	private TableColumn<Equity, String> tradingSize;
+	private TableColumn<EquityProperty, Number> tradingSize;
 
 	@FXML
-	private TableColumn<Equity, String> totalIssued;
+	private TableColumn<EquityProperty, Number> totalIssued;
 
 	@FXML
-	private TableColumn<Equity, String> payDividend;
+	private TableColumn<EquityProperty, Boolean> payDividend;
 
 	@FXML
-	private TableColumn<Equity, String> dividendCurrency;
+	private TableColumn<EquityProperty, String> dividendCurrency;
 
 	@FXML
-	private TableColumn<Equity, String> activeFrom;
+	private TableColumn<EquityProperty, String> activeFrom;
 
 	@FXML
-	private TableColumn<Equity, String> activeTo;
+	private TableColumn<EquityProperty, String> activeTo;
 
 	@FXML
-	private TableColumn<Equity, String> id;
+	private TableColumn<EquityProperty, Number> id;
 
 	@FXML
-	private TableColumn<Equity, String> issuerId;
+	private TableColumn<EquityProperty, String> issuer;
 
 	@FXML
-	private TableColumn<Equity, String> isin;
+	private TableColumn<EquityProperty, String> isin;
 
 	private EquityBusinessDelegate equityBusinessDelegate;
 
 	// This method is called by the FXMLLoader when initialization is complete
 	public void initialize() {
 		equityBusinessDelegate = new EquityBusinessDelegate();
-		id.setCellValueFactory(new PropertyValueFactory<Equity, String>("id"));
 
-		tradingSize.setCellValueFactory(new PropertyValueFactory<Equity, String>("tradingSize"));
-
-		totalIssued.setCellValueFactory(new PropertyValueFactory<Equity, String>("totalIssued"));
-
-		payDividend.setCellValueFactory(new PropertyValueFactory<Equity, String>("payDividend"));
-
-		dividendCurrency.setCellValueFactory(new PropertyValueFactory<Equity, String>("dividendCurrency"));
-
-		activeFrom.setCellValueFactory(new PropertyValueFactory<Equity, String>("activeFrom"));
-
-		activeTo.setCellValueFactory(new PropertyValueFactory<Equity, String>("activeTo"));
-
-		issuerId.setCellValueFactory(new PropertyValueFactory<Equity, String>("issuerId"));
-
-		isin.setCellValueFactory(new PropertyValueFactory<Equity, String>("isin"));
+		id.setCellValueFactory(cellData -> cellData.getValue().getId());
+		tradingSize.setCellValueFactory(cellData -> cellData.getValue().getTradingSize());
+		totalIssued.setCellValueFactory(cellData -> cellData.getValue().getTotalIssued());
+		payDividend.setCellValueFactory(cellData -> cellData.getValue().getPayDividend());
+		dividendCurrency.setCellValueFactory(cellData -> cellData.getValue().getDividendCurrency());
+		activeFrom.setCellValueFactory(cellData -> cellData.getValue().getActiveFrom());
+		activeTo.setCellValueFactory(cellData -> cellData.getValue().getActiveTo());
+		issuer.setCellValueFactory(cellData -> cellData.getValue().getIssuer());
+		isin.setCellValueFactory(cellData -> cellData.getValue().getIsin());
 	}
 
 	@FXML
 	protected void load() {
-		ObservableList<Equity> data = null;
+		ObservableList<EquityProperty> data = null;
 		if (!idTextField.getText().isEmpty()) {
 			Equity equity = equityBusinessDelegate.getEquityById(Long.parseLong(idTextField.getText()));
 			if (equity != null) {
-				data = FXCollections.observableArrayList(equity);
+				EquityProperty ep = new EquityProperty(equity);
+				data = FXCollections.observableArrayList(ep);
 			}
 			report.setItems(data);
 			report.refresh();
@@ -129,7 +124,13 @@ public class EquityReportController extends TradistaControllerAdapter {
 		} else if (!isinTextField.getText().isEmpty()) {
 			Set<Equity> equities = equityBusinessDelegate.getEquitiesByIsin(isinTextField.getText());
 			if (equities != null) {
-				data = FXCollections.observableArrayList(equities);
+				if (!equities.isEmpty()) {
+					List<EquityProperty> epList = new ArrayList<EquityProperty>(equities.size());
+					for (Equity equity : equities) {
+						epList.add(new EquityProperty(equity));
+					}
+					data = FXCollections.observableArrayList(epList);
+				}
 			}
 			report.setItems(data);
 			report.refresh();
@@ -155,29 +156,35 @@ public class EquityReportController extends TradistaControllerAdapter {
 	}
 
 	private void fillReport() {
-		ObservableList<Equity> data = null;
+		ObservableList<EquityProperty> data = null;
 		Set<Equity> equities;
 		try {
 			equities = equityBusinessDelegate.getEquitiesByDates(creationDateFromDatePicker.getValue(),
 					creationDateToDatePicker.getValue(), activeDateFromDatePicker.getValue(),
 					activeDateToDatePicker.getValue());
 			if (equities != null) {
-				data = FXCollections.observableArrayList(equities);
+				if (!equities.isEmpty()) {
+					List<EquityProperty> epList = new ArrayList<EquityProperty>(equities.size());
+					for (Equity equity : equities) {
+						epList.add(new EquityProperty(equity));
+					}
+					data = FXCollections.observableArrayList(epList);
+				}
 			}
 			report.setItems(data);
 			report.refresh();
-		} catch (TradistaBusinessException abe) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}
 	}
-	
+
 	@FXML
 	protected void export() {
 		try {
-		TradistaGUIUtil.export(report, "Equities", report.getScene().getWindow());
-		} catch (TradistaTechnicalException ate) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, ate.getMessage());
+			TradistaGUIUtil.export(report, "Equities", report.getScene().getWindow());
+		} catch (TradistaTechnicalException tte) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tte.getMessage());
 			alert.showAndWait();
 		}
 	}

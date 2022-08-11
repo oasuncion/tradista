@@ -1,9 +1,9 @@
 package finance.tradista.security.bond.ui.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
@@ -12,8 +12,6 @@ import finance.tradista.core.common.ui.util.TradistaGUIUtil;
 import finance.tradista.core.common.ui.view.TradistaAlert;
 import finance.tradista.security.bond.model.Bond;
 import finance.tradista.security.bond.service.BondBusinessDelegate;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,11 +19,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 /*
  * Copyright 2016 Olivier Asuncion
@@ -68,31 +63,31 @@ public class BondReportController extends TradistaControllerAdapter {
 	private TextField isinTextField;
 
 	@FXML
-	private TableView<Bond> report;
+	private TableView<BondProperty> report;
 
 	@FXML
-	private TableColumn<Bond, String> coupon;
+	private TableColumn<BondProperty, String> coupon;
 
 	@FXML
-	private TableColumn<Bond, String> maturity;
+	private TableColumn<BondProperty, String> maturity;
 
 	@FXML
-	private TableColumn<Bond, String> principal;
+	private TableColumn<BondProperty, String> principal;
 
 	@FXML
-	private TableColumn<Bond, String> creationDate;
+	private TableColumn<BondProperty, String> creationDate;
 
 	@FXML
-	private TableColumn<Bond, String> datedDate;
+	private TableColumn<BondProperty, String> datedDate;
 
 	@FXML
-	private TableColumn<Bond, String> id;
+	private TableColumn<BondProperty, Number> id;
 
 	@FXML
-	private TableColumn<Bond, String> issuerId;
+	private TableColumn<BondProperty, String> issuer;
 
 	@FXML
-	private TableColumn<Bond, String> isin;
+	private TableColumn<BondProperty, String> isin;
 
 	private BondBusinessDelegate bondBusinessDelegate;
 
@@ -101,43 +96,24 @@ public class BondReportController extends TradistaControllerAdapter {
 
 		bondBusinessDelegate = new BondBusinessDelegate();
 
-		id.setCellValueFactory(new PropertyValueFactory<Bond, String>("id"));
-
-		coupon.setCellValueFactory(new Callback<CellDataFeatures<Bond, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<Bond, String> p) {
-				String coupon = StringUtils.EMPTY;
-				if (p.getValue().getCoupon() != null) {
-					coupon = TradistaGUIUtil.formatAmount(p.getValue().getCoupon());
-				}
-				return new ReadOnlyObjectWrapper<String>(coupon);
-			}
-		});
-
-		maturity.setCellValueFactory(new PropertyValueFactory<Bond, String>("maturityDate"));
-
-		principal.setCellValueFactory(new Callback<CellDataFeatures<Bond, String>, ObservableValue<String>>() {
-			public ObservableValue<String> call(CellDataFeatures<Bond, String> p) {
-				return new ReadOnlyObjectWrapper<String>(TradistaGUIUtil.formatAmount(p.getValue().getPrincipal()));
-			}
-		});
-
-		creationDate.setCellValueFactory(new PropertyValueFactory<Bond, String>("creationDate"));
-
-		datedDate.setCellValueFactory(new PropertyValueFactory<Bond, String>("datedDate"));
-
-		issuerId.setCellValueFactory(new PropertyValueFactory<Bond, String>("issuerId"));
-
-		isin.setCellValueFactory(new PropertyValueFactory<Bond, String>("isin"));
-
+		id.setCellValueFactory(cellData -> cellData.getValue().getId());
+		coupon.setCellValueFactory(cellData -> cellData.getValue().getCoupon());
+		maturity.setCellValueFactory(cellData -> cellData.getValue().getMaturityDate());
+		principal.setCellValueFactory(cellData -> cellData.getValue().getPrincipal());
+		creationDate.setCellValueFactory(cellData -> cellData.getValue().getCreationDate());
+		datedDate.setCellValueFactory(cellData -> cellData.getValue().getDatedDate());
+		issuer.setCellValueFactory(cellData -> cellData.getValue().getIssuer());
+		isin.setCellValueFactory(cellData -> cellData.getValue().getIsin());
 	}
 
 	@FXML
 	protected void load() {
-		ObservableList<Bond> data = null;
+		ObservableList<BondProperty> data = null;
 		if (!idTextField.getText().isEmpty()) {
 			Bond bond = bondBusinessDelegate.getBondById(Long.parseLong(idTextField.getText()));
 			if (bond != null) {
-				data = FXCollections.observableArrayList(bond);
+				BondProperty bp = new BondProperty(bond);
+				data = FXCollections.observableArrayList(bp);
 			}
 			report.setItems(data);
 			report.refresh();
@@ -145,7 +121,13 @@ public class BondReportController extends TradistaControllerAdapter {
 		} else if (!isinTextField.getText().isEmpty()) {
 			Set<Bond> bonds = bondBusinessDelegate.getBondsByIsin(isinTextField.getText());
 			if (bonds != null) {
-				data = FXCollections.observableArrayList(bonds);
+				if (!bonds.isEmpty()) {
+					List<BondProperty> bpList = new ArrayList<>(bonds.size());
+					for (Bond bond : bonds) {
+						bpList.add(new BondProperty(bond));
+					}
+					data = FXCollections.observableArrayList(bpList);
+				}
 			}
 			report.setItems(data);
 			report.refresh();
@@ -171,19 +153,23 @@ public class BondReportController extends TradistaControllerAdapter {
 	}
 
 	private void fillReport() {
-		ObservableList<Bond> data = null;
+		ObservableList<BondProperty> data = null;
 		Set<Bond> bonds;
 		try {
 			bonds = bondBusinessDelegate.getBondsByDates(creationDateFromDatePicker.getValue(),
 					creationDateToDatePicker.getValue(), maturityDateFromDatePicker.getValue(),
 					maturityDateToDatePicker.getValue());
 			if (bonds != null) {
-				data = FXCollections.observableArrayList(bonds);
+				List<BondProperty> bpList = new ArrayList<>(bonds.size());
+				for (Bond bond : bonds) {
+					bpList.add(new BondProperty(bond));
+				}
+				data = FXCollections.observableArrayList(bpList);
 			}
 			report.setItems(data);
 			report.refresh();
-		} catch (TradistaBusinessException abe) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}
 	}
@@ -192,8 +178,8 @@ public class BondReportController extends TradistaControllerAdapter {
 	protected void export() {
 		try {
 			TradistaGUIUtil.export(report, "Bonds", report.getScene().getWindow());
-		} catch (TradistaTechnicalException ate) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, ate.getMessage());
+		} catch (TradistaTechnicalException tte) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tte.getMessage());
 			alert.showAndWait();
 		}
 	}

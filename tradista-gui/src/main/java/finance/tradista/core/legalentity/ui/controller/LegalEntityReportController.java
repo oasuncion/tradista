@@ -1,6 +1,8 @@
 package finance.tradista.core.legalentity.ui.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +24,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 /*
  * Copyright 2014 Olivier Asuncion
@@ -50,22 +51,22 @@ public class LegalEntityReportController extends TradistaControllerAdapter {
 	private TextField shortNameTextField;
 
 	@FXML
-	private TableView<LegalEntity> report;
+	private TableView<LegalEntityProperty> report;
 
 	@FXML
-	private TableColumn<LegalEntity, String> id;
+	private TableColumn<LegalEntityProperty, Number> id;
 
 	@FXML
-	private TableColumn<LegalEntity, String> shortName;
+	private TableColumn<LegalEntityProperty, String> shortName;
 
 	@FXML
-	private TableColumn<LegalEntity, String> longName;
+	private TableColumn<LegalEntityProperty, String> longName;
 
 	@FXML
-	private TableColumn<LegalEntity, String> description;
+	private TableColumn<LegalEntityProperty, String> description;
 
 	@FXML
-	private TableColumn<LegalEntity, LegalEntity.Role> role;
+	private TableColumn<LegalEntityProperty, String> role;
 
 	@FXML
 	private ComboBox<String> roleComboBox;
@@ -75,11 +76,11 @@ public class LegalEntityReportController extends TradistaControllerAdapter {
 	// This method is called by the FXMLLoader when initialization is complete
 	public void initialize() {
 		legalEntityBusinessDelegate = new LegalEntityBusinessDelegate();
-		id.setCellValueFactory(new PropertyValueFactory<LegalEntity, String>("id"));
-		shortName.setCellValueFactory(new PropertyValueFactory<LegalEntity, String>("shortName"));
-		longName.setCellValueFactory(new PropertyValueFactory<LegalEntity, String>("longName"));
-		description.setCellValueFactory(new PropertyValueFactory<LegalEntity, String>("description"));
-		role.setCellValueFactory(new PropertyValueFactory<LegalEntity, LegalEntity.Role>("role"));
+		id.setCellValueFactory(cellData -> cellData.getValue().getId());
+		shortName.setCellValueFactory(cellData -> cellData.getValue().getShortName());
+		longName.setCellValueFactory(cellData -> cellData.getValue().getLongName());
+		description.setCellValueFactory(cellData -> cellData.getValue().getDescription());
+		role.setCellValueFactory(cellData -> cellData.getValue().getRole());
 		TradistaGUIUtil.fillComboBox(
 				Arrays.asList(LegalEntity.Role.values()).stream().map(t -> t.toString()).collect(Collectors.toList()),
 				roleComboBox);
@@ -106,7 +107,7 @@ public class LegalEntityReportController extends TradistaControllerAdapter {
 	}
 
 	private void fillReport() {
-		ObservableList<LegalEntity> data = null;
+		ObservableList<LegalEntityProperty> data = null;
 		LegalEntity.Role role = null;
 		if (!roleComboBox.getValue().isEmpty()) {
 			role = LegalEntity.Role.getRole(roleComboBox.getValue());
@@ -115,7 +116,13 @@ public class LegalEntityReportController extends TradistaControllerAdapter {
 				.getLegalEntitiesByShortNameAndRole("%" + shortNameTextField.getText() + "%", role);
 
 		if (legalEntities != null) {
-			data = FXCollections.observableArrayList(legalEntities);
+			if (!legalEntities.isEmpty()) {
+				List<LegalEntityProperty> bpList = new ArrayList<>(legalEntities.size());
+				for (LegalEntity legalEntity : legalEntities) {
+					bpList.add(new LegalEntityProperty(legalEntity));
+				}
+				data = FXCollections.observableArrayList(bpList);
+			}
 		}
 		report.setItems(data);
 		report.refresh();

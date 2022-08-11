@@ -29,7 +29,7 @@
 				<TableColumn fx:id="creationDate" text="Creation Date" />
 				<TableColumn fx:id="productId" text="Product Id" />
 				<TableColumn fx:id="productType" text="Product Type" />
-				<TableColumn fx:id="counterpartyId" text="Counterparty" />
+				<TableColumn fx:id="counterparty" text="Counterparty" />
 			</columns>
 		</TableView>
 		<Label styleClass="labelBold" text="Trade report" GridPane.columnIndex="1"/>

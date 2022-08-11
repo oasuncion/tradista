@@ -34,7 +34,7 @@
 				<TableColumn fx:id="maturity" text="Maturity Date" />
 				<TableColumn fx:id="principal" text="Principal" />
 				<TableColumn fx:id="creationDate" text="Creation Date" />
-				<TableColumn fx:id="issuerId" text="Issuer Id" />
+				<TableColumn fx:id="issuer" text="Issuer" />
 				<TableColumn fx:id="datedDate" text="Dated Date" />
 				<TableColumn fx:id="isin" text="ISIN" />
 			</columns>

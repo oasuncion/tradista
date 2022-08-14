@@ -1,4 +1,4 @@
-# Tradista: the first open source Post Trading Solution
+# Tradista: the first open source Financial Risk Management Solution
 
 
 Tradista is a lightweight Financial Risk Management Solution enabling you to manage in a single tool your daily treasury & risk management tasks. Tradista, among other possibilities, can be used for market data analyses, pre-deal checks and trades booking, P&L management, financial inventory management and reporting.

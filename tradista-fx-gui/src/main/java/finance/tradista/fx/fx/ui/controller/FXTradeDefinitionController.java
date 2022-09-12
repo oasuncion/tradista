@@ -323,7 +323,7 @@ public class FXTradeDefinitionController extends TradistaTradeBookingController 
 		quoteLow.setCellValueFactory(cellLow -> new ReadOnlyStringWrapper(cellLow.getValue().getLow()));
 		quoteLast.setCellValueFactory(cellLast -> new ReadOnlyStringWrapper(cellLast.getValue().getLast()));
 		quoteEnteredDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getEnteredDate()));
-		quoteSourceName.setCellValueFactory(cellName -> new ReadOnlyStringWrapper(cellName.getValue().getName()));
+		quoteSourceName.setCellValueFactory(cellName -> new ReadOnlyStringWrapper(cellName.getValue().getSourceName()));
 
 		// CashFlows table
 		cfDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getDate()));

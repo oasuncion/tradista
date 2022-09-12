@@ -21,6 +21,7 @@ import finance.tradista.fx.common.model.PricingParameterUnrealizedPnlCalculation
 import finance.tradista.fx.common.model.PricingParameterUnrealizedPnlCalculationModule.BookProductTypePair;
 import finance.tradista.fx.common.model.PricingParameterUnrealizedPnlCalculationModule.UnrealizedPnlCalculation;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -106,7 +107,7 @@ public class PricingParameterUnrealizedPnlCalculationModuleController extends Tr
 		};
 
 		fxProductType
-				.setCellValueFactory(new PropertyValueFactory<UnrealizedPnlCalculationProperty, String>("productType"));
+				.setCellValueFactory(productType -> new ReadOnlyStringWrapper(productType.getValue().getProductType()));
 
 		fxProductType.setCellFactory(unrealizedPnlCalculationProductTypeCellFactory);
 

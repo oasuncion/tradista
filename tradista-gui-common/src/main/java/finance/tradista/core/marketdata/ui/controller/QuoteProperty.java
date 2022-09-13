@@ -15,6 +15,7 @@ import finance.tradista.core.marketdata.model.QuoteType;
 import finance.tradista.core.marketdata.model.QuoteValue;
 import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -54,7 +55,7 @@ public class QuoteProperty {
 	private final SimpleStringProperty sourceName;
 
 	public QuoteProperty(String date, String name, String type, String bid, String ask, String open, String close,
-			String high, String low, String last, String enteredDate, String sourceName) {
+		String high, String low, String last, String enteredDate, String sourceName) {
 		this.date = new SimpleStringProperty(date);
 		this.name = new SimpleStringProperty(name);
 		this.type = new SimpleStringProperty(type);
@@ -129,96 +130,96 @@ public class QuoteProperty {
 		return quotePropertyList;
 	}
 
-	public String getDate() {
-		return date.get();
+	public StringProperty getDate() {
+		return date;
 	}
 
 	public void setDate(String date) {
 		this.date.set(date);
 	}
 
-	public String getName() {
-		return name.get();
+	public StringProperty getName() {
+		return name;
 	}
 
 	public void setName(String name) {
 		this.name.set(name);
 	}
 
-	public String getType() {
-		return type.get();
+	public StringProperty getType() {
+		return type;
 	}
 
 	public void setType(String type) {
 		this.type.set(type);
 	}
 
-	public String getBid() {
-		return bid.get();
+	public StringProperty getBid() {
+		return bid;
 	}
 
 	public void setBid(String bid) {
 		this.bid.set(bid);
 	}
 
-	public String getAsk() {
-		return ask.get();
+	public StringProperty getAsk() {
+		return ask;
 	}
 
 	public void setAsk(String ask) {
 		this.ask.set(ask);
 	}
 
-	public String getOpen() {
-		return open.get();
+	public StringProperty getOpen() {
+		return open;
 	}
 
 	public void setOpen(String open) {
 		this.open.set(open);
 	}
 
-	public String getClose() {
-		return close.get();
+	public StringProperty getClose() {
+		return close;
 	}
 
 	public void setClose(String close) {
 		this.close.set(close);
 	}
 
-	public String getHigh() {
-		return high.get();
+	public StringProperty getHigh() {
+		return high;
 	}
 
 	public void setHigh(String high) {
 		this.high.set(high);
 	}
 
-	public String getLow() {
-		return low.get();
+	public StringProperty getLow() {
+		return low;
 	}
 
 	public void setLow(String low) {
 		this.low.set(low);
 	}
 
-	public String getLast() {
-		return last.get();
+	public StringProperty getLast() {
+		return last;
 	}
 
 	public void setLast(String last) {
 		this.last.set(last);
 	}
 
-	public String getEnteredDate() {
-		return enteredDate.get();
+	public StringProperty getEnteredDate() {
+		return enteredDate;
 	}
 
 	public void setEnteredDate(String enteredDate) {
 		this.enteredDate.set(enteredDate);
 	}
 
-	public String getSourceName() {
-		return sourceName.get();
+	public StringProperty getSourceName() {
+		return sourceName;
 	}
 
 	public void setSourceName(String sourceName) {

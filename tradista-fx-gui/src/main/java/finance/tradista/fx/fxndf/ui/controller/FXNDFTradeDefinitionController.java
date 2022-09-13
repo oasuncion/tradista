@@ -246,28 +246,28 @@ public class FXNDFTradeDefinitionController extends TradistaTradeBookingControll
 		TradistaGUIUtil.fillTradeDirectionComboBox(buySell);
 
 		// Quotes initialization
-		quoteName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
-		quoteDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getDate()));
-		quoteType.setCellValueFactory(cellType -> new ReadOnlyStringWrapper(cellType.getValue().getType()));
+		quoteName.setCellValueFactory(cellData -> cellData.getValue().getName());
+		quoteDate.setCellValueFactory(cellDate -> cellDate.getValue().getDate());
+		quoteType.setCellValueFactory(cellType -> cellType.getValue().getType());
 
-		quoteBid.setCellValueFactory(cellBid -> new ReadOnlyStringWrapper(cellBid.getValue().getBid()));
-		quoteAsk.setCellValueFactory(cellAsk -> new ReadOnlyStringWrapper(cellAsk.getValue().getAsk()));
-		quoteOpen.setCellValueFactory(cellOpen -> new ReadOnlyStringWrapper(cellOpen.getValue().getOpen()));
-		quoteClose.setCellValueFactory(cellClose -> new ReadOnlyStringWrapper(cellClose.getValue().getClose()));
-		quoteHigh.setCellValueFactory(cellHigh -> new ReadOnlyStringWrapper(cellHigh.getValue().getHigh()));
-		quoteLow.setCellValueFactory(cellLow -> new ReadOnlyStringWrapper(cellLow.getValue().getLow()));
-		quoteLast.setCellValueFactory(cellLast -> new ReadOnlyStringWrapper(cellLast.getValue().getLast()));
-		quoteEnteredDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getEnteredDate()));
-		quoteSourceName.setCellValueFactory(cellName -> new ReadOnlyStringWrapper(cellName.getValue().getSourceName()));
+		quoteBid.setCellValueFactory(cellBid -> cellBid.getValue().getBid());
+		quoteAsk.setCellValueFactory(cellAsk -> cellAsk.getValue().getAsk());
+		quoteOpen.setCellValueFactory(cellOpen -> cellOpen.getValue().getOpen());
+		quoteClose.setCellValueFactory(cellClose -> cellClose.getValue().getClose());
+		quoteHigh.setCellValueFactory(cellHigh -> cellHigh.getValue().getHigh());
+		quoteLow.setCellValueFactory(cellLow -> cellLow.getValue().getLow());
+		quoteLast.setCellValueFactory(cellLast -> cellLast.getValue().getLast());
+		quoteEnteredDate.setCellValueFactory(cellDate -> cellDate.getValue().getEnteredDate());
+		quoteSourceName.setCellValueFactory(cellName -> cellName.getValue().getSourceName());
 
 		// CashFlows table
-		cfDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getDate()));
-		cfAmount.setCellValueFactory(cellAmount -> new ReadOnlyStringWrapper(cellAmount.getValue().getAmount()));
-		cfCurrency.setCellValueFactory(cellCurrency -> new ReadOnlyStringWrapper(cellCurrency.getValue().getCurrency()));
-		cfPurpose.setCellValueFactory(cellPurpose -> new ReadOnlyStringWrapper(cellPurpose.getValue().getPurpose()));
-		cfDirection.setCellValueFactory(cellDirection -> new ReadOnlyStringWrapper(cellDirection.getValue().getDirection()));
-		cfDiscountedAmount.setCellValueFactory(cellDiscount -> new ReadOnlyStringWrapper(cellDiscount.getValue().getDiscountedAmount()));
-		cfDiscountFactor.setCellValueFactory(cellFactor -> new ReadOnlyStringWrapper(cellFactor.getValue().getDiscountFactor()));
+		cfDate.setCellValueFactory(cellDate -> cellDate.getValue().getDate());
+		cfAmount.setCellValueFactory(cellAmount -> cellAmount.getValue().getAmount());
+		cfCurrency.setCellValueFactory(cellCurrency -> cellCurrency.getValue().getCurrency());
+		cfPurpose.setCellValueFactory(cellPurpose -> cellPurpose.getValue().getPurpose());
+		cfDirection.setCellValueFactory(cellDirection -> cellDirection.getValue().getDirection());
+		cfDiscountedAmount.setCellValueFactory(cellDiscount -> cellDiscount.getValue().getDiscountedAmount());
+		cfDiscountFactor.setCellValueFactory(cellFactor -> cellFactor.getValue().getDiscountFactor());
 
 		book.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Book>() {
 			@Override

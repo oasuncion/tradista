@@ -47,6 +47,7 @@ import finance.tradista.fx.fx.service.FXPricerBusinessDelegate;
 import finance.tradista.fx.fx.service.FXTradeBusinessDelegate;
 import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -64,7 +65,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 /*
@@ -311,28 +311,28 @@ public class FXTradeDefinitionController extends TradistaTradeBookingController 
 		}
 
 		// Quotes initialization
-		quoteName.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("name"));
-		quoteDate.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("date"));
-		quoteType.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("type"));
+		quoteName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
+		quoteDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getDate()));
+		quoteType.setCellValueFactory(cellType -> new ReadOnlyStringWrapper(cellType.getValue().getType()));
 
-		quoteBid.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("bid"));
-		quoteAsk.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("ask"));
-		quoteOpen.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("open"));
-		quoteClose.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("close"));
-		quoteHigh.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("high"));
-		quoteLow.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("low"));
-		quoteLast.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("last"));
-		quoteEnteredDate.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("enteredDate"));
-		quoteSourceName.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("sourceName"));
+		quoteBid.setCellValueFactory(cellBid -> new ReadOnlyStringWrapper(cellBid.getValue().getBid()));
+		quoteAsk.setCellValueFactory(cellAsk -> new ReadOnlyStringWrapper(cellAsk.getValue().getAsk()));
+		quoteOpen.setCellValueFactory(cellOpen -> new ReadOnlyStringWrapper(cellOpen.getValue().getOpen()));
+		quoteClose.setCellValueFactory(cellClose -> new ReadOnlyStringWrapper(cellClose.getValue().getClose()));
+		quoteHigh.setCellValueFactory(cellHigh -> new ReadOnlyStringWrapper(cellHigh.getValue().getHigh()));
+		quoteLow.setCellValueFactory(cellLow -> new ReadOnlyStringWrapper(cellLow.getValue().getLow()));
+		quoteLast.setCellValueFactory(cellLast -> new ReadOnlyStringWrapper(cellLast.getValue().getLast()));
+		quoteEnteredDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getEnteredDate()));
+		quoteSourceName.setCellValueFactory(cellName -> new ReadOnlyStringWrapper(cellName.getValue().getSourceName()));
 
 		// CashFlows table
-		cfDate.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("date"));
-		cfAmount.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("amount"));
-		cfCurrency.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("currency"));
-		cfPurpose.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("purpose"));
-		cfDirection.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("direction"));
-		cfDiscountedAmount.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("discountedAmount"));
-		cfDiscountFactor.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("discountFactor"));
+		cfDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getDate()));
+		cfAmount.setCellValueFactory(cellAmount -> new ReadOnlyStringWrapper(cellAmount.getValue().getAmount()));
+		cfCurrency.setCellValueFactory(cellCurrency -> new ReadOnlyStringWrapper(cellCurrency.getValue().getCurrency()));
+		cfPurpose.setCellValueFactory(cellPurpose -> new ReadOnlyStringWrapper(cellPurpose.getValue().getPurpose()));
+		cfDirection.setCellValueFactory(cellDirection -> new ReadOnlyStringWrapper(cellDirection.getValue().getDirection()));
+		cfDiscountedAmount.setCellValueFactory(cellDiscount -> new ReadOnlyStringWrapper(cellDiscount.getValue().getDiscountedAmount()));
+		cfDiscountFactor.setCellValueFactory(cellFactor -> new ReadOnlyStringWrapper(cellFactor.getValue().getDiscountFactor()));
 
 		selectedQuoteDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
 			@Override

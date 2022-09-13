@@ -37,7 +37,6 @@ import finance.tradista.fx.fxoption.model.FXOptionTrade;
 import finance.tradista.fx.fxoption.service.FXOptionTradeBusinessDelegate;
 import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -236,19 +235,19 @@ public class FXOptionTradeDefinitionController extends TradistaTradeBookingContr
 		TradistaGUIUtil.fillOptionSettlementTypeComboBox(settlementType);
 
 		// Quotes initialization
-		quoteName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
-		quoteDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getDate()));
-		quoteType.setCellValueFactory(cellType -> new ReadOnlyStringWrapper(cellType.getValue().getType()));
+		quoteName.setCellValueFactory(cellData -> cellData.getValue().getName());
+		quoteDate.setCellValueFactory(cellDate -> cellDate.getValue().getDate());
+		quoteType.setCellValueFactory(cellType -> cellType.getValue().getType());
 
-		quoteBid.setCellValueFactory(cellBid -> new ReadOnlyStringWrapper(cellBid.getValue().getBid()));
-		quoteAsk.setCellValueFactory(cellAsk -> new ReadOnlyStringWrapper(cellAsk.getValue().getAsk()));
-		quoteOpen.setCellValueFactory(cellOpen -> new ReadOnlyStringWrapper(cellOpen.getValue().getOpen()));
-		quoteClose.setCellValueFactory(cellClose -> new ReadOnlyStringWrapper(cellClose.getValue().getClose()));
-		quoteHigh.setCellValueFactory(cellHigh -> new ReadOnlyStringWrapper(cellHigh.getValue().getHigh()));
-		quoteLow.setCellValueFactory(cellLow -> new ReadOnlyStringWrapper(cellLow.getValue().getLow()));
-		quoteLast.setCellValueFactory(cellLast -> new ReadOnlyStringWrapper(cellLast.getValue().getLast()));
-		quoteEnteredDate.setCellValueFactory(cellDate -> new ReadOnlyStringWrapper(cellDate.getValue().getEnteredDate()));
-		quoteSourceName.setCellValueFactory(cellName -> new ReadOnlyStringWrapper(cellName.getValue().getSourceName()));
+		quoteBid.setCellValueFactory(cellBid -> cellBid.getValue().getBid());
+		quoteAsk.setCellValueFactory(cellAsk -> cellAsk.getValue().getAsk());
+		quoteOpen.setCellValueFactory(cellOpen -> cellOpen.getValue().getOpen());
+		quoteClose.setCellValueFactory(cellClose -> cellClose.getValue().getClose());
+		quoteHigh.setCellValueFactory(cellHigh -> cellHigh.getValue().getHigh());
+		quoteLow.setCellValueFactory(cellLow -> cellLow.getValue().getLow());
+		quoteLast.setCellValueFactory(cellLast -> cellLast.getValue().getLast());
+		quoteEnteredDate.setCellValueFactory(cellDate -> cellDate.getValue().getEnteredDate());
+		quoteSourceName.setCellValueFactory(cellName -> cellName.getValue().getSourceName());
 
 		try {
 			if (calendar.isBusinessDay(now)) {

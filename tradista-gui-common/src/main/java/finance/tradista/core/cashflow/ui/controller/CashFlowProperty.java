@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -33,13 +34,13 @@ under the License.    */
 
 public class CashFlowProperty {
 
-	private final SimpleStringProperty date;
-	private final SimpleStringProperty direction;
-	private final SimpleStringProperty purpose;
-	private final SimpleStringProperty amount;
-	private final SimpleStringProperty currency;
-	private final SimpleStringProperty discountedAmount;
-	private final SimpleStringProperty discountFactor;
+	private final StringProperty date;
+	private final StringProperty direction;
+	private final StringProperty purpose;
+	private final StringProperty amount;
+	private final StringProperty currency;
+	private final StringProperty discountedAmount;
+	private final StringProperty discountFactor;
 
 	public CashFlowProperty(String date, String direction, String purpose, String amount, String currency,
 			String discountedAmount, String discountFactor) {
@@ -68,56 +69,56 @@ public class CashFlowProperty {
 		return cfPropertyList;
 	}
 
-	public String getDate() {
-		return date.get();
+	public StringProperty getDate() {
+		return date;
 	}
 
 	public void setDate(String date) {
 		this.date.set(date);
 	}
 
-	public String getDirection() {
-		return direction.get();
+	public StringProperty getDirection() {
+		return direction;
 	}
 
 	public void setDirection(String direction) {
 		this.direction.set(direction);
 	}
 
-	public String getPurpose() {
-		return purpose.get();
+	public StringProperty getPurpose() {
+		return purpose;
 	}
 
 	public void setPurpose(String purpose) {
 		this.purpose.set(purpose);
 	}
 
-	public String getAmount() {
-		return amount.get();
+	public StringProperty getAmount() {
+		return amount;
 	}
 
 	public void setAmount(String amount) {
 		this.amount.set(amount);
 	}
 
-	public String getCurrency() {
-		return currency.get();
+	public StringProperty getCurrency() {
+		return currency;
 	}
 
 	public void setCurrency(String currency) {
 		this.currency.set(currency);
 	}
 
-	public String getDiscountedAmount() {
-		return discountedAmount.get();
+	public StringProperty getDiscountedAmount() {
+		return discountedAmount;
 	}
 
 	public void setDiscountedAmount(String discountedAmount) {
 		this.discountedAmount.set(discountedAmount);
 	}
 
-	public String getDiscountFactor() {
-		return discountFactor.get();
+	public StringProperty getDiscountFactor() {
+		return discountFactor;
 	}
 
 	public void setDiscountFactor(String discountFactor) {

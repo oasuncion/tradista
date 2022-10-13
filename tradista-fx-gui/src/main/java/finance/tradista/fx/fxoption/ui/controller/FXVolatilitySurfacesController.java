@@ -24,6 +24,7 @@ import finance.tradista.fx.fxoption.service.FXVolatilitySurfaceBusinessDelegate;
 import finance.tradista.fx.fxoption.ui.view.FXVolatilitySurfaceCreatorDialog;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -568,7 +569,7 @@ public class FXVolatilitySurfacesController extends TradistaVolatilitySurfaceCon
 	public static List<BigDecimal> toDeltaList(ObservableList<DeltaProperty> items) throws TradistaBusinessException {
 		List<BigDecimal> deltaList = new ArrayList<BigDecimal>();
 		for (DeltaProperty delta : items) {
-			deltaList.add(TradistaGUIUtil.parseAmount(delta.getValue(), "Delta"));
+			deltaList.add(TradistaGUIUtil.parseAmount(delta.getValue().toString(), "Delta"));
 		}
 
 		return deltaList;
@@ -904,14 +905,14 @@ public class FXVolatilitySurfacesController extends TradistaVolatilitySurfaceCon
 
 	public static class DeltaProperty {
 
-		private final SimpleStringProperty value;
+		private final StringProperty value;
 
 		public DeltaProperty(String value) {
 			this.value = new SimpleStringProperty(value);
 		}
 
-		public String getValue() {
-			return value.get();
+		public StringProperty getValue() {
+			return value;
 		}
 
 		public void setValue(String name) {
@@ -926,7 +927,7 @@ public class FXVolatilitySurfacesController extends TradistaVolatilitySurfaceCon
 				return false;
 			}
 
-			return (getValue().compareTo(((DeltaProperty) o).getValue()) == 0);
+			return (getValue().toString().compareTo(((DeltaProperty) o).getValue().toString()) == 0);
 		}
 
 		public int hashCode() {

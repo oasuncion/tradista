@@ -34,9 +34,11 @@ import finance.tradista.core.marketdata.ui.view.TradistaQuoteSetsListView;
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.position.ui.view.TradistaPositionDefinitionComboBox;
 import javafx.application.Platform;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -148,7 +150,7 @@ public class JobsController extends TradistaControllerAdapter {
 			}
 		};
 
-		propertyName.setCellValueFactory(new PropertyValueFactory<JobPropertyProperty, String>("name"));
+		propertyName.setCellValueFactory(cellData -> cellData.getValue().getName());
 
 		propertyValue.setCellFactory(cellFactory);
 
@@ -165,17 +167,17 @@ public class JobsController extends TradistaControllerAdapter {
 		executionId.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("id"));
 
 		executionJobInstanceName
-				.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("jobInstanceName"));
+				.setCellValueFactory(cellData -> cellData.getValue().getJobInstanceName());
 
-		executionJobType.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("jobType"));
+		executionJobType.setCellValueFactory(cellData -> cellData.getValue().getJobType());
 
-		executionStartTime.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("startTime"));
+		executionStartTime.setCellValueFactory(cellData -> cellData.getValue().getStartTime());
 
-		executionEndTime.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("endTime"));
+		executionEndTime.setCellValueFactory(cellData -> cellData.getValue().getEndTime());
 
-		executionStatus.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("status"));
+		executionStatus.setCellValueFactory(cellData -> cellData.getValue().getStatus());
 
-		executionErrorCause.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("errorCause"));
+		executionErrorCause.setCellValueFactory(cellData -> cellData.getValue().getErrorCause());
 
 		executionActions.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, List<Button>>("actions"));
 
@@ -750,7 +752,7 @@ public class JobsController extends TradistaControllerAdapter {
 		for (JobPropertyProperty prop : data) {
 			Object value = prop.getValue();
 			if (value != null) {
-				properties.put(prop.getName(), prop.getValue());
+				properties.put(prop.getName().toString(), prop.getValue());
 			}
 		}
 
@@ -759,9 +761,9 @@ public class JobsController extends TradistaControllerAdapter {
 
 	public static class JobPropertyProperty implements Comparable<JobPropertyProperty> {
 
-		private final SimpleStringProperty name;
+		private final StringProperty name;
 		private final SimpleObjectProperty value;
-		private final SimpleStringProperty type;
+		private final StringProperty type;
 
 		private JobPropertyProperty(String name, Object value, String type) {
 			this.name = new SimpleStringProperty(name);
@@ -769,8 +771,8 @@ public class JobsController extends TradistaControllerAdapter {
 			this.type = new SimpleStringProperty(type);
 		}
 
-		public String getName() {
-			return name.get();
+		public StringProperty getName() {
+			return name;
 		}
 
 		public void setName(String name) {
@@ -785,8 +787,8 @@ public class JobsController extends TradistaControllerAdapter {
 			this.value.set(value);
 		}
 
-		public String getType() {
-			return type.get();
+		public StringProperty getType() {
+			return type;
 		}
 
 		public void setValue(String type) {
@@ -795,21 +797,21 @@ public class JobsController extends TradistaControllerAdapter {
 
 		@Override
 		public int compareTo(JobPropertyProperty o) {
-			return getName().compareTo(o.getName());
+			return getName().toString().compareTo(o.getName().toString());
 		}
 
 	}
 
 	public class JobExecutionProperty implements Comparable<JobExecutionProperty> {
 
-		private final SimpleStringProperty name;
-		private final SimpleStringProperty status;
-		private final SimpleStringProperty startTime;
-		private SimpleStringProperty endTime;
-		private final SimpleStringProperty errorCause;
-		private final SimpleStringProperty jobInstanceName;
-		private final SimpleStringProperty jobType;
-		private final SimpleLongProperty id;
+		private final StringProperty name;
+		private final StringProperty status;
+		private final StringProperty startTime;
+		private StringProperty endTime;
+		private final StringProperty errorCause;
+		private final StringProperty jobInstanceName;
+		private final StringProperty jobType;
+		private final LongProperty id;
 		private final List<Button> actions;
 
 		private JobExecutionProperty(long id, final String name, String status, LocalDateTime startTime,
@@ -861,33 +863,33 @@ public class JobsController extends TradistaControllerAdapter {
 			}
 		}
 
-		public String getName() {
-			return name.get();
+		public StringProperty getName() {
+			return name;
 		}
 
 		public void setName(String name) {
 			this.name.set(name);
 		}
 
-		public String getStatus() {
-			return status.get();
+		public StringProperty getStatus() {
+			return status;
 		}
 
 		public void setStatus(String status) {
 			this.status.set(status);
 		}
 
-		public String getStartTime() {
-			return startTime.get();
+		public StringProperty getStartTime() {
+			return startTime;
 		}
 
 		public void setStartTime(String startTime) {
 			this.startTime.set(startTime);
 		}
 
-		public String getEndTime() {
+		public StringProperty getEndTime() {
 			if (endTime != null) {
-				return endTime.get();
+				return endTime;
 			}
 			return null;
 		}
@@ -896,24 +898,24 @@ public class JobsController extends TradistaControllerAdapter {
 			this.endTime.set(endTime);
 		}
 
-		public String getErrorCause() {
-			return errorCause.get();
+		public StringProperty getErrorCause() {
+			return errorCause;
 		}
 
 		public void setErrorCause(String errorCause) {
 			this.errorCause.set(errorCause);
 		}
 
-		public String getJobInstanceName() {
-			return jobInstanceName.get();
+		public StringProperty getJobInstanceName() {
+			return jobInstanceName;
 		}
 
 		public void setJobInstanceName(String jobInstanceName) {
 			this.jobInstanceName.set(jobInstanceName);
 		}
 
-		public String getJobType() {
-			return jobType.get();
+		public StringProperty getJobType() {
+			return jobType;
 		}
 
 		public void setJobType(String jobType) {

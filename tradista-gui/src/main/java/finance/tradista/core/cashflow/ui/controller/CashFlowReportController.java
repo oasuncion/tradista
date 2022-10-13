@@ -31,7 +31,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -121,13 +120,13 @@ public class CashFlowReportController extends TradistaControllerAdapter {
 		aggregationCriteria[2] = CURRENCY_PLUS_PURPOSE;
 
 		// CashFlows table
-		cfDate.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("date"));
-		cfAmount.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("amount"));
-		cfCurrency.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("currency"));
-		cfPurpose.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("purpose"));
-		cfDirection.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("direction"));
-		cfDiscountedAmount.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("discountedAmount"));
-		cfDiscountFactor.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("discountFactor"));
+		cfDate.setCellValueFactory(cellData -> cellData.getValue().getDate());
+		cfAmount.setCellValueFactory(cellData -> cellData.getValue().getAmount());
+		cfCurrency.setCellValueFactory(cellData -> cellData.getValue().getCurrency());
+		cfPurpose.setCellValueFactory(cellData -> cellData.getValue().getPurpose());
+		cfDirection.setCellValueFactory(cellData -> cellData.getValue().getDirection());
+		cfDiscountedAmount.setCellValueFactory(cellData -> cellData.getValue().getDiscountedAmount());
+		cfDiscountFactor.setCellValueFactory(cellData -> cellData.getValue().getDiscountFactor());
 
 		valueDateDatePicker.setValue(LocalDate.now());
 

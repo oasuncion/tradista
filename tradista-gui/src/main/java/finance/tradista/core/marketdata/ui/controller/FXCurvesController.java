@@ -28,6 +28,7 @@ import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
 import finance.tradista.core.marketdata.ui.view.FXCurveCreatorDialog;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -49,7 +50,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -127,7 +127,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 			}
 		};
 
-		pointDate.setCellValueFactory(new PropertyValueFactory<RatePointProperty, String>("date"));
+		pointDate.setCellValueFactory(cellData -> cellData.getValue().getDate());
 
 		pointRate.setCellFactory(cellFactory);
 
@@ -146,7 +146,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 			}
 		});
 
-		pointRate.setCellValueFactory(new PropertyValueFactory<RatePointProperty, String>("rate"));
+		pointRate.setCellValueFactory(cellData -> cellData.getValue().getRate());
 
 		VBox rateGraphic = new VBox();
 		Label rateLabel = new Label("Rate");
@@ -203,7 +203,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 							if (newValue == null || newValue.isEmpty()) {
 								return true;
 							}
-							return point.getRate().toUpperCase().contains(newValue.toUpperCase());
+							return point.getRate().toString().toUpperCase().contains(newValue.toUpperCase());
 						});
 					});
 
@@ -217,7 +217,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 								return true;
 							}
 							return newValue.equals(
-									LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate())));
+									LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().toString())));
 						});
 					});
 
@@ -229,7 +229,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 							if (newValue == null || newValue.isEmpty()) {
 								return true;
 							}
-							return point.getRate().contains(newValue);
+							return point.getRate().toString().contains(newValue.toString());
 						});
 					});
 
@@ -556,8 +556,8 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 		Map<LocalDate, BigDecimal> ratePointsMap = new HashMap<LocalDate, BigDecimal>();
 		for (RatePointProperty point : data) {
 			try {
-				ratePointsMap.put(LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate())),
-						point.getRate().equals("") ? null : TradistaGUIUtil.parseAmount(point.getRate(), "Rate"));
+				ratePointsMap.put(LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().toString())),
+						point.getRate().equals("") ? null : TradistaGUIUtil.parseAmount(point.getRate().toString(), "Rate"));
 			} catch (DateTimeParseException e) {
 				// TODO Add a WARN log and continue
 				// TODO Auto-generated catch block
@@ -570,24 +570,24 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 
 	public static class RatePointProperty {
 
-		private final SimpleStringProperty date;
-		private final SimpleStringProperty rate;
+		private final StringProperty date;
+		private final StringProperty rate;
 
 		private RatePointProperty(String date, String rate) {
 			this.date = new SimpleStringProperty(date);
 			this.rate = new SimpleStringProperty(rate);
 		}
 
-		public String getDate() {
-			return date.get();
+		public StringProperty getDate() {
+			return date;
 		}
 
 		public void setDate(String date) {
 			this.date.set(date);
 		}
 
-		public String getRate() {
-			return rate.get();
+		public StringProperty getRate() {
+			return rate;
 		}
 
 		public void setRate(String rate) {

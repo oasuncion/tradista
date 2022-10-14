@@ -20,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -61,7 +60,7 @@ public class EquityOptionVolatilitySurfaceCreatorDialog extends TradistaDialog<E
 		selectedStrikePriceRatios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		strikePriceRatioValue.setText("Strike/Price ratio");
 		selectedStrikePriceRatios.getColumns().add(strikePriceRatioValue);
-		strikePriceRatioValue.setCellValueFactory(new PropertyValueFactory<StrikeProperty, String>("value"));
+		strikePriceRatioValue.setCellValueFactory(cellData -> cellData.getValue().getValue());
 		GridPane grid = new GridPane();
 		grid.setStyle("-fx-padding: 20; -fx-hgap: 20; -fx-vgap: 20;");
 		grid.add(nameLabel, 1, 1);
@@ -100,7 +99,7 @@ public class EquityOptionVolatilitySurfaceCreatorDialog extends TradistaDialog<E
 					if (selectedStrikePriceRatios.getItems() != null
 							&& !selectedStrikePriceRatios.getItems().isEmpty()) {
 						for (StrikeProperty prop : selectedStrikePriceRatios.getItems()) {
-							if (TradistaGUIUtil.parseAmount(prop.getValue(), "Strike/Price Ratio").compareTo(TradistaGUIUtil
+							if (TradistaGUIUtil.parseAmount(prop.getValue().toString(), "Strike/Price Ratio").compareTo(TradistaGUIUtil
 									.parseAmount(addStrikePriceRatioTextField.getText(), "Strike/Price Ratio")) == 0) {
 								strikeExists = true;
 								break;

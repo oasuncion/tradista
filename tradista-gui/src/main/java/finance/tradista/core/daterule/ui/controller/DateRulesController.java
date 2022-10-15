@@ -157,7 +157,7 @@ public class DateRulesController extends TradistaControllerAdapter {
 		});
 		dateRuleName.setCellValueFactory(cellData -> cellData.getValue().getDateRuleName());
 		dateRuleDuration
-				.setCellValueFactory(cellData -> cellData.getValue().getDateRuleName());
+				.setCellValueFactory(cellData -> cellData.getValue().getDateRuleDuration());
 
 		dateRuleMove.setCellValueFactory(new PropertyValueFactory<DateRuleDurationProperty, List<Button>>("moves"));
 

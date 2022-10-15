@@ -41,18 +41,18 @@ under the License.    */
 
 public class QuoteProperty {
 
-	private final SimpleStringProperty date;
-	private final SimpleStringProperty name;
-	private final SimpleStringProperty type;
-	private final SimpleStringProperty bid;
-	private final SimpleStringProperty ask;
-	private final SimpleStringProperty open;
-	private final SimpleStringProperty close;
-	private final SimpleStringProperty high;
-	private final SimpleStringProperty low;
-	private final SimpleStringProperty last;
-	private final SimpleStringProperty enteredDate;
-	private final SimpleStringProperty sourceName;
+	private final StringProperty date;
+	private final StringProperty name;
+	private final StringProperty type;
+	private final StringProperty bid;
+	private final StringProperty ask;
+	private final StringProperty open;
+	private final StringProperty close;
+	private final StringProperty high;
+	private final StringProperty low;
+	private final StringProperty last;
+	private final StringProperty enteredDate;
+	private final StringProperty sourceName;
 
 	public QuoteProperty(String date, String name, String type, String bid, String ask, String open, String close,
 		String high, String low, String last, String enteredDate, String sourceName) {

@@ -25,6 +25,7 @@ import finance.tradista.core.daterollconvention.model.DateRollingConvention;
 import finance.tradista.core.daterule.model.DateRule;
 import finance.tradista.core.daterule.service.DateRuleBusinessDelegate;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -154,9 +155,9 @@ public class DateRulesController extends TradistaControllerAdapter {
 				}
 			}
 		});
-		dateRuleName.setCellValueFactory(new PropertyValueFactory<DateRuleDurationProperty, String>("dateRuleName"));
+		dateRuleName.setCellValueFactory(cellData -> cellData.getValue().getDateRuleName());
 		dateRuleDuration
-				.setCellValueFactory(new PropertyValueFactory<DateRuleDurationProperty, String>("dateRuleDuration"));
+				.setCellValueFactory(cellData -> cellData.getValue().getDateRuleDuration());
 
 		dateRuleMove.setCellValueFactory(new PropertyValueFactory<DateRuleDurationProperty, List<Button>>("moves"));
 
@@ -176,11 +177,11 @@ public class DateRulesController extends TradistaControllerAdapter {
 					public void changed(ObservableValue<? extends DateRuleDurationProperty> observable,
 							DateRuleDurationProperty oldValue, DateRuleDurationProperty newValue) {
 						if (newValue != null) {
-							Period period = toPeriod(newValue.getDateRuleDuration());
+							Period period = toPeriod(newValue.getDateRuleDuration().toString());
 							subDateRuleDay.setValue(period.getDays());
 							subDateRuleMonth.setValue(period.getMonths());
 							subDateRuleYear.setValue(period.getYears());
-							subDateRuleName.getSelectionModel().select(new DateRule(newValue.getDateRuleName()));
+							subDateRuleName.getSelectionModel().select(new DateRule(newValue.getDateRuleName().toString()));
 						}
 
 					}
@@ -632,8 +633,8 @@ public class DateRulesController extends TradistaControllerAdapter {
 
 	public class DateRuleDurationProperty {
 
-		private final SimpleStringProperty dateRuleName;
-		private final SimpleStringProperty dateRuleDuration;
+		private final StringProperty dateRuleName;
+		private final StringProperty dateRuleDuration;
 		private List<Button> moves;
 
 		private DateRuleDurationProperty(String dateRuleName, String dateRuleDuration) {
@@ -659,16 +660,16 @@ public class DateRulesController extends TradistaControllerAdapter {
 			moves.add(down);
 		}
 
-		public String getDateRuleName() {
-			return dateRuleName.get();
+		public StringProperty getDateRuleName() {
+			return dateRuleName;
 		}
 
 		public void setDateRuleName(String dateRuleName) {
 			this.dateRuleName.set(dateRuleName);
 		}
 
-		public String getDateRuleDuration() {
-			return dateRuleDuration.get();
+		public StringProperty getDateRuleDuration() {
+			return dateRuleDuration;
 		}
 
 		public void setDateRuleDuration(String dateRuleDuration) {
@@ -715,8 +716,8 @@ public class DateRulesController extends TradistaControllerAdapter {
 			Map<DateRule, Period> dateRulesPeriods = new LinkedHashMap<DateRule, Period>(items.size());
 			DateRuleBusinessDelegate dateRuleBusinessDelegate = new DateRuleBusinessDelegate();
 			for (DateRuleDurationProperty prop : items) {
-				DateRule dateRule = dateRuleBusinessDelegate.getDateRuleByName(prop.getDateRuleName());
-				Period period = toPeriod(prop.getDateRuleDuration());
+				DateRule dateRule = dateRuleBusinessDelegate.getDateRuleByName(prop.getDateRuleName().toString());
+				Period period = toPeriod(prop.getDateRuleDuration().toString());
 				dateRulesPeriods.put(dateRule, period);
 			}
 			return dateRulesPeriods;

@@ -57,7 +57,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 /*
@@ -263,28 +262,28 @@ public class FRATradeDefinitionController extends TradistaTradeBookingController
 		tradeDate.setValue(LocalDate.now());
 
 		// Quotes initialization
-		quoteName.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("name"));
-		quoteDate.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("date"));
-		quoteType.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("type"));
+		quoteName.setCellValueFactory(cellData -> cellData.getValue().getName());
+		quoteDate.setCellValueFactory(cellData -> cellData.getValue().getDate());
+		quoteType.setCellValueFactory(cellData -> cellData.getValue().getType());
 
-		quoteBid.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("bid"));
-		quoteAsk.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("ask"));
-		quoteOpen.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("open"));
-		quoteClose.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("close"));
-		quoteHigh.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("high"));
-		quoteLow.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("low"));
-		quoteLast.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("last"));
-		quoteEnteredDate.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("enteredDate"));
-		quoteSourceName.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("sourceName"));
+		quoteBid.setCellValueFactory(cellData -> cellData.getValue().getBid());
+		quoteAsk.setCellValueFactory(cellData -> cellData.getValue().getAsk());
+		quoteOpen.setCellValueFactory(cellData -> cellData.getValue().getOpen());
+		quoteClose.setCellValueFactory(cellData -> cellData.getValue().getClose());
+		quoteHigh.setCellValueFactory(cellData -> cellData.getValue().getHigh());
+		quoteLow.setCellValueFactory(cellData -> cellData.getValue().getLow());
+		quoteLast.setCellValueFactory(cellData -> cellData.getValue().getLast());
+		quoteEnteredDate.setCellValueFactory(cellData -> cellData.getValue().getEnteredDate());
+		quoteSourceName.setCellValueFactory(cellData -> cellData.getValue().getSourceName());
 
 		// CashFlows table
-		cfDate.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("date"));
-		cfAmount.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("amount"));
-		cfCurrency.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("currency"));
-		cfPurpose.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("purpose"));
-		cfDirection.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("direction"));
-		cfDiscountedAmount.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("discountedAmount"));
-		cfDiscountFactor.setCellValueFactory(new PropertyValueFactory<CashFlowProperty, String>("discountFactor"));
+		cfDate.setCellValueFactory(cellData -> cellData.getValue().getDate());
+		cfAmount.setCellValueFactory(cellData -> cellData.getValue().getAmount());
+		cfCurrency.setCellValueFactory(cellData -> cellData.getValue().getCurrency());
+		cfPurpose.setCellValueFactory(cellData -> cellData.getValue().getPurpose());
+		cfDirection.setCellValueFactory(cellData -> cellData.getValue().getDirection());
+		cfDiscountedAmount.setCellValueFactory(cellData -> cellData.getValue().getDiscountedAmount());
+		cfDiscountFactor.setCellValueFactory(cellData -> cellData.getValue().getDiscountFactor());
 
 		selectedQuoteSet.valueProperty().addListener(new ChangeListener<QuoteSet>() {
 			@Override

@@ -62,7 +62,7 @@ public class FXVolatilitySurfaceCreatorDialog extends TradistaDialog<FXVolatilit
 		selectedDeltas.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		deltaValue.setText("Delta");
 		selectedDeltas.getColumns().add(deltaValue);
-		deltaValue.setCellValueFactory(new PropertyValueFactory<DeltaProperty, String>("value"));
+		deltaValue.setCellValueFactory(cellData -> cellData.getValue().getValue());
 		GridPane grid = new GridPane();
 		grid.setStyle("-fx-padding: 20; -fx-hgap: 20; -fx-vgap: 20;");
 		grid.add(nameLabel, 1, 1);

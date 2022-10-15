@@ -23,6 +23,7 @@ import finance.tradista.ir.irswapoption.service.SwaptionVolatilitySurfaceBusines
 import finance.tradista.ir.irswapoption.view.IRSwapOptionVolatilitySurfaceCreatorDialog;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -43,7 +44,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -120,9 +120,9 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 			}
 		};
 
-		pointOptionExpiry.setCellValueFactory(new PropertyValueFactory<SurfacePointProperty, String>("optionExpiry"));
+		pointOptionExpiry.setCellValueFactory(cellData -> cellData.getValue().getOptionExpiry());
 
-		pointSwapLength.setCellValueFactory(new PropertyValueFactory<SurfacePointProperty, String>("swapLength"));
+		pointSwapLength.setCellValueFactory(cellData -> cellData.getValue().getSwapLength());
 
 		pointVolatility.setCellFactory(cellFactory);
 
@@ -141,7 +141,7 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 			}
 		});
 
-		pointVolatility.setCellValueFactory(new PropertyValueFactory<SurfacePointProperty, String>("volatility"));
+		pointVolatility.setCellValueFactory(cellData -> cellData.getValue().getVolatility());
 
 		VBox optionExpiryGraphic = new VBox();
 		Label optionExpiryLabel = new Label("Option Expiry");
@@ -212,7 +212,7 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 							if (newValue == null || newValue.isEmpty()) {
 								return true;
 							}
-							return point.getOptionExpiry().toUpperCase().contains(newValue.toUpperCase());
+							return point.getOptionExpiry().toString().toUpperCase().contains(newValue.toUpperCase());
 						});
 					});
 
@@ -224,7 +224,7 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 							if (newValue == null || newValue.isEmpty()) {
 								return true;
 							}
-							return point.getSwapLength().toUpperCase().contains(newValue.toUpperCase());
+							return point.getSwapLength().toString().toUpperCase().contains(newValue.toUpperCase());
 						});
 					});
 
@@ -235,7 +235,7 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 							if (newValue == null || newValue.isEmpty()) {
 								return true;
 							}
-							return point.getVolatility().contains(newValue);
+							return point.getVolatility().toString().contains(newValue);
 						});
 					});
 
@@ -543,13 +543,13 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 		List<SurfacePoint<Integer, Integer, BigDecimal>> surfacePointList = new ArrayList<SurfacePoint<Integer, Integer, BigDecimal>>();
 		for (SurfacePointProperty point : data) {
 			try {
-				String optionExpiry = point.getOptionExpiry();
-				String swapLength = point.getSwapLength();
+				String optionExpiry = point.getOptionExpiry().toString();
+				String swapLength = point.getSwapLength().toString();
 				if (!optionExpiry.isEmpty() && !swapLength.isEmpty()) {
 					surfacePointList.add(
-							new SurfacePoint<Integer, Integer, BigDecimal>(toPeriodInteger(point.getOptionExpiry()),
-									toPeriodInteger(point.getSwapLength()), point.getVolatility().equals("") ? null
-											: TradistaGUIUtil.parseAmount(point.getVolatility(), "Volatility")));
+							new SurfacePoint<Integer, Integer, BigDecimal>(toPeriodInteger(point.getOptionExpiry().toString()),
+									toPeriodInteger(point.getSwapLength().toString()), point.getVolatility().equals("") ? null
+											: TradistaGUIUtil.parseAmount(point.getVolatility().toString(), "Volatility")));
 				}
 			} catch (DateTimeParseException dtpe) {
 				// TODO Auto-generated catch block
@@ -636,9 +636,9 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 
 	public static class SurfacePointProperty {
 
-		private final SimpleStringProperty optionExpiry;
-		private final SimpleStringProperty swapLength;
-		private final SimpleStringProperty volatility;
+		private final StringProperty optionExpiry;
+		private final StringProperty swapLength;
+		private final StringProperty volatility;
 
 		private SurfacePointProperty(String optionExpiry, String swapLength, String volatility) {
 			this.optionExpiry = new SimpleStringProperty(optionExpiry);
@@ -646,24 +646,24 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 			this.volatility = new SimpleStringProperty(volatility);
 		}
 
-		public String getOptionExpiry() {
-			return optionExpiry.get();
+		public StringProperty getOptionExpiry() {
+			return optionExpiry;
 		}
 
 		public void setOptionExpiry(String optionExpiry) {
 			this.optionExpiry.set(optionExpiry);
 		}
 
-		public String getVolatility() {
-			return volatility.get();
+		public StringProperty getVolatility() {
+			return volatility;
 		}
 
 		public void setVolatility(String volatility) {
 			this.volatility.set(volatility);
 		}
 
-		public String getSwapLength() {
-			return swapLength.get();
+		public StringProperty getSwapLength() {
+			return swapLength;
 		}
 
 		public void getSwapLength(String swapLength) {

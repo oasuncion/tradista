@@ -41,6 +41,7 @@ import finance.tradista.core.product.ui.view.TradistaProductTypeComboBox;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -353,7 +354,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 			}
 		};
 
-		paramName.setCellValueFactory(new PropertyValueFactory<PricingParamProperty, String>("name"));
+		paramName.setCellValueFactory(cellData -> cellData.getValue().getName());
 
 		paramName.setCellFactory(paramNameCellFactory);
 
@@ -375,7 +376,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 			}
 		});
 
-		paramValue.setCellValueFactory(new PropertyValueFactory<PricingParamProperty, String>("value"));
+		paramValue.setCellValueFactory(cellData -> cellData.getValue().getValue());
 
 		TradistaGUIUtil.fillComboBox(pricerBusinessDelegate.getAllPricingParameters(), pricingParam);
 
@@ -536,7 +537,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 			}
 		};
 
-		productType.setCellValueFactory(new PropertyValueFactory<CustomPricerProperty, String>("productType"));
+		productType.setCellValueFactory(cellData -> cellData.getValue().getProductType());
 
 		productType.setCellFactory(productTypeCellFactory);
 
@@ -558,7 +559,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 			}
 		});
 
-		customPricer.setCellValueFactory(new PropertyValueFactory<CustomPricerProperty, String>("customPricer"));
+		customPricer.setCellValueFactory(cellData -> cellData.getValue().getCustomPricer());
 
 		customPricerTextField.setPromptText("Custom Pricer");
 
@@ -1980,7 +1981,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 		pricingParameter.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 		pricingParameter.getParams().clear();
 		for (PricingParamProperty prop : pricingParamTable.getItems()) {
-			pricingParameter.getParams().put(prop.getName(), prop.getValue());
+			pricingParameter.getParams().put(prop.getName().toString(), prop.getValue().toString());
 		}
 		pricingParameter.getDiscountCurves().clear();
 		for (DiscountCurveProperty prop : discountCurveTable.getItems()) {
@@ -1999,7 +2000,8 @@ public class PricingParameterController extends TradistaControllerAdapter {
 		}
 		pricingParameter.getCustomPricers().clear();
 		for (CustomPricerProperty prop : customPricerTable.getItems()) {
-			pricingParameter.getCustomPricers().put(prop.getProductType(), prop.getCustomPricer());
+			pricingParameter.getCustomPricers().put(prop.getProductType().toString(),
+					prop.getCustomPricer().toString());
 		}
 		pricingParameter.getModules().clear();
 		if (pricingParameterModuleControllersList != null && !pricingParameterModuleControllersList.isEmpty()) {
@@ -2011,24 +2013,24 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 	protected class PricingParamProperty implements Comparable<PricingParamProperty> {
 
-		private final SimpleStringProperty name;
-		private final SimpleStringProperty value;
+		private final StringProperty name;
+		private final StringProperty value;
 
 		private PricingParamProperty(String name, String value) {
 			this.name = new SimpleStringProperty(name);
 			this.value = new SimpleStringProperty(value);
 		}
 
-		public String getName() {
-			return name.get();
+		public StringProperty getName() {
+			return name;
 		}
 
 		public void setName(String name) {
 			this.name.set(name);
 		}
 
-		public String getValue() {
-			return value.get();
+		public StringProperty getValue() {
+			return value;
 		}
 
 		public void setValue(String value) {
@@ -2037,7 +2039,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 		@Override
 		public int compareTo(PricingParamProperty o) {
-			return getName().compareTo(o.getName());
+			return getName().toString().compareTo(o.getName().toString());
 		}
 
 		@Override
@@ -2260,24 +2262,24 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 	protected class CustomPricerProperty implements Comparable<CustomPricerProperty> {
 
-		private final SimpleStringProperty productType;
-		private final SimpleStringProperty customPricer;
+		private final StringProperty productType;
+		private final StringProperty customPricer;
 
 		private CustomPricerProperty(String productType, String customPricer) {
 			this.productType = new SimpleStringProperty(productType);
 			this.customPricer = new SimpleStringProperty(customPricer);
 		}
 
-		public String getProductType() {
-			return productType.get();
+		public StringProperty getProductType() {
+			return productType;
 		}
 
 		public void setProductType(String productType) {
 			this.productType.set(productType);
 		}
 
-		public String getCustomPricer() {
-			return customPricer.get();
+		public StringProperty getCustomPricer() {
+			return customPricer;
 		}
 
 		public void setCustomPricer(String customPricer) {
@@ -2286,7 +2288,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 		@Override
 		public int compareTo(CustomPricerProperty o) {
-			return getProductType().compareTo(o.getProductType());
+			return getProductType().toString().compareTo(o.getProductType().toString());
 		}
 
 		@Override

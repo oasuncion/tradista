@@ -24,6 +24,7 @@ import finance.tradista.core.marketdata.service.FeedBusinessDelegate;
 import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
 import finance.tradista.core.marketdata.ui.view.FeedConfigCreatorDialog;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -38,7 +39,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 /*
  * Copyright 2015 Olivier Asuncion
@@ -163,16 +163,16 @@ public class FeedConfigController extends TradistaControllerAdapter {
 
 		feedBusinessDelegate = new FeedBusinessDelegate();
 
-		mappingQuoteName.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("quoteName"));
-		mappingQuoteType.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("quoteType"));
-		mappingFieldName.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("fieldName"));
-		mappingBid.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("bid"));
-		mappingAsk.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("ask"));
-		mappingOpen.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("open"));
-		mappingClose.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("close"));
-		mappingHigh.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("high"));
-		mappingLow.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("low"));
-		mappingLast.setCellValueFactory(new PropertyValueFactory<FeedMappingProperty, String>("last"));
+		mappingQuoteName.setCellValueFactory(cellData -> cellData.getValue().getQuoteName());
+		mappingQuoteType.setCellValueFactory(cellData -> cellData.getValue().getQuoteType());
+		mappingFieldName.setCellValueFactory(cellData -> cellData.getValue().getFieldName());
+		mappingBid.setCellValueFactory(cellData -> cellData.getValue().getBid());
+		mappingAsk.setCellValueFactory(cellData -> cellData.getValue().getAsk());
+		mappingOpen.setCellValueFactory(cellData -> cellData.getValue().getOpen());
+		mappingClose.setCellValueFactory(cellData -> cellData.getValue().getClose());
+		mappingHigh.setCellValueFactory(cellData -> cellData.getValue().getHigh());
+		mappingLow.setCellValueFactory(cellData -> cellData.getValue().getLow());
+		mappingLast.setCellValueFactory(cellData -> cellData.getValue().getLast());
 
 		try {
 			TradistaGUIUtil.fillComboBox(feedBusinessDelegate.getAllFeedConfigs(), feedConfig);
@@ -192,16 +192,16 @@ public class FeedConfigController extends TradistaControllerAdapter {
 					public void changed(ObservableValue<? extends FeedMappingProperty> arg0,
 							FeedMappingProperty oldProp, FeedMappingProperty prop) {
 						if (feedMappingTable.getSelectionModel().getSelectedItem() != null) {
-							quoteNameTextField.setText(prop.getQuoteName());
-							quoteType.setValue(QuoteType.getQuoteType(prop.getQuoteType()));
-							bidTextField.setText(prop.getBid());
-							fieldNameTextField.setText(prop.getFieldName());
-							askTextField.setText(prop.getAsk());
-							openTextField.setText(prop.getOpen());
-							closeTextField.setText(prop.getClose());
-							highTextField.setText(prop.getHigh());
-							lowTextField.setText(prop.getLow());
-							lastTextField.setText(prop.getLast());
+							quoteNameTextField.setText(prop.getQuoteName().toString());
+							quoteType.setValue(QuoteType.getQuoteType(prop.getQuoteType().toString()));
+							bidTextField.setText(prop.getBid().toString());
+							fieldNameTextField.setText(prop.getFieldName().toString());
+							askTextField.setText(prop.getAsk().toString());
+							openTextField.setText(prop.getOpen().toString());
+							closeTextField.setText(prop.getClose().toString());
+							highTextField.setText(prop.getHigh().toString());
+							lowTextField.setText(prop.getLow().toString());
+							lastTextField.setText(prop.getLast().toString());
 						}
 
 					}
@@ -516,19 +516,19 @@ public class FeedConfigController extends TradistaControllerAdapter {
 			Map<String, Quote> mapping = new HashMap<String, Quote>();
 
 			for (FeedMappingProperty prop : data) {
-				String quoteName = prop.getQuoteName();
-				QuoteType quoteType = QuoteType.getQuoteType(prop.getQuoteType());
+				String quoteName = prop.getQuoteName().toString();
+				QuoteType quoteType = QuoteType.getQuoteType(prop.getQuoteType().toString());
 				Quote quote = new Quote(quoteName, quoteType);
-				mapping.put(prop.getFieldName(), quote);
+				mapping.put(prop.getFieldName().toString(), quote);
 				Map<String, String> currentField = new HashMap<String, String>();
-				currentField.put(QuoteValue.ASK, prop.getAsk());
-				currentField.put(QuoteValue.BID, prop.getBid());
-				currentField.put(QuoteValue.CLOSE, prop.getClose());
-				currentField.put(QuoteValue.HIGH, prop.getHigh());
-				currentField.put(QuoteValue.LAST, prop.getLast());
-				currentField.put(QuoteValue.LOW, prop.getLow());
-				currentField.put(QuoteValue.OPEN, prop.getOpen());
-				fieldsMapping.put(prop.getFieldName(), currentField);
+				currentField.put(QuoteValue.ASK, prop.getAsk().toString());
+				currentField.put(QuoteValue.BID, prop.getBid().toString());
+				currentField.put(QuoteValue.CLOSE, prop.getClose().toString());
+				currentField.put(QuoteValue.HIGH, prop.getHigh().toString());
+				currentField.put(QuoteValue.LAST, prop.getLast().toString());
+				currentField.put(QuoteValue.LOW, prop.getLow().toString());
+				currentField.put(QuoteValue.OPEN, prop.getOpen().toString());
+				fieldsMapping.put(prop.getFieldName().toString(), currentField);
 			}
 			currentFeedConfig.setFieldsMapping(fieldsMapping);
 			currentFeedConfig.setMapping(mapping);
@@ -537,16 +537,16 @@ public class FeedConfigController extends TradistaControllerAdapter {
 
 	public static class FeedMappingProperty implements Comparable<FeedMappingProperty> {
 
-		private final SimpleStringProperty quoteName;
-		private final SimpleStringProperty quoteType;
-		private final SimpleStringProperty fieldName;
-		private final SimpleStringProperty bid;
-		private final SimpleStringProperty ask;
-		private final SimpleStringProperty open;
-		private final SimpleStringProperty close;
-		private final SimpleStringProperty high;
-		private final SimpleStringProperty low;
-		private final SimpleStringProperty last;
+		private final StringProperty quoteName;
+		private final StringProperty quoteType;
+		private final StringProperty fieldName;
+		private final StringProperty bid;
+		private final StringProperty ask;
+		private final StringProperty open;
+		private final StringProperty close;
+		private final StringProperty high;
+		private final StringProperty low;
+		private final StringProperty last;
 
 		private FeedMappingProperty(String quoteName, String quoteType, String fieldName, String bid, String ask,
 				String open, String close, String high, String low, String last) {
@@ -562,80 +562,80 @@ public class FeedConfigController extends TradistaControllerAdapter {
 			this.last = new SimpleStringProperty(last);
 		}
 
-		public String getQuoteName() {
-			return quoteName.get();
+		public StringProperty getQuoteName() {
+			return quoteName;
 		}
 
 		public void setQuoteName(String quoteName) {
 			this.quoteName.set(quoteName);
 		}
 
-		public String getQuoteType() {
-			return quoteType.get();
+		public StringProperty getQuoteType() {
+			return quoteType;
 		}
 
 		public void setQuoteType(String value) {
 			this.quoteType.set(value);
 		}
 
-		public String getFieldName() {
-			return fieldName.get();
+		public StringProperty getFieldName() {
+			return fieldName;
 		}
 
 		public void setFieldName(String fieldName) {
 			this.fieldName.set(fieldName);
 		}
 
-		public String getBid() {
-			return bid.get();
+		public StringProperty getBid() {
+			return bid;
 		}
 
 		public void setBid(String bid) {
 			this.bid.set(bid);
 		}
 
-		public String getAsk() {
-			return ask.get();
+		public StringProperty getAsk() {
+			return ask;
 		}
 
 		public void setAsk(String ask) {
 			this.ask.set(ask);
 		}
 
-		public String getOpen() {
-			return open.get();
+		public StringProperty getOpen() {
+			return open;
 		}
 
 		public void setOpen(String open) {
 			this.open.set(open);
 		}
 
-		public String getClose() {
-			return close.get();
+		public StringProperty getClose() {
+			return close;
 		}
 
 		public void setClose(String close) {
 			this.close.set(close);
 		}
 
-		public String getHigh() {
-			return high.get();
+		public StringProperty getHigh() {
+			return high;
 		}
 
 		public void setHigh(String high) {
 			this.high.set(high);
 		}
 
-		public String getLow() {
-			return low.get();
+		public StringProperty getLow() {
+			return low;
 		}
 
 		public void setLow(String low) {
 			this.low.set(low);
 		}
 
-		public String getLast() {
-			return last.get();
+		public StringProperty getLast() {
+			return last;
 		}
 
 		public void setLast(String last) {
@@ -644,7 +644,7 @@ public class FeedConfigController extends TradistaControllerAdapter {
 
 		@Override
 		public int compareTo(FeedMappingProperty o) {
-			return getQuoteName().compareTo(o.getQuoteName());
+			return getQuoteName().toString().compareTo(o.getQuoteName().toString());
 		}
 
 		public boolean equals(Object o) {

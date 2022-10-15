@@ -51,7 +51,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 /*
@@ -248,19 +247,19 @@ public class IRCapFloorCollarTradeDefinitionController extends TradistaTradeBook
 		tradeDate.setValue(LocalDate.now());
 
 		// Quotes initialization
-		quoteName.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("name"));
-		quoteDate.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("date"));
-		quoteType.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("type"));
+		quoteName.setCellValueFactory(cellData -> cellData.getValue().getName());
+		quoteDate.setCellValueFactory(cellData -> cellData.getValue().getDate());
+		quoteType.setCellValueFactory(cellData -> cellData.getValue().getType());
 
-		quoteBid.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("bid"));
-		quoteAsk.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("ask"));
-		quoteOpen.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("open"));
-		quoteClose.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("close"));
-		quoteHigh.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("high"));
-		quoteLow.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("low"));
-		quoteLast.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("last"));
-		quoteEnteredDate.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("enteredDate"));
-		quoteSourceName.setCellValueFactory(new PropertyValueFactory<QuoteProperty, String>("sourceName"));
+		quoteBid.setCellValueFactory(cellData -> cellData.getValue().getBid());
+		quoteAsk.setCellValueFactory(cellData -> cellData.getValue().getAsk());
+		quoteOpen.setCellValueFactory(cellData -> cellData.getValue().getOpen());
+		quoteClose.setCellValueFactory(cellData -> cellData.getValue().getClose());
+		quoteHigh.setCellValueFactory(cellData -> cellData.getValue().getHigh());
+		quoteLow.setCellValueFactory(cellData -> cellData.getValue().getLow());
+		quoteLast.setCellValueFactory(cellData -> cellData.getValue().getLast());
+		quoteEnteredDate.setCellValueFactory(cellData -> cellData.getValue().getEnteredDate());
+		quoteSourceName.setCellValueFactory(cellData -> cellData.getValue().getSourceName());
 
 		selectedQuoteSet.valueProperty().addListener(new ChangeListener<QuoteSet>() {
 			@Override

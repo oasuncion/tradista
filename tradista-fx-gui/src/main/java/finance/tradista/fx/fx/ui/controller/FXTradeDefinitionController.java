@@ -47,7 +47,6 @@ import finance.tradista.fx.fx.service.FXPricerBusinessDelegate;
 import finance.tradista.fx.fx.service.FXTradeBusinessDelegate;
 import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -311,7 +310,7 @@ public class FXTradeDefinitionController extends TradistaTradeBookingController 
 		}
 
 		// Quotes initialization
-		quoteName.setCellValueFactory(cellData -> cellData.getValue().getName());
+		quoteName.setCellValueFactory(cellName -> cellName.getValue().getName());
 		quoteDate.setCellValueFactory(cellDate -> cellDate.getValue().getDate());
 		quoteType.setCellValueFactory(cellType -> cellType.getValue().getType());
 
@@ -323,7 +322,7 @@ public class FXTradeDefinitionController extends TradistaTradeBookingController 
 		quoteLow.setCellValueFactory(cellLow -> cellLow.getValue().getLow());
 		quoteLast.setCellValueFactory(cellLast -> cellLast.getValue().getLast());
 		quoteEnteredDate.setCellValueFactory(cellDate -> cellDate.getValue().getEnteredDate());
-		quoteSourceName.setCellValueFactory(cellName -> cellName.getValue().getSourceName());
+		quoteSourceName.setCellValueFactory(cellSourceName -> cellSourceName.getValue().getSourceName());
 
 		// CashFlows table
 		cfDate.setCellValueFactory(cellDate -> cellDate.getValue().getDate());
@@ -331,8 +330,9 @@ public class FXTradeDefinitionController extends TradistaTradeBookingController 
 		cfCurrency.setCellValueFactory(cellCurrency -> cellCurrency.getValue().getCurrency());
 		cfPurpose.setCellValueFactory(cellPurpose -> cellPurpose.getValue().getPurpose());
 		cfDirection.setCellValueFactory(cellDirection -> cellDirection.getValue().getDirection());
-		cfDiscountedAmount.setCellValueFactory(cellDiscount -> cellDiscount.getValue().getDiscountedAmount());
-		cfDiscountFactor.setCellValueFactory(cellFactor -> cellFactor.getValue().getDiscountFactor());
+		cfDiscountedAmount
+				.setCellValueFactory(cellDiscountAmount -> cellDiscountAmount.getValue().getDiscountedAmount());
+		cfDiscountFactor.setCellValueFactory(cellDiscountFactor -> cellDiscountFactor.getValue().getDiscountFactor());
 
 		selectedQuoteDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
 			@Override

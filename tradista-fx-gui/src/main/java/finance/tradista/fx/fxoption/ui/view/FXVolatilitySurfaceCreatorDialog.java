@@ -22,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -96,7 +95,8 @@ public class FXVolatilitySurfaceCreatorDialog extends TradistaDialog<FXVolatilit
 						boolean deltaExists = false;
 						if (selectedDeltas.getItems() != null && !selectedDeltas.getItems().isEmpty()) {
 							for (DeltaProperty prop : selectedDeltas.getItems()) {
-								if (TradistaGUIUtil.parseAmount(prop.getValue(), "Delta").compareTo(delta) == 0) {
+								if (TradistaGUIUtil.parseAmount(prop.getValue().toString(), "Delta")
+										.compareTo(delta) == 0) {
 									deltaExists = true;
 									break;
 								}

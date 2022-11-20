@@ -1,6 +1,6 @@
 package finance.tradista.security.common.service;
 
-import javax.ejb.Stateless;
+import jakarta.ejb.Stateless;
 
 import finance.tradista.security.common.service.SecurityInformationService;
 

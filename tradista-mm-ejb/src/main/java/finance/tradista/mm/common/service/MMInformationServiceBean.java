@@ -1,6 +1,6 @@
 package finance.tradista.mm.common.service;
 
-import javax.ejb.Stateless;
+import jakarta.ejb.Stateless;
 
 import finance.tradista.mm.common.service.MMInformationService;
 

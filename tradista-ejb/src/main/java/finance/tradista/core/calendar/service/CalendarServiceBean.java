@@ -2,12 +2,10 @@ package finance.tradista.core.calendar.service;
 
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.calendar.model.Calendar;
 import finance.tradista.core.calendar.persistence.CalendarSQL;
-import finance.tradista.core.calendar.service.CalendarService;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

@@ -2,10 +2,9 @@ package finance.tradista.core.book.service;
 
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

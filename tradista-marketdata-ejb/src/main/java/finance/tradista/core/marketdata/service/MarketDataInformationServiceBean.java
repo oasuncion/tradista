@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.ejb.Stateless;
+import jakarta.ejb.Stateless;
 
 import finance.tradista.core.marketdata.service.MarketDataConfigurationBusinessDelegate;
 import finance.tradista.core.marketdata.service.MarketDataInformationService;

@@ -1,13 +1,12 @@
 package finance.tradista.ai.agent.service;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.ai.agent.model.Mandate;
 import finance.tradista.ai.agent.persistence.MandateSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

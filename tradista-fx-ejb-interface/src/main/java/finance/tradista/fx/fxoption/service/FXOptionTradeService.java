@@ -1,6 +1,6 @@
 package finance.tradista.fx.fxoption.service;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.fx.fxoption.model.FXOptionTrade;

@@ -2,10 +2,9 @@ package finance.tradista.core.daterule.service;
 
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.daterule.model.DateRule;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2017 Olivier Asuncion

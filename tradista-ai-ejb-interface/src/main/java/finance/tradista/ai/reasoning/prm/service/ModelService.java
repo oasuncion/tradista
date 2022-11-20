@@ -1,10 +1,9 @@
 package finance.tradista.ai.reasoning.prm.service;
 
-import javax.ejb.Remote;
-
 import finance.tradista.ai.reasoning.prm.model.Constant;
 import finance.tradista.ai.reasoning.prm.model.Function;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2017 Olivier Asuncion

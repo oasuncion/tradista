@@ -3,7 +3,7 @@ package finance.tradista.core.dailypnl.service;
 import java.time.LocalDate;
 import java.util.Set;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.dailypnl.model.DailyPnl;

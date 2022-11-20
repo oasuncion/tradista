@@ -4,18 +4,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
 import finance.tradista.core.trade.persistence.TradeSQL;
-import finance.tradista.core.trade.service.TradeAuthorizationFilteringInterceptor;
-import finance.tradista.core.trade.service.TradeService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2019 Olivier Asuncion

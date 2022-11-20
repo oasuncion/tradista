@@ -2,12 +2,10 @@ package finance.tradista.core.currency.service;
 
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.persistence.CurrencySQL;
-import finance.tradista.core.currency.service.CurrencyService;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

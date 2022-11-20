@@ -2,12 +2,10 @@ package finance.tradista.core.exchange.service;
 
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.core.exchange.persistence.ExchangeSQL;
-import finance.tradista.core.exchange.service.ExchangeService;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

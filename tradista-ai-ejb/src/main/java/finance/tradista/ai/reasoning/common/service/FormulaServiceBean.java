@@ -8,9 +8,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import asp4j.lang.AnswerSet;
@@ -27,6 +24,8 @@ import finance.tradista.ai.reasoning.common.model.Formula;
 import finance.tradista.ai.reasoning.common.persistence.FormulaSQL;
 import finance.tradista.ai.reasoning.common.util.TradistaAIProperties;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

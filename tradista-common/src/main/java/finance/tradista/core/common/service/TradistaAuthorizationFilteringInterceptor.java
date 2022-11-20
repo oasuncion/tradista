@@ -1,13 +1,12 @@
 package finance.tradista.core.common.service;
 
-import javax.annotation.Resource;
-import javax.ejb.EJBContext;
-import javax.interceptor.InvocationContext;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.user.model.User;
 import finance.tradista.core.user.service.UserBusinessDelegate;
+import jakarta.annotation.Resource;
+import jakarta.ejb.EJBContext;
+import jakarta.interceptor.InvocationContext;
 
 /*
  * Copyright 2019 Olivier Asuncion

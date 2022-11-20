@@ -1,8 +1,8 @@
 package finance.tradista.core.configuration.service;
 
-import javax.ejb.Local;
-
 import org.quartz.Scheduler;
+
+import jakarta.ejb.Local;
 
 /*
  * Copyright 2019 Olivier Asuncion

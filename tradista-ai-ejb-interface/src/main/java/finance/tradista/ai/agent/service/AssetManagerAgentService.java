@@ -2,10 +2,9 @@ package finance.tradista.ai.agent.service;
 
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.ai.agent.model.AssetManagerAgent;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2017 Olivier Asuncion

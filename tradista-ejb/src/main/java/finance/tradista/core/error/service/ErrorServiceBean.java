@@ -2,11 +2,9 @@ package finance.tradista.core.error.service;
 
 import java.time.LocalDate;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.error.model.Error.Status;
 import finance.tradista.core.error.persistence.ErrorSQL;
-import finance.tradista.core.error.service.ErrorService;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

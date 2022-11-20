@@ -2,7 +2,7 @@ package finance.tradista.core.common.service;
 
 import java.util.Map;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2017 Olivier Asuncion

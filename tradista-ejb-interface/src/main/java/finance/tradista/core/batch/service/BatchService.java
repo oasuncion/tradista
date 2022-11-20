@@ -4,12 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.batch.model.TradistaJob;
 import finance.tradista.core.batch.model.TradistaJobExecution;
 import finance.tradista.core.batch.model.TradistaJobInstance;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

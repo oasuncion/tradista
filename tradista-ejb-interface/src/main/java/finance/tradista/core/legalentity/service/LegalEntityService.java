@@ -2,10 +2,9 @@ package finance.tradista.core.legalentity.service;
 
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.legalentity.model.LegalEntity;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

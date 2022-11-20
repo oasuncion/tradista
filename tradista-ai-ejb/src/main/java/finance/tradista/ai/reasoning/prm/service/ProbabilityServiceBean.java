@@ -1,10 +1,9 @@
 package finance.tradista.ai.reasoning.prm.service;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.ai.reasoning.prm.probability.model.ProbabilityLaw;
 import finance.tradista.ai.reasoning.prm.probability.persistence.ProbabilityLawSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

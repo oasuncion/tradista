@@ -2,12 +2,6 @@ package finance.tradista.core.configuration.service;
 
 import java.math.RoundingMode;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.security.PermitAll;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.interceptor.Interceptors;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.quartz.Scheduler;
 import org.springframework.context.ApplicationContext;
@@ -17,9 +11,12 @@ import finance.tradista.core.common.service.CustomProperties;
 import finance.tradista.core.common.util.MathProperties;
 import finance.tradista.core.configuration.model.UIConfiguration;
 import finance.tradista.core.configuration.persistence.UIConfigurationSQL;
-import finance.tradista.core.configuration.service.ConfigurationPreFilteringInterceptor;
-import finance.tradista.core.configuration.service.ConfigurationService;
 import finance.tradista.core.user.model.User;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2019 Olivier Asuncion

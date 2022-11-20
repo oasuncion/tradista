@@ -3,8 +3,8 @@ package finance.tradista.security.bond.service;
 import java.time.LocalDate;
 import java.util.Set;
 
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.security.bond.model.Bond;

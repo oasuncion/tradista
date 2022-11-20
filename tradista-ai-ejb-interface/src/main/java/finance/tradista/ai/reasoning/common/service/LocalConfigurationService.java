@@ -1,6 +1,6 @@
 package finance.tradista.ai.reasoning.common.service;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 /*
  * Copyright 2021 Olivier Asuncion

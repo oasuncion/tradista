@@ -16,7 +16,8 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>11.0.0</version>
+			<version>12.0.0</version>
+			<classifier>jakarta</classifier>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
@@ -31,7 +32,8 @@
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>poseidon-theme</artifactId>
-			<version>4.1.0</version>
+			<version>5.0.0</version>
+			<classifier>jakarta</classifier>
 		</dependency>
 	</dependencies>
 	<build>
@@ -42,9 +44,10 @@
 				<configuration>
 					<groupId>org.primefaces.themes</groupId>
 					<artifactId>poseidon-theme</artifactId>
-					<version>4.1.0</version>
+					<version>5.0.0</version>
+					<classifier>jakarta</classifier>
 					<packaging>jar</packaging>
-					<file>${basedir}/lib/poseidon-theme-4.1.0.jar</file>
+					<file>${basedir}/lib/poseidon-theme-5.0.0-jakarta.jar</file>
 				</configuration>
 				<executions>
 					<execution>

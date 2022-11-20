@@ -11,10 +11,10 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;

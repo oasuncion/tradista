@@ -6,9 +6,9 @@ import java.time.Year;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.ejb3.annotation.SecurityDomain;

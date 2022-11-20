@@ -1,6 +1,6 @@
 package finance.tradista.core.marketdata.service;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.marketdata.model.Provider;

@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.el.MethodNotFoundException;
-
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -206,9 +204,9 @@ public final class TradistaUtil {
 				}
 			}
 			if (!found) {
-				throw new TradistaTechnicalException(new MethodNotFoundException(
+				throw new TradistaTechnicalException(
 						String.format("%s method with %s parameters has not been found in %s class.", methodName,
-								klasses, fullClassName)));
+								klasses, fullClassName));
 			}
 		} catch (ClassNotFoundException | SecurityException | IllegalAccessException | IllegalArgumentException e) {
 			throw new TradistaTechnicalException(e);

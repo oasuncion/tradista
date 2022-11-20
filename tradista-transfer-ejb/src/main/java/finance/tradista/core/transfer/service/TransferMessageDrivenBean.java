@@ -1,12 +1,12 @@
 package finance.tradista.core.transfer.service;
 
-import javax.annotation.Resource;
-import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
+import jakarta.annotation.Resource;
+import jakarta.ejb.MessageDriven;
+import jakarta.ejb.MessageDrivenContext;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageListener;
+import jakarta.jms.ObjectMessage;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.trade.messaging.TradeEvent;

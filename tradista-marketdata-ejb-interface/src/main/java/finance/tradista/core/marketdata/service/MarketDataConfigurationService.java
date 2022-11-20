@@ -2,7 +2,7 @@ package finance.tradista.core.marketdata.service;
 
 import java.util.Set;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

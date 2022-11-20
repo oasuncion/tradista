@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Set;
 
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 import finance.tradista.core.calendar.model.Calendar;
 import finance.tradista.core.calendar.service.CalendarBusinessDelegate;

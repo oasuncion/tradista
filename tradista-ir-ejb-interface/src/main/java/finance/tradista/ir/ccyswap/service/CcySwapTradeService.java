@@ -1,6 +1,6 @@
 package finance.tradista.ir.ccyswap.service;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.ir.ccyswap.model.CcySwapTrade;

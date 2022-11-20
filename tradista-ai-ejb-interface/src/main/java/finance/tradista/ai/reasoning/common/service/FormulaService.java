@@ -2,10 +2,9 @@ package finance.tradista.ai.reasoning.common.service;
 
 import java.util.List;
 
-import javax.ejb.Remote;
-
 import finance.tradista.ai.reasoning.common.model.Formula;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2019 Olivier Asuncion

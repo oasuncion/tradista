@@ -1761,13 +1761,13 @@ public class TradistaServiceLocator {
 
 		String ejbString = JAVA_GLOBAL_PREFIX + "/" + application + "/" + module + "/" + serviceName + "Bean!"
 				+ packageName + "." + serviceName;
-		try {
-			service = context.lookup(ejbString);
-			return service;
-		} catch (NamingException ne) {
-			// TODO Have a log instead
-			ne.printStackTrace();
-		}
+//		try {
+//			service = context.lookup(ejbString);
+//			return service;
+//		} catch (NamingException ne) {
+//			// TODO Have a log instead
+//			ne.printStackTrace();
+//		}
 
 		ejbString = EJB_PREFIX + application + "/" + module + "/" + serviceName + "Bean!" + packageName + "."
 				+ serviceName;

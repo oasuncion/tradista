@@ -24,7 +24,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-ear-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>3.3.0</version>
 				<configuration>
 					<generateApplicationXml>true</generateApplicationXml>
 					<earSourceDirectory>EarContent</earSourceDirectory>

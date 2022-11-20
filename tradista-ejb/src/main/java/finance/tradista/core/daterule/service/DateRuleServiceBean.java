@@ -2,12 +2,9 @@ package finance.tradista.core.daterule.service;
 
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.daterule.model.DateRule;
-import finance.tradista.core.daterule.service.DateRuleSQL;
-import finance.tradista.core.daterule.service.DateRuleService;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

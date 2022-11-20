@@ -4,11 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

@@ -177,11 +177,11 @@ public class DateRulesController extends TradistaControllerAdapter {
 					public void changed(ObservableValue<? extends DateRuleDurationProperty> observable,
 							DateRuleDurationProperty oldValue, DateRuleDurationProperty newValue) {
 						if (newValue != null) {
-							Period period = toPeriod(newValue.getDateRuleDuration().toString());
+							Period period = toPeriod(newValue.getDateRuleDuration().getValue());
 							subDateRuleDay.setValue(period.getDays());
 							subDateRuleMonth.setValue(period.getMonths());
 							subDateRuleYear.setValue(period.getYears());
-							subDateRuleName.getSelectionModel().select(new DateRule(newValue.getDateRuleName().toString()));
+							subDateRuleName.getSelectionModel().select(new DateRule(newValue.getDateRuleName().getValue()));
 						}
 
 					}
@@ -716,8 +716,8 @@ public class DateRulesController extends TradistaControllerAdapter {
 			Map<DateRule, Period> dateRulesPeriods = new LinkedHashMap<DateRule, Period>(items.size());
 			DateRuleBusinessDelegate dateRuleBusinessDelegate = new DateRuleBusinessDelegate();
 			for (DateRuleDurationProperty prop : items) {
-				DateRule dateRule = dateRuleBusinessDelegate.getDateRuleByName(prop.getDateRuleName().toString());
-				Period period = toPeriod(prop.getDateRuleDuration().toString());
+				DateRule dateRule = dateRuleBusinessDelegate.getDateRuleByName(prop.getDateRuleName().getValue());
+				Period period = toPeriod(prop.getDateRuleDuration().getValue());
 				dateRulesPeriods.put(dateRule, period);
 			}
 			return dateRulesPeriods;

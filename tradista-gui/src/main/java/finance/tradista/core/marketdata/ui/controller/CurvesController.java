@@ -383,8 +383,9 @@ public class CurvesController extends TradistaControllerAdapter {
 		for (RatePointProperty point : data) {
 			try {
 				ratePointList.add(new RatePoint(
-						LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().toString())),
-						point.getRate().equals("") ? null : TradistaGUIUtil.parseAmount(point.getRate().toString(), "Rate")));
+						LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().getValue())),
+						point.getRate().getValue().isEmpty() ? null
+								: TradistaGUIUtil.parseAmount(point.getRate().getValue(), "Rate")));
 			} catch (DateTimeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

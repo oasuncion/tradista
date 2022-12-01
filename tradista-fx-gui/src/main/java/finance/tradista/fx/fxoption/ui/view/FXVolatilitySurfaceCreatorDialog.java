@@ -95,7 +95,7 @@ public class FXVolatilitySurfaceCreatorDialog extends TradistaDialog<FXVolatilit
 						boolean deltaExists = false;
 						if (selectedDeltas.getItems() != null && !selectedDeltas.getItems().isEmpty()) {
 							for (DeltaProperty prop : selectedDeltas.getItems()) {
-								if (TradistaGUIUtil.parseAmount(prop.getValue().toString(), "Delta")
+								if (TradistaGUIUtil.parseAmount(prop.getValue().getValue(), "Delta")
 										.compareTo(delta) == 0) {
 									deltaExists = true;
 									break;
@@ -106,8 +106,8 @@ public class FXVolatilitySurfaceCreatorDialog extends TradistaDialog<FXVolatilit
 							selectedDeltas.getItems().add(new DeltaProperty(addDeltaTextField.getText()));
 						}
 					}
-				} catch (TradistaBusinessException abe) {
-					TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());
+				} catch (TradistaBusinessException tbe) {
+					TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 					alert.showAndWait();
 				}
 			}

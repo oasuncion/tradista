@@ -240,7 +240,7 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 							if (newValue == null || newValue.isEmpty()) {
 								return true;
 							}
-							return point.getStrike().toString().toUpperCase().contains(newValue.toUpperCase());
+							return point.getStrike().getValue().toUpperCase().contains(newValue.toUpperCase());
 						});
 					});
 
@@ -471,10 +471,10 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 		try {
 			if (pointsTable.getItems() != null && !pointsTable.getItems().isEmpty()) {
 				for (SurfacePointProperty prop : pointsTable.getItems()) {
-					if (TradistaGUIUtil.parseAmount(prop.getStrike().toString(), "Strike/Price Ratio").compareTo(
+					if (TradistaGUIUtil.parseAmount(prop.getStrike().getValue(), "Strike/Price Ratio").compareTo(
 							TradistaGUIUtil.parseAmount(selectedStrikes.getSelectionModel().getSelectedItem(),
 									"Strike/Price Ratio")) == 0) {
-						if (!StringUtils.isEmpty(prop.getVolatility().toString())) {
+						if (!StringUtils.isEmpty(prop.getVolatility().getValue())) {
 							TradistaAlert confirmation = new TradistaAlert(AlertType.CONFIRMATION);
 							confirmation.setTitle("Remove Strike/Price Ratio");
 							confirmation.setHeaderText("Remove Strike/Price Ratio");
@@ -721,7 +721,8 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 		if (data != null && !data.isEmpty()) {
 			try {
 				for (SurfacePoint<Integer, BigDecimal, BigDecimal> point : data) {
-					String optionExpiry = equityOptionVolatilitySurfaceBusinessDelegate.getOptionExpiryName(point.getxAxis());
+					String optionExpiry = equityOptionVolatilitySurfaceBusinessDelegate
+							.getOptionExpiryName(point.getxAxis());
 					String strike = TradistaGUIUtil.formatAmount(point.getyAxis());
 					String volatility = point.getzAxis() == null ? "" : TradistaGUIUtil.formatAmount(point.getzAxis());
 					if (!optionExpiry.isEmpty()) {
@@ -743,14 +744,14 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 		try {
 			for (SurfacePointProperty point : data) {
 				try {
-					String optionExpiry = point.getOptionExpiry().toString();
-					String volatility = point.getVolatility().toString();
-					String strike = point.getStrike().toString();
+					String optionExpiry = point.getOptionExpiry().getValue();
+					String volatility = point.getVolatility().getValue();
+					String strike = point.getStrike().getValue();
 					if (!optionExpiry.isEmpty() && !volatility.isEmpty()) {
 
 						surfacePointList.add(new SurfacePoint<Integer, BigDecimal, BigDecimal>(
 								equityOptionVolatilitySurfaceBusinessDelegate
-										.getOptionExpiryValue(point.getOptionExpiry().toString()), // toPeriodLong(point.getOptionExpiry()),
+										.getOptionExpiryValue(point.getOptionExpiry().getValue()),
 								TradistaGUIUtil.parseAmount(strike, "Strike/Price Ratio"),
 								TradistaGUIUtil.parseAmount(volatility, "Volatility")));
 

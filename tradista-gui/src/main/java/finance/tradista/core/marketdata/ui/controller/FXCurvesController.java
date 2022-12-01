@@ -216,8 +216,8 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 							if (newValue == null) {
 								return true;
 							}
-							return newValue.equals(
-									LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().toString())));
+							return newValue.equals(LocalDate
+									.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().getValue())));
 						});
 					});
 
@@ -556,8 +556,10 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 		Map<LocalDate, BigDecimal> ratePointsMap = new HashMap<LocalDate, BigDecimal>();
 		for (RatePointProperty point : data) {
 			try {
-				ratePointsMap.put(LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().toString())),
-						point.getRate().equals("") ? null : TradistaGUIUtil.parseAmount(point.getRate().toString(), "Rate"));
+				ratePointsMap.put(
+						LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().getValue())),
+						point.getRate().getValue().isEmpty() ? null
+								: TradistaGUIUtil.parseAmount(point.getRate().getValue(), "Rate"));
 			} catch (DateTimeParseException e) {
 				// TODO Add a WARN log and continue
 				// TODO Auto-generated catch block
@@ -673,7 +675,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 		}
 		updateWindow();
 	}
-	
+
 	public void buildErrorMap() {
 		super.buildErrorMap();
 		if (!canGetInterestRateCurve) {
@@ -685,7 +687,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 			errors.put("get", err);
 		}
 	}
-	
+
 	public void updateComponents() {
 		super.updateComponents();
 		primaryCurrency.setDisable(!quoteSetExists || !canGetQuoteSet || !canGetQuote || !canGetCurve

@@ -94,7 +94,7 @@ public class ZeroCouponCurvesController extends TradistaGenerableCurveController
 
 	@FXML
 	protected TextField quoteNameTextField;
-	
+
 	@FXML
 	protected Button searchButton;
 
@@ -203,8 +203,8 @@ public class ZeroCouponCurvesController extends TradistaGenerableCurveController
 							if (newValue == null) {
 								return true;
 							}
-							return newValue.equals(
-									LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().toString())));
+							return newValue.equals(LocalDate
+									.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().getValue())));
 						});
 					});
 
@@ -599,8 +599,10 @@ public class ZeroCouponCurvesController extends TradistaGenerableCurveController
 		Map<LocalDate, BigDecimal> ratePointsMap = new HashMap<LocalDate, BigDecimal>();
 		for (RatePointProperty point : data) {
 			try {
-				ratePointsMap.put(LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().toString())),
-						point.getRate().equals("") ? null : TradistaGUIUtil.parseAmount(point.getRate().toString(), "Rate"));
+				ratePointsMap.put(
+						LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(point.getDate().getValue())),
+						point.getRate().getValue().isEmpty() ? null
+								: TradistaGUIUtil.parseAmount(point.getRate().getValue(), "Rate"));
 			} catch (DateTimeParseException e) {
 				// TODO add a WARN log and continue
 				// TODO Auto-generated catch block

@@ -166,8 +166,7 @@ public class JobsController extends TradistaControllerAdapter {
 
 		executionId.setCellValueFactory(new PropertyValueFactory<JobExecutionProperty, String>("id"));
 
-		executionJobInstanceName
-				.setCellValueFactory(cellData -> cellData.getValue().getJobInstanceName());
+		executionJobInstanceName.setCellValueFactory(cellData -> cellData.getValue().getJobInstanceName());
 
 		executionJobType.setCellValueFactory(cellData -> cellData.getValue().getJobType());
 
@@ -752,7 +751,7 @@ public class JobsController extends TradistaControllerAdapter {
 		for (JobPropertyProperty prop : data) {
 			Object value = prop.getValue();
 			if (value != null) {
-				properties.put(prop.getName().toString(), prop.getValue());
+				properties.put(prop.getName().getValue(), prop.getValue());
 			}
 		}
 
@@ -797,7 +796,7 @@ public class JobsController extends TradistaControllerAdapter {
 
 		@Override
 		public int compareTo(JobPropertyProperty o) {
-			return getName().toString().compareTo(o.getName().toString());
+			return getName().getValue().compareTo(o.getName().getValue());
 		}
 
 	}

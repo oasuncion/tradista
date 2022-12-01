@@ -1981,7 +1981,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 		pricingParameter.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 		pricingParameter.getParams().clear();
 		for (PricingParamProperty prop : pricingParamTable.getItems()) {
-			pricingParameter.getParams().put(prop.getName().toString(), prop.getValue().toString());
+			pricingParameter.getParams().put(prop.getName().getValue(), prop.getValue().getValue());
 		}
 		pricingParameter.getDiscountCurves().clear();
 		for (DiscountCurveProperty prop : discountCurveTable.getItems()) {
@@ -2000,8 +2000,8 @@ public class PricingParameterController extends TradistaControllerAdapter {
 		}
 		pricingParameter.getCustomPricers().clear();
 		for (CustomPricerProperty prop : customPricerTable.getItems()) {
-			pricingParameter.getCustomPricers().put(prop.getProductType().toString(),
-					prop.getCustomPricer().toString());
+			pricingParameter.getCustomPricers().put(prop.getProductType().getValue(),
+					prop.getCustomPricer().getValue());
 		}
 		pricingParameter.getModules().clear();
 		if (pricingParameterModuleControllersList != null && !pricingParameterModuleControllersList.isEmpty()) {
@@ -2039,14 +2039,15 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 		@Override
 		public int compareTo(PricingParamProperty o) {
-			return getName().toString().compareTo(o.getName().toString());
+			return getName().getValue().compareTo(o.getName().getValue());
 		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+			result = prime * result
+					+ ((getName() == null || getName().getValue() == null) ? 0 : getName().getValue().hashCode());
 			return result;
 		}
 
@@ -2062,8 +2063,19 @@ public class PricingParameterController extends TradistaControllerAdapter {
 			if (getName() == null) {
 				if (other.getName() != null)
 					return false;
-			} else if (!getName().equals(other.getName()))
-				return false;
+			} else {
+				if (other.getName() == null)
+					return false;
+				else {
+					if (getName().getValue() == null) {
+						if (other.getName().getValue() != null)
+							return false;
+					} else {
+						return getName().getValue().equals(other.getName().getValue());
+					}
+				}
+			}
+
 			return true;
 		}
 

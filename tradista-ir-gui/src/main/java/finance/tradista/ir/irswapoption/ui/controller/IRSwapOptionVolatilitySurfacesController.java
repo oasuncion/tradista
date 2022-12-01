@@ -235,7 +235,7 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 							if (newValue == null || newValue.isEmpty()) {
 								return true;
 							}
-							return point.getVolatility().toString().contains(newValue);
+							return point.getVolatility().getValue().contains(newValue);
 						});
 					});
 
@@ -543,13 +543,13 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 		List<SurfacePoint<Integer, Integer, BigDecimal>> surfacePointList = new ArrayList<SurfacePoint<Integer, Integer, BigDecimal>>();
 		for (SurfacePointProperty point : data) {
 			try {
-				String optionExpiry = point.getOptionExpiry().toString();
-				String swapLength = point.getSwapLength().toString();
+				String optionExpiry = point.getOptionExpiry().getValue();
+				String swapLength = point.getSwapLength().getValue();
 				if (!optionExpiry.isEmpty() && !swapLength.isEmpty()) {
 					surfacePointList.add(
-							new SurfacePoint<Integer, Integer, BigDecimal>(toPeriodInteger(point.getOptionExpiry().toString()),
-									toPeriodInteger(point.getSwapLength().toString()), point.getVolatility().equals("") ? null
-											: TradistaGUIUtil.parseAmount(point.getVolatility().toString(), "Volatility")));
+							new SurfacePoint<Integer, Integer, BigDecimal>(toPeriodInteger(point.getOptionExpiry().getValue()),
+									toPeriodInteger(point.getSwapLength().getValue()), point.getVolatility().getValue().isEmpty() ? null
+											: TradistaGUIUtil.parseAmount(point.getVolatility().getValue(), "Volatility")));
 				}
 			} catch (DateTimeParseException dtpe) {
 				// TODO Auto-generated catch block

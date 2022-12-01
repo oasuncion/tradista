@@ -759,24 +759,26 @@ public class QuotesController extends TradistaControllerAdapter {
 			if (valueExists(quoteValue)) {
 				try {
 					QuoteValue qv = new QuoteValue(
-							LocalDate.from(DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(quoteValue.getDate().toString())),
-							quoteValue.getBid().equals("") ? null
-									: TradistaGUIUtil.parseAmount(quoteValue.getBid().toString(), "Bid"),
-							quoteValue.getAsk().equals("") ? null
-									: TradistaGUIUtil.parseAmount(quoteValue.getAsk().toString(), "Ask"),
-							quoteValue.getOpen().equals("") ? null
-									: TradistaGUIUtil.parseAmount(quoteValue.getOpen().toString(), "Open"),
-							quoteValue.getClose().equals("") ? null
-									: TradistaGUIUtil.parseAmount(quoteValue.getClose().toString(), "Close"),
-							quoteValue.getHigh().equals("") ? null
-									: TradistaGUIUtil.parseAmount(quoteValue.getHigh().toString(), "High"),
-							quoteValue.getLow().equals("") ? null
-									: TradistaGUIUtil.parseAmount(quoteValue.getLow().toString(), "Low"),
-							quoteValue.getLast().equals("") ? null
-									: TradistaGUIUtil.parseAmount(quoteValue.getLast().toString(), "Last"),
-							quoteValue.getSourceName().equals("") ? null : quoteValue.getSourceName().toString());
-					qv.setQuote(quoteBusinessDelegate.getQuoteByNameAndType(quoteValue.getName().toString(),
-							QuoteType.getQuoteType(quoteValue.getType().toString())));
+							LocalDate.from(
+									DateTimeFormatter.ofPattern("yyyy-MM-dd").parse(quoteValue.getDate().getValue())),
+							quoteValue.getBid().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(quoteValue.getBid().getValue(), "Bid"),
+							quoteValue.getAsk().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(quoteValue.getAsk().getValue(), "Ask"),
+							quoteValue.getOpen().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(quoteValue.getOpen().getValue(), "Open"),
+							quoteValue.getClose().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(quoteValue.getClose().getValue(), "Close"),
+							quoteValue.getHigh().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(quoteValue.getHigh().getValue(), "High"),
+							quoteValue.getLow().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(quoteValue.getLow().getValue(), "Low"),
+							quoteValue.getLast().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(quoteValue.getLast().getValue(), "Last"),
+							quoteValue.getSourceName().getValue().isEmpty() ? null
+									: quoteValue.getSourceName().getValue());
+					qv.setQuote(quoteBusinessDelegate.getQuoteByNameAndType(quoteValue.getName().getValue(),
+							QuoteType.getQuoteType(quoteValue.getType().getValue())));
 
 					quoteValueList.add(qv);
 
@@ -790,9 +792,10 @@ public class QuotesController extends TradistaControllerAdapter {
 	}
 
 	private boolean valueExists(QuoteProperty quoteValue) {
-		return (!quoteValue.getAsk().toString().isEmpty() || !quoteValue.getBid().toString().isEmpty() || !quoteValue.getClose().toString().isEmpty()
-				|| !quoteValue.getHigh().toString().isEmpty() || !quoteValue.getLast().toString().isEmpty() || !quoteValue.getLow().toString().isEmpty()
-				|| !quoteValue.getOpen().toString().isEmpty());
+		return (!quoteValue.getAsk().getValue().isEmpty() || !quoteValue.getBid().getValue().isEmpty()
+				|| !quoteValue.getClose().getValue().isEmpty() || !quoteValue.getHigh().getValue().isEmpty()
+				|| !quoteValue.getLast().getValue().isEmpty() || !quoteValue.getLow().getValue().isEmpty()
+				|| !quoteValue.getOpen().getValue().isEmpty());
 	}
 
 	@Override

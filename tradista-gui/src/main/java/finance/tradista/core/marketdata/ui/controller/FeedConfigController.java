@@ -192,16 +192,16 @@ public class FeedConfigController extends TradistaControllerAdapter {
 					public void changed(ObservableValue<? extends FeedMappingProperty> arg0,
 							FeedMappingProperty oldProp, FeedMappingProperty prop) {
 						if (feedMappingTable.getSelectionModel().getSelectedItem() != null) {
-							quoteNameTextField.setText(prop.getQuoteName().toString());
-							quoteType.setValue(QuoteType.getQuoteType(prop.getQuoteType().toString()));
-							bidTextField.setText(prop.getBid().toString());
-							fieldNameTextField.setText(prop.getFieldName().toString());
-							askTextField.setText(prop.getAsk().toString());
-							openTextField.setText(prop.getOpen().toString());
-							closeTextField.setText(prop.getClose().toString());
-							highTextField.setText(prop.getHigh().toString());
-							lowTextField.setText(prop.getLow().toString());
-							lastTextField.setText(prop.getLast().toString());
+							quoteNameTextField.setText(prop.getQuoteName().getValue());
+							quoteType.setValue(QuoteType.getQuoteType(prop.getQuoteType().getValue()));
+							bidTextField.setText(prop.getBid().getValue());
+							fieldNameTextField.setText(prop.getFieldName().getValue());
+							askTextField.setText(prop.getAsk().getValue());
+							openTextField.setText(prop.getOpen().getValue());
+							closeTextField.setText(prop.getClose().getValue());
+							highTextField.setText(prop.getHigh().getValue());
+							lowTextField.setText(prop.getLow().getValue());
+							lastTextField.setText(prop.getLast().getValue());
 						}
 
 					}
@@ -516,19 +516,19 @@ public class FeedConfigController extends TradistaControllerAdapter {
 			Map<String, Quote> mapping = new HashMap<String, Quote>();
 
 			for (FeedMappingProperty prop : data) {
-				String quoteName = prop.getQuoteName().toString();
-				QuoteType quoteType = QuoteType.getQuoteType(prop.getQuoteType().toString());
+				String quoteName = prop.getQuoteName().getValue();
+				QuoteType quoteType = QuoteType.getQuoteType(prop.getQuoteType().getValue());
 				Quote quote = new Quote(quoteName, quoteType);
-				mapping.put(prop.getFieldName().toString(), quote);
+				mapping.put(prop.getFieldName().getValue(), quote);
 				Map<String, String> currentField = new HashMap<String, String>();
-				currentField.put(QuoteValue.ASK, prop.getAsk().toString());
-				currentField.put(QuoteValue.BID, prop.getBid().toString());
-				currentField.put(QuoteValue.CLOSE, prop.getClose().toString());
-				currentField.put(QuoteValue.HIGH, prop.getHigh().toString());
-				currentField.put(QuoteValue.LAST, prop.getLast().toString());
-				currentField.put(QuoteValue.LOW, prop.getLow().toString());
-				currentField.put(QuoteValue.OPEN, prop.getOpen().toString());
-				fieldsMapping.put(prop.getFieldName().toString(), currentField);
+				currentField.put(QuoteValue.ASK, prop.getAsk().getValue());
+				currentField.put(QuoteValue.BID, prop.getBid().getValue());
+				currentField.put(QuoteValue.CLOSE, prop.getClose().getValue());
+				currentField.put(QuoteValue.HIGH, prop.getHigh().getValue());
+				currentField.put(QuoteValue.LAST, prop.getLast().getValue());
+				currentField.put(QuoteValue.LOW, prop.getLow().getValue());
+				currentField.put(QuoteValue.OPEN, prop.getOpen().getValue());
+				fieldsMapping.put(prop.getFieldName().getValue(), currentField);
 			}
 			currentFeedConfig.setFieldsMapping(fieldsMapping);
 			currentFeedConfig.setMapping(mapping);

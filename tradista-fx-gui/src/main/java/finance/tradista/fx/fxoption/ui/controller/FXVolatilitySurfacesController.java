@@ -569,7 +569,7 @@ public class FXVolatilitySurfacesController extends TradistaVolatilitySurfaceCon
 	public static List<BigDecimal> toDeltaList(ObservableList<DeltaProperty> items) throws TradistaBusinessException {
 		List<BigDecimal> deltaList = new ArrayList<BigDecimal>();
 		for (DeltaProperty delta : items) {
-			deltaList.add(TradistaGUIUtil.parseAmount(delta.getValue().toString(), "Delta"));
+			deltaList.add(TradistaGUIUtil.parseAmount(delta.getValue().getValue(), "Delta"));
 		}
 
 		return deltaList;
@@ -760,10 +760,9 @@ public class FXVolatilitySurfacesController extends TradistaVolatilitySurfaceCon
 					String optionExpiry = point.getOptionExpiry();
 					if (!optionExpiry.isEmpty()) {
 						String volatility = point.getVolatility();
-						if (volatility != null && !volatility.equals("")) {
+						if (volatility != null && !volatility.isEmpty()) {
 							surfacePointList.add(new SurfacePoint<Integer, BigDecimal, BigDecimal>(
 									fxVolatilitySurfaceBusinessDelegate.getOptionExpiryValue(optionExpiry),
-									// toPeriodLong(optionExpiry),
 									TradistaGUIUtil.parseAmount(point.getDelta(), "Delta"),
 									TradistaGUIUtil.parseAmount(point.getVolatility(), "Volatility")));
 						}
@@ -927,7 +926,7 @@ public class FXVolatilitySurfacesController extends TradistaVolatilitySurfaceCon
 				return false;
 			}
 
-			return (getValue().toString().compareTo(((DeltaProperty) o).getValue().toString()) == 0);
+			return (getValue().getValue().compareTo(((DeltaProperty) o).getValue().getValue()) == 0);
 		}
 
 		public int hashCode() {

@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
-import jakarta.interceptor.Interceptors;
-
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.cashflow.model.CashFlow;
@@ -31,6 +28,10 @@ import finance.tradista.core.productinventory.service.ProductInventoryBusinessDe
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.model.EquityTrade;
 import finance.tradista.security.equity.pricer.PricerEquityUtil;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2015 Olivier Asuncion
@@ -54,6 +55,8 @@ under the License.    */
 
 @Stateless
 @Interceptors(EquityProductScopeFilteringInterceptor.class)
+@PermitAll
+@SecurityDomain(value = "other")
 public class EquityPricerServiceBean implements EquityPricerService {
 
 	@EJB
@@ -249,7 +252,6 @@ public class EquityPricerServiceBean implements EquityPricerService {
 
 			return rf.add(beta.multiply(rm.subtract(rf)));
 		} catch (PricerException pe) {
-			pe.printStackTrace();
 			throw new TradistaBusinessException(pe.getMessage());
 		}
 	}

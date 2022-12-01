@@ -587,8 +587,10 @@ public final class PricerUtil {
 			throw new PricerException(tbe.getMessage());
 		}
 		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<LocalDate, BigDecimal>();
-		for (RatePoint point : points) {
-			pointsMap.put(point.getDate(), point.getRate());
+		if (points != null) {
+			for (RatePoint point : points) {
+				pointsMap.put(point.getDate(), point.getRate());
+			}
 		}
 		BigDecimal value = pointsMap.get(date);
 		if (value != null) {

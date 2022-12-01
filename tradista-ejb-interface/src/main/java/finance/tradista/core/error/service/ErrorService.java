@@ -2,9 +2,8 @@ package finance.tradista.core.error.service;
 
 import java.time.LocalDate;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.error.model.Error.Status;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2016 Olivier Asuncion

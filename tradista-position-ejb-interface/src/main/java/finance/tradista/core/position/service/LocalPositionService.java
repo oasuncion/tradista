@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.position.model.Position;

@@ -2,10 +2,9 @@ package finance.tradista.core.configuration.service;
 
 import java.math.RoundingMode;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.configuration.model.UIConfiguration;
 import finance.tradista.core.user.model.User;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

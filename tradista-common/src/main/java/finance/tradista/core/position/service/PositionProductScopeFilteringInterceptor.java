@@ -2,13 +2,12 @@ package finance.tradista.core.position.service;
 
 import java.util.List;
 
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.InvocationContext;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.position.model.Position;
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.product.service.ProductBusinessDelegate;
+import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.InvocationContext;
 
 /*
  * Copyright 2021 Olivier Asuncion

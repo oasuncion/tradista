@@ -1,12 +1,11 @@
 package finance.tradista.ai.reasoning.prm.service;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.ai.reasoning.prm.model.Constant;
 import finance.tradista.ai.reasoning.prm.model.Function;
 import finance.tradista.ai.reasoning.prm.persistence.ConstantSQL;
 import finance.tradista.ai.reasoning.prm.persistence.FunctionSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

@@ -1,6 +1,6 @@
 package finance.tradista.core.position.service;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 /*
  * Copyright 2022 Olivier Asuncion

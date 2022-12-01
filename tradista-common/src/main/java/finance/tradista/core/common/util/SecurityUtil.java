@@ -2,8 +2,6 @@ package finance.tradista.core.common.util;
 
 import java.util.function.Supplier;
 
-import javax.ejb.EJBException;
-import javax.ejb.NoSuchEJBException;
 import javax.security.sasl.SaslException;
 
 import org.jboss.ejb.client.RequestSendFailedException;
@@ -19,6 +17,8 @@ import org.wildfly.security.sasl.SaslMechanismSelector;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
+import jakarta.ejb.EJBException;
+import jakarta.ejb.NoSuchEJBException;
 
 /*
  * Copyright 2019 Olivier Asuncion

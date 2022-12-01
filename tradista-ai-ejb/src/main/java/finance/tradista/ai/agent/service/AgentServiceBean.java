@@ -2,12 +2,11 @@ package finance.tradista.ai.agent.service;
 
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.ai.agent.model.Agent;
 import finance.tradista.ai.agent.persistence.AgentSQL;
 import finance.tradista.ai.reasoning.prm.persistence.FunctionSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

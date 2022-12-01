@@ -2,17 +2,15 @@ package finance.tradista.core.legalentity.service;
 
 import java.util.Set;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
-import finance.tradista.core.legalentity.service.LegalEntityService;
 import finance.tradista.legalentity.service.LegalEntityFilteringInterceptor;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2019 Olivier Asuncion

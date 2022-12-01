@@ -1,6 +1,6 @@
 package finance.tradista.core.common.exception;
 
-import javax.ejb.ApplicationException;
+import jakarta.ejb.ApplicationException;
 
 /*
  * Copyright 2015 Olivier Asuncion

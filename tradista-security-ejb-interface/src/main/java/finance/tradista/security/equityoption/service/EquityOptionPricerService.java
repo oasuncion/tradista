@@ -3,7 +3,7 @@ package finance.tradista.security.equityoption.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;

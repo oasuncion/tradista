@@ -11,11 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.security.PermitAll;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.ai.agent.model.Agent;
@@ -38,6 +33,10 @@ import finance.tradista.core.pricing.util.PricerUtil;
 import finance.tradista.fx.common.util.FXUtil;
 import finance.tradista.fx.fx.model.FXTrade;
 import finance.tradista.fx.fx.service.FXTradeBusinessDelegate;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

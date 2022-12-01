@@ -1,6 +1,6 @@
 package finance.tradista.fx.common.service;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2017 Olivier Asuncion

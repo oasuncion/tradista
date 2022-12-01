@@ -3,13 +3,12 @@ package finance.tradista.core.book.service;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.InvocationContext;
-
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.service.TradistaAuthorizationFilteringInterceptor;
 import finance.tradista.core.user.model.User;
+import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.InvocationContext;
 
 /*
  * Copyright 2019 Olivier Asuncion

@@ -15,7 +15,6 @@ import finance.tradista.core.batch.jobproperty.JobProperty;
 import finance.tradista.core.batch.model.TradistaJob;
 import finance.tradista.core.batch.model.TradistaJobExecution;
 import finance.tradista.core.batch.model.TradistaJobInstance;
-import finance.tradista.core.batch.service.BatchService;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;

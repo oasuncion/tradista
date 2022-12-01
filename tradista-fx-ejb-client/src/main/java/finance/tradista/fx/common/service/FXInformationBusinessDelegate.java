@@ -2,7 +2,6 @@ package finance.tradista.fx.common.service;
 
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
-import finance.tradista.fx.common.service.FXInformationService;
 
 /*
  * Copyright 2018 Olivier Asuncion

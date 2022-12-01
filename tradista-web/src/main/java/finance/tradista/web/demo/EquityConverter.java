@@ -1,10 +1,10 @@
 package finance.tradista.web.demo;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.convert.Converter;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.service.EquityBusinessDelegate;

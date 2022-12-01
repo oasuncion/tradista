@@ -2,8 +2,8 @@ package finance.tradista.core.batch.service;
 
 import java.lang.reflect.Method;
 
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.InvocationContext;
+import jakarta.interceptor.InvocationContext;
+import jakarta.interceptor.AroundInvoke;
 
 import finance.tradista.core.batch.model.TradistaJobExecution;
 import finance.tradista.core.batch.model.TradistaJobInstance;

@@ -1,8 +1,6 @@
 package finance.tradista.fx.common.service;
 
-import javax.ejb.Stateless;
-
-import finance.tradista.fx.common.service.FXInformationService;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2017 Olivier Asuncion

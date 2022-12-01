@@ -4,13 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.pricing.pricer.Pricer;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
 import finance.tradista.core.pricing.pricer.PricingParameter;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

@@ -5,12 +5,11 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.product.persistence.ProductSQL;
 import finance.tradista.core.trade.persistence.TradeSQL;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

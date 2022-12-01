@@ -32,12 +32,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.security.PermitAll;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
@@ -58,6 +52,11 @@ import finance.tradista.core.common.service.CustomProperties;
 import finance.tradista.core.common.util.TradistaConstants;
 import finance.tradista.core.common.util.TradistaUtil;
 import finance.tradista.core.configuration.service.LocalConfigurationService;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 @SecurityDomain(value = "other")
 @PermitAll
@@ -71,7 +70,7 @@ public class BatchServiceBean implements BatchService {
 	@EJB
 	private LocalConfigurationService configurationService;
 
-	static {
+	public static void initJobTypes() {
 		jobTypes = new HashMap<String, Class<? extends TradistaJob>>();
 		String tradistaJobsPackage = TradistaConstants.CORE_PACKAGE + ".batch.job";
 		List<Class<TradistaJob>> classes = TradistaUtil.getAllClassesByType(TradistaJob.class, tradistaJobsPackage);
@@ -96,11 +95,13 @@ public class BatchServiceBean implements BatchService {
 			// TODO Auto-generated catch block
 			tte.printStackTrace();
 		}
-
 	}
 
 	@PostConstruct
 	public void init() {
+		if (jobTypes == null) {
+			initJobTypes();
+		}
 		if (scheduler == null) {
 			try {
 				scheduler = configurationService.getScheduler();

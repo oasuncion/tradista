@@ -25,7 +25,7 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-ear-plugin</artifactId>
-					<version>3.0.2</version>
+					<version>3.3.0</version>
 					<configuration>
 						<!-- I need to add this fileNameMapping tag because net.sf.tweety and 
 							net.sf.tweety.logics have artifacts with the same jar name: commons. This 

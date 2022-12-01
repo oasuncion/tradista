@@ -2,11 +2,9 @@ package finance.tradista.core.daycountconvention.service;
 
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
 import finance.tradista.core.daycountconvention.persistence.DayCountConventionSQL;
-import finance.tradista.core.daycountconvention.service.DayCountConventionService;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

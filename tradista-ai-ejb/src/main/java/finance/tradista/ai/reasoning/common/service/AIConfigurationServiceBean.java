@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-
 import finance.tradista.ai.reasoning.common.util.TradistaAIProperties;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 /*
  * Copyright 2019 Olivier Asuncion

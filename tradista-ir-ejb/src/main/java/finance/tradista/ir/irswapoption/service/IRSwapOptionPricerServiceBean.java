@@ -5,9 +5,9 @@ import static finance.tradista.core.pricing.util.PricerUtil.cnd;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.util.DateUtil;

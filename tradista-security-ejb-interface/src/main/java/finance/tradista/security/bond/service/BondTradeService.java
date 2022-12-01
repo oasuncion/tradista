@@ -3,7 +3,7 @@ package finance.tradista.security.bond.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 import finance.tradista.security.bond.model.BondTrade;
 

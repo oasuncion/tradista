@@ -2,12 +2,10 @@ package finance.tradista.core.index.service;
 
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.index.persistence.IndexSQL;
-import finance.tradista.core.index.service.IndexService;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2019 Olivier Asuncion

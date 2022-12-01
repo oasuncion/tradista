@@ -1,6 +1,6 @@
 package finance.tradista.core.position.service;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2016 Olivier Asuncion

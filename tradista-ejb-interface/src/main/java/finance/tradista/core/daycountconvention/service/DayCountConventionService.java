@@ -2,9 +2,8 @@ package finance.tradista.core.daycountconvention.service;
 
 import java.util.Set;
 
-import javax.ejb.Remote;
-
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
+import jakarta.ejb.Remote;
 
 /*
  * Copyright 2015 Olivier Asuncion

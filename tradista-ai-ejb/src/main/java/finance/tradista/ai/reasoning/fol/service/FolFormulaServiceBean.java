@@ -6,11 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.ejb.Stateless;
-
 import finance.tradista.ai.reasoning.fol.model.FolFormula;
 import finance.tradista.ai.reasoning.fol.persistence.FolFormulaSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.ejb.Stateless;
 import net.sf.tweety.commons.Formula;
 import net.sf.tweety.commons.ParserException;
 import net.sf.tweety.logics.fol.parser.FolParser;

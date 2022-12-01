@@ -119,7 +119,7 @@ public final class PricerUtil {
 			}
 			try {
 				return getForwardRate(indexCurveId, valueDate, DateUtil.addTenor(valueDate, tenor), dcc);
-			} catch (TradistaBusinessException abe) {
+			} catch (TradistaBusinessException tbe) {
 				// Should not happen here.
 			}
 		} else {
@@ -141,7 +141,7 @@ public final class PricerUtil {
 					}
 					try {
 						rate = PricerUtil.getValueAsOfDateFromCurve(indexCurveId, DateUtil.addTenor(valueDate, tenor));
-					} catch (TradistaBusinessException abe) {
+					} catch (TradistaBusinessException tbe) {
 						// Should not happen here.
 					}
 				}
@@ -282,8 +282,8 @@ public final class PricerUtil {
 		CurveBusinessDelegate curveBusinessDelegate = new CurveBusinessDelegate();
 		try {
 			curve = curveBusinessDelegate.getCurveById(curveId);
-		} catch (TradistaBusinessException abe) {
-			throw new PricerException(abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			throw new PricerException(tbe.getMessage());
 		}
 
 		LocalDate min = valueDate.minus(1, ChronoUnit.YEARS);
@@ -291,8 +291,8 @@ public final class PricerUtil {
 		List<RatePoint> points;
 		try {
 			points = curveBusinessDelegate.getCurvePointsByCurveAndDates(curve, min, max);
-		} catch (TradistaBusinessException abe) {
-			throw new PricerException(abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			throw new PricerException(tbe.getMessage());
 		}
 		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<LocalDate, BigDecimal>();
 		for (RatePoint point : points) {
@@ -506,8 +506,8 @@ public final class PricerUtil {
 			if (interestRateCurveBusinessDelegate.getInterestRateCurveById(curveId) == null) {
 				throw new PricerException(String.format("The curve '%s' must exist in the system.", curveId));
 			}
-		} catch (TradistaBusinessException abe) {
-			throw new PricerException(abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			throw new PricerException(tbe.getMessage());
 		}
 
 		LocalDate min = date.minus(1, ChronoUnit.YEARS);
@@ -515,13 +515,15 @@ public final class PricerUtil {
 		List<RatePoint> points;
 		try {
 			points = interestRateCurveBusinessDelegate.getInterestRateCurvePointsByCurveIdAndDates(curveId, min, max);
-		} catch (TradistaBusinessException abe) {
-			abe.printStackTrace();
-			throw new PricerException(abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			tbe.printStackTrace();
+			throw new PricerException(tbe.getMessage());
 		}
 		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<LocalDate, BigDecimal>();
-		for (RatePoint point : points) {
-			pointsMap.put(point.getDate(), point.getRate());
+		if (points != null) {
+			for (RatePoint point : points) {
+				pointsMap.put(point.getDate(), point.getRate());
+			}
 		}
 		BigDecimal value = pointsMap.get(date);
 		if (value != null) {
@@ -701,7 +703,7 @@ public final class PricerUtil {
 					.add(BigDecimal.valueOf(30)
 							.multiply(BigDecimal.valueOf(endDate.getMonthValue() - startDate.getMonthValue())))
 					.add(BigDecimal.valueOf(endDate.getDayOfMonth() - startDate.getDayOfMonth())))
-							.divide(BigDecimal.valueOf(360), scale, roundingMode);
+					.divide(BigDecimal.valueOf(360), scale, roundingMode);
 		}
 		case "30E/360": {
 			int startDay = Math.min(30, startDate.getDayOfMonth());

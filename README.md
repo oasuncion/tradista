@@ -9,7 +9,7 @@ See more on [tradista.finance](https://www.tradista.finance)
 Tradista is a Java based application. The server is based on WildFly and the clients are based on JavaFX and PrimeFaces.
 
 Tested configuration:
-- Server: WildFly 18.0.1
+- Server: WildFly 27.0.0.Final
 - JRE: Oracle JRE v11.0.5 or OpenJDK JRE (RedHat implementation) v11.0.14.9
 - Database: Derby 10.15.2.0
 - Build automation tool: Maven 3.8.5

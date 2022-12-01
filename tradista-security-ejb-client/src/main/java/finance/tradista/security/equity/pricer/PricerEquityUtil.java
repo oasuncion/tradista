@@ -303,7 +303,10 @@ public final class PricerEquityUtil {
 			cfs.add(payment);
 		}
 
-		cfs.addAll(PricerEquityUtil.getPendingDividends(trade, pricingDate, trade.getProduct().getActiveTo(), params));
+		if (trade.getProduct().isPayDividend()) {
+			cfs.addAll(
+					PricerEquityUtil.getPendingDividends(trade, pricingDate, trade.getProduct().getActiveTo(), params));
+		}
 
 		return cfs;
 	}

@@ -104,13 +104,22 @@ public final class PricerEquityUtil {
 
 		if (trade == null) {
 			errMsg.append(String.format("Trade is mandatory.%n"));
+		} else {
+			if (trade.getProduct() == null) {
+				errMsg.append(String.format("Trade %d has no equity. Equity is mandatory.%n", trade.getId()));
+			} else {
+				if (!trade.getProduct().isPayDividend()) {
+					return null;
+				}
+			}
 		}
 
 		if (params == null) {
 			errMsg.append(String.format("Pricing Parameters Set is mandatory.%n"));
 		} else {
 			if (params.getQuoteSet() == null) {
-				errMsg.append(String.format("Pricing Parameters Set quote set is mandatory."));
+				errMsg.append(String.format("Pricing Parameters Set %s has no quote set. Quote set is mandatory.",
+						params.getName()));
 			}
 		}
 

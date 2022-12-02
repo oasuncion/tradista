@@ -68,6 +68,7 @@ public class EquityTradeBusinessDelegate {
 		exchangeCalendar = equityExchange.getCalendar();
 		if (exchangeCalendar == null) {
 			// TODO add a warning log.
+			return true; // no calendar, by default all days are business days.
 		}
 
 		return exchangeCalendar.isBusinessDay(date);

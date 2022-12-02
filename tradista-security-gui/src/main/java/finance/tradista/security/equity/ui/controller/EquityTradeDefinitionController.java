@@ -399,19 +399,15 @@ public class EquityTradeDefinitionController extends TradistaTradeBookingControl
 			public DateCell call(final DatePicker datePicker) {
 				return new DateCell() {
 
-					EquityTrade equityTrade;
-
 					private boolean isAvailable(LocalDate date) {
-						if (equityTrade == null) {
-							equityTrade = new EquityTrade();
-							equityTrade.setProduct(equity.getValue());
-						}
+						EquityTrade equityTrade = new EquityTrade();
+						equityTrade.setProduct(equity.getValue());
 						if (equityTrade.getProduct() != null) {
 							try {
 								return equityTradeBusinessDelegate.isBusinessDay(equityTrade, date);
-							} catch (TradistaBusinessException e) {
+							} catch (TradistaBusinessException tbe) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								tbe.printStackTrace();
 							}
 							return false;
 						} else {

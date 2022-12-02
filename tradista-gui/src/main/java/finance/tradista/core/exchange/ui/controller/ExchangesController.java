@@ -93,6 +93,8 @@ public class ExchangesController extends TradistaControllerAdapter {
 				}
 				if (!calendar.getValue().equals(BlankCalendar.getInstance())) {
 					exchange.setCalendar(calendar.getValue());
+				} else {
+					exchange.setCalendar(null);
 				}
 				if (code.isVisible()) {
 					exchange.setCode(code.getText());
@@ -126,6 +128,8 @@ public class ExchangesController extends TradistaControllerAdapter {
 				exchange.setName(result.get().getName());
 				if (!calendar.getValue().equals(BlankCalendar.getInstance())) {
 					exchange.setCalendar(calendar.getValue());
+				} else {
+					exchange.setCalendar(null);
 				}
 				exchange.setOtc(isOtc.isSelected());
 				oldExchangeId = exchange.getId();
@@ -171,7 +175,11 @@ public class ExchangesController extends TradistaControllerAdapter {
 
 	private void load(Exchange exchange) {
 		this.exchange = exchange;
-		calendar.setValue(exchange.getCalendar());
+		if (exchange.getCalendar() != null) {
+			calendar.setValue(exchange.getCalendar());
+		} else {
+			calendar.setValue(BlankCalendar.getInstance());
+		}
 		code.setVisible(false);
 		codeLabel.setText(exchange.getCode());
 		codeLabel.setVisible(true);

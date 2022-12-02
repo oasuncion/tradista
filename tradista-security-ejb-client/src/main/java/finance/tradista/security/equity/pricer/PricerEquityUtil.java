@@ -133,6 +133,7 @@ public final class PricerEquityUtil {
 		List<CashFlow> dividends = new ArrayList<CashFlow>();
 
 		LocalDate activeFrom = equity.getActiveFrom();
+
 		LocalDate cashFlowDate = activeFrom;
 
 		LocalDate activeTo = equity.getActiveTo();
@@ -162,7 +163,8 @@ public final class PricerEquityUtil {
 		}
 
 		while (!cashFlowDate.isAfter(endDate)) {
-			if (cashFlowDate.isAfter(activeFrom)) {
+			if (cashFlowDate.isAfter(activeFrom) && !cashFlowDate.isBefore(startDate)
+					&& !cashFlowDate.isBefore(trade.getSettlementDate())) {
 				CashFlow cashFlow = new CashFlow();
 				cashFlow.setDate(cashFlowDate);
 				cashFlow.setCurrency(equity.getDividendCurrency());

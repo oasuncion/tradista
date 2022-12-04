@@ -183,8 +183,10 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 				TransferPurpose.DIVIDEND, 0, trade.getProductId(), trade.getBook().getId(),
 				trade.getProduct().getDividendCurrency().getId(), null, null, trade.getSettlementDate(), null, null,
 				null);
-		existingDividends = existingDividends.stream().filter(t -> !t.getStatus().equals(Transfer.Status.CANCELED))
-				.collect(Collectors.toList());
+		if (existingDividends != null) {
+			existingDividends = existingDividends.stream().filter(t -> !t.getStatus().equals(Transfer.Status.CANCELED))
+					.collect(Collectors.toList());
+		}
 
 		if (cashTransfers == null) {
 			cashTransfers = EquityTransferUtil.generateDividends(trade);
@@ -192,7 +194,8 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 		List<CashTransfer> dividends = new ArrayList<CashTransfer>();
 
 		for (CashTransfer transfer : cashTransfers) {
-			if (transfer.getPurpose().equals(TransferPurpose.DIVIDEND) && !existingDividends.contains(transfer)) {
+			if (transfer.getPurpose().equals(TransferPurpose.DIVIDEND)
+					&& (existingDividends == null || !existingDividends.contains(transfer))) {
 				dividends.add(transfer);
 			}
 		}

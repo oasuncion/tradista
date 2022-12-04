@@ -236,7 +236,9 @@ public abstract class Transfer extends TradistaObject {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(book, product, purpose, settlementDate, trade);
+		long tradeId = trade != null ? trade.getId() : 0;
+		long productId = product != null ? product.getId() : 0;
+		return Objects.hash(book, productId, purpose, settlementDate, tradeId);
 	}
 
 	@Override

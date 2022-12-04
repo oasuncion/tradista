@@ -1,6 +1,7 @@
 package finance.tradista.core.transfer.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import finance.tradista.core.currency.model.Currency;
 
@@ -54,6 +55,26 @@ public class CashTransfer extends Transfer {
 	@Override
 	public Type getType() {
 		return Transfer.Type.CASH;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(currency);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CashTransfer other = (CashTransfer) obj;
+		return Objects.equals(currency, other.currency);
 	}
 
 }

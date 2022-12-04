@@ -3,6 +3,7 @@ package finance.tradista.core.transfer.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.model.TradistaObject;
@@ -38,6 +39,7 @@ public abstract class Transfer extends TradistaObject {
 
 	public static enum Status {
 		UNKNOWN, KNOWN, CANCELED;
+
 		public String toString() {
 			switch (this) {
 			case UNKNOWN:
@@ -72,6 +74,7 @@ public abstract class Transfer extends TradistaObject {
 
 	public static enum Type {
 		CASH, PRODUCT;
+
 		public String toString() {
 			switch (this) {
 			case CASH:
@@ -102,6 +105,7 @@ public abstract class Transfer extends TradistaObject {
 
 	public static enum Direction {
 		PAY, RECEIVE;
+
 		public String toString() {
 			switch (this) {
 			case PAY:
@@ -228,6 +232,30 @@ public abstract class Transfer extends TradistaObject {
 
 	public void setBook(Book book) {
 		this.book = book;
+	}
+
+	@Override
+	public int hashCode() {
+		long tradeId = trade != null ? trade.getId() : 0;
+		long productId = product != null ? product.getId() : 0;
+		return Objects.hash(book, productId, purpose, settlementDate, tradeId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transfer other = (Transfer) obj;
+		long tradeId = trade != null ? trade.getId() : 0;
+		long otherTradeId = other.getTrade() != null ? other.getTrade().getId() : 0;
+		long productId = product != null ? product.getId() : 0;
+		long otherProductId = other.getProduct() != null ? other.getProduct().getId() : 0;
+		return Objects.equals(book, other.book) && (productId == otherProductId) && purpose == other.purpose
+				&& Objects.equals(settlementDate, other.settlementDate) && (tradeId == otherTradeId);
 	}
 
 }

@@ -10,6 +10,7 @@ import finance.tradista.core.common.util.DateUtil;
 import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.core.transfer.model.CashTransfer;
 import finance.tradista.core.transfer.model.Transfer;
+import finance.tradista.core.transfer.model.Transfer.Direction;
 import finance.tradista.core.transfer.model.TransferPurpose;
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.model.EquityTrade;
@@ -38,27 +39,41 @@ public final class EquityTransferUtil {
 
 	/**
 	 * Returns the list of received dividends for a given equity trade.
-	 * @param equity trade the concerned equity trade 
-	 * @return the list of received dividends for a given equity
-	 * @throws TradistaBusinessException
+	 * 
+	 * @param equity trade the concerned equity trade
+	 * @return the list of received dividends for a given trade
+	 * @throws TradistaBusinessException If the trade or the equity is null, a
+	 *                                   TradistaBusinessException is thrown
 	 */
 	public static List<CashTransfer> generateDividends(EquityTrade trade) throws TradistaBusinessException {
 		if (trade == null) {
 			throw new TradistaBusinessException("The trade is mandatory.");
+		} else {
+			if (trade.getProduct() == null) {
+				throw new TradistaBusinessException(
+						String.format("Trade %d has no equity. Equity is mandatory.%n", trade.getId()));
+			} else {
+				if (!trade.getProduct().isPayDividend()) {
+					return null;
+				}
+			}
 		}
-		
+
+		if (trade.isSell()) {
+			return null;
+		}
+
 		Equity equity = trade.getProduct();
 
 		Tenor frequency = equity.getDividendFrequency();
 		List<CashTransfer> dividends = new ArrayList<CashTransfer>();
 
-		LocalDate cashFlowDate = trade.getSettlementDate();
-		if (trade.getSettlementDate().isBefore(equity.getActiveFrom())) {
-			cashFlowDate = equity.getActiveFrom();
-		}
+		LocalDate activeFrom = equity.getActiveFrom();
+
+		LocalDate cashFlowDate = activeFrom;
 
 		while (!cashFlowDate.isAfter(equity.getActiveTo())) {
-			if (cashFlowDate.isAfter(trade.getSettlementDate())) {
+			if (cashFlowDate.isAfter(activeFrom) && !cashFlowDate.isBefore(trade.getSettlementDate())) {
 				CashTransfer cashTransfer = new CashTransfer();
 				cashTransfer.setSettlementDate(cashFlowDate);
 				cashTransfer.setCurrency(equity.getDividendCurrency());
@@ -68,6 +83,7 @@ public final class EquityTransferUtil {
 				cashTransfer.setPurpose(TransferPurpose.DIVIDEND);
 				cashTransfer.setStatus(Transfer.Status.UNKNOWN);
 				cashTransfer.setBook(trade.getBook());
+				cashTransfer.setDirection(Direction.RECEIVE);
 
 				dividends.add(cashTransfer);
 			}

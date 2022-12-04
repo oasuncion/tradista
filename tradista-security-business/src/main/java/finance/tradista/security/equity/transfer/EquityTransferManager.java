@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;
@@ -178,13 +179,23 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 	private List<CashTransfer> createNewDividends(List<CashTransfer> cashTransfers, EquityTrade trade)
 			throws TradistaBusinessException {
 
+		List<Transfer> existingDividends = transferBusinessDelegate.getTransfers(Transfer.Type.CASH, null, null,
+				TransferPurpose.DIVIDEND, 0, trade.getProductId(), trade.getBook().getId(),
+				trade.getProduct().getDividendCurrency().getId(), null, null, trade.getSettlementDate(), null, null,
+				null);
+		if (existingDividends != null) {
+			existingDividends = existingDividends.stream().filter(t -> !t.getStatus().equals(Transfer.Status.CANCELED))
+					.collect(Collectors.toList());
+		}
+
 		if (cashTransfers == null) {
 			cashTransfers = EquityTransferUtil.generateDividends(trade);
 		}
 		List<CashTransfer> dividends = new ArrayList<CashTransfer>();
 
 		for (CashTransfer transfer : cashTransfers) {
-			if (transfer.getPurpose().equals(TransferPurpose.DIVIDEND)) {
+			if (transfer.getPurpose().equals(TransferPurpose.DIVIDEND)
+					&& (existingDividends == null || !existingDividends.contains(transfer))) {
 				dividends.add(transfer);
 			}
 		}

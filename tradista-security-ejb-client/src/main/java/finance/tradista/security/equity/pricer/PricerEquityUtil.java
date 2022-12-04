@@ -113,6 +113,10 @@ public final class PricerEquityUtil {
 				}
 			}
 		}
+		
+		if (trade.isSell()) {
+			return null;
+		}
 
 		if (params == null) {
 			errMsg.append(String.format("Pricing Parameters Set is mandatory.%n"));

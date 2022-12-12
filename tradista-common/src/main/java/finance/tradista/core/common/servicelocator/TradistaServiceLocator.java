@@ -2,6 +2,10 @@ package finance.tradista.core.common.servicelocator;
 
 import static finance.tradista.core.common.util.TradistaConstants.CORE_PACKAGE;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -109,162 +113,6 @@ public class TradistaServiceLocator {
 
 	private static TradistaServiceLocator instance = new TradistaServiceLocator();
 
-	private static BondService bondService;
-
-	private static BondTradeService bondTradeService;
-
-	private static MarketDataService marketDataService;
-
-	private static LegalEntityService legalEntityService;
-
-	private static PricerService pricerService;
-
-	private static QuoteService quoteService;
-
-	private static CurrencyService currencyService;
-
-	private static BookService bookService;
-
-	private static UserService userService;
-
-	private static CalendarService calendarService;
-
-	private static DateRuleService dateRuleService;
-
-	private static ExchangeService exchangeService;
-
-	private static InterestRateCurveService interestRateCurveService;
-
-	private static FXCurveService fxCurveService;
-
-	private static CurveService curveService;
-
-	private static DayCountConventionService dayCountConventionService;
-
-	private static IndexService indexService;
-
-	private static CcySwapTradeService ccySwapTradeService;
-
-	private static EquityService equityService;
-
-	private static EquityTradeService equityTradeService;
-
-	private static EquityOptionTradeService equityOptionTradeService;
-
-	private static EquityOptionService equityOptionService;
-
-	private static EquityOptionContractSpecificationService equityOptionSpecificationService;
-
-	private static EquityOptionVolatilitySurfaceService equityOptionVolatilitySurfaceService;
-
-	private static FRATradeService fraTradeService;
-
-	private static FutureService futureService;
-
-	private static FutureContractSpecificationService futureContractSpecificationService;
-
-	private static FutureTradeService futureTradeService;
-
-	private static FXNDFTradeService fxNDFTradeService;
-
-	private static FXOptionTradeService fxOptionTradeService;
-
-	private static FXTradeService fxTradeService;
-
-	private static FXSwapTradeService fxSwapTradeService;
-
-	private static IRCapFloorCollarTradeService irCapFloorCollarTradeService;
-
-	private static IRSwapOptionTradeService irSwapOptionTradeService;
-
-	private static IRSwapTradeService irSwapTradeService;
-
-	private static FeedService feedService;
-
-	private static FXVolatilitySurfaceService fxVolatilitySurfaceService;
-
-	private static SwaptionVolatilitySurfaceService swaptionVolatilitySurfaceService;
-
-	private static LoanDepositTradeService loanDepositService;
-
-	private static TradeService tradeService;
-
-	private static ProductService productService;
-
-	private static MarketDataConfigurationService marketDataConfigurationService;
-
-	private static BatchService batchService;
-
-	private static FXPricerService fxPricerService;
-
-	private static FXNDFPricerService fxNdfPricerService;
-
-	private static FXOptionPricerService fxOptionPricerService;
-
-	private static FXSwapPricerService fxSwapPricerService;
-
-	private static CcySwapPricerService ccySwapPricerService;
-
-	private static FRAPricerService fraPricerService;
-
-	private static FuturePricerService futurePricerService;
-
-	private static IRSwapOptionPricerService irSwapOptionPricerService;
-
-	private static IRSwapPricerService irSwapPricerService;
-
-	private static IRCapFloorCollarPricerService irCapFloorCollarPricerService;
-
-	private static LoanDepositPricerService loanDepositPricerService;
-
-	private static BondPricerService bondPricerService;
-
-	private static EquityPricerService equityPricerService;
-
-	private static EquityOptionPricerService equityOptionPricerService;
-
-	private static SurfaceService surfaceService;
-
-	private static PositionDefinitionService positionDefinitionService;
-
-	private static PositionCalculationErrorService positionCalculationErrorService;
-
-	private static FixingErrorService fixingErrorService;
-
-	private static ErrorService errorService;
-
-	private static PositionService positionService;
-
-	private static DailyPnlService dailyPnlService;
-
-	private static ProductInventoryService productInventoryService;
-
-	private static CashInventoryService cashInventoryService;
-
-	private static InformationService informationService;
-
-	private static MarketDataInformationService marketDataInformationService;
-
-	private static FXInformationService fxInformationService;
-
-	private static IRInformationService irInformationService;
-
-	private static MMInformationService mmInformationService;
-
-	private static SecurityInformationService securityInformationService;
-
-	private static ConfigurationService configurationService;
-
-	private static FolFormulaService folFormulaService;
-
-	private static FormulaService formulaService;
-
-	private static MandateService mandateService;
-
-	private static AssetManagerAgentService assetManagerAgentService;
-
-	private static TransferService transferService;
-
 	private static final String APP = "app";
 
 	private static final String CORE_EJB = "core-ejb";
@@ -357,10 +205,39 @@ public class TradistaServiceLocator {
 
 	private static final String USER_SERVICE_PACKAGE = CORE_PACKAGE + ".user.service";
 
+	private static final String CALENDAR_SERVICE_PACKAGE = CORE_PACKAGE + ".calendar.service";
+
+	private static final String DATE_RULE_SERVICE_PACKAGE = CORE_PACKAGE + ".daterule.service";
+
+	private static final String EXCHANGE_SERVICE_PACKAGE = CORE_PACKAGE + ".exchange.service";
+
+	private static final String PRICING_SERVICE_PACKAGE = CORE_PACKAGE + ".pricing.service";
+
+	private static final String BATCH_SERVICE_PACKAGE = CORE_PACKAGE + ".batch.service";
+
+	private static final String LEGAL_ENTITY_SERVICE_PACKAGE = CORE_PACKAGE + ".legalentity.service";
+
+	private static final String DAY_COUNT_CONVENTION_SERVICE_PACKAGE = CORE_PACKAGE + ".daycountconvention.service";
+
+	private static final String INDEX_SERVICE_PACKAGE = CORE_PACKAGE + ".index.service";
+
+	private static final String TRADE_SERVICE_PACKAGE = CORE_PACKAGE + ".trade.service";
+
+	private static final String PRODUCT_SERVICE_PACKAGE = CORE_PACKAGE + ".product.service";
+
+	private static final String ERROR_SERVICE_PACKAGE = CORE_PACKAGE + ".error.service";
+
+	private static final String CURRENCY_SERVICE_PACKAGE = CORE_PACKAGE + ".currency.service";
+
+	private static final String BOOK_SERVICE_PACKAGE = CORE_PACKAGE + ".book.service";
+
 	private Context context;
+
+	private Map<String, Object> services;
 
 	private TradistaServiceLocator() {
 		try {
+			services = Collections.synchronizedMap(new HashMap<String, Object>());
 			context = new InitialContext();
 		} catch (NamingException ne) {
 			ne.printStackTrace();
@@ -372,1412 +249,375 @@ public class TradistaServiceLocator {
 	}
 
 	public MarketDataService getMarketDataService() {
-
-		if (marketDataService != null) {
-			return marketDataService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/MarketDataServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".MarketDataService";
-		try {
-			marketDataService = (MarketDataService) context.lookup(ejbString);
-			return marketDataService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (MarketDataService) getService(MARKET_DATA_APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE,
+				"MarketDataService");
 	}
 
 	public QuoteService getQuoteService() {
-
-		if (quoteService != null) {
-			return quoteService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/QuoteServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".QuoteService";
-		try {
-			quoteService = (QuoteService) context.lookup(ejbString);
-			return quoteService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (QuoteService) getService(MARKET_DATA_APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE, "QuoteService");
 	}
 
 	public ConfigurationService getConfigurationService() {
-
-		if (configurationService != null) {
-			return configurationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/ConfigurationServiceBean!" + CONFIGURATION_SERVICE_PACKAGE
-				+ ".ConfigurationService";
-		try {
-			configurationService = (ConfigurationService) context.lookup(ejbString);
-			return configurationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (ConfigurationService) getService(APP, CORE_EJB, CONFIGURATION_SERVICE_PACKAGE, "ConfigurationService");
 	}
 
 	public FeedService getFeedService() {
-
-		if (feedService != null) {
-			return feedService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/FeedServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".FeedService";
-		try {
-			feedService = (FeedService) context.lookup(ejbString);
-			return feedService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FeedService) getService(MARKET_DATA_APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE, "FeedService");
 	}
 
 	public LegalEntityService getLegalEntityService() {
-
-		if (legalEntityService != null) {
-			return legalEntityService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/LegalEntityServiceBean!" + CORE_PACKAGE
-				+ ".legalentity.service.LegalEntityService";
-		try {
-			legalEntityService = (LegalEntityService) context.lookup(ejbString);
-			return legalEntityService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (LegalEntityService) getService(APP, CORE_EJB, LEGAL_ENTITY_SERVICE_PACKAGE, "LegalEntityService");
 	}
 
 	public DayCountConventionService getDayCountConventionService() {
-
-		if (dayCountConventionService != null) {
-			return dayCountConventionService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/DayCountConventionServiceBean!" + CORE_PACKAGE
-				+ ".daycountconvention.service.DayCountConventionService";
-		try {
-			dayCountConventionService = (DayCountConventionService) context.lookup(ejbString);
-			return dayCountConventionService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (DayCountConventionService) getService(APP, CORE_EJB, DAY_COUNT_CONVENTION_SERVICE_PACKAGE,
+				"DayCountConventionService");
 	}
 
 	public IndexService getIndexService() {
-
-		if (indexService != null) {
-			return indexService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/IndexServiceBean!" + CORE_PACKAGE
-				+ ".index.service.IndexService";
-		try {
-			indexService = (IndexService) context.lookup(ejbString);
-			return indexService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IndexService) getService(APP, CORE_EJB, INDEX_SERVICE_PACKAGE, "IndexService");
 	}
 
 	public TradeService getTradeService() {
-
-		if (tradeService != null) {
-			return tradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/TradeServiceBean!" + CORE_PACKAGE
-				+ ".trade.service.TradeService";
-		try {
-			tradeService = (TradeService) context.lookup(ejbString);
-			return tradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (TradeService) getService(APP, CORE_EJB, TRADE_SERVICE_PACKAGE, "TradeService");
 	}
 
 	public ProductService getProductService() {
-
-		if (productService != null) {
-			return productService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/ProductServiceBean!" + CORE_PACKAGE
-				+ ".product.service.ProductService";
-		try {
-			productService = (ProductService) context.lookup(ejbString);
-			return productService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (ProductService) getService(APP, CORE_EJB, PRODUCT_SERVICE_PACKAGE, "ProductService");
 	}
 
 	public PositionDefinitionService getPositionDefinitionService() {
-
-		if (positionDefinitionService != null) {
-			return positionDefinitionService;
-		}
-
-		String ejbString = "ejb:" + POSITION_APP + "/" + POSITION_EJB + "/PositionDefinitionServiceBean!"
-				+ POSITION_SERVICE_PACKAGE + ".PositionDefinitionService";
-		try {
-			positionDefinitionService = (PositionDefinitionService) context.lookup(ejbString);
-			return positionDefinitionService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (PositionDefinitionService) getService(POSITION_APP, POSITION_EJB, POSITION_SERVICE_PACKAGE,
+				"PositionDefinitionService");
 	}
 
 	public PositionCalculationErrorService getPositionCalculationErrorService() {
-
-		if (positionCalculationErrorService != null) {
-			return positionCalculationErrorService;
-		}
-
-		String ejbString = "ejb:" + POSITION_APP + "/" + POSITION_EJB + "/PositionCalculationErrorServiceBean!"
-				+ POSITION_SERVICE_PACKAGE + ".PositionCalculationErrorService";
-		try {
-			positionCalculationErrorService = (PositionCalculationErrorService) context.lookup(ejbString);
-			return positionCalculationErrorService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (PositionCalculationErrorService) getService(POSITION_APP, POSITION_EJB, POSITION_SERVICE_PACKAGE,
+				"PositionCalculationErrorService");
 	}
 
 	public FixingErrorService getFixingErrorService() {
-
-		if (fixingErrorService != null) {
-			return fixingErrorService;
-		}
-
-		String ejbString = "ejb:" + TRANSFER_APP + "/" + TRANSFER_EJB + "/FixingErrorServiceBean!"
-				+ TRANSFER_SERVICE_PACKAGE + ".FixingErrorService";
-		try {
-			fixingErrorService = (FixingErrorService) context.lookup(ejbString);
-			return fixingErrorService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FixingErrorService) getService(TRANSFER_APP, TRANSFER_EJB, TRANSFER_SERVICE_PACKAGE,
+				"FixingErrorService");
 	}
 
 	public ErrorService getErrorService() {
-
-		if (errorService != null) {
-			return errorService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/ErrorServiceBean!" + CORE_PACKAGE
-				+ ".error.service.ErrorService";
-		try {
-			errorService = (ErrorService) context.lookup(ejbString);
-			return errorService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (ErrorService) getService(APP, CORE_EJB, ERROR_SERVICE_PACKAGE, "ErrorService");
 	}
 
 	public PositionService getPositionService() {
-
-		if (positionService != null) {
-			return positionService;
-		}
-
-		String ejbString = "ejb:" + POSITION_APP + "/" + POSITION_EJB + "/PositionServiceBean!"
-				+ POSITION_SERVICE_PACKAGE + ".PositionService";
-		try {
-			positionService = (PositionService) context.lookup(ejbString);
-			return positionService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (PositionService) getService(POSITION_APP, POSITION_EJB, POSITION_SERVICE_PACKAGE, "PositionService");
 	}
 
 	public FolFormulaService getFolFormulaService() {
-
-		if (folFormulaService != null) {
-			return folFormulaService;
-		}
-
-		String ejbString = "ejb:" + AI_APP + "/" + AI_EJB + "/FolFormulaServiceBean!" + FOL_SERVICE_PACKAGE
-				+ ".FolFormulaService";
-		try {
-			folFormulaService = (FolFormulaService) context.lookup(ejbString);
-			return folFormulaService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FolFormulaService) getService(AI_APP, AI_EJB, FOL_SERVICE_PACKAGE, "FolFormulaService");
 	}
 
 	public FormulaService getFormulaService() {
-
-		if (formulaService != null) {
-			return formulaService;
-		}
-
-		String ejbString = "ejb:" + AI_APP + "/" + AI_EJB + "/FormulaServiceBean!" + AI_COMMON_SERVICE_PACKAGE
-				+ ".FormulaService";
-		try {
-			formulaService = (FormulaService) context.lookup(ejbString);
-			return formulaService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FormulaService) getService(AI_APP, AI_EJB, AI_COMMON_SERVICE_PACKAGE, "FormulaService");
 	}
 
 	public MandateService getMandateService() {
-
-		if (mandateService != null) {
-			return mandateService;
-		}
-
-		String ejbString = "ejb:" + AI_APP + "/" + AI_EJB + "/MandateServiceBean!" + AGENT_SERVICE_PACKAGE
-				+ ".MandateService";
-		try {
-			mandateService = (MandateService) context.lookup(ejbString);
-			return mandateService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (MandateService) getService(AI_APP, AI_EJB, AGENT_SERVICE_PACKAGE, "MandateService");
 	}
 
 	public AssetManagerAgentService getAssetManagerAgentService() {
-
-		if (assetManagerAgentService != null) {
-			return assetManagerAgentService;
-		}
-
-		String ejbString = "ejb:" + AI_APP + "/" + AI_EJB + "/AssetManagerAgentServiceBean!" + AGENT_SERVICE_PACKAGE
-				+ ".AssetManagerAgentService";
-		try {
-			assetManagerAgentService = (AssetManagerAgentService) context.lookup(ejbString);
-			return assetManagerAgentService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (AssetManagerAgentService) getService(AI_APP, AI_EJB, AGENT_SERVICE_PACKAGE, "AssetManagerAgentService");
 	}
 
 	public DailyPnlService getDailyPnlService() {
-
-		if (dailyPnlService != null) {
-			return dailyPnlService;
-		}
-
-		String ejbString = "ejb:" + POSITION_APP + "/" + POSITION_EJB + "/DailyPnlServiceBean!"
-				+ DAILY_PNL_SERVICE_PACKAGE + ".DailyPnlService";
-		try {
-			dailyPnlService = (DailyPnlService) context.lookup(ejbString);
-			return dailyPnlService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (DailyPnlService) getService(POSITION_APP, POSITION_EJB, DAILY_PNL_SERVICE_PACKAGE, "DailyPnlService");
 	}
 
 	public ProductInventoryService getProductInventoryService() {
-
-		if (productInventoryService != null) {
-			return productInventoryService;
-		}
-
-		String ejbString = "ejb:" + POSITION_APP + "/" + POSITION_EJB + "/ProductInventoryServiceBean!"
-				+ PRODUCT_INVENTORY_SERVICE_PACKAGE + ".ProductInventoryService";
-		try {
-			productInventoryService = (ProductInventoryService) context.lookup(ejbString);
-			return productInventoryService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (ProductInventoryService) getService(POSITION_APP, POSITION_EJB, PRODUCT_INVENTORY_SERVICE_PACKAGE,
+				"ProductInventoryService");
 	}
 
 	public CurrencyService getCurrencyService() {
-
-		if (currencyService != null) {
-			return currencyService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/CurrencyServiceBean!" + CORE_PACKAGE
-				+ ".currency.service.CurrencyService";
-		try {
-			currencyService = (CurrencyService) context.lookup(ejbString);
-			return currencyService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (CurrencyService) getService(APP, CORE_EJB, CURRENCY_SERVICE_PACKAGE, "CurrencyService");
 	}
 
 	public BookService getBookService() {
-
-		if (bookService != null) {
-			return bookService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/BookServiceBean!" + CORE_PACKAGE
-				+ ".book.service.BookService";
-		try {
-			bookService = (BookService) context.lookup(ejbString);
-			return bookService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (BookService) getService(APP, CORE_EJB, BOOK_SERVICE_PACKAGE, "BookService");
 	}
 
 	public UserService getUserService() {
-		return (UserService) getService(userService, APP, CORE_EJB, USER_SERVICE_PACKAGE, "UserService");
+		return (UserService) getService(APP, CORE_EJB, USER_SERVICE_PACKAGE, "UserService");
 	}
 
 	public CalendarService getCalendarService() {
-
-		if (calendarService != null) {
-			return calendarService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/CalendarServiceBean!" + CORE_PACKAGE
-				+ ".calendar.service.CalendarService";
-		try {
-			calendarService = (CalendarService) context.lookup(ejbString);
-			return calendarService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (CalendarService) getService(APP, CORE_EJB, CALENDAR_SERVICE_PACKAGE, "CalendarService");
 	}
 
 	public DateRuleService getDateRuleService() {
-
-		if (dateRuleService != null) {
-			return dateRuleService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/DateRuleServiceBean!" + CORE_PACKAGE
-				+ ".daterule.service.DateRuleService";
-		try {
-			dateRuleService = (DateRuleService) context.lookup(ejbString);
-			return dateRuleService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (DateRuleService) getService(APP, CORE_EJB, DATE_RULE_SERVICE_PACKAGE, "DateRuleService");
 	}
 
 	public ExchangeService getExchangeService() {
-
-		if (exchangeService != null) {
-			return exchangeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/ExchangeServiceBean!" + CORE_PACKAGE
-				+ ".exchange.service.ExchangeService";
-		try {
-			exchangeService = (ExchangeService) context.lookup(ejbString);
-			return exchangeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (ExchangeService) getService(APP, CORE_EJB, EXCHANGE_SERVICE_PACKAGE, "ExchangeService");
 	}
 
 	public PricerService getPricerService() {
-
-		if (pricerService != null) {
-			return pricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/PricerServiceBean!" + CORE_PACKAGE
-				+ ".pricing.service.PricerService";
-		try {
-			pricerService = (PricerService) context.lookup(ejbString);
-			return pricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (PricerService) getService(APP, CORE_EJB, PRICING_SERVICE_PACKAGE, "PricerService");
 	}
 
 	public InterestRateCurveService getInterestRateCurveService() {
-
-		if (interestRateCurveService != null) {
-			return interestRateCurveService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/InterestRateCurveServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".InterestRateCurveService";
-		try {
-			interestRateCurveService = (InterestRateCurveService) context.lookup(ejbString);
-			return interestRateCurveService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (InterestRateCurveService) getService(MARKET_DATA_APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE,
+				"InterestRateCurveService");
 	}
 
 	public FXCurveService getFXCurveService() {
-
-		if (fxCurveService != null) {
-			return fxCurveService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/FXCurveServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".FXCurveService";
-		try {
-			fxCurveService = (FXCurveService) context.lookup(ejbString);
-			return fxCurveService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXCurveService) getService(MARKET_DATA_APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE,
+				"FXCurveService");
 	}
 
 	public CurveService getCurveService() {
-
-		if (curveService != null) {
-			return curveService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/CurveServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".CurveService";
-		try {
-			curveService = (CurveService) context.lookup(ejbString);
-			return curveService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (CurveService) getService(MARKET_DATA_APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE, "CurveService");
 	}
 
 	public BondService getBondService() {
-
-		if (bondService != null) {
-			return bondService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/BondServiceBean!" + BOND_SERVICE_PACKAGE
-				+ ".BondService";
-		try {
-			bondService = (BondService) context.lookup(ejbString);
-			return bondService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (BondService) getService(APP, SECURITY_EJB, BOND_SERVICE_PACKAGE, "BondService");
 	}
 
 	public EquityService getEquityService() {
-
-		if (equityService != null) {
-			return equityService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityServiceBean!" + EQUITY_SERVICE_PACKAGE
-				+ ".EquityService";
-		try {
-			equityService = (EquityService) context.lookup(ejbString);
-			return equityService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityService) getService(APP, SECURITY_EJB, EQUITY_SERVICE_PACKAGE, "EquityService");
 	}
 
 	public EquityTradeService getEquityTradeService() {
-
-		if (equityTradeService != null) {
-			return equityTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityTradeServiceBean!" + EQUITY_SERVICE_PACKAGE
-				+ ".EquityTradeService";
-		try {
-			equityTradeService = (EquityTradeService) context.lookup(ejbString);
-			return equityTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityTradeService) getService(APP, SECURITY_EJB, EQUITY_SERVICE_PACKAGE, "EquityTradeService");
 	}
 
 	public EquityPricerService getEquityPricerService() {
-
-		if (equityPricerService != null) {
-			return equityPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityPricerServiceBean!" + EQUITY_SERVICE_PACKAGE
-				+ ".EquityPricerService";
-		try {
-			equityPricerService = (EquityPricerService) context.lookup(ejbString);
-			return equityPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityPricerService) getService(APP, SECURITY_EJB, EQUITY_SERVICE_PACKAGE, "EquityPricerService");
 	}
 
 	public EquityOptionTradeService getEquityOptionTradeService() {
-
-		if (equityOptionTradeService != null) {
-			return equityOptionTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityOptionTradeServiceBean!"
-				+ EQUITY_OPTION_SERVICE_PACKAGE + ".EquityOptionTradeService";
-		try {
-			equityOptionTradeService = (EquityOptionTradeService) context.lookup(ejbString);
-			return equityOptionTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityOptionTradeService) getService(APP, SECURITY_EJB, EQUITY_OPTION_SERVICE_PACKAGE,
+				"EquityOptionTradeService");
 	}
 
 	public EquityOptionContractSpecificationService getEquityOptionSpecificationService() {
-
-		if (equityOptionSpecificationService != null) {
-			return equityOptionSpecificationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityOptionContractSpecificationServiceBean!"
-				+ EQUITY_OPTION_SERVICE_PACKAGE + ".EquityOptionContractSpecificationService";
-		try {
-			equityOptionSpecificationService = (EquityOptionContractSpecificationService) context.lookup(ejbString);
-			return equityOptionSpecificationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityOptionContractSpecificationService) getService(APP, SECURITY_EJB, EQUITY_OPTION_SERVICE_PACKAGE,
+				"EquityOptionContractSpecificationService");
 	}
 
 	public EquityOptionService getEquityOptionService() {
-
-		if (equityOptionService != null) {
-			return equityOptionService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityOptionServiceBean!"
-				+ EQUITY_OPTION_SERVICE_PACKAGE + ".EquityOptionService";
-		try {
-			equityOptionService = (EquityOptionService) context.lookup(ejbString);
-			return equityOptionService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityOptionService) getService(APP, SECURITY_EJB, EQUITY_OPTION_SERVICE_PACKAGE,
+				"EquityOptionService");
 	}
 
 	public EquityOptionPricerService getEquityOptionPricerService() {
-
-		if (equityOptionPricerService != null) {
-			return equityOptionPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityOptionPricerServiceBean!"
-				+ EQUITY_OPTION_SERVICE_PACKAGE + ".EquityOptionPricerService";
-		try {
-			equityOptionPricerService = (EquityOptionPricerService) context.lookup(ejbString);
-			return equityOptionPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityOptionPricerService) getService(APP, SECURITY_EJB, EQUITY_OPTION_SERVICE_PACKAGE,
+				"EquityOptionPricerService");
 	}
 
 	public EquityOptionVolatilitySurfaceService getEquityOptionVolatilitySurfaceService() {
-
-		if (equityOptionVolatilitySurfaceService != null) {
-			return equityOptionVolatilitySurfaceService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/EquityOptionVolatilitySurfaceServiceBean!"
-				+ EQUITY_OPTION_SERVICE_PACKAGE + ".EquityOptionVolatilitySurfaceService";
-		try {
-			equityOptionVolatilitySurfaceService = (EquityOptionVolatilitySurfaceService) context.lookup(ejbString);
-			return equityOptionVolatilitySurfaceService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (EquityOptionVolatilitySurfaceService) getService(APP, SECURITY_EJB, EQUITY_OPTION_SERVICE_PACKAGE,
+				"EquityOptionVolatilitySurfaceService");
 	}
 
 	public BondTradeService getBondTradeService() {
-
-		if (bondTradeService != null) {
-			return bondTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/BondTradeServiceBean!" + BOND_SERVICE_PACKAGE
-				+ ".BondTradeService";
-		try {
-			bondTradeService = (BondTradeService) context.lookup(ejbString);
-			return bondTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (BondTradeService) getService(APP, SECURITY_EJB, BOND_SERVICE_PACKAGE, "BondTradeService");
 	}
 
 	public BondPricerService getBondPricerService() {
-
-		if (bondPricerService != null) {
-			return bondPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/BondPricerServiceBean!" + BOND_SERVICE_PACKAGE
-				+ ".BondPricerService";
-		try {
-			bondPricerService = (BondPricerService) context.lookup(ejbString);
-			return bondPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (BondPricerService) getService(APP, SECURITY_EJB, BOND_SERVICE_PACKAGE, "BondPricerService");
 	}
 
 	public CcySwapTradeService getCcySwapTradeService() {
-
-		if (ccySwapTradeService != null) {
-			return ccySwapTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/CcySwapTradeServiceBean!" + CCY_SWAP_SERVICE_PACKAGE
-				+ ".CcySwapTradeService";
-		try {
-			ccySwapTradeService = (CcySwapTradeService) context.lookup(ejbString);
-			return ccySwapTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (CcySwapTradeService) getService(APP, IR_EJB, CCY_SWAP_SERVICE_PACKAGE, "CcySwapTradeService");
 	}
 
 	public CcySwapPricerService getCcySwapPricerService() {
-
-		if (ccySwapPricerService != null) {
-			return ccySwapPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/CcySwapPricerServiceBean!" + CCY_SWAP_SERVICE_PACKAGE
-				+ ".CcySwapPricerService";
-		try {
-			ccySwapPricerService = (CcySwapPricerService) context.lookup(ejbString);
-			return ccySwapPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (CcySwapPricerService) getService(APP, IR_EJB, CCY_SWAP_SERVICE_PACKAGE, "CcySwapPricerService");
 	}
 
 	public FRATradeService getFRATradeService() {
-
-		if (fraTradeService != null) {
-			return fraTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/FRATradeServiceBean!" + FRA_SERVICE_PACKAGE
-				+ ".FRATradeService";
-		try {
-			fraTradeService = (FRATradeService) context.lookup(ejbString);
-			return fraTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FRATradeService) getService(APP, IR_EJB, FRA_SERVICE_PACKAGE, "FRATradeService");
 	}
 
 	public FRAPricerService getFRAPricerService() {
-
-		if (fraPricerService != null) {
-			return fraPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/FRAPricerServiceBean!" + FRA_SERVICE_PACKAGE
-				+ ".FRAPricerService";
-		try {
-			fraPricerService = (FRAPricerService) context.lookup(ejbString);
-			return fraPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FRAPricerService) getService(APP, IR_EJB, FRA_SERVICE_PACKAGE, "FRAPricerService");
 	}
 
 	public IRCapFloorCollarTradeService getIRCapFloorCollarTradeService() {
-
-		if (irCapFloorCollarTradeService != null) {
-			return irCapFloorCollarTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/IRCapFloorCollarTradeServiceBean!"
-				+ IR_CAP_FLOOR_COLLAR_SERVICE_PACKAGE + ".IRCapFloorCollarTradeService";
-		try {
-			irCapFloorCollarTradeService = (IRCapFloorCollarTradeService) context.lookup(ejbString);
-			return irCapFloorCollarTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IRCapFloorCollarTradeService) getService(APP, IR_EJB, IR_CAP_FLOOR_COLLAR_SERVICE_PACKAGE,
+				"IRCapFloorCollarTradeService");
 	}
 
 	public IRCapFloorCollarPricerService getIRCapFloorCollarPricerService() {
-
-		if (irCapFloorCollarPricerService != null) {
-			return irCapFloorCollarPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/IRCapFloorCollarPricerServiceBean!"
-				+ IR_CAP_FLOOR_COLLAR_SERVICE_PACKAGE + ".IRCapFloorCollarPricerService";
-		try {
-			irCapFloorCollarPricerService = (IRCapFloorCollarPricerService) context.lookup(ejbString);
-			return irCapFloorCollarPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IRCapFloorCollarPricerService) getService(APP, IR_EJB, IR_CAP_FLOOR_COLLAR_SERVICE_PACKAGE,
+				"IRCapFloorCollarPricerService");
 	}
 
 	public IRSwapOptionTradeService getIRSwapOptionTradeService() {
-
-		if (irSwapOptionTradeService != null) {
-			return irSwapOptionTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/IRSwapOptionTradeServiceBean!"
-				+ IR_SWAP_OPTION_SERVICE_PACKAGE + ".IRSwapOptionTradeService";
-		try {
-			irSwapOptionTradeService = (IRSwapOptionTradeService) context.lookup(ejbString);
-			return irSwapOptionTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IRSwapOptionTradeService) getService(APP, IR_EJB, IR_SWAP_OPTION_SERVICE_PACKAGE,
+				"IRSwapOptionTradeService");
 	}
 
 	public IRSwapOptionPricerService getIRSwapOptionPricerService() {
-
-		if (irSwapOptionPricerService != null) {
-			return irSwapOptionPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/IRSwapOptionPricerServiceBean!"
-				+ IR_SWAP_OPTION_SERVICE_PACKAGE + ".IRSwapOptionPricerService";
-		try {
-			irSwapOptionPricerService = (IRSwapOptionPricerService) context.lookup(ejbString);
-			return irSwapOptionPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IRSwapOptionPricerService) getService(APP, IR_EJB, IR_SWAP_OPTION_SERVICE_PACKAGE,
+				"IRSwapOptionPricerService");
 	}
 
 	public IRSwapTradeService getIRSwapTradeService() {
-
-		if (irSwapTradeService != null) {
-			return irSwapTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/IRSwapTradeServiceBean!" + IR_SWAP_SERVICE_PACKAGE
-				+ ".IRSwapTradeService";
-		try {
-			irSwapTradeService = (IRSwapTradeService) context.lookup(ejbString);
-			return irSwapTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IRSwapTradeService) getService(APP, IR_EJB, IR_SWAP_SERVICE_PACKAGE, "IRSwapTradeService");
 	}
 
 	public IRSwapPricerService getIRSwapPricerService() {
-
-		if (irSwapPricerService != null) {
-			return irSwapPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/IRSwapPricerServiceBean!" + IR_SWAP_SERVICE_PACKAGE
-				+ ".IRSwapPricerService";
-		try {
-			irSwapPricerService = (IRSwapPricerService) context.lookup(ejbString);
-			return irSwapPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IRSwapPricerService) getService(APP, IR_EJB, IR_SWAP_SERVICE_PACKAGE, "IRSwapPricerService");
 	}
 
 	public SwaptionVolatilitySurfaceService getSwaptionVolatilitySurfaceService() {
-
-		if (swaptionVolatilitySurfaceService != null) {
-			return swaptionVolatilitySurfaceService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/SwaptionVolatilitySurfaceServiceBean!"
-				+ IR_SWAP_OPTION_SERVICE_PACKAGE + ".SwaptionVolatilitySurfaceService";
-		try {
-			swaptionVolatilitySurfaceService = (SwaptionVolatilitySurfaceService) context.lookup(ejbString);
-			return swaptionVolatilitySurfaceService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (SwaptionVolatilitySurfaceService) getService(APP, IR_EJB, IR_SWAP_OPTION_SERVICE_PACKAGE,
+				"SwaptionVolatilitySurfaceService");
 	}
 
 	public FutureService getFutureService() {
-
-		if (futureService != null) {
-			return futureService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/FutureServiceBean!" + FUTURE_SERVICE_PACKAGE
-				+ ".FutureService";
-		try {
-			futureService = (FutureService) context.lookup(ejbString);
-			return futureService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FutureService) getService(APP, IR_EJB, FUTURE_SERVICE_PACKAGE, "FutureService");
 	}
 
 	public FutureContractSpecificationService getFutureContractSpecificationService() {
-
-		if (futureContractSpecificationService != null) {
-			return futureContractSpecificationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/FutureContractSpecificationServiceBean!"
-				+ FUTURE_SERVICE_PACKAGE + ".FutureContractSpecificationService";
-		try {
-			futureContractSpecificationService = (FutureContractSpecificationService) context.lookup(ejbString);
-			return futureContractSpecificationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FutureContractSpecificationService) getService(APP, IR_EJB, FUTURE_SERVICE_PACKAGE,
+				"FutureContractSpecificationService");
 	}
 
 	public FutureTradeService getFutureTradeService() {
-
-		if (futureTradeService != null) {
-			return futureTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/FutureTradeServiceBean!" + FUTURE_SERVICE_PACKAGE
-				+ ".FutureTradeService";
-		try {
-			futureTradeService = (FutureTradeService) context.lookup(ejbString);
-			return futureTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FutureTradeService) getService(APP, IR_EJB, FUTURE_SERVICE_PACKAGE, "FutureTradeService");
 	}
 
 	public FuturePricerService getFuturePricerService() {
-
-		if (futurePricerService != null) {
-			return futurePricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/FuturePricerServiceBean!" + FUTURE_SERVICE_PACKAGE
-				+ ".FuturePricerService";
-		try {
-			futurePricerService = (FuturePricerService) context.lookup(ejbString);
-			return futurePricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FuturePricerService) getService(APP, IR_EJB, FUTURE_SERVICE_PACKAGE, "FuturePricerService");
 	}
 
 	public FXNDFTradeService getFXNDFTradeService() {
-
-		if (fxNDFTradeService != null) {
-			return fxNDFTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXNDFTradeServiceBean!" + FX_NDF_SERVICE_PACKAGE
-				+ ".FXNDFTradeService";
-		try {
-			fxNDFTradeService = (FXNDFTradeService) context.lookup(ejbString);
-			return fxNDFTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXNDFTradeService) getService(APP, FX_EJB, FX_NDF_SERVICE_PACKAGE, "FXNDFTradeService");
 	}
 
 	public FXPricerService getFXPricerService() {
-
-		if (fxPricerService != null) {
-			return fxPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXPricerServiceBean!" + FX_SERVICE_PACKAGE
-				+ ".FXPricerService";
-		try {
-			fxPricerService = (FXPricerService) context.lookup(ejbString);
-			return fxPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXPricerService) getService(APP, FX_EJB, FX_SERVICE_PACKAGE, "FXPricerService");
 	}
 
 	public FXOptionPricerService getFXOptionPricerService() {
-
-		if (fxOptionPricerService != null) {
-			return fxOptionPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXOptionPricerServiceBean!" + FX_OPTION_SERVICE_PACKAGE
-				+ ".FXOptionPricerService";
-		try {
-			fxOptionPricerService = (FXOptionPricerService) context.lookup(ejbString);
-			return fxOptionPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXOptionPricerService) getService(APP, FX_EJB, FX_OPTION_SERVICE_PACKAGE, "FXOptionPricerService");
 	}
 
 	public FXNDFPricerService getFXNDFPricerService() {
-
-		if (fxNdfPricerService != null) {
-			return fxNdfPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXNDFPricerServiceBean!" + FX_NDF_SERVICE_PACKAGE
-				+ ".FXNDFPricerService";
-		try {
-			fxNdfPricerService = (FXNDFPricerService) context.lookup(ejbString);
-			return fxNdfPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXNDFPricerService) getService(APP, FX_EJB, FX_NDF_SERVICE_PACKAGE, "FXNDFPricerService");
 	}
 
 	public FXSwapPricerService getFXSwapPricerService() {
-
-		if (fxSwapPricerService != null) {
-			return fxSwapPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXSwapPricerServiceBean!" + FX_SWAP_SERVICE_PACKAGE
-				+ ".FXSwapPricerService";
-		try {
-			fxSwapPricerService = (FXSwapPricerService) context.lookup(ejbString);
-			return fxSwapPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXSwapPricerService) getService(APP, FX_EJB, FX_SWAP_SERVICE_PACKAGE, "FXSwapPricerService");
 	}
 
 	public FXOptionTradeService getFXOptionTradeService() {
-
-		if (fxOptionTradeService != null) {
-			return fxOptionTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXOptionTradeServiceBean!" + FX_OPTION_SERVICE_PACKAGE
-				+ ".FXOptionTradeService";
-		try {
-			fxOptionTradeService = (FXOptionTradeService) context.lookup(ejbString);
-			return fxOptionTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXOptionTradeService) getService(APP, FX_EJB, FX_OPTION_SERVICE_PACKAGE, "FXOptionTradeService");
 	}
 
 	public FXVolatilitySurfaceService getFXVolatilitySurfaceService() {
-
-		if (fxVolatilitySurfaceService != null) {
-			return fxVolatilitySurfaceService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXVolatilitySurfaceServiceBean!" + FX_OPTION_SERVICE_PACKAGE
-				+ ".FXVolatilitySurfaceService";
-		try {
-			fxVolatilitySurfaceService = (FXVolatilitySurfaceService) context.lookup(ejbString);
-			return fxVolatilitySurfaceService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXVolatilitySurfaceService) getService(APP, FX_EJB, FX_OPTION_SERVICE_PACKAGE,
+				"FXVolatilitySurfaceService");
 	}
 
 	public FXSwapTradeService getFXSwapTradeService() {
-
-		if (fxSwapTradeService != null) {
-			return fxSwapTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXSwapTradeServiceBean!" + FX_SWAP_SERVICE_PACKAGE
-				+ ".FXSwapTradeService";
-		try {
-			fxSwapTradeService = (FXSwapTradeService) context.lookup(ejbString);
-			return fxSwapTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXSwapTradeService) getService(APP, FX_EJB, FX_SWAP_SERVICE_PACKAGE, "FXSwapTradeService");
 	}
 
 	public FXTradeService getFXTradeService() {
-
-		if (fxTradeService != null) {
-			return fxTradeService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXTradeServiceBean!" + FX_SERVICE_PACKAGE
-				+ ".FXTradeService";
-		try {
-			fxTradeService = (FXTradeService) context.lookup(ejbString);
-			return fxTradeService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXTradeService) getService(APP, FX_EJB, FX_SERVICE_PACKAGE, "FXTradeService");
 	}
 
 	public LoanDepositTradeService getLoanDepositService() {
-
-		if (loanDepositService != null) {
-			return loanDepositService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + MM_EJB + "/LoanDepositTradeServiceBean!" + LOAN_DEPOSIT_SERVICE_PACKAGE
-				+ ".LoanDepositTradeService";
-		try {
-			loanDepositService = (LoanDepositTradeService) context.lookup(ejbString);
-			return loanDepositService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (LoanDepositTradeService) getService(APP, MM_EJB, LOAN_DEPOSIT_SERVICE_PACKAGE,
+				"LoanDepositTradeService");
 	}
 
 	public LoanDepositPricerService getLoanDepositPricerService() {
-
-		if (loanDepositPricerService != null) {
-			return loanDepositPricerService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + MM_EJB + "/LoanDepositPricerServiceBean!" + LOAN_DEPOSIT_SERVICE_PACKAGE
-				+ ".LoanDepositPricerService";
-		try {
-			loanDepositPricerService = (LoanDepositPricerService) context.lookup(ejbString);
-			return loanDepositPricerService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (LoanDepositPricerService) getService(APP, MM_EJB, LOAN_DEPOSIT_SERVICE_PACKAGE,
+				"LoanDepositPricerService");
 	}
 
 	public MarketDataConfigurationService getMarketDataConfigurationService() {
-		if (marketDataConfigurationService != null) {
-			return marketDataConfigurationService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/MarketDataConfigurationServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".MarketDataConfigurationService";
-		try {
-			marketDataConfigurationService = (MarketDataConfigurationService) context.lookup(ejbString);
-			return marketDataConfigurationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (MarketDataConfigurationService) getService(APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE,
+				"MarketDataConfigurationService");
 	}
 
 	public BatchService getBatchService() {
-		if (batchService != null) {
-			return batchService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/BatchServiceBean!" + CORE_PACKAGE
-				+ ".batch.service.BatchService";
-		try {
-			batchService = (BatchService) context.lookup(ejbString);
-			return batchService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (BatchService) getService(APP, CORE_EJB, BATCH_SERVICE_PACKAGE, "BatchService");
 	}
 
 	public SurfaceService getSurfaceService() {
-		if (surfaceService != null) {
-			return surfaceService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/SurfaceServiceBean!" + MARKET_DATA_SERVICE_PACKAGE
-				+ ".SurfaceService";
-		try {
-			surfaceService = (SurfaceService) context.lookup(ejbString);
-			return surfaceService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (SurfaceService) getService(APP, CORE_EJB, MARKET_DATA_SERVICE_PACKAGE, "SurfaceService");
 	}
 
 	public InformationService getInformationService() {
-		if (informationService != null) {
-			return informationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + CORE_EJB + "/InformationServiceBean!" + COMMON_SERVICE_PACKAGE
-				+ ".InformationService";
-		try {
-			informationService = (InformationService) context.lookup(ejbString);
-			return informationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (InformationService) getService(APP, CORE_EJB, COMMON_SERVICE_PACKAGE, "InformationService");
 	}
 
 	public MarketDataInformationService getMarketDataInformationService() {
-		if (marketDataInformationService != null) {
-			return marketDataInformationService;
-		}
-
-		String ejbString = "ejb:" + MARKET_DATA_APP + "/" + MARKET_DATA_EJB + "/MarketDataInformationServiceBean!"
-				+ MARKET_DATA_SERVICE_PACKAGE + ".MarketDataInformationService";
-		try {
-			marketDataInformationService = (MarketDataInformationService) context.lookup(ejbString);
-			return marketDataInformationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (MarketDataInformationService) getService(APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE,
+				"MarketDataInformationService");
 	}
 
 	public FXInformationService getFXInformationService() {
-		if (fxInformationService != null) {
-			return fxInformationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + FX_EJB + "/FXInformationServiceBean!" + FX_COMMON_SERVICE_PACKAGE
-				+ ".FXInformationService";
-		try {
-			fxInformationService = (FXInformationService) context.lookup(ejbString);
-			return fxInformationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (FXInformationService) getService(APP, FX_EJB, FX_COMMON_SERVICE_PACKAGE, "FXInformationService");
 	}
 
 	public MMInformationService getMMInformationService() {
-		if (mmInformationService != null) {
-			return mmInformationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + MM_EJB + "/MMInformationServiceBean!" + MM_COMMON_SERVICE_PACKAGE
-				+ ".MMInformationService";
-		try {
-			mmInformationService = (MMInformationService) context.lookup(ejbString);
-			return mmInformationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (MMInformationService) getService(APP, MM_EJB, MM_COMMON_SERVICE_PACKAGE, "MMInformationService");
 	}
 
 	public IRInformationService getIRInformationService() {
-		if (irInformationService != null) {
-			return irInformationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + IR_EJB + "/IRInformationServiceBean!" + IR_COMMON_SERVICE_PACKAGE
-				+ ".IRInformationService";
-		try {
-			irInformationService = (IRInformationService) context.lookup(ejbString);
-			return irInformationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (IRInformationService) getService(APP, IR_EJB, IR_COMMON_SERVICE_PACKAGE, "IRInformationService");
 	}
 
 	public SecurityInformationService getSecurityInformationService() {
-		if (securityInformationService != null) {
-			return securityInformationService;
-		}
-
-		String ejbString = "ejb:" + APP + "/" + SECURITY_EJB + "/SecurityInformationServiceBean!"
-				+ SECURITY_COMMON_SERVICE_PACKAGE + ".SecurityInformationService";
-		try {
-			securityInformationService = (SecurityInformationService) context.lookup(ejbString);
-			return securityInformationService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (SecurityInformationService) getService(APP, SECURITY_EJB, SECURITY_COMMON_SERVICE_PACKAGE,
+				"SecurityInformationService");
 	}
 
 	public CashInventoryService getCashInventoryService() {
-
-		if (cashInventoryService != null) {
-			return cashInventoryService;
-		}
-
-		String ejbString = "ejb:" + POSITION_APP + "/" + POSITION_EJB + "/CashInventoryServiceBean!"
-				+ CASH_INVENTORY_SERVICE_PACKAGE + ".CashInventoryService";
-		try {
-			cashInventoryService = (CashInventoryService) context.lookup(ejbString);
-			return cashInventoryService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (CashInventoryService) getService(POSITION_APP, POSITION_EJB, CASH_INVENTORY_SERVICE_PACKAGE,
+				"CashInventoryService");
 	}
 
 	public TransferService getTransferService() {
-
-		if (transferService != null) {
-			return transferService;
-		}
-
-		String ejbString = "ejb:" + TRANSFER_APP + "/" + TRANSFER_EJB + "/TransferServiceBean!"
-				+ TRANSFER_SERVICE_PACKAGE + ".TransferService";
-		try {
-			transferService = (TransferService) context.lookup(ejbString);
-			return transferService;
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return (TransferService) getService(TRANSFER_APP, TRANSFER_EJB, TRANSFER_SERVICE_PACKAGE, "TransferService");
 	}
 
-	private Object getService(Object service, String application, String module, String packageName,
-			String serviceName) {
+	private Object getService(String application, String module, String packageName, String serviceName) {
 
-		if (service != null) {
-			return service;
+		Object service;
+
+		if (services.containsKey(serviceName)) {
+			return services.get(serviceName);
 		}
 
-		String ejbString = JAVA_GLOBAL_PREFIX + "/" + application + "/" + module + "/" + serviceName + "Bean!"
-				+ packageName + "." + serviceName;
-		try {
-			service = context.lookup(ejbString);
-			return service;
-		} catch (NamingException ne) {
-			// TODO Have a log instead
-			ne.printStackTrace();
-		}
-
-		ejbString = EJB_PREFIX + application + "/" + module + "/" + serviceName + "Bean!" + packageName + "."
+		// First, we use the ejb prefix which is optimized
+		String ejbString = EJB_PREFIX + application + "/" + module + "/" + serviceName + "Bean!" + packageName + "."
 				+ serviceName;
 		try {
 			service = context.lookup(ejbString);
-			return service;
+			services.put(serviceName, service);
+			return services.get(serviceName);
 		} catch (NamingException ne) {
 			// TODO Have a log instead
 			ne.printStackTrace();
 		}
+
+		// If the previous lookup fails, we try the global prefix
+		ejbString = JAVA_GLOBAL_PREFIX + "/" + application + "/" + module + "/" + serviceName + "Bean!" + packageName
+				+ "." + serviceName;
+		try {
+			service = context.lookup(ejbString);
+			services.put(serviceName, service);
+			return services.get(serviceName);
+		} catch (NamingException ne) {
+			// TODO Have a log instead
+			ne.printStackTrace();
+		}
+
 		return null;
 	}
 

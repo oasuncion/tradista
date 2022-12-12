@@ -10,8 +10,8 @@ Tradista is a Java based application. The server is based on WildFly and the cli
 
 Tested configuration:
 - Server: WildFly 27.0.0.Final
-- JRE: Oracle JRE v11.0.5 or OpenJDK JRE (RedHat implementation) v11.0.14.9
-- Database: Derby 10.15.2.0
+- JRE: Oracle JRE v17.0.5 or OpenJDK JRE (RedHat implementation) v17.0.5
+- Database: Derby 10.16.1.1
 - Build automation tool: Maven 3.8.5
 
 Tradista can be built using Maven, build the whole application using the tradista-parent project.

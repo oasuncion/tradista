@@ -8,11 +8,11 @@ import java.util.List;
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
+import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.exception.PricerException;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.fx.fxswap.model.FXSwapTrade;
-import finance.tradista.fx.fxswap.service.FXSwapPricerService;
 import finance.tradista.fx.fxswap.validator.FXSwapTradeValidator;
 
 /*
@@ -52,37 +52,42 @@ public class FXSwapPricerBusinessDelegate implements Serializable {
 	public BigDecimal fwdLegNpvDiscountedLegsDiff(PricingParameter params, FXSwapTrade trade, Currency currency,
 			LocalDate pricingDate) throws PricerException, TradistaBusinessException {
 		validator.validateTrade(trade);
-		return fxSwapPricerService.fwdLegNpvDiscountedLegsDiff(params, trade, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> fxSwapPricerService.fwdLegNpvDiscountedLegsDiff(params, trade, currency, pricingDate));
 	}
 
 	public BigDecimal npvDiscountedLegsDiff(PricingParameter params, FXSwapTrade trade, Currency currency,
 			LocalDate pricingDate) throws PricerException, TradistaBusinessException {
 		validator.validateTrade(trade);
-		return fxSwapPricerService.npvDiscountedLegsDiff(params, trade, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> fxSwapPricerService.npvDiscountedLegsDiff(params, trade, currency, pricingDate));
 	}
 
 	public BigDecimal spotLegNpvDiscountedLegsDiff(PricingParameter params, FXSwapTrade trade, Currency currency,
 			LocalDate pricingDate) throws PricerException, TradistaBusinessException {
 		validator.validateTrade(trade);
-		return fxSwapPricerService.spotLegNpvDiscountedLegsDiff(params, trade, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> fxSwapPricerService.spotLegNpvDiscountedLegsDiff(params, trade, currency, pricingDate));
 	}
 
-	public BigDecimal realizedPnlMarkToMarket(PricingParameter params, FXSwapTrade trade,
-			Currency currency, LocalDate pricingDate) throws TradistaBusinessException, PricerException {
+	public BigDecimal realizedPnlMarkToMarket(PricingParameter params, FXSwapTrade trade, Currency currency,
+			LocalDate pricingDate) throws TradistaBusinessException, PricerException {
 		validator.validateTrade(trade);
-		return fxSwapPricerService.realizedPnlMarkToMarket(params, trade, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> fxSwapPricerService.realizedPnlMarkToMarket(params, trade, currency, pricingDate));
 	}
 
 	public BigDecimal unrealizedPnlLegsDiff(PricingParameter params, FXSwapTrade trade, Currency currency,
 			LocalDate pricingDate) throws TradistaBusinessException, PricerException {
 		validator.validateTrade(trade);
-		return fxSwapPricerService.unrealizedPnlLegsDiff(params, trade, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> fxSwapPricerService.unrealizedPnlLegsDiff(params, trade, currency, pricingDate));
 	}
 
 	public BigDecimal defaultPNL(PricingParameter params, FXSwapTrade trade, Currency currency, LocalDate pricingDate)
 			throws TradistaBusinessException, PricerException {
 		validator.validateTrade(trade);
-		return fxSwapPricerService.defaultPNL(params, trade, currency, pricingDate);
+		return SecurityUtil.runEx(() -> fxSwapPricerService.defaultPNL(params, trade, currency, pricingDate));
 	}
 
 	public List<CashFlow> generateCashFlows(FXSwapTrade trade, PricingParameter pp, LocalDate pricingDate)
@@ -101,13 +106,14 @@ public class FXSwapPricerBusinessDelegate implements Serializable {
 			throw new TradistaBusinessException(errorMsg.toString());
 		}
 		validator.validateTrade(trade);
-		return fxSwapPricerService.generateCashFlows(pp, trade, pricingDate);
+		return SecurityUtil.runEx(() -> fxSwapPricerService.generateCashFlows(pp, trade, pricingDate));
 	}
 
 	public BigDecimal unrealizedPnlMarkToMarket(PricingParameter params, FXSwapTrade trade, Currency currency,
 			LocalDate pricingDate) throws TradistaBusinessException, PricerException {
 		validator.validateTrade(trade);
-		return fxSwapPricerService.unrealizedPnlMarkToMarket(params, trade, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> fxSwapPricerService.unrealizedPnlMarkToMarket(params, trade, currency, pricingDate));
 	}
 
 }

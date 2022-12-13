@@ -2,8 +2,11 @@ package finance.tradista.core.daycountconvention.service;
 
 import java.util.Set;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
 import finance.tradista.core.daycountconvention.persistence.DayCountConventionSQL;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Stateless;
 
 /*
@@ -26,6 +29,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class DayCountConventionServiceBean implements DayCountConventionService {
 	

@@ -8,7 +8,6 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
-import finance.tradista.core.currency.service.CurrencyService;
 
 /*
  * Copyright 2018 Olivier Asuncion

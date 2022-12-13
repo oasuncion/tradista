@@ -2,13 +2,14 @@ package finance.tradista.security.equityoption.service;
 
 import java.util.Set;
 
-import jakarta.ejb.Stateless;
-import jakarta.interceptor.Interceptors;
+import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.security.equityoption.model.EquityOptionContractSpecification;
 import finance.tradista.security.equityoption.persistence.EquityOptionContractSpecificationSQL;
-import finance.tradista.security.equityoption.service.EquityOptionContractSpecificationService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2017 Olivier Asuncion
@@ -30,6 +31,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class EquityOptionContractSpecificationServiceBean implements EquityOptionContractSpecificationService {
 

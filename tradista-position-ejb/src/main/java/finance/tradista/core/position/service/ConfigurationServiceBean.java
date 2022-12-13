@@ -1,9 +1,11 @@
 package finance.tradista.core.position.service;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -27,6 +29,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Startup
 @Singleton
 public class ConfigurationServiceBean implements LocalConfigurationService {

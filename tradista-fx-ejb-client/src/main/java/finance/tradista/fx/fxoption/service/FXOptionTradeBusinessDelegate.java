@@ -8,7 +8,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.fx.fx.service.FXTradeBusinessDelegate;
 import finance.tradista.fx.fxoption.model.FXOptionTrade;
-import finance.tradista.fx.fxoption.service.FXOptionTradeService;
 import finance.tradista.fx.fxoption.validator.FXOptionTradeValidator;
 
 /*

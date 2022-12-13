@@ -5,7 +5,6 @@ import java.util.Set;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
-import finance.tradista.core.daycountconvention.service.DayCountConventionService;
 
 /*
  * Copyright 2018 Olivier Asuncion

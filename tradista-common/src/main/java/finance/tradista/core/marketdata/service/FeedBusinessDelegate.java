@@ -9,7 +9,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.marketdata.model.FeedConfig;
 import finance.tradista.core.marketdata.model.Quote;
 import finance.tradista.core.marketdata.model.QuoteType;
-import finance.tradista.core.marketdata.service.FeedService;
 
 /*
  * Copyright 2018 Olivier Asuncion

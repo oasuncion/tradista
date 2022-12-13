@@ -53,12 +53,12 @@ public class AssetManagerAgentBusinessDelegate {
 
 		return SecurityUtil.runEx(() -> assetManagerAgentService.saveAssetManagerAgent(agent));
 	}
-	
+
 	public void executeMandate(AssetManagerAgent agent) throws TradistaBusinessException {
 		if (agent == null) {
 			throw new TradistaBusinessException("The agent cannot be null.");
 		}
-		assetManagerAgentService.executeMandate(agent);
+		SecurityUtil.runEx(() -> assetManagerAgentService.executeMandate(agent));
 	}
 
 }

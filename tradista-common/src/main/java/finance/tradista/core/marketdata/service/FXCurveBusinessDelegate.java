@@ -16,7 +16,6 @@ import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.model.QuoteValue;
 import finance.tradista.core.marketdata.model.RatePoint;
-import finance.tradista.core.marketdata.service.FXCurveService;
 import finance.tradista.core.marketdata.validator.DefaultFXCurveValidator;
 import finance.tradista.core.marketdata.validator.FXCurveValidator;
 

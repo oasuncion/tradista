@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.configuration.service.ConfigurationService;
@@ -19,6 +21,7 @@ import finance.tradista.core.pricing.util.PricerUtil;
 import finance.tradista.core.transfer.model.TransferPurpose;
 import finance.tradista.fx.fx.model.FXTrade;
 import finance.tradista.fx.fx.service.FXPricerService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.interceptor.Interceptors;
@@ -43,6 +46,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 @Interceptors(FXProductScopeFilteringInterceptor.class)
 public class FXPricerServiceBean implements FXPricerService {

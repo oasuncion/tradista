@@ -6,9 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import finance.tradista.ai.reasoning.fol.model.FolFormula;
 import finance.tradista.ai.reasoning.fol.persistence.FolFormulaSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Stateless;
 import net.sf.tweety.commons.Formula;
 import net.sf.tweety.commons.ParserException;
@@ -37,6 +40,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class FolFormulaServiceBean implements FolFormulaService {
 

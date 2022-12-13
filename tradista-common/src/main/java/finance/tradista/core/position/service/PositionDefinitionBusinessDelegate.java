@@ -8,7 +8,6 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.position.model.PositionDefinition;
-import finance.tradista.core.position.service.PositionDefinitionService;
 import finance.tradista.core.product.service.ProductBusinessDelegate;
 
 /*

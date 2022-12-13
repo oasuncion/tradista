@@ -2,9 +2,6 @@ package finance.tradista.security.equity.pricer;
 
 import finance.tradista.core.pricing.pricer.Parameterizable;
 import finance.tradista.core.pricing.pricer.Pricer;
-import finance.tradista.security.equity.pricer.PricerMeasurePNL;
-import finance.tradista.security.equity.pricer.PricerMeasureREALIZED_PNL;
-import finance.tradista.security.equity.pricer.PricerMeasureUNREALIZED_PNL;
 
 /*
  * Copyright 2018 Olivier Asuncion

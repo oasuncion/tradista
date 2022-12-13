@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import finance.tradista.ai.reasoning.common.util.TradistaAIProperties;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 
@@ -30,6 +33,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Startup
 @Singleton
 public class AIConfigurationServiceBean implements LocalConfigurationService {

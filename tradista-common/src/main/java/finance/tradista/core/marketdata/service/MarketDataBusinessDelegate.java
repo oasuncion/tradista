@@ -6,14 +6,13 @@ import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
+import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.common.util.TradistaProperties;
 import finance.tradista.core.marketdata.model.FeedConfig;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.model.QuoteValue;
 import finance.tradista.core.marketdata.requestpreparator.RequestPreparator;
 import finance.tradista.core.marketdata.requestpreparator.RequestPreparatorFactory;
-import finance.tradista.core.marketdata.service.MarketDataService;
-import finance.tradista.core.common.util.SecurityUtil;
 
 /*
  * Copyright 2018 Olivier Asuncion

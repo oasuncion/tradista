@@ -9,7 +9,6 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.security.equityoption.model.EquityOptionContractSpecification;
-import finance.tradista.security.equityoption.service.EquityOptionContractSpecificationService;
 
 /*
  * Copyright 2018 Olivier Asuncion

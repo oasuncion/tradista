@@ -12,7 +12,6 @@ import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.fx.fx.model.FXTrade;
 import finance.tradista.fx.fx.model.FXTrade.Type;
-import finance.tradista.fx.fx.service.FXTradeService;
 import finance.tradista.fx.fx.validator.FXTradeValidator;
 
 /*

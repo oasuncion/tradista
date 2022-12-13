@@ -10,7 +10,6 @@ import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
 import finance.tradista.ir.irswapoption.model.IRSwapOptionTrade;
-import finance.tradista.ir.irswapoption.service.IRSwapOptionTradeService;
 import finance.tradista.ir.irswapoption.validator.IRSwapOptionTradeValidator;
 
 /*

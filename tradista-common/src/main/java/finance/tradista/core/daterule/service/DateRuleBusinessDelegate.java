@@ -16,7 +16,6 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.DateUtil;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.daterule.model.DateRule;
-import finance.tradista.core.daterule.service.DateRuleService;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -199,7 +198,7 @@ public class DateRuleBusinessDelegate {
 					}
 					startDate = startDate.plusDays(1);
 				}
-			} catch (TradistaBusinessException abe) {
+			} catch (TradistaBusinessException tbe) {
 				// Should never happen here.
 			}
 		} else {

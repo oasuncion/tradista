@@ -10,7 +10,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.fx.fx.service.AbstractFXTradeBusinessDelegate;
 import finance.tradista.fx.fxndf.model.FXNDFTrade;
-import finance.tradista.fx.fxndf.service.FXNDFTradeService;
 import finance.tradista.fx.fxndf.validator.FXNDFTradeValidator;
 
 /*

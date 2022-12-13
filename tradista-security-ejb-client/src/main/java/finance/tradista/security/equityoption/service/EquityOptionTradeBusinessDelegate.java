@@ -11,7 +11,6 @@ import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.security.equity.model.EquityTrade;
 import finance.tradista.security.equityoption.model.EquityOption;
 import finance.tradista.security.equityoption.model.EquityOptionTrade;
-import finance.tradista.security.equityoption.service.EquityOptionTradeService;
 import finance.tradista.security.equityoption.validator.EquityOptionTradeValidator;
 
 /*

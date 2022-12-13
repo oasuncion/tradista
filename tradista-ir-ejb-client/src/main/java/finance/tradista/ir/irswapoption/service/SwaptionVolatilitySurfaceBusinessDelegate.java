@@ -17,7 +17,6 @@ import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.model.RatePoint;
 import finance.tradista.core.marketdata.model.SurfacePoint;
 import finance.tradista.ir.irswapoption.model.SwaptionVolatilitySurface;
-import finance.tradista.ir.irswapoption.service.SwaptionVolatilitySurfaceService;
 import finance.tradista.ir.irswapoption.validator.SwaptionVolatilitySurfaceValidator;
 
 /*

@@ -13,7 +13,6 @@ import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.exception.PricerException;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.ir.fra.model.FRATrade;
-import finance.tradista.ir.fra.service.FRAPricerService;
 import finance.tradista.ir.fra.validator.FRATradeValidator;
 
 /*

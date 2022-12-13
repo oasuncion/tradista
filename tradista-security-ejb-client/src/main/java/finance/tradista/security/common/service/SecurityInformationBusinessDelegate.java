@@ -22,7 +22,6 @@ under the License.    */
 
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
-import finance.tradista.security.common.service.SecurityInformationService;
 
 public class SecurityInformationBusinessDelegate {
 

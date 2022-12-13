@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import jakarta.ejb.Stateless;
+import org.jboss.ejb3.annotation.SecurityDomain;
 
-import finance.tradista.core.marketdata.service.MarketDataConfigurationBusinessDelegate;
-import finance.tradista.core.marketdata.service.MarketDataInformationService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2017 Olivier Asuncion
@@ -29,6 +29,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class MarketDataInformationServiceBean implements MarketDataInformationService {
 

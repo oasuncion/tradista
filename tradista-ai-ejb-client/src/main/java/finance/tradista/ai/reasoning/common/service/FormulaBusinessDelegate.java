@@ -51,7 +51,7 @@ public class FormulaBusinessDelegate {
 
 	public List<Formula> validateFormulas(Formula... formulas) throws TradistaBusinessException {
 		if (formulas != null && formulas.length > 0) {
-			return formulaService.validateFormulas(formulas);
+			return SecurityUtil.runEx(() -> formulaService.validateFormulas(formulas));
 		}
 		return null;
 
@@ -61,7 +61,7 @@ public class FormulaBusinessDelegate {
 		if (StringUtils.isEmpty(functionName)) {
 			throw new TradistaBusinessException("The function name is mandatory.");
 		}
-		return formulaService.query(functionName, parameters);
+		return SecurityUtil.runEx(() -> formulaService.query(functionName, parameters));
 	}
 
 }

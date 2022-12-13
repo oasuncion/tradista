@@ -10,7 +10,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.security.bond.model.Bond;
 import finance.tradista.security.bond.model.BondTrade;
-import finance.tradista.security.bond.service.BondTradeService;
 import finance.tradista.security.bond.validator.BondTradeValidator;
 
 /*

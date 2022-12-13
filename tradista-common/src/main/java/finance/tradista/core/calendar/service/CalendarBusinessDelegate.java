@@ -5,7 +5,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 import finance.tradista.core.calendar.model.Calendar;
-import finance.tradista.core.calendar.service.CalendarService;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;

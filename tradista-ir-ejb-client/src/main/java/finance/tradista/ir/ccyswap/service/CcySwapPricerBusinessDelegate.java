@@ -12,7 +12,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.ir.ccyswap.model.CcySwapTrade;
-import finance.tradista.ir.ccyswap.service.CcySwapPricerService;
 import finance.tradista.ir.ccyswap.validator.CcySwapTradeValidator;
 
 /*

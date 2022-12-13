@@ -11,7 +11,6 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.MathProperties;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.configuration.model.UIConfiguration;
-import finance.tradista.core.configuration.service.ConfigurationService;
 import finance.tradista.core.user.model.User;
 
 /*

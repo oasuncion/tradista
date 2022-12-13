@@ -10,7 +10,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
-import finance.tradista.core.trade.service.TradeService;
 
 /*
  * Copyright 2018 Olivier Asuncion

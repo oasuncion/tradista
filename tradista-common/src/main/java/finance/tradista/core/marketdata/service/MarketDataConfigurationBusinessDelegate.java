@@ -4,7 +4,6 @@ import java.util.Set;
 
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
-import finance.tradista.core.marketdata.service.MarketDataConfigurationService;
 
 /*
  * Copyright 2018 Olivier Asuncion

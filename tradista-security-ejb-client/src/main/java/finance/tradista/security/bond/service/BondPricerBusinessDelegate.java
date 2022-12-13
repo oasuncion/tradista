@@ -14,7 +14,6 @@ import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.security.bond.model.Bond;
 import finance.tradista.security.bond.model.BondTrade;
-import finance.tradista.security.bond.service.BondPricerService;
 import finance.tradista.security.bond.validator.BondTradeValidator;
 import finance.tradista.security.bond.validator.BondValidator;
 

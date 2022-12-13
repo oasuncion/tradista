@@ -9,7 +9,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.ir.ircapfloorcollar.model.IRCapFloorCollarTrade;
-import finance.tradista.ir.ircapfloorcollar.service.IRCapFloorCollarTradeService;
 import finance.tradista.ir.ircapfloorcollar.validator.IRCapFloorCollarTradeValidator;
 import finance.tradista.ir.irforward.model.IRForwardTrade;
 

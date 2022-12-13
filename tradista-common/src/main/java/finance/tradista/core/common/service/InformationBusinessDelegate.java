@@ -2,7 +2,6 @@ package finance.tradista.core.common.service;
 
 import java.util.Map;
 
-import finance.tradista.core.common.service.InformationService;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 

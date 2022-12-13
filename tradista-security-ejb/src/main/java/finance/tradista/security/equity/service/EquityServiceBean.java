@@ -3,6 +3,9 @@ package finance.tradista.security.equity.service;
 import java.time.LocalDate;
 import java.util.Set;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.interceptor.Interceptors;
@@ -33,6 +36,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class EquityServiceBean implements EquityService {
 

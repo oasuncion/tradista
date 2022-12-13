@@ -5,11 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
-
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
@@ -17,10 +14,10 @@ import finance.tradista.core.marketdata.model.FeedConfig;
 import finance.tradista.core.marketdata.model.Provider;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.model.QuoteValue;
-import finance.tradista.core.marketdata.service.FeedService;
-import finance.tradista.core.marketdata.service.LocalConfigurationService;
-import finance.tradista.core.marketdata.service.MarketDataService;
-import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 
 /*
  * Copyright 2015 Olivier Asuncion
@@ -42,6 +39,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class MarketDataServiceBean implements MarketDataService {
 

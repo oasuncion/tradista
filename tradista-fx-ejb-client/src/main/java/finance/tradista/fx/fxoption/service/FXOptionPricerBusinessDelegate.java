@@ -10,7 +10,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.fx.fxoption.model.FXOptionTrade;
-import finance.tradista.fx.fxoption.service.FXOptionPricerService;
 import finance.tradista.fx.fxoption.validator.FXOptionTradeValidator;
 
 /*

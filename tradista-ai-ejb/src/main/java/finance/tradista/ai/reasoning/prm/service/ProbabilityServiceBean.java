@@ -1,8 +1,11 @@
 package finance.tradista.ai.reasoning.prm.service;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import finance.tradista.ai.reasoning.prm.probability.model.ProbabilityLaw;
 import finance.tradista.ai.reasoning.prm.probability.persistence.ProbabilityLawSQL;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Stateless;
 
 /*
@@ -25,6 +28,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class ProbabilityServiceBean implements ProbabilityService {
 

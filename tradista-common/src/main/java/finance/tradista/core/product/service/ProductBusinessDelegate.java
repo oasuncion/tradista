@@ -11,7 +11,6 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.product.model.Product;
-import finance.tradista.core.product.service.ProductService;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -84,7 +83,7 @@ public class ProductBusinessDelegate {
 		if (StringUtils.isEmpty(productType)) {
 			Set<Product> products = null;
 			for (String type : getAvailableListableProductTypes()) {
-				Set<? extends Product> prods = productService.getAllProductsByType(type);
+				Set<? extends Product> prods = SecurityUtil.runEx(() -> productService.getAllProductsByType(type));
 				if (prods != null && !prods.isEmpty()) {
 					if (products == null) {
 						products = new HashSet<Product>();

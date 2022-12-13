@@ -10,7 +10,6 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.trade.model.OptionTrade;
 import finance.tradista.security.equityoption.model.EquityOption;
-import finance.tradista.security.equityoption.service.EquityOptionService;
 import finance.tradista.security.equityoption.validator.EquityOptionValidator;
 
 /*

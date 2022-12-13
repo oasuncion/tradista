@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.error.model.Error.Status;
-import finance.tradista.core.error.service.ErrorService;
 
 /*
  * Copyright 2018 Olivier Asuncion

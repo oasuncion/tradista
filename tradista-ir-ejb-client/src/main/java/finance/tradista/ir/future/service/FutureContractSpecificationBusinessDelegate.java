@@ -14,7 +14,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.daterule.service.DateRuleBusinessDelegate;
 import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.ir.future.model.FutureContractSpecification;
-import finance.tradista.ir.future.service.FutureContractSpecificationService;
 
 /*
  * Copyright 2018 Olivier Asuncion

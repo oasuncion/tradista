@@ -9,12 +9,12 @@ import finance.tradista.core.book.model.Book;
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
+import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.exception.PricerException;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.ir.future.model.Future;
 import finance.tradista.ir.future.model.FutureTrade;
-import finance.tradista.ir.future.service.FuturePricerService;
 import finance.tradista.ir.future.validator.FutureTradeValidator;
 import finance.tradista.ir.future.validator.FutureValidator;
 
@@ -60,31 +60,33 @@ public class FuturePricerBusinessDelegate implements Serializable {
 	public BigDecimal npvValuation(PricingParameter params, FutureTrade trade, Currency currency, LocalDate pricingDate)
 			throws PricerException, TradistaBusinessException {
 		tradeValidator.validateTrade(trade);
-		return futurePricerService.npvValuation(params, trade, currency, pricingDate);
+		return SecurityUtil.runEx(() -> futurePricerService.npvValuation(params, trade, currency, pricingDate));
 	}
 
 	public BigDecimal pvValuation(PricingParameter params, FutureTrade trade, Currency currency, LocalDate pricingDate)
 			throws PricerException, TradistaBusinessException {
 		tradeValidator.validateTrade(trade);
-		return futurePricerService.pvValuation(params, trade, currency, pricingDate);
+		return SecurityUtil.runEx(() -> futurePricerService.pvValuation(params, trade, currency, pricingDate));
 	}
 
 	public BigDecimal pnlDefault(PricingParameter params, Future future, Book book, Currency currency,
 			LocalDate pricingDate) throws PricerException, TradistaBusinessException {
 		futureValidator.validateProduct(future);
-		return futurePricerService.pnlDefault(params, future, book, currency, pricingDate);
+		return SecurityUtil.runEx(() -> futurePricerService.pnlDefault(params, future, book, currency, pricingDate));
 	}
 
 	public BigDecimal realizedPnlDefault(PricingParameter params, Future future, Book book, Currency currency,
 			LocalDate pricingDate) throws PricerException, TradistaBusinessException {
 		futureValidator.validateProduct(future);
-		return futurePricerService.realizedPnlDefault(params, future, book, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> futurePricerService.realizedPnlDefault(params, future, book, currency, pricingDate));
 	}
 
 	public BigDecimal unrealizedPnlDefault(PricingParameter params, Future future, Book book, Currency currency,
 			LocalDate pricingDate) throws PricerException, TradistaBusinessException {
 		futureValidator.validateProduct(future);
-		return futurePricerService.unrealizedPnlDefault(params, future, book, currency, pricingDate);
+		return SecurityUtil
+				.runEx(() -> futurePricerService.unrealizedPnlDefault(params, future, book, currency, pricingDate));
 	}
 
 	public List<CashFlow> generateCashFlows(FutureTrade trade, PricingParameter pp, LocalDate pricingDate)
@@ -103,7 +105,7 @@ public class FuturePricerBusinessDelegate implements Serializable {
 			throw new TradistaBusinessException(errorMsg.toString());
 		}
 		tradeValidator.validateTrade(trade);
-		return futurePricerService.generateCashFlows(pp, trade, pricingDate);
+		return SecurityUtil.runEx(() -> futurePricerService.generateCashFlows(pp, trade, pricingDate));
 	}
 
 }

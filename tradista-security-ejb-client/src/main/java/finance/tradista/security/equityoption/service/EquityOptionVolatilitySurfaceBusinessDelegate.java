@@ -14,7 +14,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.model.SurfacePoint;
 import finance.tradista.security.equityoption.model.EquityOptionVolatilitySurface;
-import finance.tradista.security.equityoption.service.EquityOptionVolatilitySurfaceService;
 import finance.tradista.security.equityoption.validator.EquityOptionVolatilitySurfaceValidator;
 
 /*

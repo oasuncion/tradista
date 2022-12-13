@@ -11,7 +11,10 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
@@ -49,6 +52,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Startup
 @Singleton
 public class PositionCalculator {

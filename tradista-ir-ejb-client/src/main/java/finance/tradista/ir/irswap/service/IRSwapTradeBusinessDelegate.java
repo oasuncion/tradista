@@ -8,7 +8,6 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.ir.irswap.model.SingleCurrencyIRSwapTrade;
-import finance.tradista.ir.irswap.service.IRSwapTradeService;
 import finance.tradista.ir.irswap.validator.IRSwapTradeValidator;
 
 /*

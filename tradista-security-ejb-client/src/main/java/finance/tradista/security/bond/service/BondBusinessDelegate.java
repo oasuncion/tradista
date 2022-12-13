@@ -7,7 +7,6 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.security.bond.model.Bond;
-import finance.tradista.security.bond.service.BondService;
 import finance.tradista.security.bond.validator.BondValidator;
 
 /*

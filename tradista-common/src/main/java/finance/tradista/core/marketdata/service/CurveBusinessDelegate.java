@@ -12,7 +12,6 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.marketdata.model.Curve;
 import finance.tradista.core.marketdata.model.RatePoint;
-import finance.tradista.core.marketdata.service.CurveService;
 
 /*
  * Copyright 2018 Olivier Asuncion

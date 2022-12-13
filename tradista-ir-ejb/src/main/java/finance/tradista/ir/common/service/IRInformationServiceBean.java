@@ -1,6 +1,9 @@
 package finance.tradista.ir.common.service;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Stateless;
+
+import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.ir.common.service.IRInformationService;
 
@@ -24,6 +27,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class IRInformationServiceBean implements IRInformationService {
 

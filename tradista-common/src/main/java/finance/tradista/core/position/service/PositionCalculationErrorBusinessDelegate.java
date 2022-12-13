@@ -9,7 +9,6 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.error.model.Error.Status;
 import finance.tradista.core.position.model.PositionCalculationError;
-import finance.tradista.core.position.service.PositionCalculationErrorService;
 
 /*
  * Copyright 2018 Olivier Asuncion

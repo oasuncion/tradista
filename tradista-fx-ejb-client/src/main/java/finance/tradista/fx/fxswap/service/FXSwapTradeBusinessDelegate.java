@@ -11,7 +11,6 @@ import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.fx.fx.service.AbstractFXTradeBusinessDelegate;
 import finance.tradista.fx.fx.service.FXTradeBusinessDelegate;
 import finance.tradista.fx.fxswap.model.FXSwapTrade;
-import finance.tradista.fx.fxswap.service.FXSwapTradeService;
 import finance.tradista.fx.fxswap.validator.FXSwapTradeValidator;
 
 /*

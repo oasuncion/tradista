@@ -101,10 +101,11 @@ public class LoanDepositTradeBusinessDelegate {
 					// added to a percentage
 					// 1bp = 0.01%
 					r = r.add(trade.getSpread().divide(BigDecimal.valueOf(100),
-							configurationBusinessDelegate.getRoundingMode()));
+							SecurityUtil.run(() -> configurationBusinessDelegate.getRoundingMode())));
 				}
 			}
-			return amount.multiply(r).divide(BigDecimal.valueOf(100), configurationBusinessDelegate.getRoundingMode());
+			return amount.multiply(r).divide(BigDecimal.valueOf(100),
+					SecurityUtil.run(() -> configurationBusinessDelegate.getRoundingMode()));
 		} else {
 			double n;
 			if (!trade.getCompoundPeriod().equals(Tenor.NO_TENOR)) {
@@ -144,7 +145,7 @@ public class LoanDepositTradeBusinessDelegate {
 							// added to a percentage
 							// 1bp = 0.01%
 							r = r.add(trade.getSpread().divide(BigDecimal.valueOf(100),
-									configurationBusinessDelegate.getRoundingMode()));
+									SecurityUtil.run(() -> configurationBusinessDelegate.getRoundingMode())));
 						}
 						BigDecimal lastCapital = capital;
 						capital = capital.multiply(BigDecimal.valueOf((1 + ((r.doubleValue() / 100) / n))));

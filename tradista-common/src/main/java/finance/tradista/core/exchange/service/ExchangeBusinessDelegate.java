@@ -8,7 +8,6 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.exchange.model.Exchange;
-import finance.tradista.core.exchange.service.ExchangeService;
 
 /*
  * Copyright 2018 Olivier Asuncion

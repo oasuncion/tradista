@@ -12,7 +12,6 @@ import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.ir.irswap.model.SingleCurrencyIRSwapTrade;
-import finance.tradista.ir.irswap.service.IRSwapPricerService;
 import finance.tradista.ir.irswap.validator.IRSwapTradeValidator;
 
 /*

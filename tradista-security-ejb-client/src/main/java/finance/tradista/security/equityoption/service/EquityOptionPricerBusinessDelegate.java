@@ -15,7 +15,6 @@ import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.security.equityoption.model.EquityOption;
 import finance.tradista.security.equityoption.model.EquityOptionTrade;
-import finance.tradista.security.equityoption.service.EquityOptionPricerService;
 import finance.tradista.security.equityoption.validator.EquityOptionTradeValidator;
 import finance.tradista.security.equityoption.validator.EquityOptionValidator;
 

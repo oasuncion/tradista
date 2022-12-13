@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.service.InformationBusinessDelegate;
 import finance.tradista.core.marketdata.model.VolatilitySurface;
@@ -15,6 +17,7 @@ import finance.tradista.ir.irswapoption.service.SwaptionVolatilitySurfaceBusines
 import finance.tradista.security.equityoption.model.EquityOptionVolatilitySurface;
 import finance.tradista.security.equityoption.service.EquityOptionVolatilitySurfaceBusinessDelegate;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Stateless;
 import jakarta.interceptor.Interceptors;
 
@@ -38,6 +41,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@SecurityDomain(value = "other")
+@PermitAll
 @Stateless
 public class SurfaceServiceBean implements SurfaceService {
 

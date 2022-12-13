@@ -13,7 +13,6 @@ import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.exception.PricerException;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.fx.fxndf.model.FXNDFTrade;
-import finance.tradista.fx.fxndf.service.FXNDFPricerService;
 import finance.tradista.fx.fxndf.validator.FXNDFTradeValidator;
 
 /*

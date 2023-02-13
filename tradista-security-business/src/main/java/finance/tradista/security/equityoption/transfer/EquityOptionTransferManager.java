@@ -173,30 +173,22 @@ public class EquityOptionTransferManager implements TransferManager<EquityOption
 	}
 
 	private CashTransfer createNewCashSettlementTransfer(EquityOptionTrade trade) throws TradistaBusinessException {
-		CashTransfer cashSettlementTransfer = new CashTransfer();
+		CashTransfer cashSettlementTransfer = new CashTransfer(trade.getBook(), TransferPurpose.CASH_SETTLEMENT,
+				trade.getExerciseDate(), trade, trade.getUnderlying().getCurrency());
 		cashSettlementTransfer.setCreationDateTime(LocalDateTime.now());
 		cashSettlementTransfer.setFixingDateTime(trade.getExerciseDate().atStartOfDay());
-		cashSettlementTransfer.setSettlementDate(trade.getExerciseDate());
-		cashSettlementTransfer.setPurpose(TransferPurpose.CASH_SETTLEMENT);
 		cashSettlementTransfer.setStatus(Transfer.Status.UNKNOWN);
-		cashSettlementTransfer.setTrade(trade);
-		cashSettlementTransfer.setBook(trade.getBook());
-		cashSettlementTransfer.setCurrency(trade.getUnderlying().getCurrency());
 
 		return cashSettlementTransfer;
 	}
 
 	private CashTransfer createNewPremiumTransfer(EquityOptionTrade trade) throws TradistaBusinessException {
-		CashTransfer premiumTransfer = new CashTransfer();
+		CashTransfer premiumTransfer = new CashTransfer(trade.getBook(), TransferPurpose.PREMIUM,
+				trade.getSettlementDate(), trade, trade.getCurrency());
 		premiumTransfer.setCreationDateTime(LocalDateTime.now());
 		premiumTransfer.setFixingDateTime(LocalDateTime.now());
-		premiumTransfer.setSettlementDate(trade.getSettlementDate());
-		premiumTransfer.setPurpose(TransferPurpose.PREMIUM);
 		premiumTransfer.setStatus(Transfer.Status.KNOWN);
-		premiumTransfer.setTrade(trade);
-		premiumTransfer.setBook(trade.getBook());
 		premiumTransfer.setAmount(trade.getAmount());
-		premiumTransfer.setCurrency(trade.getCurrency());
 		if (trade.isBuy()) {
 			premiumTransfer.setDirection(Transfer.Direction.PAY);
 		} else {
@@ -208,16 +200,12 @@ public class EquityOptionTransferManager implements TransferManager<EquityOption
 
 	private ProductTransfer createNewEquityOptionSettlementTransfer(EquityOptionTrade trade)
 			throws TradistaBusinessException {
-		ProductTransfer eqOptionSettlementTransfer = new ProductTransfer();
+		ProductTransfer eqOptionSettlementTransfer = new ProductTransfer(trade.getBook(),
+				TransferPurpose.EQUITY_OPTION_SETTLEMENT, trade.getSettlementDate(), trade);
 		eqOptionSettlementTransfer.setCreationDateTime(LocalDateTime.now());
 		eqOptionSettlementTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		eqOptionSettlementTransfer.setSettlementDate(trade.getSettlementDate());
-		eqOptionSettlementTransfer.setPurpose(TransferPurpose.EQUITY_OPTION_SETTLEMENT);
 		eqOptionSettlementTransfer.setStatus(Transfer.Status.KNOWN);
-		eqOptionSettlementTransfer.setTrade(trade);
-		eqOptionSettlementTransfer.setBook(trade.getBook());
 		eqOptionSettlementTransfer.setQuantity(trade.getQuantity());
-		eqOptionSettlementTransfer.setProduct(trade.getEquityOption());
 		if (trade.isBuy()) {
 			eqOptionSettlementTransfer.setDirection(Transfer.Direction.RECEIVE);
 		} else {

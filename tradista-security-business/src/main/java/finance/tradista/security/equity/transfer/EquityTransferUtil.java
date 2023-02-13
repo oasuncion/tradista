@@ -74,15 +74,11 @@ public final class EquityTransferUtil {
 
 		while (!cashFlowDate.isAfter(equity.getActiveTo())) {
 			if (cashFlowDate.isAfter(activeFrom) && !cashFlowDate.isBefore(trade.getSettlementDate())) {
-				CashTransfer cashTransfer = new CashTransfer();
-				cashTransfer.setSettlementDate(cashFlowDate);
-				cashTransfer.setCurrency(equity.getDividendCurrency());
-				cashTransfer.setProduct(equity);
+				CashTransfer cashTransfer = new CashTransfer(trade.getBook(), equity, TransferPurpose.DIVIDEND,
+						cashFlowDate, equity.getDividendCurrency());
 				cashTransfer.setCreationDateTime(LocalDateTime.now());
 				cashTransfer.setFixingDateTime(cashFlowDate.atStartOfDay());
-				cashTransfer.setPurpose(TransferPurpose.DIVIDEND);
 				cashTransfer.setStatus(Transfer.Status.UNKNOWN);
-				cashTransfer.setBook(trade.getBook());
 				cashTransfer.setDirection(Direction.RECEIVE);
 
 				dividends.add(cashTransfer);

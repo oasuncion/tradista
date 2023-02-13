@@ -49,16 +49,14 @@ public class LegalEntityCreatorDialog extends TradistaDialog<LegalEntity> {
 		grid.add(longNameTextField, 2, 2);
 		getDialogPane().setContent(grid);
 		ButtonType buttonTypeOk = new ButtonType("Copy", ButtonData.OK_DONE);
-		ButtonType buttonTypeCancel = new ButtonType("Cancel",
-				ButtonData.CANCEL_CLOSE);
+		ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 		getDialogPane().getButtonTypes().add(buttonTypeOk);
 		getDialogPane().getButtonTypes().add(buttonTypeCancel);
 		setResultConverter(new Callback<ButtonType, LegalEntity>() {
 			@Override
 			public LegalEntity call(ButtonType b) {
 				if (b == buttonTypeOk) {
-					LegalEntity legalEntity = new LegalEntity();
-					legalEntity.setShortName(shortNameTextField.getText());
+					LegalEntity legalEntity = new LegalEntity(shortNameTextField.getText());
 					legalEntity.setLongName(longNameTextField.getText());
 					return legalEntity;
 				}

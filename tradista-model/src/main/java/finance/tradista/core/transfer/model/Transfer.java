@@ -3,9 +3,10 @@ package finance.tradista.core.transfer.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
@@ -136,36 +137,44 @@ public abstract class Transfer extends TradistaObject {
 
 	private Status status;
 
+	@Id
 	private TransferPurpose purpose;
 
 	private Direction direction;
 
 	protected BigDecimal quantityOrAmount;
 
+	@Id
 	private Trade<?> trade;
 
 	private LocalDateTime creationDateTime;
 
 	private LocalDateTime fixingDateTime;
 
+	@Id
 	private LocalDate settlementDate;
 
+	@Id
 	private Product product;
 
+	@Id
 	private Book book;
 
-	public Product getProduct() {
-		if (product != null) {
-			return product;
+	public Transfer(Book book, Product product, TransferPurpose purpose, LocalDate settlementDate, Trade<?> trade) {
+		this.book = book;
+		this.product = product;
+		this.purpose = purpose;
+		this.settlementDate = settlementDate;
+		this.trade = trade;
+		if (product == null) {
+			if (trade != null) {
+				this.product = trade.getProduct();
+			}
 		}
-		if (trade != null) {
-			return trade.getProduct();
-		}
-		return null;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public Product getProduct() {
+		return TradistaModelUtil.clone(product);
 	}
 
 	public Status getStatus() {
@@ -187,11 +196,7 @@ public abstract class Transfer extends TradistaObject {
 	}
 
 	public Trade<?> getTrade() {
-		return trade;
-	}
-
-	public void setTrade(Trade<?> trade) {
-		this.trade = trade;
+		return TradistaModelUtil.clone(trade);
 	}
 
 	public LocalDateTime getCreationDateTime() {
@@ -214,48 +219,21 @@ public abstract class Transfer extends TradistaObject {
 		return settlementDate;
 	}
 
-	public void setSettlementDate(LocalDate settlementDate) {
-		this.settlementDate = settlementDate;
-	}
-
 	public TransferPurpose getPurpose() {
 		return purpose;
 	}
 
-	public void setPurpose(TransferPurpose purpose) {
-		this.purpose = purpose;
-	}
-
 	public Book getBook() {
-		return book;
-	}
-
-	public void setBook(Book book) {
-		this.book = book;
+		return TradistaModelUtil.clone(book);
 	}
 
 	@Override
-	public int hashCode() {
-		long tradeId = trade != null ? trade.getId() : 0;
-		long productId = product != null ? product.getId() : 0;
-		return Objects.hash(book, productId, purpose, settlementDate, tradeId);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Transfer other = (Transfer) obj;
-		long tradeId = trade != null ? trade.getId() : 0;
-		long otherTradeId = other.getTrade() != null ? other.getTrade().getId() : 0;
-		long productId = product != null ? product.getId() : 0;
-		long otherProductId = other.getProduct() != null ? other.getProduct().getId() : 0;
-		return Objects.equals(book, other.book) && (productId == otherProductId) && purpose == other.purpose
-				&& Objects.equals(settlementDate, other.settlementDate) && (tradeId == otherTradeId);
+	public Transfer clone() {
+		Transfer transfer = (Transfer) super.clone();
+		transfer.trade = TradistaModelUtil.clone(trade);
+		transfer.product = TradistaModelUtil.clone(product);
+		transfer.book = TradistaModelUtil.clone(book);
+		return transfer;
 	}
 
 }

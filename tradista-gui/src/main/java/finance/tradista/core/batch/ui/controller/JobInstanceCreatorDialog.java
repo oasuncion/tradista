@@ -4,6 +4,7 @@ import finance.tradista.core.batch.model.TradistaJobInstance;
 import finance.tradista.core.batch.service.BatchBusinessDelegate;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
 import finance.tradista.core.common.ui.view.TradistaDialog;
+import finance.tradista.core.common.util.ClientUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -35,8 +36,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class JobInstanceCreatorDialog extends
-		TradistaDialog<TradistaJobInstance> {
+public class JobInstanceCreatorDialog extends TradistaDialog<TradistaJobInstance> {
 
 	public JobInstanceCreatorDialog() {
 		super();
@@ -50,8 +50,7 @@ public class JobInstanceCreatorDialog extends
 		TextField nameTextField = new TextField();
 		ComboBox<String> jobTypeComboBox = new ComboBox<String>();
 		ObservableList<String> jobTypes = FXCollections
-				.observableArrayList(new BatchBusinessDelegate()
-						.getAllJobTypes());
+				.observableArrayList(new BatchBusinessDelegate().getAllJobTypes());
 		jobTypeComboBox.setItems(jobTypes);
 		jobTypeComboBox.getSelectionModel().selectFirst();
 		GridPane grid = new GridPane();
@@ -62,16 +61,15 @@ public class JobInstanceCreatorDialog extends
 		grid.add(jobTypeComboBox, 2, 2);
 		getDialogPane().setContent(grid);
 		ButtonType buttonTypeOk = new ButtonType("Create", ButtonData.OK_DONE);
-		ButtonType buttonTypeCancel = new ButtonType("Cancel",
-				ButtonData.CANCEL_CLOSE);
+		ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 		getDialogPane().getButtonTypes().add(buttonTypeOk);
 		getDialogPane().getButtonTypes().add(buttonTypeCancel);
 		setResultConverter(new Callback<ButtonType, TradistaJobInstance>() {
 			@Override
 			public TradistaJobInstance call(ButtonType b) {
 				if (b == buttonTypeOk) {
-					return new TradistaJobInstance(
-							nameTextField.getText(), jobTypeComboBox.getValue());
+					return new TradistaJobInstance(nameTextField.getText(), jobTypeComboBox.getValue(),
+							ClientUtil.getCurrentUser().getProcessingOrg());
 				}
 				return null;
 			}

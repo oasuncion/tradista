@@ -80,9 +80,8 @@ public class AgentSQL {
 			try (ResultSet results = stmtGetAgentById.executeQuery()) {
 
 				while (results.next()) {
-					agent = new Agent();
+					agent = new Agent(results.getString("name"));
 					agent.setId(results.getLong("id"));
-					agent.setName(results.getString("name"));
 					agent.setOnlyInformative(results.getBoolean("only_informative"));
 					agent.setStarted(results.getBoolean("started"));
 				}
@@ -103,9 +102,8 @@ public class AgentSQL {
 			try (ResultSet results = stmtGetAgentByName.executeQuery()) {
 
 				while (results.next()) {
-					agent = new Agent();
+					agent = new Agent(results.getString("name"));
 					agent.setId(results.getLong("id"));
-					agent.setName(results.getString("name"));
 					agent.setOnlyInformative(results.getBoolean("only_informative"));
 					agent.setStarted(results.getBoolean("started"));
 				}
@@ -127,9 +125,8 @@ public class AgentSQL {
 				if (agents == null) {
 					agents = new HashSet<Agent>();
 				}
-				Agent agent = new Agent();
+				Agent agent = new Agent(results.getString("name"));
 				agent.setId(results.getLong("id"));
-				agent.setName(results.getString("name"));
 				agent.setOnlyInformative(results.getBoolean("only_informative"));
 				agent.setStarted(results.getBoolean("started"));
 				agents.add(agent);

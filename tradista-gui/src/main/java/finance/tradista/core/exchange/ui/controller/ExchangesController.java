@@ -88,19 +88,14 @@ public class ExchangesController extends TradistaControllerAdapter {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
-				if (exchange == null) {
-					exchange = new Exchange();
-				}
 				if (!calendar.getValue().equals(BlankCalendar.getInstance())) {
 					exchange.setCalendar(calendar.getValue());
 				} else {
 					exchange.setCalendar(null);
 				}
 				if (code.isVisible()) {
-					exchange.setCode(code.getText());
+					exchange = new Exchange(code.getText());
 					codeLabel.setText(code.getText());
-				} else {
-					exchange.setCode(codeLabel.getText());
 				}
 				exchange.setName(name.getText());
 				exchange.setOtc(isOtc.isSelected());
@@ -116,32 +111,26 @@ public class ExchangesController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldExchangeId = 0;
 		try {
 			ExchangeCreatorDialog dialog = new ExchangeCreatorDialog();
 			Optional<Exchange> result = dialog.showAndWait();
 			if (result.isPresent()) {
-				if (exchange == null) {
-					exchange = new Exchange();
-				}
-				exchange.setCode(result.get().getCode());
-				exchange.setName(result.get().getName());
+				Exchange copyExchange = new Exchange(result.get().getCode());
+				copyExchange.setName(result.get().getName());
 				if (!calendar.getValue().equals(BlankCalendar.getInstance())) {
-					exchange.setCalendar(calendar.getValue());
+					copyExchange.setCalendar(calendar.getValue());
 				} else {
-					exchange.setCalendar(null);
+					copyExchange.setCalendar(null);
 				}
-				exchange.setOtc(isOtc.isSelected());
-				oldExchangeId = exchange.getId();
-				exchange.setId(0);
-				exchange.setId(exchangeBusinessDelegate.saveExchange(exchange));
+				copyExchange.setOtc(isOtc.isSelected());
+				copyExchange.setId(exchangeBusinessDelegate.saveExchange(copyExchange));
+				exchange = copyExchange;
 				code.setVisible(false);
 				codeLabel.setVisible(true);
 				codeLabel.setText(exchange.getCode());
 				name.setText(exchange.getName());
 			}
 		} catch (TradistaBusinessException tbe) {
-			exchange.setId(oldExchangeId);
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}

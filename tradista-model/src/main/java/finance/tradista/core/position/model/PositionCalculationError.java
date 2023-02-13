@@ -3,6 +3,7 @@ package finance.tradista.core.position.model;
 import java.time.LocalDate;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.error.model.Error;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
@@ -39,24 +40,23 @@ public class PositionCalculationError extends Error {
 	private LocalDate valueDate;
 
 	private Trade<? extends Product> trade;
-	
+
 	private Product product;
-	
+
 	public static final String POSITION_CALCULATION = "PositionCalculation";
 
 	public PositionCalculationError() {
-		super();
 		setType(POSITION_CALCULATION);
 	}
 
 	public PositionDefinition getPositionDefinition() {
-		return positionDefinition;
+		return TradistaModelUtil.clone(positionDefinition);
 	}
 
 	public void setPositionDefinition(PositionDefinition positionDefinition) {
 		this.positionDefinition = positionDefinition;
 	}
-	
+
 	public LocalDate getValueDate() {
 		return valueDate;
 	}
@@ -66,7 +66,7 @@ public class PositionCalculationError extends Error {
 	}
 
 	public Trade<? extends Product> getTrade() {
-		return trade;
+		return TradistaModelUtil.clone(trade);
 	}
 
 	public void setTrade(Trade<? extends Product> trade) {
@@ -74,13 +74,13 @@ public class PositionCalculationError extends Error {
 	}
 
 	public Product getProduct() {
-		return product;
+		return TradistaModelUtil.clone(product);
 	}
 
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-	
+
 	public Book getBook() {
 		if (positionDefinition.getBook() != null) {
 			return positionDefinition.getBook();
@@ -94,5 +94,14 @@ public class PositionCalculationError extends Error {
 	@Override
 	public String getSubjectKey() {
 		return getType() + "-" + getPositionDefinition() + "-" + getValueDate();
+	}
+
+	@Override
+	public PositionCalculationError clone() {
+		PositionCalculationError positionCalculationError = (PositionCalculationError) super.clone();
+		positionCalculationError.positionDefinition = TradistaModelUtil.clone(positionDefinition);
+		positionCalculationError.trade = TradistaModelUtil.clone(trade);
+		positionCalculationError.product = TradistaModelUtil.clone(product);
+		return positionCalculationError;
 	}
 }

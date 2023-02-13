@@ -37,12 +37,12 @@ under the License.    */
 public final class IRCapFloorCollarTransferUtil {
 
 	/**
-	 * @param trade
-	 *            the ir cap/floor/collar for which we want to generate the paid
-	 *            cash transfers
+	 * @param trade the ir cap/floor/collar for which we want to generate the paid
+	 *              cash transfers
 	 * @throws TradistaBusinessException
 	 */
-	public static List<CashTransfer> generateCashTransfers(IRCapFloorCollarTrade trade) throws TradistaBusinessException {
+	public static List<CashTransfer> generateCashTransfers(IRCapFloorCollarTrade trade)
+			throws TradistaBusinessException {
 		Tenor frequency = trade.getIrForwardTrade().getFrequency();
 		List<CashTransfer> cashTransfers = null;
 		LocalDate cashFlowDate = trade.getSettlementDate();
@@ -86,15 +86,11 @@ public final class IRCapFloorCollarTransferUtil {
 
 	private static CashTransfer createCashTransfer(IRCapFloorCollarTrade trade, LocalDate fixingDate,
 			LocalDate settlementDate) {
-		CashTransfer cashTransfer = new CashTransfer();
-		cashTransfer.setCurrency(trade.getCurrency());
+		CashTransfer cashTransfer = new CashTransfer(trade.getBook(), TransferPurpose.CASH_SETTLEMENT, settlementDate,
+				trade, trade.getCurrency());
 		cashTransfer.setFixingDateTime(fixingDate.atStartOfDay());
 		cashTransfer.setCreationDateTime(LocalDateTime.now());
-		cashTransfer.setTrade(trade);
-		cashTransfer.setBook(trade.getBook());
 		cashTransfer.setStatus(Transfer.Status.UNKNOWN);
-		cashTransfer.setPurpose(TransferPurpose.CASH_SETTLEMENT);
-		cashTransfer.setSettlementDate(settlementDate);
 		return cashTransfer;
 	}
 

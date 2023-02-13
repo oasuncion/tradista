@@ -1,7 +1,12 @@
 package finance.tradista.ai.reasoning.prm.probability.model;
 
+import java.util.Set;
+
+import finance.tradista.ai.reasoning.prm.model.Function;
 import finance.tradista.ai.reasoning.prm.model.FunctionCall;
+import finance.tradista.ai.reasoning.prm.model.Parameter;
 import finance.tradista.ai.reasoning.prm.model.Value;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -40,7 +45,7 @@ public class Predicate extends TradistaObject {
 	private boolean result;
 
 	public FunctionCall getFunctionCall() {
-		return functionCall;
+		return TradistaModelUtil.clone(functionCall);
 	}
 
 	public Operator getOperator() {
@@ -69,7 +74,13 @@ public class Predicate extends TradistaObject {
 
 	public void setFunctionCall(FunctionCall functionCall) {
 		this.functionCall = functionCall;
-	}	
-	
+	}
+
+	@Override
+	public Predicate clone() {
+		Predicate predicate = (Predicate) super.clone();
+		predicate.functionCall = TradistaModelUtil.clone(functionCall);
+		return predicate;
+	}
 
 }

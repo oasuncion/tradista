@@ -85,9 +85,8 @@ public class LegalEntityController extends TradistaControllerAdapter {
 		if (result.get() == ButtonType.OK) {
 			try {
 				if (legalEntity == null) {
-					legalEntity = new LegalEntity();
+					legalEntity = new LegalEntity(shortName.getText());
 				}
-				legalEntity.setShortName(shortName.getText());
 				legalEntity.setLongName(longName.getText());
 				legalEntity.setDescription(description.getText());
 				legalEntity.setRole(role.getValue());
@@ -102,27 +101,21 @@ public class LegalEntityController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldLegalEntityId = 0;
 		try {
 			LegalEntityCreatorDialog dialog = new LegalEntityCreatorDialog();
 			Optional<LegalEntity> result = dialog.showAndWait();
 			if (result.isPresent()) {
-				if (legalEntity == null) {
-					legalEntity = new LegalEntity();
-				}
-				legalEntity.setShortName(result.get().getShortName());
-				legalEntity.setLongName(result.get().getLongName());
-				legalEntity.setDescription(description.getText());
-				legalEntity.setRole(role.getValue());
-				oldLegalEntityId = legalEntity.getId();
-				legalEntity.setId(0);
-				legalEntity.setId(legalEntityBusinessDelegate.saveLegalEntity(legalEntity));
+				LegalEntity copyLegalEntity = new LegalEntity(shortName.getText());
+				copyLegalEntity.setLongName(result.get().getLongName());
+				copyLegalEntity.setDescription(description.getText());
+				copyLegalEntity.setRole(role.getValue());
+				copyLegalEntity.setId(legalEntityBusinessDelegate.saveLegalEntity(copyLegalEntity));
+				legalEntity = copyLegalEntity;
 				legalEntityId.setText(String.valueOf(legalEntity.getId()));
 				shortName.setText(legalEntity.getShortName());
 				longName.setText(legalEntity.getLongName());
 			}
 		} catch (TradistaBusinessException tbe) {
-			legalEntity.setId(oldLegalEntityId);
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}

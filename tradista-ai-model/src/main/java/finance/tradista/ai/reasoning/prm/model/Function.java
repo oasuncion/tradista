@@ -3,6 +3,8 @@ package finance.tradista.ai.reasoning.prm.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -36,14 +38,18 @@ public class Function extends TradistaObject {
 
 	private Type returnType;
 
+	@Id
 	private String name;
 
-	public Function() {
+	public Function(String name) {
+		super();
+		this.name = name;
 		parameters = new LinkedHashSet<>();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Set<Parameter> getParameters() {
-		return parameters;
+		return (Set<Parameter>) TradistaModelUtil.deepCopy(parameters);
 	}
 
 	public void addParameter(Parameter parameter) {
@@ -66,33 +72,12 @@ public class Function extends TradistaObject {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	@SuppressWarnings("unchecked")
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Function other = (Function) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public Function clone() {
+		Function function = (Function) super.clone();
+		function.parameters = (Set<Parameter>) TradistaModelUtil.deepCopy(parameters);
+		return function;
 	}
 
 }

@@ -3,6 +3,7 @@ package finance.tradista.security.equityoption.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 import finance.tradista.security.equity.model.Equity;
 
@@ -26,7 +27,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class PricingParameterVolatilitySurfaceModule implements PricingParameterModule {
+public class PricingParameterVolatilitySurfaceModule extends PricingParameterModule {
 
 	/**
 	 * 
@@ -49,8 +50,9 @@ public class PricingParameterVolatilitySurfaceModule implements PricingParameter
 		return EquityOption.EQUITY_OPTION;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<Equity, EquityOptionVolatilitySurface> getVolatilitySurfaces() {
-		return volatilitySurfaces;
+		return (Map<Equity, EquityOptionVolatilitySurface>) TradistaModelUtil.deepCopy(volatilitySurfaces);
 	}
 
 	public void setVolatilitySurfaces(Map<Equity, EquityOptionVolatilitySurface> volatilitySurfaces) {
@@ -58,10 +60,21 @@ public class PricingParameterVolatilitySurfaceModule implements PricingParameter
 	}
 
 	public EquityOptionVolatilitySurface getEquityOptionVolatilitySurface(Equity equity) {
-		if (equity == null) {
+		if (equity == null || volatilitySurfaces == null) {
 			return null;
 		}
-		return volatilitySurfaces.get(equity);
+		return TradistaModelUtil.clone(volatilitySurfaces.get(equity));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public PricingParameterVolatilitySurfaceModule clone() {
+		PricingParameterVolatilitySurfaceModule pricingParameterVolatilitySurfaceModule = (PricingParameterVolatilitySurfaceModule) super.clone();
+		if (volatilitySurfaces != null) {
+			pricingParameterVolatilitySurfaceModule.volatilitySurfaces = (Map<Equity, EquityOptionVolatilitySurface>) TradistaModelUtil
+					.deepCopy(volatilitySurfaces);
+		}
+		return pricingParameterVolatilitySurfaceModule;
 	}
 
 }

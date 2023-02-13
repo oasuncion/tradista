@@ -96,8 +96,7 @@ public class UIConfigurationController extends TradistaControllerAdapter {
 		if (result.get() == ButtonType.OK) {
 			DecimalFormat uiDecimalFormat = new DecimalFormat();
 			DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-			UIConfiguration uiConfiguration = new UIConfiguration();
-			uiConfiguration.setUser(ClientUtil.getCurrentUser());
+			UIConfiguration uiConfiguration = new UIConfiguration(ClientUtil.getCurrentUser());
 			if (!StringUtils.isEmpty(decimalSeparator.getText())) {
 				dfs.setGroupingSeparator(decimalSeparator.getText().charAt(0));
 			} else {

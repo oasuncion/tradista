@@ -1,6 +1,7 @@
 package finance.tradista.ai.reasoning.prm.probability.model;
 
 import finance.tradista.ai.reasoning.prm.model.FunctionCall;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -29,21 +30,29 @@ public class ProbabilityLaw extends TradistaObject {
 	 * 
 	 */
 	private static final long serialVersionUID = -6117351919886016790L;
-	
+
 	private FunctionCall function;
-	
+
 	private ProbabilityDistribution probabilityDistribution;
 
 	public FunctionCall getFunction() {
-		return function;
+		return TradistaModelUtil.clone(function);
 	}
 
 	public ProbabilityDistribution getProbabilityDistribution() {
-		return probabilityDistribution;
+		return TradistaModelUtil.clone(probabilityDistribution);
 	}
 
 	public void setFunction(FunctionCall function) {
 		this.function = function;
 	}
-		
+
+	@Override
+	public ProbabilityLaw clone() {
+		ProbabilityLaw probabilityLaw = (ProbabilityLaw) super.clone();
+		probabilityLaw.function = TradistaModelUtil.clone(function);
+		probabilityLaw.probabilityDistribution = TradistaModelUtil.clone(probabilityDistribution);
+		return probabilityLaw;
+	}
+
 }

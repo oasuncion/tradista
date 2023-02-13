@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
@@ -87,8 +89,8 @@ public final class PricerEquityUtil {
 		trade.setProduct(equity);
 
 		// Filling the trade with (dummy) values needed by the trade validator.
-		trade.setBook(new Book());
-		trade.setCounterparty(new LegalEntity());
+		trade.setBook(new Book(StringUtils.EMPTY, null));
+		trade.setCounterparty(new LegalEntity(StringUtils.EMPTY));
 		trade.setAmount(BigDecimal.valueOf(1));
 		trade.setTradeDate(LocalDate.now());
 		trade.setSettlementDate(LocalDate.now());
@@ -113,7 +115,7 @@ public final class PricerEquityUtil {
 				}
 			}
 		}
-		
+
 		if (trade.isSell()) {
 			return null;
 		}

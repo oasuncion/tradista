@@ -56,7 +56,10 @@ public class Formula extends TradistaObject {
 	}
 
 	public Program getProgram() {
-		return program;
+		if (program == null) {
+			return null;
+		}
+		return program.clone();
 	}
 
 	public void setProgram(Program program) {
@@ -117,6 +120,15 @@ public class Formula extends TradistaObject {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Formula clone() {
+		Formula formula = (Formula) super.clone();
+		if (this.program != null) {
+			formula.program = this.program.clone();
+		}
+		return formula;
 	}
 
 }

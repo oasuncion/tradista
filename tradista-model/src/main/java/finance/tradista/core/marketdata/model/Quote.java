@@ -1,5 +1,6 @@
 package finance.tradista.core.marketdata.model;
 
+import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -29,8 +30,10 @@ public class Quote extends TradistaObject implements MarketData {
 	 */
 	private static final long serialVersionUID = 8868004835569574694L;
 
+	@Id
 	private String name;
 
+	@Id
 	private QuoteType type;
 
 	public Quote(long id, String name, QuoteType type) {
@@ -38,7 +41,7 @@ public class Quote extends TradistaObject implements MarketData {
 		this.name = name;
 		this.type = type;
 	}
-	
+
 	public Quote(String name, QuoteType type) {
 		super();
 		this.name = name;
@@ -49,36 +52,12 @@ public class Quote extends TradistaObject implements MarketData {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public QuoteType getType() {
 		return type;
 	}
 
-	public void setType(QuoteType type) {
-		this.type = type;
-	}
-
 	public String toString() {
 		return this.getName();
-	}
-
-	public boolean equals(Object o) {
-		if (o == null) {
-			return false;
-		}
-
-		if (o == this) {
-			return true;
-		}
-
-		if (!(o instanceof Quote)) {
-			return false;
-		}
-		return (((Quote) o).getName().equals(name) && ((Quote) o).getType()
-				.equals(type));
 	}
 
 }

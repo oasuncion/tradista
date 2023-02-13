@@ -120,15 +120,14 @@ public class DailyPnlSQL {
 			stmtGetDailyPnlByPositionDefinitionCalendarAndValueDate.setDate(3, Date.valueOf(valueDate));
 			try (ResultSet results = stmtGetDailyPnlByPositionDefinitionCalendarAndValueDate.executeQuery()) {
 				while (results.next()) {
-					dailyPnl = new DailyPnl();
+					dailyPnl = new DailyPnl(
+							PositionDefinitionSQL.getPositionDefinitionById(results.getLong("position_definition_id")),
+							CalendarSQL.getCalendarById(results.getLong("calendar_id")),
+							results.getDate("value_date").toLocalDate());
 					dailyPnl.setId(results.getLong("id"));
 					dailyPnl.setPnl(results.getBigDecimal("pnl"));
 					dailyPnl.setRealizedPnl(results.getBigDecimal("realized_pnl"));
-					dailyPnl.setCalendar(CalendarSQL.getCalendarById(results.getLong("calendar_id")));
 					dailyPnl.setUnrealizedPnl(results.getBigDecimal("unrealized_pnl"));
-					dailyPnl.setPositionDefinition(
-							PositionDefinitionSQL.getPositionDefinitionById(results.getLong("position_definition_id")));
-					dailyPnl.setValueDate(results.getDate("value_date").toLocalDate());
 				}
 			}
 		} catch (SQLException sqle) {
@@ -198,15 +197,14 @@ public class DailyPnlSQL {
 					if (dailyPnls == null) {
 						dailyPnls = new HashSet<DailyPnl>();
 					}
-					DailyPnl dailyPnl = new DailyPnl();
+					DailyPnl dailyPnl = new DailyPnl(
+							PositionDefinitionSQL.getPositionDefinitionById(results.getLong("position_definition_id")),
+							CalendarSQL.getCalendarById(results.getLong("calendar_id")),
+							results.getDate("value_date").toLocalDate());
 					dailyPnl.setId(results.getLong("id"));
 					dailyPnl.setPnl(results.getBigDecimal("pnl"));
 					dailyPnl.setRealizedPnl(results.getBigDecimal("realized_pnl"));
-					dailyPnl.setCalendar(CalendarSQL.getCalendarById(results.getLong("calendar_id")));
 					dailyPnl.setUnrealizedPnl(results.getBigDecimal("unrealized_pnl"));
-					dailyPnl.setPositionDefinition(
-							PositionDefinitionSQL.getPositionDefinitionById(results.getLong("position_definition_id")));
-					dailyPnl.setValueDate(results.getDate("value_date").toLocalDate());
 					dailyPnls.add(dailyPnl);
 				}
 			}

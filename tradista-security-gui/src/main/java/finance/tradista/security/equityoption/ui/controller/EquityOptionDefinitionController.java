@@ -1,10 +1,13 @@
 package finance.tradista.security.equityoption.ui.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.ui.controller.TradistaController;
@@ -93,6 +96,21 @@ public class EquityOptionDefinitionController implements TradistaController {
 	@FXML
 	private Label productType;
 
+	@FXML
+	private Label codeLabel;
+
+	@FXML
+	private Label typeLabel;
+
+	@FXML
+	private Label strikeLabel;
+
+	@FXML
+	private Label contractSpecificationLabel;
+
+	@FXML
+	private Label maturityDateLabel;
+
 	// This method is called by the FXMLLoader when initialization is complete
 	public void initialize() {
 
@@ -146,23 +164,8 @@ public class EquityOptionDefinitionController implements TradistaController {
 		TradistaGUIUtil.fillComboBox(equityBusinessDelegate.getAllEquities(), equity);
 	}
 
-	private void buildProduct() {
-		if (equityOption == null) {
-			equityOption = new EquityOption();
-			equityOption.setCreationDate(LocalDate.now());
-		}
-		try {
-			equityOption.setEquityOptionContractSpecification(contractSpecification.getValue());
-			equityOption.setType(type.getValue());
-			equityOption.setCode(code.getText());
-			equityOption.setUnderlying(equity.getValue());
-			if (!strike.getText().isEmpty()) {
-				equityOption.setStrike(TradistaGUIUtil.parseAmount(strike.getText(), "Strike"));
-			}
-			equityOption.setMaturityDate(maturityDate.getValue());
-		} catch (TradistaBusinessException tbe) {
-			// Should not appear here.
-		}
+	private void buildProduct(EquityOption equityOption) {
+		equityOption.setUnderlying(equity.getValue());
 	}
 
 	@FXML
@@ -177,11 +180,40 @@ public class EquityOptionDefinitionController implements TradistaController {
 			try {
 				checkAmounts();
 
-				buildProduct();
+				if (code.isVisible()) {
+					BigDecimal strikeBigDecimal = null;
+					if (!strike.getText().isEmpty()) {
+						try {
+							strikeBigDecimal = TradistaGUIUtil.parseAmount(strike.getText(), "Strike");
+						} catch (TradistaBusinessException tbe) {
+							// Should not appear here.
+						}
+					}
+					equityOption = new EquityOption(code.getText(), type.getValue(), strikeBigDecimal,
+							maturityDate.getValue(), contractSpecification.getValue());
+					equityOption.setCreationDate(LocalDate.now());
+				}
+
+				buildProduct(equityOption);
 
 				equityOption.setId(equityOptionBusinessDelegate.saveEquityOption(equityOption));
 				equityOptionId.setText(String.valueOf(equityOption.getId()));
 
+				codeLabel.setText(code.getText());
+				typeLabel.setText(type.getValue().toString());
+				strikeLabel.setText(strike.getText());
+				maturityDateLabel.setText(maturityDate.getValue().toString());
+				contractSpecificationLabel.setText(contractSpecification.getValue().toString());
+				code.setVisible(false);
+				type.setVisible(false);
+				strike.setVisible(false);
+				maturityDate.setVisible(false);
+				contractSpecification.setVisible(false);
+				codeLabel.setVisible(true);
+				typeLabel.setVisible(true);
+				strikeLabel.setVisible(true);
+				maturityDateLabel.setVisible(true);
+				contractSpecificationLabel.setVisible(true);
 			} catch (TradistaBusinessException tbe) {
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
@@ -193,31 +225,38 @@ public class EquityOptionDefinitionController implements TradistaController {
 	protected void copy() {
 		EquityOptionCreatorDialog dialog = new EquityOptionCreatorDialog(equityOption);
 		Optional<EquityOption> result = dialog.showAndWait();
-		long oldEquityOptionId = 0;
-		;
 
 		if (result.isPresent()) {
 			try {
-				buildProduct();
-				oldEquityOptionId = equityOption.getId();
-				equityOption.setCode(result.get().getCode());
-				equityOption.setType(result.get().getType());
-				equityOption.setMaturityDate(result.get().getMaturityDate());
-				equityOption.setEquityOptionContractSpecification(result.get().getEquityOptionContractSpecification());
-				equityOption.setStrike(result.get().getStrike());
-
-				equityOption.setId(0);
-				equityOption.setId(equityOptionBusinessDelegate.saveEquityOption(equityOption));
+				EquityOption copyEquityOption = new EquityOption(result.get().getCode(), result.get().getType(),
+						result.get().getStrike(), result.get().getMaturityDate(),
+						result.get().getEquityOptionContractSpecification());
+				buildProduct(copyEquityOption);
+				copyEquityOption.setId(equityOptionBusinessDelegate.saveEquityOption(copyEquityOption));
+				equityOption = copyEquityOption;
 				equityOptionId.setText(String.valueOf(equityOption.getId()));
-
 				code.setText(equityOption.getCode());
 				type.setValue(equityOption.getType());
 				contractSpecification.setValue(equityOption.getEquityOptionContractSpecification());
 				maturityDate.setValue(equityOption.getMaturityDate());
 				strike.setText(TradistaGUIUtil.formatAmount(equityOption.getStrike()));
 
+				codeLabel.setText(code.getText());
+				typeLabel.setText(type.getValue().toString());
+				strikeLabel.setText(strike.getText());
+				maturityDateLabel.setText(maturityDate.getValue().toString());
+				contractSpecificationLabel.setText(contractSpecification.getValue().toString());
+				code.setVisible(false);
+				type.setVisible(false);
+				strike.setVisible(false);
+				maturityDate.setVisible(false);
+				contractSpecification.setVisible(false);
+				codeLabel.setVisible(true);
+				typeLabel.setVisible(true);
+				strikeLabel.setVisible(true);
+				maturityDateLabel.setVisible(true);
+				contractSpecificationLabel.setVisible(true);
 			} catch (TradistaBusinessException tbe) {
-				equityOption.setId(oldEquityOptionId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
@@ -285,16 +324,46 @@ public class EquityOptionDefinitionController implements TradistaController {
 		code.setText(equityOption.getCode());
 		strike.setText(TradistaGUIUtil.formatAmount(equityOption.getStrike()));
 		maturityDate.setValue(equityOption.getMaturityDate());
+		codeLabel.setText(equityOption.getCode());
+		typeLabel.setText(equityOption.getType().toString());
+		strikeLabel.setText(TradistaGUIUtil.formatAmount(equityOption.getStrike()));
+		maturityDateLabel.setText(equityOption.getMaturityDate().toString());
+		contractSpecificationLabel.setText(equityOption.getEquityOptionContractSpecification().toString());
+		code.setVisible(false);
+		type.setVisible(false);
+		strike.setVisible(false);
+		maturityDate.setVisible(false);
+		contractSpecification.setVisible(false);
+		codeLabel.setVisible(true);
+		typeLabel.setVisible(true);
+		strikeLabel.setVisible(true);
+		maturityDateLabel.setVisible(true);
+		contractSpecificationLabel.setVisible(true);
 	}
 
 	@Override
 	@FXML
 	public void clear() {
 		equityOption = null;
-		equityOptionId.setText("");
+		equityOptionId.setText(StringUtils.EMPTY);
 		code.clear();
 		strike.clear();
 		maturityDate.setValue(null);
+		codeLabel.setText(StringUtils.EMPTY);
+		code.setVisible(true);
+		codeLabel.setVisible(false);
+		typeLabel.setText(StringUtils.EMPTY);
+		type.setVisible(true);
+		typeLabel.setVisible(false);
+		strikeLabel.setText(StringUtils.EMPTY);
+		strike.setVisible(true);
+		strikeLabel.setVisible(false);
+		maturityDateLabel.setText(StringUtils.EMPTY);
+		maturityDate.setVisible(true);
+		maturityDateLabel.setVisible(false);
+		contractSpecificationLabel.setText(StringUtils.EMPTY);
+		contractSpecification.setVisible(true);
+		contractSpecificationLabel.setVisible(false);
 	}
 
 	@Override

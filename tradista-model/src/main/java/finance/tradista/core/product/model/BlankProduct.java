@@ -28,12 +28,13 @@ public final class BlankProduct extends Product {
 	 * 
 	 */
 	private static final long serialVersionUID = 7008346502067185499L;
-	
+
 	private static final BlankProduct instance = new BlankProduct();
-	
+
 	private BlankProduct() {
+		super(null);
 	}
-	
+
 	public static BlankProduct getInstance() {
 		return instance;
 	}
@@ -42,7 +43,7 @@ public final class BlankProduct extends Product {
 	public String getProductType() {
 		return StringUtils.EMPTY;
 	}
-	
+
 	@Override
 	public String toString() {
 		return StringUtils.EMPTY;

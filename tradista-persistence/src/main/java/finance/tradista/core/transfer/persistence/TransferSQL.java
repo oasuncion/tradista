@@ -15,12 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import finance.tradista.core.book.persistence.BookSQL;
+import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
 import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;
+import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.product.service.ProductBusinessDelegate;
@@ -74,18 +75,32 @@ public class TransferSQL {
 				}
 				Transfer transfer;
 				Transfer.Type type = Transfer.Type.valueOf(results.getString("type"));
-				if (type.equals(Transfer.Type.CASH)) {
-					transfer = new CashTransfer();
-					((CashTransfer) transfer)
-							.setCurrency(currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id")));
-					((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
-				} else {
-					transfer = new ProductTransfer();
-					((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
-				}
+				Book book = bookBusinessDelegate.getBookById(results.getLong("book_id"));
+				Product product = null;
 				long productId = results.getLong("product_id");
 				if (productId > 0) {
-					transfer.setProduct(productBusinessDelegate.getProductById(productId));
+					product = productBusinessDelegate.getProductById(productId);
+				}
+				Trade<?> trade = null;
+				long tradeId = results.getLong("trade_id");
+				if (tradeId > 0) {
+					trade = tradeBusinessDelegate.getTradeById(tradeId, true);
+				}
+				if (type.equals(Transfer.Type.CASH)) {
+					Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
+					if (trade != null) {
+						transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade, currency);
+					} else {
+						transfer = new CashTransfer(book, product,
+								TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), currency);
+					}
+					((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
+				} else {
+					transfer = new ProductTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+							results.getDate("settlement_date").toLocalDate(), trade);
+					((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
 				}
 				transfer.setId(results.getLong("id"));
 				transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));
@@ -93,18 +108,11 @@ public class TransferSQL {
 				if (direction != null) {
 					transfer.setDirection(Transfer.Direction.valueOf(direction));
 				}
-				long tradeId = results.getLong("trade_id");
-				if (tradeId > 0) {
-					transfer.setTrade(tradeBusinessDelegate.getTradeById(tradeId, true));
-				}
-				transfer.setBook(bookBusinessDelegate.getBookById(results.getLong("book_id")));
 				transfer.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 				Timestamp fixingTimestamp = results.getTimestamp("fixing_datetime");
 				if (fixingTimestamp != null) {
 					transfer.setFixingDateTime(fixingTimestamp.toLocalDateTime());
 				}
-				transfer.setSettlementDate(results.getDate("settlement_date").toLocalDate());
-				transfer.setPurpose(TransferPurpose.valueOf(results.getString("purpose")));
 				transfers.add(transfer);
 			}
 		} catch (SQLException | TradistaBusinessException e) {
@@ -308,6 +316,7 @@ public class TransferSQL {
 		CurrencyBusinessDelegate currencyBusinessDelegate = new CurrencyBusinessDelegate();
 		ProductBusinessDelegate productBusinessDelegate = new ProductBusinessDelegate();
 		TradeBusinessDelegate tradeBusinessDelegate = new TradeBusinessDelegate();
+		BookBusinessDelegate bookBusinessDelegate = new BookBusinessDelegate();
 
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetTransferById = con.prepareStatement("SELECT * FROM TRANSFER WHERE ID = ?")) {
@@ -315,18 +324,33 @@ public class TransferSQL {
 			try (ResultSet results = stmtGetTransferById.executeQuery()) {
 				while (results.next()) {
 					Transfer.Type type = Transfer.Type.valueOf(results.getString("type"));
-					if (type.equals(Transfer.Type.CASH)) {
-						transfer = new CashTransfer();
-						((CashTransfer) transfer)
-								.setCurrency(currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id")));
-						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
-					} else {
-						transfer = new ProductTransfer();
-						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
-					}
+					Book book = bookBusinessDelegate.getBookById(results.getLong("book_id"));
+					Product product = null;
 					long productId = results.getLong("product_id");
 					if (productId > 0) {
-						transfer.setProduct(productBusinessDelegate.getProductById(productId));
+						product = productBusinessDelegate.getProductById(productId);
+					}
+					Trade<?> trade = null;
+					long tradeId = results.getLong("trade_id");
+					if (tradeId > 0) {
+						trade = tradeBusinessDelegate.getTradeById(tradeId, true);
+					}
+					if (type.equals(Transfer.Type.CASH)) {
+						Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
+						if (trade != null) {
+							transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+									results.getDate("settlement_date").toLocalDate(), trade, currency);
+						} else {
+							transfer = new CashTransfer(book, product,
+									TransferPurpose.valueOf(results.getString("purpose")),
+									results.getDate("settlement_date").toLocalDate(), currency);
+						}
+						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
+
+					} else {
+						transfer = new ProductTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade);
+						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
 					}
 					transfer.setId(results.getLong("id"));
 					transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));
@@ -334,18 +358,11 @@ public class TransferSQL {
 					if (direction != null) {
 						transfer.setDirection(Transfer.Direction.valueOf(direction));
 					}
-					long tradeId = results.getLong("trade_id");
-					if (tradeId > 0) {
-						transfer.setTrade(tradeBusinessDelegate.getTradeById(tradeId, true));
-					}
-					transfer.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					transfer.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 					Timestamp fixingTimestamp = results.getTimestamp("fixing_datetime");
 					if (fixingTimestamp != null) {
 						transfer.setFixingDateTime(fixingTimestamp.toLocalDateTime());
 					}
-					transfer.setSettlementDate(results.getDate("settlement_date").toLocalDate());
-					transfer.setPurpose(TransferPurpose.valueOf(results.getString("purpose")));
 				}
 			}
 		} catch (SQLException | TradistaBusinessException e) {
@@ -378,18 +395,31 @@ public class TransferSQL {
 					}
 					Transfer transfer = null;
 					Transfer.Type type = Transfer.Type.valueOf(results.getString("type"));
-					if (type.equals(Transfer.Type.CASH)) {
-						transfer = new CashTransfer();
-						((CashTransfer) transfer)
-								.setCurrency(currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id")));
-						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
-					} else {
-						transfer = new ProductTransfer();
-						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
-					}
+					Book book = bookBusinessDelegate.getBookById(results.getLong("book_id"));
+					Product product = null;
 					long productId = results.getLong("product_id");
 					if (productId > 0) {
-						transfer.setProduct(productBusinessDelegate.getProductById(productId));
+						product = productBusinessDelegate.getProductById(productId);
+					}
+					Trade<?> trade = null;
+					if (tradeId > 0) {
+						trade = tradeBusinessDelegate.getTradeById(tradeId, true);
+					}
+					if (type.equals(Transfer.Type.CASH)) {
+						Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
+						if (trade != null) {
+							transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+									results.getDate("settlement_date").toLocalDate(), trade, currency);
+						} else {
+							transfer = new CashTransfer(book, product,
+									TransferPurpose.valueOf(results.getString("purpose")),
+									results.getDate("settlement_date").toLocalDate(), currency);
+						}
+						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
+					} else {
+						transfer = new ProductTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade);
+						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
 					}
 					transfer.setId(results.getLong("id"));
 					transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));
@@ -397,18 +427,11 @@ public class TransferSQL {
 					if (direction != null) {
 						transfer.setDirection(Transfer.Direction.valueOf(direction));
 					}
-					tradeId = results.getLong("trade_id");
-					if (tradeId > 0) {
-						transfer.setTrade(tradeBusinessDelegate.getTradeById(tradeId, true));
-					}
-					transfer.setBook(bookBusinessDelegate.getBookById(results.getLong("book_id")));
 					transfer.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 					Timestamp fixingTimestamp = results.getTimestamp("fixing_datetime");
 					if (fixingTimestamp != null) {
 						transfer.setFixingDateTime(fixingTimestamp.toLocalDateTime());
 					}
-					transfer.setSettlementDate(results.getDate("settlement_date").toLocalDate());
-					transfer.setPurpose(TransferPurpose.valueOf(results.getString("purpose")));
 					transfers.add(transfer);
 				}
 			}
@@ -437,18 +460,31 @@ public class TransferSQL {
 					}
 					Transfer transfer = null;
 					Transfer.Type type = Transfer.Type.valueOf(results.getString("type"));
-					if (type.equals(Transfer.Type.CASH)) {
-						transfer = new CashTransfer();
-						((CashTransfer) transfer)
-								.setCurrency(currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id")));
-						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
-					} else {
-						transfer = new ProductTransfer();
-						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
-					}
+					Book book = bookBusinessDelegate.getBookById(results.getLong("book_id"));
+					Product product = null;
 					long productId = results.getLong("product_id");
 					if (productId > 0) {
-						transfer.setProduct(productBusinessDelegate.getProductById(productId));
+						product = productBusinessDelegate.getProductById(productId);
+					}
+					Trade<?> trade = null;
+					if (tradeId > 0) {
+						trade = tradeBusinessDelegate.getTradeById(tradeId, true);
+					}
+					if (type.equals(Transfer.Type.CASH)) {
+						Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
+						if (trade != null) {
+							transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+									results.getDate("settlement_date").toLocalDate(), trade, currency);
+						} else {
+							transfer = new CashTransfer(book, product,
+									TransferPurpose.valueOf(results.getString("purpose")),
+									results.getDate("settlement_date").toLocalDate(), currency);
+						}
+						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
+					} else {
+						transfer = new ProductTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade);
+						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
 					}
 					transfer.setId(results.getLong("id"));
 					transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));
@@ -456,18 +492,11 @@ public class TransferSQL {
 					if (direction != null) {
 						transfer.setDirection(Transfer.Direction.valueOf(direction));
 					}
-					tradeId = results.getLong("trade_id");
-					if (tradeId > 0) {
-						transfer.setTrade(tradeBusinessDelegate.getTradeById(tradeId, true));
-					}
-					transfer.setBook(bookBusinessDelegate.getBookById(results.getLong("book_id")));
 					transfer.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 					Timestamp fixingTimestamp = results.getTimestamp("fixing_datetime");
 					if (fixingTimestamp != null) {
 						transfer.setFixingDateTime(fixingTimestamp.toLocalDateTime());
 					}
-					transfer.setSettlementDate(results.getDate("settlement_date").toLocalDate());
-					transfer.setPurpose(TransferPurpose.valueOf(results.getString("purpose")));
 					transfers.add(transfer);
 				}
 			}
@@ -495,8 +524,26 @@ public class TransferSQL {
 					if (transfers == null) {
 						transfers = new ArrayList<CashTransfer>();
 					}
-					CashTransfer transfer = new CashTransfer();
-					transfer.setCurrency(currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id")));
+					Product product = null;
+					if (productId > 0) {
+						product = productBusinessDelegate.getProductById(productId);
+					}
+					Book book = bookBusinessDelegate.getBookById(results.getLong("book_id"));
+					Trade<?> trade = null;
+					long tradeId = results.getLong("trade_id");
+					if (tradeId > 0) {
+						trade = tradeBusinessDelegate.getTradeById(tradeId, true);
+					}
+					Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
+					CashTransfer transfer = null;
+					if (trade != null) {
+						transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade, currency);
+					} else {
+						transfer = new CashTransfer(book, product,
+								TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), currency);
+					}
 					transfer.setAmount(results.getBigDecimal("quantity"));
 					transfer.setId(results.getLong("id"));
 					transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));
@@ -504,20 +551,10 @@ public class TransferSQL {
 					if (direction != null) {
 						transfer.setDirection(Transfer.Direction.valueOf(direction));
 					}
-					long tradeId = results.getLong("trade_id");
-					if (tradeId > 0) {
-						transfer.setTrade(tradeBusinessDelegate.getTradeById(tradeId, true));
-					}
-					transfer.setBook(bookBusinessDelegate.getBookById(results.getLong("book_id")));
 					transfer.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 					Timestamp fixingTimestamp = results.getTimestamp("fixing_datetime");
 					if (fixingTimestamp != null) {
 						transfer.setFixingDateTime(fixingTimestamp.toLocalDateTime());
-					}
-					transfer.setSettlementDate(results.getDate("settlement_date").toLocalDate());
-					transfer.setPurpose(TransferPurpose.valueOf(results.getString("purpose")));
-					if (productId > 0) {
-						transfer.setProduct(productBusinessDelegate.getProductById(productId));
 					}
 					transfers.add(transfer);
 				}
@@ -673,18 +710,32 @@ public class TransferSQL {
 				}
 				Transfer transfer = null;
 				Transfer.Type transferType = Transfer.Type.valueOf(results.getString("type"));
-				if (transferType.equals(Transfer.Type.CASH)) {
-					transfer = new CashTransfer();
-					((CashTransfer) transfer)
-							.setCurrency(currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id")));
-					((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
-				} else {
-					transfer = new ProductTransfer();
-					((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
-				}
+				Product product = null;
 				long transferProductId = results.getLong("product_id");
 				if (transferProductId > 0) {
-					transfer.setProduct(productBusinessDelegate.getProductById(transferProductId));
+					product = productBusinessDelegate.getProductById(transferProductId);
+				}
+				Book book = bookBusinessDelegate.getBookById(results.getLong("book_id"));
+				Trade<?> trade = null;
+				long transferTradeId = results.getLong("trade_id");
+				if (transferTradeId > 0) {
+					trade = tradeBusinessDelegate.getTradeById(transferTradeId, true);
+				}
+				if (transferType.equals(Transfer.Type.CASH)) {
+					Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
+					if (trade != null) {
+						transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade, currency);
+					} else {
+						transfer = new CashTransfer(book, product,
+								TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), currency);
+					}
+					((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
+				} else {
+					transfer = new ProductTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+							results.getDate("settlement_date").toLocalDate(), trade);
+					((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
 				}
 				transfer.setId(results.getLong("id"));
 				transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));
@@ -692,18 +743,11 @@ public class TransferSQL {
 				if (transferDirection != null) {
 					transfer.setDirection(Transfer.Direction.valueOf(transferDirection));
 				}
-				tradeId = results.getLong("trade_id");
-				if (tradeId > 0) {
-					transfer.setTrade(tradeBusinessDelegate.getTradeById(tradeId, true));
-				}
-				transfer.setBook(bookBusinessDelegate.getBookById(results.getLong("book_id")));
 				transfer.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 				Timestamp fixingTimestamp = results.getTimestamp("fixing_datetime");
 				if (fixingTimestamp != null) {
 					transfer.setFixingDateTime(fixingTimestamp.toLocalDateTime());
 				}
-				transfer.setSettlementDate(results.getDate("settlement_date").toLocalDate());
-				transfer.setPurpose(TransferPurpose.valueOf(results.getString("purpose")));
 				transfers.add(transfer);
 			}
 		} catch (SQLException | TradistaBusinessException e) {

@@ -149,9 +149,8 @@ public class MandateSQL {
 			stmtGetMandateById.setLong(1, id);
 			try (ResultSet results = stmtGetMandateById.executeQuery()) {
 				while (results.next()) {
-					mandate = new Mandate();
+					mandate = new Mandate(results.getString("name"));
 					mandate.setId(results.getLong("id"));
-					mandate.setName(results.getString("name"));
 					mandate.setAcceptedRiskLevel(RiskLevel.valueOf(results.getString("accepted_risk_level")));
 					mandate.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 					mandate.setStartDate(results.getDate("start_date").toLocalDate());
@@ -217,9 +216,8 @@ public class MandateSQL {
 			stmtGetMandateByName.setString(1, name);
 			try (ResultSet results = stmtGetMandateByName.executeQuery()) {
 				while (results.next()) {
-					mandate = new Mandate();
+					mandate = new Mandate(results.getString("name"));
 					mandate.setId(results.getLong("id"));
-					mandate.setName(results.getString("name"));
 					mandate.setAcceptedRiskLevel(RiskLevel.valueOf(results.getString("accepted_risk_level")));
 					mandate.setCreationDateTime(results.getTimestamp("creation_datetime").toLocalDateTime());
 					mandate.setStartDate(results.getDate("start_date").toLocalDate());

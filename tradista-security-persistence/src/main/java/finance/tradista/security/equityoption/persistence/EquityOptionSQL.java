@@ -97,17 +97,14 @@ public class EquityOptionSQL {
 			stmtGetEquityOptionsByCreationDate.setDate(1, java.sql.Date.valueOf(date));
 			try (ResultSet results = stmtGetEquityOptionsByCreationDate.executeQuery()) {
 				while (results.next()) {
-					EquityOption equityOption = new EquityOption();
-					equityOption.setId(results.getLong("id"));
-					equityOption.setCode(results.getString("code"));
-					equityOption.setType(OptionTrade.Type.valueOf(results.getString("type")));
-					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
-					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
-					equityOption.setEquityOptionContractSpecification(
+					EquityOption equityOption = new EquityOption(results.getString("code"),
+							OptionTrade.Type.valueOf(results.getString("type")), results.getBigDecimal("strike"),
+							results.getDate("maturity_date").toLocalDate(),
 							EquityOptionContractSpecificationSQL.getEquityOptionContractSpecificationById(
 									results.getLong("equity_option_contract_specification_id")));
-					equityOption.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-					equityOption.setStrike(results.getBigDecimal("strike"));
+					equityOption.setId(results.getLong("id"));
+					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
+					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
 					if (equityOptions == null) {
 						equityOptions = new HashSet<EquityOption>();
 					}
@@ -146,17 +143,14 @@ public class EquityOptionSQL {
 			try (ResultSet results = stmtGetEquityOptionsByCreationDate.executeQuery(query)) {
 
 				while (results.next()) {
-					EquityOption equityOption = new EquityOption();
-					equityOption.setId(results.getLong("id"));
-					equityOption.setCode(results.getString("code"));
-					equityOption.setType(OptionTrade.Type.valueOf(results.getString("type")));
-					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
-					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
-					equityOption.setEquityOptionContractSpecification(
+					EquityOption equityOption = new EquityOption(results.getString("code"),
+							OptionTrade.Type.valueOf(results.getString("type")), results.getBigDecimal("strike"),
+							results.getDate("maturity_date").toLocalDate(),
 							EquityOptionContractSpecificationSQL.getEquityOptionContractSpecificationById(
 									results.getLong("equity_option_contract_specification_id")));
-					equityOption.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-					equityOption.setStrike(results.getBigDecimal("strike"));
+					equityOption.setId(results.getLong("id"));
+					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
+					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
 					if (equityOptions == null) {
 						equityOptions = new HashSet<EquityOption>();
 					}
@@ -178,17 +172,14 @@ public class EquityOptionSQL {
 						"SELECT * FROM EQUITY_OPTION, PRODUCT WHERE EQUITY_OPTION.PRODUCT_ID = PRODUCT.ID");
 				ResultSet results = stmtGetAllEquityOptions.executeQuery()) {
 			while (results.next()) {
-				EquityOption equityOption = new EquityOption();
-				equityOption.setId(results.getLong("id"));
-				equityOption.setCode(results.getString("code"));
-				equityOption.setType(OptionTrade.Type.valueOf(results.getString("type")));
-				equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
-				equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
-				equityOption.setEquityOptionContractSpecification(
+				EquityOption equityOption = new EquityOption(results.getString("code"),
+						OptionTrade.Type.valueOf(results.getString("type")), results.getBigDecimal("strike"),
+						results.getDate("maturity_date").toLocalDate(),
 						EquityOptionContractSpecificationSQL.getEquityOptionContractSpecificationById(
 								results.getLong("equity_option_contract_specification_id")));
-				equityOption.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-				equityOption.setStrike(results.getBigDecimal("strike"));
+				equityOption.setId(results.getLong("id"));
+				equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
+				equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
 				if (equityOptions == null) {
 					equityOptions = new HashSet<EquityOption>();
 				}
@@ -210,17 +201,14 @@ public class EquityOptionSQL {
 			stmtGetEquityOptionById.setLong(1, id);
 			try (ResultSet results = stmtGetEquityOptionById.executeQuery()) {
 				while (results.next()) {
-					equityOption = new EquityOption();
-					equityOption.setId(results.getLong("id"));
-					equityOption.setCode(results.getString("code"));
-					equityOption.setType(OptionTrade.Type.valueOf(results.getString("type")));
-					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
-					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
-					equityOption.setEquityOptionContractSpecification(
+					equityOption = new EquityOption(results.getString("code"),
+							OptionTrade.Type.valueOf(results.getString("type")), results.getBigDecimal("strike"),
+							results.getDate("maturity_date").toLocalDate(),
 							EquityOptionContractSpecificationSQL.getEquityOptionContractSpecificationById(
 									results.getLong("equity_option_contract_specification_id")));
-					equityOption.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-					equityOption.setStrike(results.getBigDecimal("strike"));
+					equityOption.setId(results.getLong("id"));
+					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
+					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
 				}
 			}
 		} catch (SQLException sqle) {
@@ -239,17 +227,14 @@ public class EquityOptionSQL {
 			stmtGetEquityOptionByCode.setString(1, code);
 			try (ResultSet results = stmtGetEquityOptionByCode.executeQuery()) {
 				while (results.next()) {
-					EquityOption equityOption = new EquityOption();
-					equityOption.setId(results.getLong("id"));
-					equityOption.setCode(results.getString("code"));
-					equityOption.setType(OptionTrade.Type.valueOf(results.getString("type")));
-					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
-					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
-					equityOption.setEquityOptionContractSpecification(
+					EquityOption equityOption = new EquityOption(results.getString("code"),
+							OptionTrade.Type.valueOf(results.getString("type")), results.getBigDecimal("strike"),
+							results.getDate("maturity_date").toLocalDate(),
 							EquityOptionContractSpecificationSQL.getEquityOptionContractSpecificationById(
 									results.getLong("equity_option_contract_specification_id")));
-					equityOption.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-					equityOption.setStrike(results.getBigDecimal("strike"));
+					equityOption.setId(results.getLong("id"));
+					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
+					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
 					if (equityOptions == null) {
 						equityOptions = new HashSet<EquityOption>();
 					}
@@ -287,17 +272,14 @@ public class EquityOptionSQL {
 			try (ResultSet results = stmtGetEquityOptionByCodeTypeStrikeMaturityDateAndContractSpecificationName
 					.executeQuery()) {
 				while (results.next()) {
-					equityOption = new EquityOption();
-					equityOption.setId(results.getLong("id"));
-					equityOption.setCode(results.getString("code"));
-					equityOption.setType(OptionTrade.Type.valueOf(results.getString("type")));
-					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
-					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
-					equityOption.setEquityOptionContractSpecification(
+					equityOption = new EquityOption(results.getString("code"),
+							OptionTrade.Type.valueOf(results.getString("type")), results.getBigDecimal("strike"),
+							results.getDate("maturity_date").toLocalDate(),
 							EquityOptionContractSpecificationSQL.getEquityOptionContractSpecificationById(
 									results.getLong("equity_option_contract_specification_id")));
-					equityOption.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-					equityOption.setStrike(results.getBigDecimal("strike"));
+					equityOption.setId(results.getLong("id"));
+					equityOption.setUnderlying(EquitySQL.getEquityById(results.getLong("equity_id")));
+					equityOption.setCreationDate(results.getDate("creation_date").toLocalDate());
 				}
 			}
 		} catch (SQLException sqle) {

@@ -80,11 +80,9 @@ public class CashInventoryServiceBean implements CashInventoryService {
 			if (foundSameCashInventory) {
 				cashInventory.setAmount(cashInventory.getAmount().add(transfer.getAmount()));
 			} else {
-				CashInventory newCashInventory = new CashInventory();
-				newCashInventory.setFrom(transfer.getSettlementDate());
+				CashInventory newCashInventory = new CashInventory(cashInventory.getCurrency(),
+						transfer.getSettlementDate(), cashInventory.getBook());
 				newCashInventory.setTo(cashInventory.getTo());
-				newCashInventory.setCurrency(cashInventory.getCurrency());
-				newCashInventory.setBook(cashInventory.getBook());
 				newCashInventory.setAmount(cashInventory.getAmount().add(transfer.getAmount()));
 				cashInventoriesToBeSaved.add(newCashInventory);
 
@@ -116,14 +114,12 @@ public class CashInventoryServiceBean implements CashInventoryService {
 		}
 
 		if (!cashInventoryFound) {
-			CashInventory newCashInventory = new CashInventory();
+			CashInventory newCashInventory = new CashInventory(transfer.getCurrency(), transfer.getSettlementDate(),
+					transfer.getBook());
 			LocalDate to = null;
 			if (firstCashInventoryFromDateAfterTradeSettlementDate != null) {
 				to = firstCashInventoryFromDateAfterTradeSettlementDate.minusDays(1);
 			}
-			newCashInventory.setFrom(transfer.getSettlementDate());
-			newCashInventory.setCurrency(transfer.getCurrency());
-			newCashInventory.setBook(transfer.getBook());
 			newCashInventory.setAmount(transfer.getAmount());
 			newCashInventory.setTo(to);
 			cashInventoriesToBeSaved.add(newCashInventory);

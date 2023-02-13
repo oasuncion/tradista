@@ -2,6 +2,8 @@ package finance.tradista.core.product.model;
 
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.exchange.model.Exchange;
 
@@ -33,14 +35,16 @@ public abstract class Product extends TradistaObject {
 	private static final long serialVersionUID = 518407081850145938L;
 	private LocalDate creationDate;
 
+	@Id
 	private Exchange exchange;
-
-	public Exchange getExchange() {
-		return exchange;
+	
+	public Product(Exchange exchange) {
+		super();
+		this.exchange = exchange;
 	}
 
-	public void setExchange(Exchange exchange) {
-		this.exchange = exchange;
+	public Exchange getExchange() {
+		return TradistaModelUtil.clone(exchange);
 	}
 
 	public LocalDate getCreationDate() {
@@ -52,5 +56,12 @@ public abstract class Product extends TradistaObject {
 	}
 
 	public abstract String getProductType();
+
+	@Override
+	public Product clone() {
+		Product product = (Product) super.clone();
+		product.exchange = TradistaModelUtil.clone(exchange);
+		return product;
+	}
 
 }

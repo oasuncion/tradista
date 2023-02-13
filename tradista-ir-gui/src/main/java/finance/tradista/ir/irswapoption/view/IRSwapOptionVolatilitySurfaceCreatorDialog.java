@@ -54,8 +54,8 @@ public class IRSwapOptionVolatilitySurfaceCreatorDialog extends TradistaDialog<S
 			@Override
 			public SwaptionVolatilitySurface call(ButtonType b) {
 				if (b == buttonTypeOk) {
-					SwaptionVolatilitySurface surface = new SwaptionVolatilitySurface(nameTextField.getText());
-					surface.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
+					SwaptionVolatilitySurface surface = new SwaptionVolatilitySurface(nameTextField.getText(),
+							ClientUtil.getCurrentUser().getProcessingOrg());
 					return surface;
 				}
 				return null;

@@ -44,11 +44,9 @@ public class UserSQL {
 			stmtGetUserById.setLong(1, id);
 			try (ResultSet results = stmtGetUserById.executeQuery()) {
 				while (results.next()) {
-					user = new User();
+					user = new User(results.getString("first_name"), results.getString("surname"),
+							LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 					user.setId(results.getLong("id"));
-					user.setFirstName(results.getString("first_name"));
-					user.setSurname(results.getString("surname"));
-					user.setProcessingOrg(LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 					user.setLogin(results.getString("login"));
 					user.setPassword(results.getString("password"));
 				}
@@ -69,11 +67,9 @@ public class UserSQL {
 			stmtGetUserByLogin.setString(1, login);
 			try (ResultSet results = stmtGetUserByLogin.executeQuery()) {
 				while (results.next()) {
-					user = new User();
+					user = new User(results.getString("first_name"), results.getString("surname"),
+							LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 					user.setId(results.getLong("id"));
-					user.setFirstName(results.getString("first_name"));
-					user.setSurname(results.getString("surname"));
-					user.setProcessingOrg(LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 					user.setLogin(results.getString("login"));
 					user.setPassword(results.getString("password"));
 				}
@@ -114,11 +110,9 @@ public class UserSQL {
 				if (users == null) {
 					users = new HashSet<User>();
 				}
-				User user = new User();
+				User user = new User(results.getString("first_name"), results.getString("surname"),
+						LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 				user.setId(results.getLong("id"));
-				user.setFirstName(results.getString("first_name"));
-				user.setSurname(results.getString("surname"));
-				user.setProcessingOrg(LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 				user.setLogin(results.getString("login"));
 				user.setPassword(results.getString("password"));
 				users.add(user);
@@ -181,11 +175,9 @@ public class UserSQL {
 			stmtGetUsersBySurname.setString(1, surname);
 			try (ResultSet results = stmtGetUsersBySurname.executeQuery()) {
 				while (results.next()) {
-					User user = new User();
+					User user = new User(results.getString("first_name"), results.getString("surname"),
+							LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 					user.setId(results.getLong("id"));
-					user.setFirstName(results.getString("first_name"));
-					user.setSurname(results.getString("surname"));
-					user.setProcessingOrg(LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 					user.setLogin(results.getString("login"));
 					user.setPassword(results.getString("password"));
 					if (users == null) {

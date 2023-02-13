@@ -16,6 +16,7 @@ import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
 import finance.tradista.core.common.ui.view.TradistaAlert;
 import finance.tradista.core.common.ui.view.TradistaTextInputDialog;
+import finance.tradista.core.common.util.ClientUtil;
 import finance.tradista.core.marketdata.model.GenerableCurve;
 import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.marketdata.model.Quote;
@@ -293,10 +294,7 @@ public class ZeroCouponCurvesController extends TradistaGenerableCurveController
 		updateWindow();
 	}
 
-	private void buildCurve() throws TradistaBusinessException {
-		if (curve == null) {
-			curve = new ZeroCouponCurve();
-		}
+	private void buildCurve(ZeroCouponCurve curve) throws TradistaBusinessException {
 		List<Quote> quotes = selectedQuotesList.getItems();
 		if (quotes != null && !quotes.isEmpty()) {
 			curve.setQuotes(quotes);
@@ -312,9 +310,6 @@ public class ZeroCouponCurvesController extends TradistaGenerableCurveController
 			curve.setInterpolator(interpolatorComboBox.getValue());
 			curve.setAlgorithm(algorithmComboBox.getValue());
 		}
-		if (curveComboBox.getValue() != null) {
-			curve.setName(curveComboBox.getValue().getName());
-		}
 		curve.setQuoteDate(quoteDate.getValue());
 	}
 
@@ -325,7 +320,7 @@ public class ZeroCouponCurvesController extends TradistaGenerableCurveController
 			if (curveComboBox.getValue() == null) {
 				throw new TradistaBusinessException("Please select a zeo coupon curve.");
 			}
-			buildCurve();
+			buildCurve((ZeroCouponCurve) curve);
 			curve.setId(interestRateCurveBusinessDelegate.saveInterestRateCurve((InterestRateCurve) curve));
 			try {
 				TradistaGUIUtil.fillComboBox(interestRateCurveBusinessDelegate.getAllZeroCouponCurves(), curveComboBox);
@@ -341,37 +336,34 @@ public class ZeroCouponCurvesController extends TradistaGenerableCurveController
 
 	@FXML
 	protected void copy() {
-		long oldInterestRateCurveId = 0;
 		boolean curveLoaded = (curve != null);
 		if (!curveLoaded) {
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, "Please select a curve.");
 			alert.showAndWait();
 		} else {
 			try {
-				buildCurve();
-				oldInterestRateCurveId = curve.getId();
 				TradistaTextInputDialog dialog = new TradistaTextInputDialog();
 				dialog.setTitle("Curve name");
 				dialog.setHeaderText("Curve name selection");
 				dialog.setContentText("Please choose a Curve name:");
 
 				Optional<String> result = dialog.showAndWait();
-				// The Java 8 way to get the response value (with lambda
-				// expression).
-				result.ifPresent(name -> curve.setName(name));
 				if (result.isPresent()) {
-					curve.setId(0);
+					ZeroCouponCurve copyCurve = new ZeroCouponCurve(result.get(),
+							ClientUtil.getCurrentUser().getProcessingOrg());
+					buildCurve(copyCurve);
 					try {
-						curve.setId(interestRateCurveBusinessDelegate.saveInterestRateCurve((InterestRateCurve) curve));
+						copyCurve.setId(
+								interestRateCurveBusinessDelegate.saveInterestRateCurve((InterestRateCurve) copyCurve));
 					} catch (TradistaTechnicalException tte) {
 						canCopyCurve = false;
 						throw tte;
 					}
+					curve = copyCurve;
 					TradistaGUIUtil.fillComboBox(interestRateCurveBusinessDelegate.getAllZeroCouponCurves(),
 							curveComboBox);
 				}
 			} catch (TradistaBusinessException | TradistaTechnicalException te) {
-				curve.setId(oldInterestRateCurveId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, te.getMessage());
 				alert.showAndWait();
 			}

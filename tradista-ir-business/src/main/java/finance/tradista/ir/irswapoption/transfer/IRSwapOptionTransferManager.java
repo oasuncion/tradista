@@ -162,30 +162,22 @@ public class IRSwapOptionTransferManager implements TransferManager<IRSwapOption
 	}
 
 	private CashTransfer createNewCashSettlementTransfer(IRSwapOptionTrade trade) throws TradistaBusinessException {
-		CashTransfer cashSettlementTransfer = new CashTransfer();
+		CashTransfer cashSettlementTransfer = new CashTransfer(trade.getBook(), TransferPurpose.CASH_SETTLEMENT,
+				trade.getSettlementDate(), trade, trade.getUnderlying().getCurrency());
 		cashSettlementTransfer.setCreationDateTime(LocalDateTime.now());
 		cashSettlementTransfer.setFixingDateTime(trade.getExerciseDate().atStartOfDay());
-		cashSettlementTransfer.setSettlementDate(trade.getSettlementDate());
-		cashSettlementTransfer.setPurpose(TransferPurpose.CASH_SETTLEMENT);
 		cashSettlementTransfer.setStatus(Transfer.Status.UNKNOWN);
-		cashSettlementTransfer.setTrade(trade);
-		cashSettlementTransfer.setBook(trade.getBook());
-		cashSettlementTransfer.setCurrency(trade.getUnderlying().getCurrency());
 
 		return cashSettlementTransfer;
 	}
 
 	private CashTransfer createNewPremiumTransfer(IRSwapOptionTrade trade) throws TradistaBusinessException {
-		CashTransfer premiumTransfer = new CashTransfer();
+		CashTransfer premiumTransfer = new CashTransfer(trade.getBook(), TransferPurpose.PREMIUM,
+				trade.getSettlementDate(), trade, trade.getCurrency());
 		premiumTransfer.setCreationDateTime(LocalDateTime.now());
 		premiumTransfer.setFixingDateTime(LocalDateTime.now());
-		premiumTransfer.setSettlementDate(trade.getSettlementDate());
-		premiumTransfer.setPurpose(TransferPurpose.PREMIUM);
 		premiumTransfer.setStatus(Transfer.Status.KNOWN);
-		premiumTransfer.setTrade(trade);
-		premiumTransfer.setBook(trade.getBook());
 		premiumTransfer.setAmount(trade.getAmount());
-		premiumTransfer.setCurrency(trade.getCurrency());
 		if (trade.isBuy()) {
 			premiumTransfer.setDirection(Transfer.Direction.PAY);
 		} else {

@@ -60,9 +60,7 @@ public class EquityCreatorDialog extends TradistaDialog<Equity> {
 			@Override
 			public Equity call(ButtonType b) {
 				if (b == buttonTypeOk) {
-					Equity equity = new Equity();
-					equity.setIsin(isinTextField.getText());
-					equity.setExchange(exchangeComboBox.getValue());
+					Equity equity = new Equity(exchangeComboBox.getValue(), isinTextField.getText());
 					return equity;
 				}
 				return null;

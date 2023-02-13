@@ -11,6 +11,7 @@ import java.util.Set;
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 
 /*
@@ -42,11 +43,15 @@ public class BookSQL {
 			stmtGetBookById.setLong(1, id);
 			try (ResultSet results = stmtGetBookById.executeQuery()) {
 				while (results.next()) {
-					book = new Book();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity processingOrg = null;
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+						;
+					}
+					book = new Book(results.getString("name"), processingOrg);
 					book.setId(results.getLong("id"));
-					book.setName(results.getString("name"));
 					book.setDescription(results.getString("description"));
-					book.setProcessingOrg(LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 				}
 			}
 		} catch (SQLException sqle) {
@@ -83,11 +88,14 @@ public class BookSQL {
 				PreparedStatement stmtGetAllBooks = con.prepareStatement("SELECT * FROM BOOK");
 				ResultSet results = stmtGetAllBooks.executeQuery()) {
 			while (results.next()) {
-				Book book = new Book();
+				long poId = results.getLong("processing_org_id");
+				LegalEntity processingOrg = null;
+				if (poId > 0) {
+					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				Book book = new Book(results.getString("name"), processingOrg);
 				book.setId(results.getLong("id"));
-				book.setName(results.getString("name"));
 				book.setDescription(results.getString("description"));
-				book.setProcessingOrg(LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 				if (books == null) {
 					books = new HashSet<Book>();
 				}
@@ -144,11 +152,14 @@ public class BookSQL {
 			stmtGetBookByName.setString(1, name);
 			try (ResultSet results = stmtGetBookByName.executeQuery()) {
 				while (results.next()) {
-					book = new Book();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity processingOrg = null;
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					book = new Book(results.getString("name"), processingOrg);
 					book.setId(results.getLong("id"));
-					book.setName(results.getString("name"));
 					book.setDescription(results.getString("description"));
-					book.setProcessingOrg(LegalEntitySQL.getLegalEntityById(results.getLong("processing_org_id")));
 				}
 			}
 		} catch (SQLException sqle) {

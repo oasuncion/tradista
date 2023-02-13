@@ -10,7 +10,6 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
 import finance.tradista.core.common.util.TradistaUtil;
-import finance.tradista.core.exchange.persistence.ExchangeSQL;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.product.service.ProductBusinessDelegate;
 
@@ -53,7 +52,6 @@ public class ProductSQL {
 					}
 					product.setId(results.getLong("id"));
 					product.setCreationDate(results.getDate("creation_date").toLocalDate());
-					product.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 				}
 			}
 		} catch (SQLException sqle) {

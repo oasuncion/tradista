@@ -225,11 +225,7 @@ public class CashFlowReportController extends TradistaControllerAdapter {
 				if (cfsByCurrency == null) {
 					List<CashFlow> cfsListCopy = new ArrayList<CashFlow>();
 					for (CashFlow cf : cfsList) {
-						try {
-							cfsListCopy.add((CashFlow) cf.clone());
-						} catch (CloneNotSupportedException cnse) {
-							// Should not happen here.
-						}
+						cfsListCopy.add((CashFlow) cf.clone());
 					}
 					Function<CashFlow, String> compositeKey = cf -> cf.getDate() + cf.getCurrency().toString();
 					List<CashFlow> cfsByCurrencyList = (List<CashFlow>) cfsListCopy.stream()
@@ -285,11 +281,7 @@ public class CashFlowReportController extends TradistaControllerAdapter {
 				if (cfsByCurrencyAndPurpose == null) {
 					List<CashFlow> cfsListCopy = new ArrayList<CashFlow>();
 					for (CashFlow cf : cfsList) {
-						try {
-							cfsListCopy.add((CashFlow) cf.clone());
-						} catch (CloneNotSupportedException cnse) {
-							// Should not happen here.
-						}
+						cfsListCopy.add((CashFlow) cf.clone());
 					}
 					Function<CashFlow, String> compositeKey = cf -> cf.getDate() + cf.getCurrency().toString()
 							+ cf.getPurpose();

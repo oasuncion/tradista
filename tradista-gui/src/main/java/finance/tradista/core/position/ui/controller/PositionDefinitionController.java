@@ -154,21 +154,17 @@ public class PositionDefinitionController extends TradistaControllerAdapter {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
-				if (positionDefinition == null) {
-					positionDefinition = new PositionDefinition();
+				if (name.isVisible()) {
+					positionDefinition = new PositionDefinition(name.getText(),
+							ClientUtil.getCurrentUser().getProcessingOrg());
+					nameLabel.setText(name.getText());
 				}
+
 				positionDefinition.setBook(book.getValue());
 				if (!counterparty.getValue().equals(BlankLegalEntity.getInstance())) {
 					positionDefinition.setCounterparty(counterparty.getValue());
 				}
 				positionDefinition.setCurrency(currency.getValue());
-
-				if (name.isVisible()) {
-					positionDefinition.setName(name.getText());
-					nameLabel.setText(name.getText());
-				} else {
-					positionDefinition.setName(nameLabel.getText());
-				}
 				positionDefinition.setPricingParameter(pricingParameter.getValue());
 				if (product.getValue() != null && !product.getValue().equals(BlankProduct.getInstance())) {
 					positionDefinition.setProduct(product.getValue());
@@ -177,7 +173,6 @@ public class PositionDefinitionController extends TradistaControllerAdapter {
 					positionDefinition.setProductType(productType.getValue());
 				}
 				positionDefinition.setRealTime(isRealTime.isSelected());
-				positionDefinition.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 				positionDefinition.setId(positionBusinessDelegate.savePositionDefinition(positionDefinition));
 				name.setVisible(false);
 				nameLabel.setVisible(true);
@@ -195,36 +190,30 @@ public class PositionDefinitionController extends TradistaControllerAdapter {
 		dialog.setHeaderText("Do you want to copy this Position Definition ?");
 		dialog.setContentText("Please enter the name of the new Position Definition:");
 		Optional<String> result = dialog.showAndWait();
-		long oldPositionId = 0;
 		if (result.isPresent()) {
 			try {
-				if (positionDefinition == null) {
-					positionDefinition = new PositionDefinition();
-				}
-				positionDefinition.setBook(book.getValue());
+				PositionDefinition copyPositionDefinition = new PositionDefinition(result.get(),
+						ClientUtil.getCurrentUser().getProcessingOrg());
+				copyPositionDefinition.setBook(book.getValue());
 				if (!counterparty.getValue().equals(BlankLegalEntity.getInstance())) {
-					positionDefinition.setCounterparty(counterparty.getValue());
+					copyPositionDefinition.setCounterparty(counterparty.getValue());
 				}
-				positionDefinition.setCurrency(currency.getValue());
-				positionDefinition.setName(result.get());
-				positionDefinition.setPricingParameter(pricingParameter.getValue());
+				copyPositionDefinition.setCurrency(currency.getValue());
+				copyPositionDefinition.setPricingParameter(pricingParameter.getValue());
 				if (product.getValue() != null && !product.getValue().equals(BlankProduct.getInstance())) {
-					positionDefinition.setProduct(product.getValue());
+					copyPositionDefinition.setProduct(product.getValue());
 				}
 				if (productType.getValue() != null && !productType.getValue().equals(StringUtils.EMPTY)) {
-					positionDefinition.setProductType(productType.getValue());
+					copyPositionDefinition.setProductType(productType.getValue());
 				}
-				positionDefinition.setRealTime(isRealTime.isSelected());
-				positionDefinition.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
-				oldPositionId = positionDefinition.getId();
-				positionDefinition.setId(0);
-				positionDefinition.setId(positionBusinessDelegate.savePositionDefinition(positionDefinition));
+				copyPositionDefinition.setRealTime(isRealTime.isSelected());
+				copyPositionDefinition.setId(positionBusinessDelegate.savePositionDefinition(copyPositionDefinition));
+				positionDefinition = copyPositionDefinition;
 				name.setVisible(false);
 				nameLabel.setVisible(true);
 				nameLabel.setText(positionDefinition.getName());
 				TradistaGUIUtil.fillPositionDefinitionComboBox(false, load);
 			} catch (TradistaBusinessException tbe) {
-				positionDefinition.setId(oldPositionId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}

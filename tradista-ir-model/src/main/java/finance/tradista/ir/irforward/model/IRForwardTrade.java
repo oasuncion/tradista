@@ -2,6 +2,7 @@ package finance.tradista.ir.irforward.model;
 
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.interestpayment.model.InterestPayment;
@@ -39,9 +40,9 @@ public class IRForwardTrade<P extends Product> extends Trade<P> {
 	private LocalDate maturityDate;
 
 	private Tenor frequency;
-	
+
 	private InterestPayment interestPayment;
-	
+
 	private InterestPayment interestFixing;
 
 	private Index referenceRateIndex;
@@ -58,7 +59,7 @@ public class IRForwardTrade<P extends Product> extends Trade<P> {
 
 	public void setInterestPayment(InterestPayment interestPayment) {
 		this.interestPayment = interestPayment;
-	}	
+	}
 
 	public InterestPayment getInterestFixing() {
 		return interestFixing;
@@ -85,7 +86,7 @@ public class IRForwardTrade<P extends Product> extends Trade<P> {
 	}
 
 	public Index getReferenceRateIndex() {
-		return referenceRateIndex;
+		return TradistaModelUtil.clone(referenceRateIndex);
 	}
 
 	public Tenor getReferenceRateIndexTenor() {
@@ -110,6 +111,13 @@ public class IRForwardTrade<P extends Product> extends Trade<P> {
 
 	public String getProductType() {
 		return IR_FORWARD;
+	}
+
+	@Override
+	public IRForwardTrade<P> clone() {
+		IRForwardTrade<P> irForwardTrade = (IRForwardTrade<P>) super.clone();
+		irForwardTrade.referenceRateIndex = TradistaModelUtil.clone(referenceRateIndex);
+		return irForwardTrade;
 	}
 
 }

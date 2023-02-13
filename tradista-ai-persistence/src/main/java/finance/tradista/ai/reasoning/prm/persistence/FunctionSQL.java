@@ -103,9 +103,8 @@ public class FunctionSQL {
 			stmtGetFunctionById.setLong(1, id);
 			try (ResultSet results = stmtGetFunctionById.executeQuery()) {
 				while (results.next()) {
-					function = new Function();
+					function = new Function(results.getString("name"));
 					function.setId(results.getLong("id"));
-					function.setName(results.getString("name"));
 					function.setReturnType(new Type(results.getString("return_type")));
 				}
 			}
@@ -117,7 +116,7 @@ public class FunctionSQL {
 			stmtGetParametersByFunctionId.setLong(1, id);
 			try (ResultSet results = stmtGetParametersByFunctionId.executeQuery()) {
 				while (results.next()) {
-					Parameter param = new Parameter();
+					Parameter param = new Parameter(function, results.getShort("position"));
 					param.setId(results.getLong("id"));
 					param.setType(new Type(results.getString("type")));
 					function.addParameter(param);
@@ -141,9 +140,8 @@ public class FunctionSQL {
 			stmtGetFunctionByName.setString(1, name);
 			try (ResultSet results = stmtGetFunctionByName.executeQuery()) {
 				while (results.next()) {
-					function = new Function();
+					function = new Function(results.getString("name"));
 					function.setId(results.getLong("id"));
-					function.setName(results.getString("name"));
 					function.setReturnType(new Type(results.getString("return_type")));
 				}
 			}
@@ -155,7 +153,7 @@ public class FunctionSQL {
 			stmtGetParametersByFunctionId.setLong(1, function.getId());
 			try (ResultSet results = stmtGetParametersByFunctionId.executeQuery()) {
 				while (results.next()) {
-					Parameter param = new Parameter();
+					Parameter param = new Parameter(function, results.getShort("position"));
 					param.setId(results.getLong("id"));
 					param.setType(new Type(results.getString("type")));
 					function.addParameter(param);

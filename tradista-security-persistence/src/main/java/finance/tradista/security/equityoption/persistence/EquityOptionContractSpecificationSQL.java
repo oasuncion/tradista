@@ -50,7 +50,7 @@ public class EquityOptionContractSpecificationSQL {
 						: con.prepareStatement(
 								"UPDATE EQUITY_OPTION_CONTRACT_SPECIFICATION SET NAME=?, STYLE=?, QUANTITY=?, SETTLEMENT_TYPE=?, SETTLEMENT_DATE_OFFSET=?, MATURITY_DATES_DATE_RULE_ID=?, MULTIPLIER=?, PREMIUM_CURRENCY_ID=?, EXCHANGE_ID = ? WHERE ID=?")) {
 			if (eocs.getId() != 0) {
-				stmtSaveEquityOptionContractSpecification.setLong(10, equityOptionContractSpecificationId);
+				stmtSaveEquityOptionContractSpecification.setLong(10, eocs.getId());
 			}
 			stmtSaveEquityOptionContractSpecification.setString(1, eocs.getName());
 			stmtSaveEquityOptionContractSpecification.setString(2, eocs.getStyle().name());
@@ -93,9 +93,9 @@ public class EquityOptionContractSpecificationSQL {
 				if (equityOptionContractSpecifications == null) {
 					equityOptionContractSpecifications = new HashSet<EquityOptionContractSpecification>();
 				}
-				EquityOptionContractSpecification equityOptionContractSpecification = new EquityOptionContractSpecification();
+				EquityOptionContractSpecification equityOptionContractSpecification = new EquityOptionContractSpecification(
+						results.getString("name"));
 				equityOptionContractSpecification.setId(results.getLong("id"));
-				equityOptionContractSpecification.setName(results.getString("name"));
 				equityOptionContractSpecification.setQuantity(results.getBigDecimal("quantity"));
 				equityOptionContractSpecification
 						.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
@@ -127,9 +127,9 @@ public class EquityOptionContractSpecificationSQL {
 			stmtGetEquityOptionContractSpecificationById.setLong(1, id);
 			try (ResultSet results = stmtGetEquityOptionContractSpecificationById.executeQuery()) {
 				while (results.next()) {
-					equityOptionContractSpecification = new EquityOptionContractSpecification();
+					equityOptionContractSpecification = new EquityOptionContractSpecification(
+							results.getString("name"));
 					equityOptionContractSpecification.setId(results.getLong("id"));
-					equityOptionContractSpecification.setName(results.getString("name"));
 					equityOptionContractSpecification.setQuantity(results.getBigDecimal("quantity"));
 					equityOptionContractSpecification
 							.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
@@ -162,9 +162,9 @@ public class EquityOptionContractSpecificationSQL {
 			stmtGetEquityOptionContractSpecificationByName.setString(1, name);
 			try (ResultSet results = stmtGetEquityOptionContractSpecificationByName.executeQuery()) {
 				while (results.next()) {
-					equityOptionContractSpecification = new EquityOptionContractSpecification();
+					equityOptionContractSpecification = new EquityOptionContractSpecification(
+							results.getString("name"));
 					equityOptionContractSpecification.setId(results.getLong("id"));
-					equityOptionContractSpecification.setName(results.getString("name"));
 					equityOptionContractSpecification.setQuantity(results.getBigDecimal("quantity"));
 					equityOptionContractSpecification
 							.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
@@ -53,25 +54,23 @@ public abstract class VolatilitySurface<X extends Number, Y extends Number, Z ex
 
 	private QuoteSet quoteSet;
 
-	public VolatilitySurface(String name) {
-		setName(name);
-		points = new ArrayList<SurfacePoint<X, Y, Z>>();
-	}
-
-	public VolatilitySurface() {
+	public VolatilitySurface(String name, LegalEntity processingOrg) {
+		this.name = name;
+		this.processingOrg = processingOrg;
 		points = new ArrayList<SurfacePoint<X, Y, Z>>();
 	}
 
 	public QuoteSet getQuoteSet() {
-		return quoteSet;
+		return TradistaModelUtil.clone(quoteSet);
 	}
 
 	public void setQuoteSet(QuoteSet quoteSet) {
 		this.quoteSet = quoteSet;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Quote> getQuotes() {
-		return quotes;
+		return (List<Quote>) TradistaModelUtil.deepCopy(quotes);
 	}
 
 	public void setQuotes(List<Quote> quotes) {
@@ -82,16 +81,8 @@ public abstract class VolatilitySurface<X extends Number, Y extends Number, Z ex
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public LegalEntity getProcessingOrg() {
-		return processingOrg;
-	}
-
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
+		return TradistaModelUtil.clone(processingOrg);
 	}
 
 	@Override
@@ -140,47 +131,26 @@ public abstract class VolatilitySurface<X extends Number, Y extends Number, Z ex
 	}
 
 	public List<SurfacePoint<X, Y, Z>> getPoints() {
-		return points;
+		if (points == null) {
+			return null;
+		}
+		return new ArrayList<>(points);
 	}
 
 	public void setPoints(List<SurfacePoint<X, Y, Z>> points) {
 		this.points = points;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		VolatilitySurface<?, ?, ?> other = (VolatilitySurface<?, ?, ?>) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return name;
+	public VolatilitySurface<X, Y, Z> clone() {
+		VolatilitySurface<X, Y, Z> volatilitySurface = (VolatilitySurface<X, Y, Z>) super.clone();
+		volatilitySurface.processingOrg = TradistaModelUtil.clone(processingOrg);
+		volatilitySurface.quoteSet = TradistaModelUtil.clone(quoteSet);
+		if (points != null) {
+			volatilitySurface.points = new ArrayList<>(points);
+		}
+		return volatilitySurface;
 	}
 
 }

@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
+import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.marketdata.model.Instrument;
 import finance.tradista.core.tenor.model.Tenor;
@@ -35,9 +37,10 @@ public class Bond extends Security implements Instrument {
 	private static final long serialVersionUID = -1544895032L;
 
 	public static final String BOND = "Bond";
-	
+
 	public static enum CapFloorCollar {
 		NONE, CAP, FLOOR, COLLAR;
+
 		public String toString() {
 			switch (this) {
 			case NONE:
@@ -52,10 +55,6 @@ public class Bond extends Security implements Instrument {
 			return super.toString();
 		}
 	};
-
-	public Bond() {
-
-	}
 
 	private BigDecimal coupon;
 
@@ -85,8 +84,13 @@ public class Bond extends Security implements Instrument {
 
 	private List<Coupon> coupons;
 
+	public Bond(Exchange exchange, String isin) {
+		super(exchange, isin);
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<Coupon> getCoupons() {
-		return coupons;
+		return (List<Coupon>) TradistaModelUtil.deepCopy(coupons);
 	}
 
 	public void setCoupons(List<Coupon> coupons) {
@@ -135,10 +139,6 @@ public class Bond extends Security implements Instrument {
 		this.principal = principal;
 	}
 
-	public String toString() {
-		return getIsin() + " - " + getExchange();
-	}
-
 	public LocalDate getDatedDate() {
 		return datedDate;
 	}
@@ -172,7 +172,7 @@ public class Bond extends Security implements Instrument {
 	}
 
 	public Currency getRedemptionCurrency() {
-		return redemptionCurrency;
+		return TradistaModelUtil.clone(redemptionCurrency);
 	}
 
 	public long getRedemptionCurrencyId() {
@@ -188,7 +188,7 @@ public class Bond extends Security implements Instrument {
 	}
 
 	public Index getReferenceRateIndex() {
-		return referenceRateindex;
+		return TradistaModelUtil.clone(referenceRateindex);
 	}
 
 	public void setReferenceRateIndex(Index index) {
@@ -244,25 +244,14 @@ public class Bond extends Security implements Instrument {
 		return BOND;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean equals(Object o) {
-		Bond b = null;
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof Bond)) {
-			return false;
-		}
-		b = (Bond) o;
-		if (b == this) {
-			return true;
-		}
-		return b.getIsin().equals(getIsin()) && b.getExchange().equals(getExchange());
-	}
-
-	@Override
-	public int hashCode() {
-		return (getIsin() + "-" + getExchange()).hashCode();
+	public Bond clone() {
+		Bond bond = (Bond) super.clone();
+		bond.redemptionCurrency = TradistaModelUtil.clone(redemptionCurrency);
+		bond.referenceRateindex = TradistaModelUtil.clone(referenceRateindex);
+		bond.coupons = (List<Coupon>) TradistaModelUtil.deepCopy(coupons);
+		return bond;
 	}
 
 }

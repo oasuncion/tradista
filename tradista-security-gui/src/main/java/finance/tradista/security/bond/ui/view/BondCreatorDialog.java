@@ -60,9 +60,7 @@ public class BondCreatorDialog extends TradistaDialog<Bond> {
 			@Override
 			public Bond call(ButtonType b) {
 				if (b == buttonTypeOk) {
-					Bond bond = new Bond();
-					bond.setIsin(isinTextField.getText());
-					bond.setExchange(exchangeComboBox.getValue());
+					Bond bond = new Bond(exchangeComboBox.getValue(), isinTextField.getText());
 					return bond;
 				}
 				return null;

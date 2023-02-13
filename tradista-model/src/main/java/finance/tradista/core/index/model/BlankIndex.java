@@ -28,13 +28,13 @@ public final class BlankIndex extends Index {
 	 * 
 	 */
 	private static final long serialVersionUID = -5867111413668811884L;
-	
+
 	private static final BlankIndex instance = new BlankIndex();
-	
+
 	private BlankIndex() {
-		setName(StringUtils.EMPTY);
+		super(StringUtils.EMPTY);
 	}
-	
+
 	public static BlankIndex getInstance() {
 		return instance;
 	}

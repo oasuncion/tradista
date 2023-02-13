@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.ui.controller.TradistaController;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
@@ -148,8 +150,18 @@ public class BondDefinitionController implements TradistaController {
 	@FXML
 	private Label couponTitle;
 
+	@FXML
+	private Label isinLabel;
+
+	@FXML
+	private Label exchangeLabel;
+
+	private BondBusinessDelegate bondBusinessDelegate;
+
 	// This method is called by the FXMLLoader when initialization is complete
 	public void initialize() {
+
+		bondBusinessDelegate = new BondBusinessDelegate();
 
 		productType.setText("Bond");
 
@@ -233,11 +245,7 @@ public class BondDefinitionController implements TradistaController {
 
 	}
 
-	private void buildProduct() {
-		if (bond == null) {
-			bond = new Bond();
-			bond.setCreationDate(LocalDate.now());
-		}
+	private void buildProduct(Bond bond) {
 		try {
 			if (couponType.getValue().equals("Fixed")) {
 				if (!coupon.getText().isEmpty()) {
@@ -271,8 +279,8 @@ public class BondDefinitionController implements TradistaController {
 			bond.setCouponType(couponType.getValue());
 			bond.setCurrency(currency.getValue());
 			bond.setDatedDate(datedDate.getValue());
-			bond.setExchange(exchange.getValue());
-			bond.setIsin(isin.getText());
+			// bond.setExchange(exchange.getValue());
+			// bond.setIsin(isin.getText());
 			bond.setIssueDate(issueDate.getValue());
 			if (!issuePrice.getText().isEmpty()) {
 				bond.setIssuePrice(TradistaGUIUtil.parseAmount(issuePrice.getText(), "Issue Price"));
@@ -303,10 +311,21 @@ public class BondDefinitionController implements TradistaController {
 			try {
 				checkAmounts();
 
-				buildProduct();
+				if (isin.isVisible()) {
+					bond = new Bond(exchange.getValue(), isin.getText());
+					bond.setCreationDate(LocalDate.now());
+				}
 
-				bond.setId(new BondBusinessDelegate().saveBond(bond));
+				buildProduct(bond);
+
+				bond.setId(bondBusinessDelegate.saveBond(bond));
 				bondId.setText(String.valueOf(bond.getId()));
+				isinLabel.setText(isin.getText());
+				exchangeLabel.setText(exchange.getValue().toString());
+				isin.setVisible(false);
+				exchange.setVisible(false);
+				isinLabel.setVisible(true);
+				exchangeLabel.setVisible(true);
 
 			} catch (TradistaBusinessException tbe) {
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
@@ -319,22 +338,24 @@ public class BondDefinitionController implements TradistaController {
 	protected void copy() {
 		BondCreatorDialog dialog = new BondCreatorDialog(exchange.getValue());
 		Optional<Bond> result = dialog.showAndWait();
-		long oldBondId = 0;
 		if (result.isPresent()) {
 			try {
+				Bond copyBond;
 				checkAmounts();
-				buildProduct();
-				oldBondId = bond.getId();
-				bond.setIsin(result.get().getIsin());
-				bond.setExchange(result.get().getExchange());
-				bond.setId(0);
-				bond.setId(new BondBusinessDelegate().saveBond(bond));
+				copyBond = new Bond(result.get().getExchange(), result.get().getIsin());
+				buildProduct(copyBond);
+				copyBond.setId(bondBusinessDelegate.saveBond(copyBond));
+				bond = copyBond;
 				bondId.setText(String.valueOf(bond.getId()));
 				exchange.setValue(bond.getExchange());
 				isin.setText(bond.getIsin());
-
+				isinLabel.setText(isin.getText());
+				exchangeLabel.setText(exchange.getValue().toString());
+				isin.setVisible(false);
+				exchange.setVisible(false);
+				isinLabel.setVisible(true);
+				exchangeLabel.setVisible(true);
 			} catch (TradistaBusinessException tbe) {
-				bond.setId(oldBondId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
@@ -363,12 +384,12 @@ public class BondDefinitionController implements TradistaController {
 
 			if (loadingCriterion.getValue().equals("id")) {
 				bonds = new HashSet<Bond>(1);
-				Bond bond = new BondBusinessDelegate().getBondById(bondId);
+				Bond bond = bondBusinessDelegate.getBondById(bondId);
 				if (bond != null) {
 					bonds.add(bond);
 				}
 			} else {
-				bonds = new BondBusinessDelegate().getBondsByIsin(bondIsin);
+				bonds = bondBusinessDelegate.getBondsByIsin(bondIsin);
 			}
 			if (bonds == null || bonds.isEmpty()) {
 				throw new TradistaBusinessException(
@@ -386,8 +407,8 @@ public class BondDefinitionController implements TradistaController {
 			} else {
 				load((Bond) bonds.toArray()[0]);
 			}
-		} catch (TradistaBusinessException abe) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}
 	}
@@ -437,13 +458,19 @@ public class BondDefinitionController implements TradistaController {
 		if (redemptionPrice != null) {
 			this.redemptionPrice.setText(TradistaGUIUtil.formatAmount(redemptionPrice));
 		}
+		isinLabel.setText(bond.getIsin());
+		exchangeLabel.setText(bond.getExchange().toString());
+		isin.setVisible(false);
+		exchange.setVisible(false);
+		isinLabel.setVisible(true);
+		exchangeLabel.setVisible(true);
 	}
 
 	@Override
 	@FXML
 	public void clear() {
 		bond = null;
-		bondId.setText("");
+		bondId.setText(StringUtils.EMPTY);
 		datedDate.setValue(null);
 		redemptionPrice.clear();
 		isin.clear();
@@ -452,6 +479,12 @@ public class BondDefinitionController implements TradistaController {
 		maturity.setValue(null);
 		issueDate.setValue(null);
 		issuePrice.clear();
+		isinLabel.setText(StringUtils.EMPTY);
+		isin.setVisible(true);
+		isinLabel.setVisible(false);
+		exchangeLabel.setText(StringUtils.EMPTY);
+		exchange.setVisible(true);
+		exchangeLabel.setVisible(false);
 	}
 
 	@Override

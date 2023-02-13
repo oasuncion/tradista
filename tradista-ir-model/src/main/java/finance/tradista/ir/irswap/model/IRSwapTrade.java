@@ -3,6 +3,7 @@ package finance.tradista.ir.irswap.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.interestpayment.model.InterestPayment;
@@ -46,11 +47,11 @@ public abstract class IRSwapTrade extends Trade<Product> {
 	protected Tenor paymentFrequency;
 
 	protected Tenor receptionFrequency;
-	
+
 	protected InterestPayment paymentInterestPayment;
 
 	protected InterestPayment receptionInterestPayment;
-	
+
 	protected InterestPayment paymentInterestFixing;
 
 	protected InterestPayment receptionInterestFixing;
@@ -73,7 +74,7 @@ public abstract class IRSwapTrade extends Trade<Product> {
 
 	protected DayCountConvention paymentDayCountConvention;
 
-	protected DayCountConvention receptionDayCountConvention;	
+	protected DayCountConvention receptionDayCountConvention;
 
 	public InterestPayment getPaymentInterestPayment() {
 		return paymentInterestPayment;
@@ -168,7 +169,7 @@ public abstract class IRSwapTrade extends Trade<Product> {
 	}
 
 	public Index getReceptionReferenceRateIndex() {
-		return receptionReferenceRateIndex;
+		return TradistaModelUtil.clone(receptionReferenceRateIndex);
 	}
 
 	public void setReceptionReferenceRateIndex(Index receptionReferenceRateIndex) {
@@ -176,7 +177,7 @@ public abstract class IRSwapTrade extends Trade<Product> {
 	}
 
 	public Index getPaymentReferenceRateIndex() {
-		return paymentReferenceRateIndex;
+		return TradistaModelUtil.clone(paymentReferenceRateIndex);
 	}
 
 	public void setPaymentReferenceRateIndex(Index paymentReferenceRateIndex) {
@@ -218,5 +219,13 @@ public abstract class IRSwapTrade extends Trade<Product> {
 	public void setReceptionInterestFixing(InterestPayment receptionInterestFixing) {
 		this.receptionInterestFixing = receptionInterestFixing;
 	}
-	
+
+	@Override
+	public IRSwapTrade clone() {
+		IRSwapTrade irSwapTrade = (IRSwapTrade) super.clone();
+		irSwapTrade.receptionReferenceRateIndex = TradistaModelUtil.clone(receptionReferenceRateIndex);
+		irSwapTrade.paymentReferenceRateIndex = TradistaModelUtil.clone(paymentReferenceRateIndex);
+		return irSwapTrade;
+	}
+
 }

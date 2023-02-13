@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,6 +36,7 @@ import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
 import finance.tradista.core.marketdata.ui.view.TradistaFXCurveComboBox;
 import finance.tradista.core.marketdata.ui.view.TradistaInterestRateCurveComboBox;
 import finance.tradista.core.pricing.pricer.PricingParameter;
+import finance.tradista.core.pricing.pricer.PricingParameterModule;
 import finance.tradista.core.pricing.service.PricerBusinessDelegate;
 import finance.tradista.core.pricing.ui.view.PricingParameterCreatorDialog;
 import finance.tradista.core.product.ui.view.TradistaProductTypeComboBox;
@@ -654,7 +656,6 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldPricingParameterId = 0;
 		boolean ppLoaded = (pricingParameter != null);
 		if (!ppLoaded) {
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, "Please load a Pricing Parameters Set");
@@ -670,11 +671,11 @@ public class PricingParameterController extends TradistaControllerAdapter {
 				Optional<String> result = dialog.showAndWait();
 
 				if (result.isPresent()) {
-					buildPricingParameter();
-					oldPricingParameterId = pricingParameter.getId();
-					pricingParameter.setName(result.get());
-					pricingParameter.setId(0);
-					pricingParameter.setId(pricerBusinessDelegate.savePricingParameter(pricingParameter));
+					PricingParameter copyPricingParameter = new PricingParameter(result.get(),
+							ClientUtil.getCurrentUser().getProcessingOrg());
+					buildPricingParameter(copyPricingParameter);
+					copyPricingParameter.setId(pricerBusinessDelegate.savePricingParameter(copyPricingParameter));
+					pricingParameter = copyPricingParameter;
 					name.setText(pricingParameter.getName());
 					pricingParameterName.setText(pricingParameter.getName());
 					quoteSetComboBox.setValue(pricingParameter.getQuoteSet());
@@ -683,7 +684,6 @@ public class PricingParameterController extends TradistaControllerAdapter {
 					TradistaGUIUtil.fillPricingParameterComboBox(pricingParam);
 				}
 			} catch (TradistaBusinessException tbe) {
-				pricingParameter.setId(oldPricingParameterId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
@@ -703,8 +703,8 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 			Optional<ButtonType> result = confirmation.showAndWait();
 			if (result.get() == ButtonType.OK) {
-				buildPricingParameter();
-				pricingParameter.setId(pricingParam.getSelectionModel().getSelectedItem().getId());
+				buildPricingParameter(pricingParameter);
+				// pricingParameter.setId(pricingParam.getSelectionModel().getSelectedItem().getId());
 				pricingParameter.setId(pricerBusinessDelegate.savePricingParameter(pricingParameter));
 			}
 
@@ -767,7 +767,7 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 			if (result.isPresent()) {
 				PricingParameter pp = result.get();
-				pricerBusinessDelegate.savePricingParameter(pp);
+				pp.setId(pricerBusinessDelegate.savePricingParameter(pp));
 				TradistaGUIUtil.fillComboBox(pricerBusinessDelegate.getAllPricingParameters(), pricingParam);
 				// Delete the Pricing Param table if the loaded PP doesn't
 				// exist anymore.
@@ -1972,42 +1972,23 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 	}
 
-	private void buildPricingParameter() {
-		if (pricingParameter == null) {
-			pricingParameter = new PricingParameter();
-		}
-		pricingParameter.setName(pricingParam.getSelectionModel().getSelectedItem().getName());
+	private void buildPricingParameter(PricingParameter pricingParameter) {
 		pricingParameter.setQuoteSet(quoteSetComboBox.getValue());
-		pricingParameter.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
-		pricingParameter.getParams().clear();
-		for (PricingParamProperty prop : pricingParamTable.getItems()) {
-			pricingParameter.getParams().put(prop.getName().getValue(), prop.getValue().getValue());
-		}
-		pricingParameter.getDiscountCurves().clear();
-		for (DiscountCurveProperty prop : discountCurveTable.getItems()) {
-			pricingParameter.getDiscountCurves().put((Currency) prop.getCurrency(),
-					(InterestRateCurve) prop.getCurve());
-		}
-		pricingParameter.getIndexCurves().clear();
-		for (IndexCurveProperty prop : indexCurveTable.getItems()) {
-			pricingParameter.getIndexCurves().put((Index) prop.getIndex(), (InterestRateCurve) prop.getCurve());
-		}
-		pricingParameter.getFxCurves().clear();
-		for (FXCurveProperty prop : fxCurveTable.getItems()) {
-			pricingParameter.getFxCurves().put(
-					new CurrencyPair((Currency) prop.getPrimaryCurrency(), (Currency) prop.getQuoteCurrency()),
-					(FXCurve) prop.getCurve());
-		}
-		pricingParameter.getCustomPricers().clear();
-		for (CustomPricerProperty prop : customPricerTable.getItems()) {
-			pricingParameter.getCustomPricers().put(prop.getProductType().getValue(),
-					prop.getCustomPricer().getValue());
-		}
-		pricingParameter.getModules().clear();
+		pricingParameter.setParams(pricingParamTable.getItems().stream()
+				.collect(Collectors.toMap(p -> p.getName().getValue(), p -> p.getValue().getValue())));
+		pricingParameter.setDiscountCurves(discountCurveTable.getItems().stream()
+				.collect(Collectors.toMap(p -> p.getCurrency(), p -> p.getCurve())));
+		pricingParameter.setIndexCurves(
+				indexCurveTable.getItems().stream().collect(Collectors.toMap(p -> p.getIndex(), p -> p.getCurve())));
+		pricingParameter.setFxCurves(fxCurveTable.getItems().stream().collect(Collectors
+				.toMap(p -> new CurrencyPair(p.getPrimaryCurrency(), p.getQuoteCurrency()), p -> p.getCurve())));
+		pricingParameter.setCustomPricers(customPricerTable.getItems().stream()
+				.collect(Collectors.toMap(p -> p.getProductType().getValue(), p -> p.getCustomPricer().getValue())));
 		if (pricingParameterModuleControllersList != null && !pricingParameterModuleControllersList.isEmpty()) {
-			for (PricingParameterModuleController controller : pricingParameterModuleControllersList) {
-				pricingParameter.getModules().add(controller.buildModule());
-			}
+			pricingParameter.setModules(pricingParameterModuleControllersList.stream().map(c -> c.buildModule())
+					.collect(Collectors.toList()));
+		} else {
+			pricingParameter.setModules(new ArrayList<PricingParameterModule>());
 		}
 	}
 
@@ -2083,27 +2064,27 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 	protected class DiscountCurveProperty implements Comparable<DiscountCurveProperty> {
 
-		private final SimpleObjectProperty currency;
-		private final SimpleObjectProperty curve;
+		private final SimpleObjectProperty<Currency> currency;
+		private final SimpleObjectProperty<InterestRateCurve> curve;
 
-		private DiscountCurveProperty(Object currency, Object curve) {
-			this.currency = new SimpleObjectProperty(currency);
-			this.curve = new SimpleObjectProperty(curve);
+		private DiscountCurveProperty(Currency currency, InterestRateCurve curve) {
+			this.currency = new SimpleObjectProperty<>(currency);
+			this.curve = new SimpleObjectProperty<>(curve);
 		}
 
-		public Object getCurrency() {
+		public Currency getCurrency() {
 			return currency.get();
 		}
 
-		public void setCurrency(Object currency) {
+		public void setCurrency(Currency currency) {
 			this.currency.set(currency);
 		}
 
-		public Object getCurve() {
+		public InterestRateCurve getCurve() {
 			return curve.get();
 		}
 
-		public void setCurve(Object curve) {
+		public void setCurve(InterestRateCurve curve) {
 			this.curve.set(curve);
 		}
 
@@ -2141,27 +2122,27 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 	protected class IndexCurveProperty implements Comparable<IndexCurveProperty> {
 
-		private final SimpleObjectProperty index;
-		private final SimpleObjectProperty curve;
+		private final SimpleObjectProperty<Index> index;
+		private final SimpleObjectProperty<InterestRateCurve> curve;
 
-		private IndexCurveProperty(Object index, Object curve) {
-			this.index = new SimpleObjectProperty(index);
-			this.curve = new SimpleObjectProperty(curve);
+		private IndexCurveProperty(Index index, InterestRateCurve curve) {
+			this.index = new SimpleObjectProperty<>(index);
+			this.curve = new SimpleObjectProperty<>(curve);
 		}
 
-		public Object getIndex() {
+		public Index getIndex() {
 			return index.get();
 		}
 
-		public void setIndex(Object index) {
+		public void setIndex(Index index) {
 			this.index.set(index);
 		}
 
-		public Object getCurve() {
+		public InterestRateCurve getCurve() {
 			return curve.get();
 		}
 
-		public void setCurve(Object curve) {
+		public void setCurve(InterestRateCurve curve) {
 			this.curve.set(curve);
 		}
 
@@ -2199,37 +2180,37 @@ public class PricingParameterController extends TradistaControllerAdapter {
 
 	protected class FXCurveProperty implements Comparable<FXCurveProperty> {
 
-		private final SimpleObjectProperty primaryCurrency;
-		private final SimpleObjectProperty quoteCurrency;
-		private final SimpleObjectProperty curve;
+		private final SimpleObjectProperty<Currency> primaryCurrency;
+		private final SimpleObjectProperty<Currency> quoteCurrency;
+		private final SimpleObjectProperty<FXCurve> curve;
 
-		private FXCurveProperty(Object primaryCurrency, Object quoteCurrency, Object curve) {
-			this.primaryCurrency = new SimpleObjectProperty(primaryCurrency);
-			this.quoteCurrency = new SimpleObjectProperty(quoteCurrency);
-			this.curve = new SimpleObjectProperty(curve);
+		private FXCurveProperty(Currency primaryCurrency, Currency quoteCurrency, FXCurve curve) {
+			this.primaryCurrency = new SimpleObjectProperty<>(primaryCurrency);
+			this.quoteCurrency = new SimpleObjectProperty<>(quoteCurrency);
+			this.curve = new SimpleObjectProperty<>(curve);
 		}
 
-		public Object getPrimaryCurrency() {
+		public Currency getPrimaryCurrency() {
 			return primaryCurrency.get();
 		}
 
-		public void setPrimaryCurrency(Object primaryCurrency) {
+		public void setPrimaryCurrency(Currency primaryCurrency) {
 			this.primaryCurrency.set(primaryCurrency);
 		}
 
-		public Object getQuoteCurrency() {
+		public Currency getQuoteCurrency() {
 			return quoteCurrency.get();
 		}
 
-		public void setQuoteCurrency(Object quoteCurrency) {
+		public void setQuoteCurrency(Currency quoteCurrency) {
 			this.quoteCurrency.set(quoteCurrency);
 		}
 
-		public Object getCurve() {
+		public FXCurve getCurve() {
 			return curve.get();
 		}
 
-		public void setCurve(Object curve) {
+		public void setCurve(FXCurve curve) {
 			this.curve.set(curve);
 		}
 

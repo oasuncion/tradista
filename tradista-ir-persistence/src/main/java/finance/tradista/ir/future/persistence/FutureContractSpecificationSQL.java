@@ -50,13 +50,12 @@ public class FutureContractSpecificationSQL {
 			try (ResultSet results = stmtGetFutureContractSpecificationById.executeQuery()) {
 				while (results.next()) {
 					if (spec == null) {
-						spec = new FutureContractSpecification();
+						spec = new FutureContractSpecification(results.getString("name"));
 					}
 
 					spec.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
 					spec.setId(results.getLong("id"));
 					spec.setNotional(results.getBigDecimal("notional"));
-					spec.setName(results.getString("name"));
 					spec.setReferenceRateIndex(IndexSQL.getIndexById(results.getLong("reference_rate_index_id")));
 					spec.setReferenceRateIndexTenor(Tenor.valueOf(results.getString("reference_rate_index_tenor")));
 					spec.setDayCountConvention(DayCountConventionSQL
@@ -84,13 +83,12 @@ public class FutureContractSpecificationSQL {
 			try (ResultSet results = stmtGetFutureContractSpecificationByName.executeQuery()) {
 				while (results.next()) {
 					if (spec == null) {
-						spec = new FutureContractSpecification();
+						spec = new FutureContractSpecification(results.getString("name"));
 					}
 
 					spec.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
 					spec.setId(results.getLong("id"));
 					spec.setNotional(results.getBigDecimal("notional"));
-					spec.setName(results.getString("name"));
 					spec.setReferenceRateIndex(IndexSQL.getIndexById(results.getLong("reference_rate_index_id")));
 					spec.setReferenceRateIndexTenor(Tenor.valueOf(results.getString("reference_rate_index_tenor")));
 					spec.setDayCountConvention(DayCountConventionSQL
@@ -117,12 +115,11 @@ public class FutureContractSpecificationSQL {
 				ResultSet results = stmtGetAllFutureContractSpecifications.executeQuery()) {
 			while (results.next()) {
 
-				FutureContractSpecification spec = new FutureContractSpecification();
+				FutureContractSpecification spec = new FutureContractSpecification(results.getString("name"));
 
 				spec.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
 				spec.setId(results.getLong("id"));
 				spec.setNotional(results.getBigDecimal("notional"));
-				spec.setName(results.getString("name"));
 				spec.setReferenceRateIndex(IndexSQL.getIndexById(results.getLong("reference_rate_index_id")));
 				spec.setReferenceRateIndexTenor(Tenor.valueOf(results.getString("reference_rate_index_tenor")));
 				spec.setDayCountConvention(

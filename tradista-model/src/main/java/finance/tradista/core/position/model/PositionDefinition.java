@@ -1,6 +1,8 @@
 package finance.tradista.core.position.model;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.legalentity.model.LegalEntity;
@@ -34,6 +36,7 @@ public class PositionDefinition extends TradistaObject {
 	 */
 	private static final long serialVersionUID = -4204899247050005377L;
 
+	@Id
 	private String name;
 
 	private Book book;
@@ -50,18 +53,21 @@ public class PositionDefinition extends TradistaObject {
 
 	private PricingParameter pricingParameter;
 
+	@Id
 	private LegalEntity processingOrg;
+
+	public PositionDefinition(String name, LegalEntity processingOrg) {
+		super();
+		this.name = name;
+		this.processingOrg = processingOrg;
+	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public Book getBook() {
-		return book;
+		return TradistaModelUtil.clone(book);
 	}
 
 	public void setBook(Book book) {
@@ -77,7 +83,7 @@ public class PositionDefinition extends TradistaObject {
 	}
 
 	public Product getProduct() {
-		return product;
+		return TradistaModelUtil.clone(product);
 	}
 
 	public void setProduct(Product product) {
@@ -85,7 +91,7 @@ public class PositionDefinition extends TradistaObject {
 	}
 
 	public LegalEntity getCounterparty() {
-		return counterparty;
+		return TradistaModelUtil.clone(counterparty);
 	}
 
 	public void setCounterparty(LegalEntity counterparty) {
@@ -101,7 +107,7 @@ public class PositionDefinition extends TradistaObject {
 	}
 
 	public Currency getCurrency() {
-		return currency;
+		return TradistaModelUtil.clone(currency);
 	}
 
 	public void setCurrency(Currency currency) {
@@ -109,7 +115,7 @@ public class PositionDefinition extends TradistaObject {
 	}
 
 	public PricingParameter getPricingParameter() {
-		return pricingParameter;
+		return TradistaModelUtil.clone(pricingParameter);
 	}
 
 	public void setPricingParameter(PricingParameter pricingParameter) {
@@ -117,47 +123,24 @@ public class PositionDefinition extends TradistaObject {
 	}
 
 	public LegalEntity getProcessingOrg() {
-		return processingOrg;
-	}
-
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PositionDefinition other = (PositionDefinition) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		return true;
+		return TradistaModelUtil.clone(processingOrg);
 	}
 
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public PositionDefinition clone() {
+		PositionDefinition positionDefinition = (PositionDefinition) super.clone();
+		positionDefinition.book = TradistaModelUtil.clone(book);
+		positionDefinition.product = TradistaModelUtil.clone(product);
+		positionDefinition.counterparty = TradistaModelUtil.clone(counterparty);
+		positionDefinition.currency = TradistaModelUtil.clone(currency);
+		positionDefinition.pricingParameter = TradistaModelUtil.clone(pricingParameter);
+		positionDefinition.processingOrg = TradistaModelUtil.clone(processingOrg);
+		return positionDefinition;
 	}
 
 }

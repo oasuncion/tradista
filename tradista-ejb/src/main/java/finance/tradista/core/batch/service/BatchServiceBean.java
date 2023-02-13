@@ -52,6 +52,8 @@ import finance.tradista.core.common.service.CustomProperties;
 import finance.tradista.core.common.util.TradistaConstants;
 import finance.tradista.core.common.util.TradistaUtil;
 import finance.tradista.core.configuration.service.LocalConfigurationService;
+import finance.tradista.core.legalentity.model.LegalEntity;
+import finance.tradista.core.legalentity.service.LegalEntityService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.EJB;
@@ -69,6 +71,9 @@ public class BatchServiceBean implements BatchService {
 
 	@EJB
 	private LocalConfigurationService configurationService;
+
+	@EJB
+	private LegalEntityService legalEntityService;
 
 	public static void initJobTypes() {
 		jobTypes = new HashMap<String, Class<? extends TradistaJob>>();
@@ -204,6 +209,11 @@ public class BatchServiceBean implements BatchService {
 	public Set<TradistaJobInstance> getAllJobInstances(String po) throws TradistaBusinessException {
 		Set<TradistaJobInstance> jobInstances = new HashSet<TradistaJobInstance>();
 
+		LegalEntity processingOrg = null;
+		if (po != null) {
+			processingOrg = legalEntityService.getLegalEntityByShortName(po);
+		}
+
 		try {
 			for (String groupName : scheduler.getJobGroupNames()) {
 				if (po != null && !po.equals(groupName)) {
@@ -212,7 +222,7 @@ public class BatchServiceBean implements BatchService {
 				for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
 					JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 					String jobType = getJobTypeByClass((Class<? extends TradistaJob>) jobDetail.getJobClass());
-					TradistaJobInstance inst = new TradistaJobInstance(jobDetail, jobType);
+					TradistaJobInstance inst = new TradistaJobInstance(jobDetail, jobType, processingOrg);
 					jobInstances.add(inst);
 				}
 			}
@@ -229,13 +239,19 @@ public class BatchServiceBean implements BatchService {
 	public TradistaJobInstance getJobInstanceByNameAndPo(String jobInstanceName, String po)
 			throws TradistaBusinessException {
 		TradistaJobInstance jobInstance = null;
+
+		LegalEntity processingOrg = null;
+		if (po != null) {
+			processingOrg = legalEntityService.getLegalEntityByShortName(po);
+		}
+
 		try {
 			JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobInstanceName, po));
 			if (jobDetail == null) {
 				return null;
 			}
 			String jobType = getJobTypeByClass((Class<? extends TradistaJob>) jobDetail.getJobClass());
-			jobInstance = new TradistaJobInstance(jobDetail, jobType);
+			jobInstance = new TradistaJobInstance(jobDetail, jobType, processingOrg);
 		} catch (SchedulerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

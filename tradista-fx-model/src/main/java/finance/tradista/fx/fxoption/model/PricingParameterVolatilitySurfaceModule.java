@@ -3,6 +3,7 @@ package finance.tradista.fx.fxoption.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.CurrencyPair;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 
@@ -26,7 +27,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class PricingParameterVolatilitySurfaceModule implements PricingParameterModule {
+public class PricingParameterVolatilitySurfaceModule extends PricingParameterModule {
 
 	/**
 	 * 
@@ -49,8 +50,9 @@ public class PricingParameterVolatilitySurfaceModule implements PricingParameter
 		return FXOptionTrade.FX_OPTION;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<CurrencyPair, FXVolatilitySurface> getVolatilitySurfaces() {
-		return volatilitySurfaces;
+		return (Map<CurrencyPair, FXVolatilitySurface>) TradistaModelUtil.deepCopy(volatilitySurfaces);
 	}
 
 	public void setVolatilitySurfaces(Map<CurrencyPair, FXVolatilitySurface> volatilitySurfaces) {
@@ -58,10 +60,19 @@ public class PricingParameterVolatilitySurfaceModule implements PricingParameter
 	}
 
 	public FXVolatilitySurface getFXVolatilitySurface(CurrencyPair currencyPair) {
-		if (currencyPair == null) {
+		if (currencyPair == null || volatilitySurfaces == null) {
 			return null;
 		}
-		return volatilitySurfaces.get(currencyPair);
+		return TradistaModelUtil.clone(volatilitySurfaces.get(currencyPair));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public PricingParameterVolatilitySurfaceModule clone() {
+		PricingParameterVolatilitySurfaceModule pricingParameterVolatilitySurfaceModule = (PricingParameterVolatilitySurfaceModule) super.clone();
+		pricingParameterVolatilitySurfaceModule.volatilitySurfaces = (Map<CurrencyPair, FXVolatilitySurface>) TradistaModelUtil
+				.deepCopy(volatilitySurfaces);
+		return pricingParameterVolatilitySurfaceModule;
 	}
 
 }

@@ -1,8 +1,11 @@
 package finance.tradista.core.marketdata.model;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
@@ -35,8 +38,10 @@ public class QuoteSet extends TradistaObject {
 
 	private Map<Quote, Map<LocalDate, QuoteValue>> quoteValues;
 
+	@Id
 	private String name;
 
+	@Id
 	private LegalEntity processingOrg;
 
 	public QuoteSet(long id, String name, LegalEntity processingOrg) {
@@ -51,7 +56,18 @@ public class QuoteSet extends TradistaObject {
 		this.processingOrg = processingOrg;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<Quote, Map<LocalDate, QuoteValue>> getQuoteValues() {
+		if (quoteValues == null) {
+			return null;
+		}
+		Map<Quote, Map<LocalDate, QuoteValue>> quoteValues = new HashMap<Quote, Map<LocalDate, QuoteValue>>();
+		for (Map.Entry<Quote, Map<LocalDate, QuoteValue>> entry : this.quoteValues.entrySet()) {
+			if (entry.getValue() != null) {
+				quoteValues.put(TradistaModelUtil.clone(entry.getKey()),
+						(Map<LocalDate, QuoteValue>) TradistaModelUtil.deepCopy(entry.getValue()));
+			}
+		}
 		return quoteValues;
 	}
 
@@ -63,55 +79,34 @@ public class QuoteSet extends TradistaObject {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public LegalEntity getProcessingOrg() {
-		return processingOrg;
+		return TradistaModelUtil.clone(processingOrg);
 	}
 
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
-	}
-
-	public QuoteValue getQuoteValueByNameAndDate(String name, LocalDate date) {
-		return quoteValues.get(name).get(date);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		QuoteSet other = (QuoteSet) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		return true;
+	public QuoteValue getQuoteValueByQuoteAndDate(Quote quote, LocalDate date) {
+		return quoteValues.get(quote).get(date);
 	}
 
 	public String toString() {
 		return name;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public QuoteSet clone() {
+		QuoteSet quoteSet = (QuoteSet) super.clone();
+		if (this.quoteValues != null) {
+			Map<Quote, Map<LocalDate, QuoteValue>> quoteValues = new HashMap<Quote, Map<LocalDate, QuoteValue>>();
+			for (Map.Entry<Quote, Map<LocalDate, QuoteValue>> entry : this.quoteValues.entrySet()) {
+				if (entry.getValue() != null) {
+					quoteValues.put(TradistaModelUtil.clone(entry.getKey()),
+							(Map<LocalDate, QuoteValue>) TradistaModelUtil.deepCopy(entry.getValue()));
+				}
+			}
+			quoteSet.quoteValues = quoteValues;
+		}
+		quoteSet.processingOrg = TradistaModelUtil.clone(processingOrg);
+		return quoteSet;
 	}
 
 }

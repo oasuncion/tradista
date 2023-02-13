@@ -1,6 +1,8 @@
 package finance.tradista.core.currency.model;
 
-import java.io.Serializable;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
+import finance.tradista.core.common.model.TradistaObject;
 
 /*
  * Copyright 2019 Olivier Asuncion
@@ -22,15 +24,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class CurrencyPair implements Serializable {
+public class CurrencyPair extends TradistaObject {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1429614201466990666L;
 
+	@Id
 	private Currency primaryCurrency;
 
+	@Id
 	private Currency quoteCurrency;
 
 	public CurrencyPair(Currency primaryCurrency, Currency quoteCurrency) {
@@ -39,55 +43,19 @@ public class CurrencyPair implements Serializable {
 	}
 
 	public Currency getPrimaryCurrency() {
-		return primaryCurrency;
-	}
-
-	public void setPrimaryCurrency(Currency primaryCurrency) {
-		this.primaryCurrency = primaryCurrency;
+		return TradistaModelUtil.clone(primaryCurrency);
 	}
 
 	public Currency getQuoteCurrency() {
-		return quoteCurrency;
-	}
-
-	public void setQuoteCurrency(Currency quoteCurrency) {
-		this.quoteCurrency = quoteCurrency;
+		return TradistaModelUtil.clone(quoteCurrency);
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((primaryCurrency == null) ? 0 : primaryCurrency.hashCode());
-		result = prime * result + ((quoteCurrency == null) ? 0 : quoteCurrency.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CurrencyPair other = (CurrencyPair) obj;
-		if (primaryCurrency == null) {
-			if (other.primaryCurrency != null)
-				return false;
-		} else if (!primaryCurrency.equals(other.primaryCurrency))
-			return false;
-		if (quoteCurrency == null) {
-			if (other.quoteCurrency != null)
-				return false;
-		} else if (!quoteCurrency.equals(other.quoteCurrency))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "CurrencyPair [primaryCurrency=" + primaryCurrency + ", quoteCurrency=" + quoteCurrency + "]";
+	public CurrencyPair clone() {
+		CurrencyPair currencyPair = (CurrencyPair) super.clone();
+		currencyPair.primaryCurrency = TradistaModelUtil.clone(primaryCurrency);
+		currencyPair.quoteCurrency = TradistaModelUtil.clone(quoteCurrency);
+		return currencyPair;
 	}
 
 }

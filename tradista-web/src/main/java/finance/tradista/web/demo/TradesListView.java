@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -50,8 +52,7 @@ public class TradesListView implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		posDef = new PositionDefinition();
-		posDef.setProcessingOrg(LoginView.getCurrentUser().getProcessingOrg());
+		posDef = new PositionDefinition(StringUtils.EMPTY, LoginView.getCurrentUser().getProcessingOrg());
 		posDef.setProductType(Equity.EQUITY);
 		try {
 			posDef.setBook(new BookBusinessDelegate().getBookByName("Demo Book"));

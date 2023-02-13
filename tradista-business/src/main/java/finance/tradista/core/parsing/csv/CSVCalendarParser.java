@@ -34,8 +34,7 @@ public class CSVCalendarParser extends TradistaObjectParser<Calendar, CSVRecord>
 
 	@Override
 	public Calendar parse(CSVRecord csvRecord) {
-		Calendar calendar = new Calendar();
-		calendar.setCode(csvRecord.get(2));
+		Calendar calendar = new Calendar(csvRecord.get(2));
 		Set<LocalDate> holidays = new HashSet<LocalDate>();
 		holidays.add(LocalDate.parse(csvRecord.get(1), DateTimeFormatter.ISO_DATE));
 		calendar.setHolidays(holidays);

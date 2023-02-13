@@ -93,16 +93,12 @@ public class FXTransferManager implements TransferManager<FXTradeEvent> {
 	}
 
 	private CashTransfer createNewPrimaryCurrencyTransfer(FXTrade trade) throws TradistaBusinessException {
-		CashTransfer primaryTransfer = new CashTransfer();
+		CashTransfer primaryTransfer = new CashTransfer(trade.getBook(), TransferPurpose.PRIMARY_CURRENCY,
+				trade.getSettlementDate(), trade, trade.getCurrencyOne());
 		primaryTransfer.setCreationDateTime(LocalDateTime.now());
 		primaryTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		primaryTransfer.setSettlementDate(trade.getSettlementDate());
-		primaryTransfer.setPurpose(TransferPurpose.PRIMARY_CURRENCY);
 		primaryTransfer.setStatus(Transfer.Status.KNOWN);
-		primaryTransfer.setTrade(trade);
-		primaryTransfer.setBook(trade.getBook());
 		primaryTransfer.setAmount(trade.getAmountOne());
-		primaryTransfer.setCurrency(trade.getCurrencyOne());
 
 		if (trade.isBuy()) {
 			primaryTransfer.setDirection(Transfer.Direction.RECEIVE);
@@ -114,16 +110,12 @@ public class FXTransferManager implements TransferManager<FXTradeEvent> {
 	}
 
 	private CashTransfer createNewQuoteCurrencyTransfer(FXTrade trade) throws TradistaBusinessException {
-		CashTransfer quoteTransfer = new CashTransfer();
+		CashTransfer quoteTransfer = new CashTransfer(trade.getBook(), TransferPurpose.QUOTE_CURRENCY,
+				trade.getSettlementDate(), trade, trade.getCurrency());
 		quoteTransfer.setCreationDateTime(LocalDateTime.now());
 		quoteTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		quoteTransfer.setSettlementDate(trade.getSettlementDate());
-		quoteTransfer.setPurpose(TransferPurpose.QUOTE_CURRENCY);
 		quoteTransfer.setStatus(Transfer.Status.KNOWN);
-		quoteTransfer.setTrade(trade);
-		quoteTransfer.setBook(trade.getBook());
 		quoteTransfer.setAmount(trade.getAmount());
-		quoteTransfer.setCurrency(trade.getCurrency());
 
 		if (trade.isBuy()) {
 			quoteTransfer.setDirection(Transfer.Direction.PAY);

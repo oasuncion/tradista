@@ -14,6 +14,7 @@ import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.core.marketdata.model.Quote;
 import finance.tradista.core.marketdata.model.SurfacePoint;
@@ -68,17 +69,17 @@ public class EquityOptionVolatilitySurfaceSQL {
 			stmtGetEquityVolatilitySurfaceByName.setString(1, surfaceName);
 			try (ResultSet results = stmtGetEquityVolatilitySurfaceByName.executeQuery()) {
 				while (results.next()) {
-					equityOptionVolatilitySurface = new EquityOptionVolatilitySurface();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity po = null;
+					if (poId > 0) {
+						po = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					equityOptionVolatilitySurface = new EquityOptionVolatilitySurface(results.getString("name"), po);
 					long id = results.getLong("id");
 					equityOptionVolatilitySurface.setId(id);
-					equityOptionVolatilitySurface.setName(results.getString("name"));
 					equityOptionVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 					equityOptionVolatilitySurface.setInterpolator(results.getString("interpolator"));
 					equityOptionVolatilitySurface.setInstance(results.getString("instance"));
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						equityOptionVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						equityOptionVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());
@@ -110,17 +111,17 @@ public class EquityOptionVolatilitySurfaceSQL {
 			stmtGetEquityVolatilitySurfaceById.setLong(1, surfaceId);
 			try (ResultSet results = stmtGetEquityVolatilitySurfaceById.executeQuery()) {
 				while (results.next()) {
-					equityOptionVolatilitySurface = new EquityOptionVolatilitySurface();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity po = null;
+					if (poId > 0) {
+						po = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					equityOptionVolatilitySurface = new EquityOptionVolatilitySurface(results.getString("name"), po);
 					long id = results.getLong("id");
 					equityOptionVolatilitySurface.setId(id);
-					equityOptionVolatilitySurface.setName(results.getString("name"));
 					equityOptionVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 					equityOptionVolatilitySurface.setInterpolator(results.getString("interpolator"));
 					equityOptionVolatilitySurface.setInstance(results.getString("instance"));
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						equityOptionVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						equityOptionVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());
@@ -149,10 +150,10 @@ public class EquityOptionVolatilitySurfaceSQL {
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtDeleteSurfacePoints = con.prepareStatement(
 						"DELETE FROM EQUITY_OPTION_VOLATILITY_SURFACE_POINT WHERE VOLATILITY_SURFACE_ID = ?");
-				PreparedStatement stmtDeleteStrikesBySurfaceName = con.prepareStatement(
-						"DELETE FROM EQUITY_OPTION_VOLATILITY_SURFACE_STRIKE WHERE SURFACE_ID = ?");
-				PreparedStatement stmtDeleteQuotesBySurfaceName = con.prepareStatement(
-						"DELETE FROM VOLATILITY_SURFACE_QUOTE WHERE SURFACE_ID = ?");
+				PreparedStatement stmtDeleteStrikesBySurfaceName = con
+						.prepareStatement("DELETE FROM EQUITY_OPTION_VOLATILITY_SURFACE_STRIKE WHERE SURFACE_ID = ?");
+				PreparedStatement stmtDeleteQuotesBySurfaceName = con
+						.prepareStatement("DELETE FROM VOLATILITY_SURFACE_QUOTE WHERE SURFACE_ID = ?");
 				PreparedStatement stmtDeleteEquityVolatilitySurface = con
 						.prepareStatement("DELETE FROM VOLATILITY_SURFACE WHERE ID = ?")) {
 
@@ -185,17 +186,18 @@ public class EquityOptionVolatilitySurfaceSQL {
 				PreparedStatement stmtGetStrikesBySurfaceId = con.prepareStatement(
 						"SELECT * FROM EQUITY_OPTION_VOLATILITY_SURFACE_STRIKE WHERE SURFACE_ID = ?")) {
 			while (results.next()) {
-				EquityOptionVolatilitySurface equityOptionVolatilitySurface = new EquityOptionVolatilitySurface();
+				long poId = results.getLong("processing_org_id");
+				LegalEntity po = null;
+				if (poId > 0) {
+					po = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				EquityOptionVolatilitySurface equityOptionVolatilitySurface = new EquityOptionVolatilitySurface(
+						results.getString("name"), po);
 				long id = results.getLong("id");
 				equityOptionVolatilitySurface.setId(id);
-				equityOptionVolatilitySurface.setName(results.getString("name"));
 				equityOptionVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 				equityOptionVolatilitySurface.setInterpolator(results.getString("interpolator"));
 				equityOptionVolatilitySurface.setInstance(results.getString("instance"));
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					equityOptionVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-				}
 				java.sql.Date quoteDate = results.getDate("quote_date");
 				if (quoteDate != null) {
 					equityOptionVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());

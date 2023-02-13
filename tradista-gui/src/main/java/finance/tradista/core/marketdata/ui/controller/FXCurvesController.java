@@ -311,10 +311,7 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 
 	}
 
-	private void buildCurve() throws TradistaBusinessException {
-		if (curve == null) {
-			curve = new FXCurve();
-		}
+	private void buildCurve(FXCurve curve) throws TradistaBusinessException {
 		Map<LocalDate, BigDecimal> ratePoints = toRatePointsMap(pointsTable.getItems());
 		curve.setPoints(ratePoints);
 
@@ -325,22 +322,19 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 			curve.setInterpolator(interpolatorComboBox.getValue());
 			curve.setAlgorithm(algorithmComboBox.getValue());
 		}
-		if (curveComboBox.getValue() != null) {
-			curve.setName(curveComboBox.getValue().getName());
-		}
+
 		curve.setQuoteDate(quoteDate.getValue());
 
 		((FXCurve) curve).setPrimaryCurrency(primaryCurrency.getValue());
 		((FXCurve) curve).setQuoteCurrency(quoteCurrency.getValue());
 		((FXCurve) curve).setPrimaryCurrencyIRCurve(primaryCurrencyIRCurve.getValue());
 		((FXCurve) curve).setQuoteCurrencyIRCurve(quoteCurrencyIRCurve.getValue());
-		curve.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 	}
 
 	@FXML
 	protected void save() {
 		try {
-			buildCurve();
+			buildCurve((FXCurve) curve);
 			curve.setId(fxCurveBusinessDelegate.saveFXCurve(((FXCurve) curve)));
 			TradistaGUIUtil.fillComboBox(fxCurveBusinessDelegate.getAllFXCurves(), curveComboBox);
 		} catch (TradistaBusinessException tbe) {
@@ -351,7 +345,6 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 
 	@FXML
 	protected void copy() {
-		long oldFXCurveId = 0;
 		try {
 			if (curve == null) {
 				throw new TradistaBusinessException("Please load a FX curve.");
@@ -361,24 +354,20 @@ public class FXCurvesController extends TradistaGenerableCurveController {
 			alert.showAndWait();
 		}
 		try {
-			buildCurve();
-			oldFXCurveId = 0;
 			TradistaTextInputDialog dialog = new TradistaTextInputDialog();
 			dialog.setTitle("Curve name");
 			dialog.setHeaderText("Curve name selection");
 			dialog.setContentText("Please choose a Curve name:");
 
 			Optional<String> result = dialog.showAndWait();
-			// The Java 8 way to get the response value (with lambda
-			// expression).
-			result.ifPresent(name -> curve.setName(name));
 			if (result.isPresent()) {
-				curve.setId(0);
-				curve.setId(fxCurveBusinessDelegate.saveFXCurve(((FXCurve) curve)));
+				FXCurve copyCurve = new FXCurve(result.get(), ClientUtil.getCurrentUser().getProcessingOrg());
+				buildCurve(copyCurve);
+				copyCurve.setId(fxCurveBusinessDelegate.saveFXCurve(copyCurve));
+				curve = copyCurve;
 				TradistaGUIUtil.fillComboBox(fxCurveBusinessDelegate.getAllFXCurves(), curveComboBox);
 			}
 		} catch (TradistaBusinessException tbe) {
-			curve.setId(oldFXCurveId);
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}

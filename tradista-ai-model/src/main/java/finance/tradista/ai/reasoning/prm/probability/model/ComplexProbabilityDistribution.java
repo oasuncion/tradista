@@ -2,6 +2,8 @@ package finance.tradista.ai.reasoning.prm.probability.model;
 
 import java.util.Set;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
+
 /*
  * Copyright 2017 Olivier Asuncion
  * 
@@ -31,12 +33,21 @@ public class ComplexProbabilityDistribution extends ProbabilityDistribution {
 
 	private Set<IfExpression> ifExpressions;
 
+	@SuppressWarnings("unchecked")
 	public Set<IfExpression> getIfExpressions() {
-		return ifExpressions;
+		return (Set<IfExpression>) TradistaModelUtil.deepCopy(ifExpressions);
 	}
 
 	public void setIfExpressions(Set<IfExpression> ifExpressions) {
 		this.ifExpressions = ifExpressions;
-	}	
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public ComplexProbabilityDistribution clone() {
+		ComplexProbabilityDistribution complexProbabilityDistribution = (ComplexProbabilityDistribution) super.clone();
+		complexProbabilityDistribution.ifExpressions = (Set<IfExpression>) TradistaModelUtil.deepCopy(ifExpressions);
+		return complexProbabilityDistribution;
+	}
 
 }

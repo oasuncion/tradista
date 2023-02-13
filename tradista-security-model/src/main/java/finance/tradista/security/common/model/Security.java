@@ -3,7 +3,10 @@ package finance.tradista.security.common.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
+import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.product.model.Product;
 
@@ -28,43 +31,45 @@ specific language governing permissions and limitations
 under the License.    */
 
 public abstract class Security extends Product {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2413499120965894034L;
+
+	@Id
 	private String isin;
 	private LegalEntity issuer;
 	private LocalDate issueDate;
 	private BigDecimal issuePrice;
 	private Currency currency;
-	
+
+	public Security(Exchange exchange, String isin) {
+		super(exchange);
+		this.isin = isin;
+	}
 
 	public String getIsin() {
 		return isin;
 	}
 
-	public void setIsin(String isin) {
-		this.isin = isin;
-	}
-	
 	public LegalEntity getIssuer() {
-		return issuer;
+		return TradistaModelUtil.clone(issuer);
 	}
 
 	public void setIssuer(LegalEntity issuer) {
 		this.issuer = issuer;
 	}
-	
+
 	public long getIssuerId() {
-		if (issuer!=null) {
-			return issuer.getId(); 
+		if (issuer != null) {
+			return issuer.getId();
 		}
 		return 0;
 	}
 
 	public Currency getCurrency() {
-		return currency;
+		return TradistaModelUtil.clone(currency);
 	}
 
 	public void setCurrency(Currency currency) {
@@ -93,5 +98,13 @@ public abstract class Security extends Product {
 
 	public void setIssuePrice(BigDecimal issuePrice) {
 		this.issuePrice = issuePrice;
+	}
+
+	@Override
+	public Security clone() {
+		Security security = (Security) super.clone();
+		security.issuer = TradistaModelUtil.clone(issuer);
+		security.currency = TradistaModelUtil.clone(currency);
+		return security;
 	}
 }

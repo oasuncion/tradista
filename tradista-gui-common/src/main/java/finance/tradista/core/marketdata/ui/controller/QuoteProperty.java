@@ -55,7 +55,7 @@ public class QuoteProperty {
 	private final StringProperty sourceName;
 
 	public QuoteProperty(String date, String name, String type, String bid, String ask, String open, String close,
-		String high, String low, String last, String enteredDate, String sourceName) {
+			String high, String low, String last, String enteredDate, String sourceName) {
 		this.date = new SimpleStringProperty(date);
 		this.name = new SimpleStringProperty(name);
 		this.type = new SimpleStringProperty(type);
@@ -85,17 +85,16 @@ public class QuoteProperty {
 			if (quoteType == null) {
 				List<QuoteType> quoteTypes = new QuoteBusinessDelegate().getQuoteTypesByQuoteName(quoteName);
 				for (QuoteType type : quoteTypes) {
-					QuoteValue quoteValue = new QuoteValue(cal);
-					quoteValue.setQuote(new QuoteBusinessDelegate().getQuoteByNameAndType(quoteName, type));
+					QuoteValue quoteValue = new QuoteValue(cal,
+							new QuoteBusinessDelegate().getQuoteByNameAndType(quoteName, type));
 					if (!data.contains(quoteValue)) {
 						data.add(quoteValue);
 					}
 				}
 			} else {
-				QuoteValue quoteValue = new QuoteValue(cal);
 				Quote quote = new QuoteBusinessDelegate().getQuoteByNameAndType(quoteName, quoteType);
 				if (quote != null) {
-					quoteValue.setQuote(quote);
+					QuoteValue quoteValue = new QuoteValue(cal, quote);
 					if (!data.contains(quoteValue)) {
 						data.add(quoteValue);
 					}

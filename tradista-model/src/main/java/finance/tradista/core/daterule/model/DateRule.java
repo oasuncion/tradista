@@ -12,6 +12,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import finance.tradista.core.calendar.model.Calendar;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.daterollconvention.model.DateRollingConvention;
 
@@ -48,6 +50,7 @@ public class DateRule extends TradistaObject implements Comparable<DateRule> {
 
 	public static String[] WEEK_DAY_POSITIONS = { "1st", "2nd", "3rd", "4th", "5th", "Last" };
 
+	@Id
 	private String name;
 
 	private DateRollingConvention drc;
@@ -66,21 +69,15 @@ public class DateRule extends TradistaObject implements Comparable<DateRule> {
 
 	private short dateOffset;
 
-	public DateRule() {
+	public DateRule(String name) {
+		super();
+		this.name = name;
 		months = new HashSet<Month>();
 		dateRulesPeriods = new LinkedHashMap<DateRule, Period>();
 	}
 
-	public DateRule(String name) {
-		this.name = name;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public DateRollingConvention getDateRollingConvention() {
@@ -92,7 +89,10 @@ public class DateRule extends TradistaObject implements Comparable<DateRule> {
 	}
 
 	public Set<Month> getMonths() {
-		return months;
+		if (months == null) {
+			return null;
+		}
+		return new HashSet<>(months);
 	}
 
 	public void setMonths(Set<Month> months) {
@@ -130,8 +130,9 @@ public class DateRule extends TradistaObject implements Comparable<DateRule> {
 		this.isSequence = isSequence;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<DateRule, Period> getDateRulesPeriods() {
-		return dateRulesPeriods;
+		return (Map<DateRule, Period>) TradistaModelUtil.deepCopy(dateRulesPeriods);
 	}
 
 	public void setDateRulesPeriods(Map<DateRule, Period> rulesPeriods) {
@@ -146,8 +147,9 @@ public class DateRule extends TradistaObject implements Comparable<DateRule> {
 		this.day = day;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Set<Calendar> getCalendars() {
-		return calendars;
+		return (Set<Calendar>) TradistaModelUtil.deepCopy(calendars);
 	}
 
 	public void setCalendars(Set<Calendar> calendars) {
@@ -163,31 +165,6 @@ public class DateRule extends TradistaObject implements Comparable<DateRule> {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DateRule other = (DateRule) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return name;
 	}
@@ -195,6 +172,15 @@ public class DateRule extends TradistaObject implements Comparable<DateRule> {
 	@Override
 	public int compareTo(DateRule dr) {
 		return name.compareTo(dr.getName());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DateRule clone() {
+		DateRule dateRule = (DateRule) super.clone();
+		dateRule.dateRulesPeriods = (Map<DateRule, Period>) TradistaModelUtil.deepCopy(dateRulesPeriods);
+		dateRule.calendars = (Set<Calendar>) TradistaModelUtil.deepCopy(calendars);
+		return dateRule;
 	}
 
 }

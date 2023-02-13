@@ -51,9 +51,8 @@ public class CalendarSQL {
 			stmtGetWeekEndByCalendarId.setLong(1, id);
 			try (ResultSet results = stmtGetCalendarById.executeQuery()) {
 				while (results.next()) {
-					calendar = new Calendar();
+					calendar = new Calendar(results.getString("code"));
 					calendar.setId(id);
-					calendar.setCode(results.getString("code"));
 					calendar.setName(results.getString("name"));
 					try (ResultSet holidaysResults = stmtGetHolidaysByCalendarId.executeQuery();
 							ResultSet weekEndResults = stmtGetWeekEndByCalendarId.executeQuery()) {
@@ -94,8 +93,7 @@ public class CalendarSQL {
 			stmtGetCalendarByCode.setString(1, code);
 			try (ResultSet results = stmtGetCalendarByCode.executeQuery()) {
 				while (results.next()) {
-					calendar = new Calendar();
-					calendar.setCode(results.getString("code"));
+					calendar = new Calendar(results.getString("code"));
 					calendar.setName(results.getString("name"));
 					long id = results.getLong("id");
 					calendar.setId(id);
@@ -140,8 +138,7 @@ public class CalendarSQL {
 			stmtGetCalendarByName.setString(1, name);
 			try (ResultSet results = stmtGetCalendarByName.executeQuery()) {
 				while (results.next()) {
-					calendar = new Calendar();
-					calendar.setCode(results.getString("code"));
+					calendar = new Calendar(results.getString("code"));
 					calendar.setName(results.getString("name"));
 					long id = results.getLong("id");
 					calendar.setId(id);
@@ -187,12 +184,11 @@ public class CalendarSQL {
 					if (calendars == null) {
 						calendars = new HashSet<Calendar>();
 					}
-					Calendar calendar = new Calendar();
+					Calendar calendar = new Calendar(results.getString("code"));
 					long id = results.getLong("id");
 					calendar.setId(id);
 					stmtGetWeekEndByCalendarId.setLong(1, id);
 					stmtGetHolidaysByCalendarId.setLong(1, id);
-					calendar.setCode(results.getString("code"));
 					calendar.setName(results.getString("name"));
 					try (ResultSet holidaysResults = stmtGetHolidaysByCalendarId.executeQuery();
 							ResultSet weekEndResults = stmtGetWeekEndByCalendarId.executeQuery()) {

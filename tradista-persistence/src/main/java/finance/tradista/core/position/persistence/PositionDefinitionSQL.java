@@ -13,6 +13,7 @@ import finance.tradista.core.book.persistence.BookSQL;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
 import finance.tradista.core.currency.persistence.CurrencySQL;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.pricing.persistence.PricingParameterSQL;
@@ -167,21 +168,21 @@ public class PositionDefinitionSQL {
 				if (positionDefinitions == null) {
 					positionDefinitions = new HashSet<PositionDefinition>();
 				}
-				PositionDefinition posDef = new PositionDefinition();
+				long poId = results.getLong("processing_org_id");
+				LegalEntity processingOrg = null;
+				if (poId > 0) {
+					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				PositionDefinition posDef = new PositionDefinition(results.getString("name"), processingOrg);
 				posDef.setId(results.getLong("id"));
 				posDef.setBook(BookSQL.getBookById(results.getLong("book_id")));
 				posDef.setCounterparty(LegalEntitySQL.getLegalEntityById(results.getLong("counterparty_id")));
 				posDef.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-				posDef.setName(results.getString("name"));
 				posDef.setPricingParameter(
 						PricingParameterSQL.getPricingParameterById(results.getLong("pricing_parameter_id")));
 				posDef.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
 				posDef.setProductType(results.getString("product_type"));
 				posDef.setRealTime(results.getBoolean("is_real_time"));
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					posDef.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-				}
 				positionDefinitions.add(posDef);
 			}
 		} catch (SQLException sqle) {
@@ -201,9 +202,13 @@ public class PositionDefinitionSQL {
 			try (ResultSet results = stmtGetPositionDefinitionByName.executeQuery()) {
 				while (results.next()) {
 					if (positionDefinition == null) {
-						positionDefinition = new PositionDefinition();
+						long poId = results.getLong("processing_org_id");
+						LegalEntity processingOrg = null;
+						if (poId > 0) {
+							processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+						}
+						positionDefinition = new PositionDefinition(results.getString("name"), processingOrg);
 						positionDefinition.setId(results.getLong("id"));
-						positionDefinition.setName(results.getString("name"));
 						positionDefinition.setBook(BookSQL.getBookById(results.getLong("book_id")));
 						positionDefinition
 								.setCounterparty(LegalEntitySQL.getLegalEntityById(results.getLong("counterparty_id")));
@@ -213,10 +218,6 @@ public class PositionDefinitionSQL {
 						positionDefinition.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
 						positionDefinition.setProductType(results.getString("product_type"));
 						positionDefinition.setRealTime(results.getBoolean("is_real_time"));
-						long poId = results.getLong("processing_org_id");
-						if (poId > 0) {
-							positionDefinition.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-						}
 					}
 				}
 			}
@@ -238,9 +239,13 @@ public class PositionDefinitionSQL {
 			try (ResultSet results = stmtGetPositionDefinitionById.executeQuery()) {
 				while (results.next()) {
 					if (positionDefinition == null) {
-						positionDefinition = new PositionDefinition();
+						long poId = results.getLong("processing_org_id");
+						LegalEntity processingOrg = null;
+						if (poId > 0) {
+							processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+						}
+						positionDefinition = new PositionDefinition(results.getString("name"), processingOrg);
 						positionDefinition.setId(results.getLong("id"));
-						positionDefinition.setName(results.getString("name"));
 						positionDefinition.setBook(BookSQL.getBookById(results.getLong("book_id")));
 						positionDefinition
 								.setCounterparty(LegalEntitySQL.getLegalEntityById(results.getLong("counterparty_id")));
@@ -250,10 +255,6 @@ public class PositionDefinitionSQL {
 						positionDefinition.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
 						positionDefinition.setProductType(results.getString("product_type"));
 						positionDefinition.setRealTime(results.getBoolean("is_real_time"));
-						long poId = results.getLong("processing_org_id");
-						if (poId > 0) {
-							positionDefinition.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-						}
 					}
 				}
 			}
@@ -276,21 +277,21 @@ public class PositionDefinitionSQL {
 				if (positionDefinitions == null) {
 					positionDefinitions = new HashSet<PositionDefinition>();
 				}
-				PositionDefinition posDef = new PositionDefinition();
+				long poId = results.getLong("processing_org_id");
+				LegalEntity processingOrg = null;
+				if (poId > 0) {
+					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				PositionDefinition posDef = new PositionDefinition(results.getString("name"), processingOrg);
 				posDef.setId(results.getLong("id"));
 				posDef.setBook(BookSQL.getBookById(results.getLong("book_id")));
 				posDef.setCounterparty(LegalEntitySQL.getLegalEntityById(results.getLong("counterparty_id")));
 				posDef.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-				posDef.setName(results.getString("name"));
 				posDef.setPricingParameter(
 						PricingParameterSQL.getPricingParameterById(results.getLong("pricing_parameter_id")));
 				posDef.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
 				posDef.setProductType(results.getString("product_type"));
 				posDef.setRealTime(results.getBoolean("is_real_time"));
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					posDef.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-				}
 				positionDefinitions.add(posDef);
 			}
 		} catch (SQLException sqle) {

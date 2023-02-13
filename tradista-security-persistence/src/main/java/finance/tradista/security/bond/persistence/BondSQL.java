@@ -131,9 +131,9 @@ public class BondSQL {
 			stmtGetBondsByCreationDate.setDate(1, java.sql.Date.valueOf(date));
 			try (ResultSet results = stmtGetBondsByCreationDate.executeQuery()) {
 				while (results.next()) {
-					Bond bond = new Bond();
+					Bond bond = new Bond(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					bond.setId(results.getInt("id"));
-					bond.setIsin(results.getString("isin"));
 					bond.setCoupon(results.getBigDecimal("coupon"));
 					bond.setMaturityDate(results.getDate("maturity_date").toLocalDate());
 					bond.setPrincipal(results.getBigDecimal("principal"));
@@ -147,7 +147,6 @@ public class BondSQL {
 					bond.setIssueDate(results.getDate("issue_date").toLocalDate());
 					bond.setIssuePrice(results.getBigDecimal("issue_price"));
 					bond.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					bond.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					long referenceRateIndexId = results.getLong("reference_rate_index_id");
 					if (referenceRateIndexId > 0) {
 						bond.setReferenceRateIndex(IndexSQL.getIndexById(referenceRateIndexId));
@@ -202,9 +201,9 @@ public class BondSQL {
 			}
 			try (ResultSet results = stmt.executeQuery(query)) {
 				while (results.next()) {
-					Bond bond = new Bond();
+					Bond bond = new Bond(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					bond.setId(results.getInt("id"));
-					bond.setIsin(results.getString("isin"));
 					bond.setCoupon(results.getBigDecimal("coupon"));
 					bond.setMaturityDate(results.getDate("maturity_date").toLocalDate());
 					bond.setPrincipal(results.getBigDecimal("principal"));
@@ -218,7 +217,6 @@ public class BondSQL {
 					bond.setIssueDate(results.getDate("issue_date").toLocalDate());
 					bond.setIssuePrice(results.getBigDecimal("issue_price"));
 					bond.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					bond.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					long referenceRateIndexId = results.getLong("reference_rate_index_id");
 					if (referenceRateIndexId > 0) {
 						bond.setReferenceRateIndex(IndexSQL.getIndexById(referenceRateIndexId));
@@ -257,9 +255,9 @@ public class BondSQL {
 				if (bonds == null) {
 					bonds = new HashSet<Bond>();
 				}
-				Bond bond = new Bond();
+				Bond bond = new Bond(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+						results.getString("isin"));
 				bond.setId(results.getLong("id"));
-				bond.setIsin(results.getString("isin"));
 				bond.setCoupon(results.getBigDecimal("coupon"));
 				bond.setMaturityDate(results.getDate("maturity_date").toLocalDate());
 				bond.setPrincipal(results.getBigDecimal("principal"));
@@ -273,7 +271,6 @@ public class BondSQL {
 				bond.setIssueDate(results.getDate("issue_date").toLocalDate());
 				bond.setIssuePrice(results.getBigDecimal("issue_price"));
 				bond.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-				bond.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 				long referenceRateIndexId = results.getLong("reference_rate_index_id");
 				if (referenceRateIndexId > 0) {
 					bond.setReferenceRateIndex(IndexSQL.getIndexById(referenceRateIndexId));
@@ -306,9 +303,9 @@ public class BondSQL {
 			stmtGetBondById.setLong(1, id);
 			try (ResultSet results = stmtGetBondById.executeQuery()) {
 				while (results.next()) {
-					bond = new Bond();
+					bond = new Bond(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					bond.setId(results.getLong("id"));
-					bond.setIsin(results.getString("isin"));
 					bond.setCoupon(results.getBigDecimal("coupon"));
 					bond.setMaturityDate(results.getDate("maturity_date").toLocalDate());
 					bond.setPrincipal(results.getBigDecimal("principal"));
@@ -322,7 +319,6 @@ public class BondSQL {
 					bond.setIssueDate(results.getDate("issue_date").toLocalDate());
 					bond.setIssuePrice(results.getBigDecimal("issue_price"));
 					bond.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					bond.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					long referenceRateIndexId = results.getLong("reference_rate_index_id");
 					if (referenceRateIndexId > 0) {
 						bond.setReferenceRateIndex(IndexSQL.getIndexById(referenceRateIndexId));
@@ -364,9 +360,9 @@ public class BondSQL {
 
 			try (ResultSet results = stmt.executeQuery(query)) {
 				while (results.next()) {
-					Bond bond = new Bond();
+					Bond bond = new Bond(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					bond.setId(results.getInt("id"));
-					bond.setIsin(results.getString("isin"));
 					bond.setCoupon(results.getBigDecimal("coupon"));
 					bond.setMaturityDate(results.getDate("maturity_date").toLocalDate());
 					bond.setPrincipal(results.getBigDecimal("principal"));
@@ -380,7 +376,6 @@ public class BondSQL {
 					bond.setIssueDate(results.getDate("issue_date").toLocalDate());
 					bond.setIssuePrice(results.getBigDecimal("issue_price"));
 					bond.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					bond.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					long referenceRateIndexId = results.getLong("reference_rate_index_id");
 					if (referenceRateIndexId > 0) {
 						bond.setReferenceRateIndex(IndexSQL.getIndexById(referenceRateIndexId));
@@ -417,9 +412,9 @@ public class BondSQL {
 			stmtGetBondByIsin.setString(1, isin);
 			try (ResultSet results = stmtGetBondByIsin.executeQuery()) {
 				while (results.next()) {
-					Bond bond = new Bond();
+					Bond bond = new Bond(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					bond.setId(results.getLong("id"));
-					bond.setIsin(results.getString("isin"));
 					bond.setCoupon(results.getBigDecimal("coupon"));
 					bond.setMaturityDate(results.getDate("maturity_date").toLocalDate());
 					bond.setPrincipal(results.getBigDecimal("principal"));
@@ -433,7 +428,6 @@ public class BondSQL {
 					bond.setIssueDate(results.getDate("issue_date").toLocalDate());
 					bond.setIssuePrice(results.getBigDecimal("issue_price"));
 					bond.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					bond.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					long referenceRateIndexId = results.getLong("reference_rate_index_id");
 					if (referenceRateIndexId > 0) {
 						bond.setReferenceRateIndex(IndexSQL.getIndexById(referenceRateIndexId));
@@ -472,9 +466,9 @@ public class BondSQL {
 			stmtGetBondByIsinAndExchangeCode.setString(2, exchangeCode);
 			try (ResultSet results = stmtGetBondByIsinAndExchangeCode.executeQuery()) {
 				while (results.next()) {
-					bond = new Bond();
+					bond = new Bond(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					bond.setId(results.getInt("id"));
-					bond.setIsin(results.getString("isin"));
 					bond.setCoupon(results.getBigDecimal("coupon"));
 					bond.setMaturityDate(results.getDate("maturity_date").toLocalDate());
 					bond.setPrincipal(results.getBigDecimal("principal"));
@@ -488,7 +482,6 @@ public class BondSQL {
 					bond.setIssueDate(results.getDate("issue_date").toLocalDate());
 					bond.setIssuePrice(results.getBigDecimal("issue_price"));
 					bond.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					bond.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					long referenceRateIndexId = results.getLong("reference_rate_index_id");
 					if (referenceRateIndexId > 0) {
 						bond.setReferenceRateIndex(IndexSQL.getIndexById(referenceRateIndexId));

@@ -84,8 +84,7 @@ public class ConfigurationServiceBean implements LocalConfigurationService, Conf
 		UIConfiguration uiConfiguration = UIConfigurationSQL.getUIConfiguration(user);
 		// if the UI Configuration is not customized, we load a default one.
 		if (uiConfiguration == null) {
-			uiConfiguration = new UIConfiguration();
-			uiConfiguration.setUser(user);
+			uiConfiguration = new UIConfiguration(user);
 		}
 		return uiConfiguration;
 	}

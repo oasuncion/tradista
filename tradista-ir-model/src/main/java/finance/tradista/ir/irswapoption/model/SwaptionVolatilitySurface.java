@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.marketdata.model.Generable;
 import finance.tradista.core.marketdata.model.SurfacePoint;
 import finance.tradista.core.marketdata.model.VolatilitySurface;
@@ -37,12 +38,8 @@ public class SwaptionVolatilitySurface extends VolatilitySurface<Integer, Intege
 	 */
 	private static final long serialVersionUID = 2717361966579455059L;
 
-	public SwaptionVolatilitySurface(String name) {
-		super(name);
-	}
-
-	public SwaptionVolatilitySurface() {
-		super();
+	public SwaptionVolatilitySurface(String name, LegalEntity processingOrg) {
+		super(name, processingOrg);
 	}
 
 	public BigDecimal getVolatilityByOptionExpiryAndSwapTenor(int optionExpiry, int swapTenor)

@@ -95,7 +95,7 @@ public class IRSwapTransferManager implements TransferManager<IRSwapTradeEvent> 
 						// exercised irswap
 						// option underlying), it was not set to the transfer in
 						// transferBusinessDelegate.getTransfersByTradeIdAndPurpose
-						transfer.setTrade(oldTrade);
+						// transfer.setTrade(oldTrade); A tester mais je pense que ce n'est plus vrai, on doit bien avoir le trade deja setté
 						transfersToBeSaved.add(transfer);
 					}
 				}
@@ -127,7 +127,7 @@ public class IRSwapTransferManager implements TransferManager<IRSwapTradeEvent> 
 						// exercised irswap
 						// option underlying), it was not set to the transfer in
 						// transferBusinessDelegate.getTransfersByTradeIdAndPurpose
-						transfer.setTrade(oldTrade);
+						// transfer.setTrade(oldTrade); A tester mais je pense que ce n'est plus vrai, on doit bien avoir le trade deja setté
 						transfersToBeSaved.add(transfer);
 					}
 				}

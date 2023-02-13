@@ -53,9 +53,8 @@ public class DateRuleSQL {
 			stmtGetDateRuleById.setLong(1, id);
 			try (ResultSet results = stmtGetDateRuleById.executeQuery()) {
 				while (results.next()) {
-					dateRule = new DateRule();
-					dateRule.setId(results.getLong("id"));
-					dateRule.setName(results.getString("name"));
+					dateRule = new DateRule(results.getString("name"));
+					dateRule.setId(results.getLong("id"));					
 					dateRule.setSequence(results.getBoolean("is_sequence"));
 					if (dateRule.isSequence()) {
 						dateRule.setDateRulesPeriods(getDateRulesPeriodsByDateRuleId(dateRule.getId()));
@@ -163,9 +162,8 @@ public class DateRuleSQL {
 				if (dateRules == null) {
 					dateRules = new TreeSet<DateRule>();
 				}
-				DateRule dateRule = new DateRule();
-				dateRule.setId(results.getLong("id"));
-				dateRule.setName(results.getString("name"));
+				DateRule dateRule = new DateRule(results.getString("name"));
+				dateRule.setId(results.getLong("id"));				
 				dateRule.setSequence(results.getBoolean("is_sequence"));
 				if (dateRule.isSequence()) {
 					dateRule.setDateRulesPeriods(getDateRulesPeriodsByDateRuleId(dateRule.getId()));
@@ -199,9 +197,8 @@ public class DateRuleSQL {
 			stmtGetDateRuleByName.setString(1, name);
 			try (ResultSet results = stmtGetDateRuleByName.executeQuery()) {
 				while (results.next()) {
-					dateRule = new DateRule();
-					dateRule.setId(results.getLong("id"));
-					dateRule.setName(results.getString("name"));
+					dateRule = new DateRule(results.getString("name"));
+					dateRule.setId(results.getLong("id"));					
 					dateRule.setSequence(results.getBoolean("is_sequence"));
 					if (dateRule.isSequence()) {
 						dateRule.setDateRulesPeriods(getDateRulesPeriodsByDateRuleId(dateRule.getId()));

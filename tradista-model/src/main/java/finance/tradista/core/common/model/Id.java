@@ -1,9 +1,12 @@
-package finance.tradista.core.marketdata.model;
+package finance.tradista.core.common.model;
 
-import finance.tradista.core.legalentity.model.LegalEntity;
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /*
- * Copyright 2014 Olivier Asuncion
+ * Copyright 2022 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,21 +25,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class ZeroCouponCurve extends InterestRateCurve {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -965571671567710336L;
-
-	public static final String ZERO_COUPON_CURVE = "ZeroCouponCurve";
-
-	public ZeroCouponCurve(String name, LegalEntity po) {
-		super(name, po);
-	}
-
-	public String getType() {
-		return ZERO_COUPON_CURVE;
-	}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface Id {
 
 }

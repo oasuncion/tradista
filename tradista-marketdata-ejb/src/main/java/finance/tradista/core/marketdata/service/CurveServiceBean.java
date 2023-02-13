@@ -8,11 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.security.PermitAll;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
-import jakarta.interceptor.Interceptors;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
@@ -20,10 +15,10 @@ import finance.tradista.core.marketdata.model.Curve;
 import finance.tradista.core.marketdata.model.FXCurve;
 import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.marketdata.model.RatePoint;
-import finance.tradista.core.marketdata.service.CurveFilteringInterceptor;
-import finance.tradista.core.marketdata.service.CurveService;
-import finance.tradista.core.marketdata.service.FXCurveService;
-import finance.tradista.core.marketdata.service.InterestRateCurveService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2016 Olivier Asuncion

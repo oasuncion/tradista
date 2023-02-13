@@ -75,7 +75,7 @@ public final class PricerBondUtil {
 		if (!bond.getCouponFrequency().equals(Tenor.NO_TENOR) && !tradeDate.isAfter(bond.getMaturityDate())) {
 			while (!couponDate.isAfter(bond.getMaturityDate())) {
 				if (couponDate.isAfter(datedDate) && !couponDate.isBefore(tradeDate)) {
-					Coupon coupon = new Coupon();
+					Coupon coupon = new Coupon(couponDate);
 					if (calculateAmount) {
 						if (bond.getCouponType().equals("Fixed")) {
 							coupon.setAmount(
@@ -109,8 +109,6 @@ public final class PricerBondUtil {
 							coupon.setAmount((rate.divide(BigDecimal.valueOf(100))).multiply(bond.getPrincipal()));
 						}
 					}
-					coupon.setDate(couponDate);
-
 					coupons.add(coupon);
 				}
 				couponDate = DateUtil.addTenor(couponDate, frequency);

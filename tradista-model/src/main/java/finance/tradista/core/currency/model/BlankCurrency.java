@@ -32,7 +32,7 @@ public final class BlankCurrency extends Currency {
 	private static final BlankCurrency instance = new BlankCurrency();
 	
 	private BlankCurrency() {
-		setIsoCode(StringUtils.EMPTY);
+		super(StringUtils.EMPTY);
 	}
 	
 	public static BlankCurrency getInstance() {

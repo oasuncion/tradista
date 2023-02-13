@@ -117,9 +117,8 @@ public final class IRSwapTransferUtil {
 		// pays it back
 		// at maturity date
 		if (trade instanceof CcySwapTrade) {
-			CashTransfer cashTransfer = new CashTransfer();
-			cashTransfer.setCurrency(currency);
-			cashTransfer.setSettlementDate(trade.getSettlementDate());
+			CashTransfer cashTransfer = new CashTransfer(trade.getBook(), TransferPurpose.FIXED_LEG_NOTIONAL_PAYMENT,
+					trade.getSettlementDate(), trade, currency);
 			if (trade.isBuy()) {
 				cashTransfer.setDirection(Transfer.Direction.PAY);
 			} else {
@@ -128,26 +127,19 @@ public final class IRSwapTransferUtil {
 			if (cashTransfers == null) {
 				cashTransfers = new ArrayList<CashTransfer>();
 			}
-			cashTransfer.setTrade(trade);
-			cashTransfer.setBook(trade.getBook());
-			cashTransfer.setPurpose(TransferPurpose.FIXED_LEG_NOTIONAL_PAYMENT);
 			cashTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
 			cashTransfer.setAmount(notional);
 			cashTransfer.setStatus(Transfer.Status.KNOWN);
 			cashTransfer.setCreationDateTime(LocalDateTime.now());
 			cashTransfers.add(cashTransfer);
 
-			cashTransfer = new CashTransfer();
-			cashTransfer.setCurrency(currency);
-			cashTransfer.setSettlementDate(trade.getMaturityDate());
+			cashTransfer = new CashTransfer(trade.getBook(), TransferPurpose.FIXED_LEG_NOTIONAL_REPAYMENT,
+					trade.getMaturityDate(), trade, currency);
 			if (trade.isSell()) {
 				cashTransfer.setDirection(Transfer.Direction.PAY);
 			} else {
 				cashTransfer.setDirection(Transfer.Direction.RECEIVE);
 			}
-			cashTransfer.setTrade(trade);
-			cashTransfer.setBook(trade.getBook());
-			cashTransfer.setPurpose(TransferPurpose.FIXED_LEG_NOTIONAL_REPAYMENT);
 			cashTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
 			cashTransfer.setAmount(notional);
 			cashTransfer.setStatus(Transfer.Status.KNOWN);
@@ -209,9 +201,8 @@ public final class IRSwapTransferUtil {
 		// he pays it back
 		// at maturity date
 		if (trade instanceof CcySwapTrade) {
-			CashTransfer cashTransfer = new CashTransfer();
-			cashTransfer.setCurrency(trade.getCurrency());
-			cashTransfer.setSettlementDate(trade.getSettlementDate());
+			CashTransfer cashTransfer = new CashTransfer(trade.getBook(), TransferPurpose.FLOATING_LEG_NOTIONAL_PAYMENT,
+					trade.getSettlementDate(), trade, trade.getCurrency());
 			if (trade.isBuy()) {
 				cashTransfer.setDirection(Transfer.Direction.PAY);
 			} else {
@@ -220,25 +211,18 @@ public final class IRSwapTransferUtil {
 			if (cashTransfers == null) {
 				cashTransfers = new ArrayList<CashTransfer>();
 			}
-			cashTransfer.setTrade(trade);
-			cashTransfer.setBook(trade.getBook());
-			cashTransfer.setPurpose(TransferPurpose.FLOATING_LEG_NOTIONAL_PAYMENT);
 			cashTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
 			cashTransfer.setAmount(trade.getAmount());
 			cashTransfer.setStatus(Transfer.Status.KNOWN);
 			cashTransfer.setCreationDateTime(LocalDateTime.now());
 			cashTransfers.add(cashTransfer);
-			cashTransfer = new CashTransfer();
-			cashTransfer.setCurrency(trade.getCurrency());
-			cashTransfer.setSettlementDate(trade.getMaturityDate());
+			cashTransfer = new CashTransfer(trade.getBook(), TransferPurpose.FLOATING_LEG_NOTIONAL_REPAYMENT,
+					trade.getMaturityDate(), trade, trade.getCurrency());
 			if (trade.isSell()) {
 				cashTransfer.setDirection(Transfer.Direction.PAY);
 			} else {
 				cashTransfer.setDirection(Transfer.Direction.RECEIVE);
 			}
-			cashTransfer.setTrade(trade);
-			cashTransfer.setBook(trade.getBook());
-			cashTransfer.setPurpose(TransferPurpose.FLOATING_LEG_NOTIONAL_REPAYMENT);
 			cashTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
 			cashTransfer.setAmount(trade.getAmount());
 			cashTransfer.setStatus(Transfer.Status.KNOWN);
@@ -251,19 +235,15 @@ public final class IRSwapTransferUtil {
 
 	private static CashTransfer createReceptionCashTransfer(IRSwapTrade trade, LocalDate fixingDate,
 			LocalDate settlementDate) throws TradistaBusinessException {
-		CashTransfer cashTransfer = new CashTransfer();
-		cashTransfer.setCurrency(trade.getCurrency());
+		CashTransfer cashTransfer = new CashTransfer(trade.getBook(), TransferPurpose.FLOATING_LEG_INTEREST_PAYMENT,
+				settlementDate, trade, trade.getCurrency());
 		cashTransfer.setFixingDateTime(fixingDate.atStartOfDay());
-		cashTransfer.setSettlementDate(settlementDate);
 		if (trade.isBuy()) {
 			cashTransfer.setDirection(Transfer.Direction.RECEIVE);
 		} else {
 			cashTransfer.setDirection(Transfer.Direction.PAY);
 		}
-		cashTransfer.setTrade(trade);
-		cashTransfer.setBook(trade.getBook());
 		cashTransfer.setStatus(Transfer.Status.UNKNOWN);
-		cashTransfer.setPurpose(TransferPurpose.FLOATING_LEG_INTEREST_PAYMENT);
 		cashTransfer.setCreationDateTime(LocalDateTime.now());
 		return cashTransfer;
 	}
@@ -271,8 +251,8 @@ public final class IRSwapTransferUtil {
 	private static CashTransfer createPaymentCashTransfer(IRSwapTrade trade, LocalDate fixingDate,
 			LocalDate settlementDate, LocalDate beginningOfPeriod, LocalDate endOfPeriod, Currency currency,
 			BigDecimal notional) {
-		CashTransfer cashTransfer = new CashTransfer();
-		cashTransfer.setCurrency(currency);
+		CashTransfer cashTransfer = new CashTransfer(trade.getBook(), TransferPurpose.FIXED_LEG_INTEREST_PAYMENT,
+				settlementDate, trade, currency);
 		BigDecimal ir = null;
 		if (trade.isInterestsToPayFixed()) {
 			ir = trade.getPaymentFixedInterestRate();
@@ -282,7 +262,6 @@ public final class IRSwapTransferUtil {
 		} else {
 			cashTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
 		}
-		cashTransfer.setSettlementDate(settlementDate);
 
 		// the fractioned notional is the notional of the reception leg
 		// * accrual
@@ -315,9 +294,6 @@ public final class IRSwapTransferUtil {
 		} else {
 			cashTransfer.setStatus(Transfer.Status.UNKNOWN);
 		}
-		cashTransfer.setTrade(trade);
-		cashTransfer.setBook(trade.getBook());
-		cashTransfer.setPurpose(TransferPurpose.FIXED_LEG_INTEREST_PAYMENT);
 		cashTransfer.setCreationDateTime(LocalDateTime.now());
 
 		return cashTransfer;

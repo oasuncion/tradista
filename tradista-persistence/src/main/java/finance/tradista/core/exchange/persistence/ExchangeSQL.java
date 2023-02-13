@@ -44,9 +44,8 @@ public class ExchangeSQL {
 			stmtGetExchangeById.setLong(1, id);
 			try (ResultSet results = stmtGetExchangeById.executeQuery()) {
 				while (results.next()) {
-					exchange = new Exchange();
+					exchange = new Exchange(results.getString("code"));
 					exchange.setId(results.getLong("id"));
-					exchange.setCode(results.getString("code"));
 					exchange.setName(results.getString("name"));
 					exchange.setOtc(results.getBoolean("is_otc"));
 					exchange.setCalendar(CalendarSQL.getCalendarById(results.getLong("calendar_id")));
@@ -68,9 +67,8 @@ public class ExchangeSQL {
 			stmtGetExchangeByCode.setString(1, code);
 			try (ResultSet results = stmtGetExchangeByCode.executeQuery()) {
 				while (results.next()) {
-					exchange = new Exchange();
+					exchange = new Exchange(results.getString("code"));
 					exchange.setId(results.getLong("id"));
-					exchange.setCode(results.getString("code"));
 					exchange.setName(results.getString("name"));
 					exchange.setOtc(results.getBoolean("is_otc"));
 					exchange.setCalendar(CalendarSQL.getCalendarById(results.getLong("calendar_id")));
@@ -92,9 +90,8 @@ public class ExchangeSQL {
 			stmtGetExchangeByName.setString(1, name);
 			try (ResultSet results = stmtGetExchangeByName.executeQuery()) {
 				while (results.next()) {
-					exchange = new Exchange();
+					exchange = new Exchange(results.getString("code"));
 					exchange.setId(results.getLong("id"));
-					exchange.setCode(results.getString("code"));
 					exchange.setName(results.getString("name"));
 					exchange.setOtc(results.getBoolean("is_otc"));
 					exchange.setCalendar(CalendarSQL.getCalendarById(results.getLong("calendar_id")));
@@ -117,9 +114,8 @@ public class ExchangeSQL {
 				if (exchanges == null) {
 					exchanges = new TreeSet<Exchange>();
 				}
-				Exchange exchange = new Exchange();
+				Exchange exchange = new Exchange(results.getString("code"));
 				exchange.setId(results.getLong("id"));
-				exchange.setCode(results.getString("code"));
 				exchange.setName(results.getString("name"));
 				exchange.setOtc(results.getBoolean("is_otc"));
 				exchange.setCalendar(CalendarSQL.getCalendarById(results.getLong("calendar_id")));

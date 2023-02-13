@@ -50,7 +50,10 @@ public class FolFormula extends TradistaObject {
 	}
 
 	public net.sf.tweety.logics.fol.syntax.FolFormula getFolFormula() {
-		return folFormula;
+		if (folFormula == null) {
+			return null;
+		}
+		return folFormula.clone();
 	}
 
 	public void setFolFormula(net.sf.tweety.logics.fol.syntax.FolFormula folFormula) {
@@ -89,6 +92,15 @@ public class FolFormula extends TradistaObject {
 			}
 		}
 		return functions;
+	}
+
+	@Override
+	public FolFormula clone() {
+		FolFormula folFormula = (FolFormula) super.clone();
+		if (this.folFormula != null) {
+			folFormula.folFormula = this.folFormula.clone();
+		}
+		return folFormula;
 	}
 
 }

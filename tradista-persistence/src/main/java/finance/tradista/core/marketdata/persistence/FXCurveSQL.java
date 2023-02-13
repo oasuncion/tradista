@@ -21,6 +21,7 @@ import java.util.Set;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
 import finance.tradista.core.currency.persistence.CurrencySQL;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.core.marketdata.model.FXCurve;
 import finance.tradista.core.marketdata.model.Quote;
@@ -107,9 +108,14 @@ public class FXCurveSQL {
 				if (fxCurves == null) {
 					fxCurves = new HashSet<FXCurve>();
 				}
-				FXCurve fxCurve = new FXCurve();
+				long poId = results.getLong("processing_org_id");
+				LegalEntity processingOrg = null;
+				if (poId > 0) {
+					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					;
+				}
+				FXCurve fxCurve = new FXCurve(results.getString("name"), processingOrg);
 				fxCurve.setId(results.getLong("id"));
-				fxCurve.setName(results.getString("name"));
 				fxCurve.setAlgorithm(results.getString("algorithm"));
 				fxCurve.setInterpolator(results.getString("interpolator"));
 				fxCurve.setInstance(results.getString("instance"));
@@ -118,10 +124,7 @@ public class FXCurveSQL {
 				long primaryCurrencyIRCurveId = results.getLong("primary_currency_curve_id");
 				long quoteCurrencyIRCurveId = results.getLong("quote_currency_curve_id");
 				long quoteSetId = results.getLong("quote_set_id");
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					fxCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-				}
+
 				java.sql.Date quoteDate = results.getDate("quote_date");
 
 				if (primaryCurrencyId != 0) {
@@ -378,9 +381,14 @@ public class FXCurveSQL {
 			stmtGetFXCurveByName.setString(1, curveName);
 			try (ResultSet results = stmtGetFXCurveByName.executeQuery()) {
 				while (results.next()) {
-					fxCurve = new FXCurve();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity processingOrg = null;
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+						;
+					}
+					fxCurve = new FXCurve(results.getString("name"), processingOrg);
 					fxCurve.setId(results.getLong("id"));
-					fxCurve.setName(results.getString("name"));
 					fxCurve.setAlgorithm(results.getString("algorithm"));
 					fxCurve.setInterpolator(results.getString("interpolator"));
 					fxCurve.setInstance(results.getString("instance"));
@@ -389,10 +397,6 @@ public class FXCurveSQL {
 					long primaryCurrencyIRCurveId = results.getLong("primary_currency_curve_id");
 					long quoteCurrencyIRCurveId = results.getLong("quote_currency_curve_id");
 					long quoteSetId = results.getLong("quote_set_id");
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						fxCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 
 					if (primaryCurrencyId != 0) {
@@ -434,9 +438,12 @@ public class FXCurveSQL {
 			stmtGetFXCurveByName.setLong(2, poId);
 			try (ResultSet results = stmtGetFXCurveByName.executeQuery()) {
 				while (results.next()) {
-					fxCurve = new FXCurve();
+					LegalEntity processingOrg = null;
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					fxCurve = new FXCurve(results.getString("name"), processingOrg);
 					fxCurve.setId(results.getLong("id"));
-					fxCurve.setName(results.getString("name"));
 					fxCurve.setAlgorithm(results.getString("algorithm"));
 					fxCurve.setInterpolator(results.getString("interpolator"));
 					fxCurve.setInstance(results.getString("instance"));
@@ -445,9 +452,6 @@ public class FXCurveSQL {
 					long primaryCurrencyIRCurveId = results.getLong("primary_currency_curve_id");
 					long quoteCurrencyIRCurveId = results.getLong("quote_currency_curve_id");
 					long quoteSetId = results.getLong("quote_set_id");
-					if (poId > 0) {
-						fxCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 
 					if (primaryCurrencyId != 0) {
@@ -489,9 +493,13 @@ public class FXCurveSQL {
 			stmtGetFXCurveById.setLong(1, curveId);
 			try (ResultSet results = stmtGetFXCurveById.executeQuery()) {
 				while (results.next()) {
-					fxCurve = new FXCurve();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity processingOrg = null;
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					fxCurve = new FXCurve(results.getString("name"), processingOrg);
 					fxCurve.setId(results.getLong("id"));
-					fxCurve.setName(results.getString("name"));
 					fxCurve.setAlgorithm(results.getString("algorithm"));
 					fxCurve.setInterpolator(results.getString("interpolator"));
 					fxCurve.setInstance(results.getString("instance"));
@@ -500,10 +508,6 @@ public class FXCurveSQL {
 					long primaryCurrencyIRCurveId = results.getLong("primary_currency_curve_id");
 					long quoteCurrencyIRCurveId = results.getLong("quote_currency_curve_id");
 					long quoteSetId = results.getLong("quote_set_id");
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						fxCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 
 					if (primaryCurrencyId != 0) {

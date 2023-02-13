@@ -1,6 +1,8 @@
 package finance.tradista.core.currency.model;
 
 import finance.tradista.core.calendar.model.Calendar;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -24,24 +26,30 @@ specific language governing permissions and limitations
 under the License.    */
 
 public class Currency extends TradistaObject {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5174185101451156191L;
 
+	@Id
 	private String isoCode;
-	
+
 	private String name;
-	
+
 	private boolean nonDeliverable;
-	
+
 	private int fixingDateOffset;
-	
+
 	private Calendar calendar;
 
+	public Currency(String isoCode) {
+		super();
+		this.isoCode = isoCode;
+	}
+
 	public Calendar getCalendar() {
-		return calendar;
+		return TradistaModelUtil.clone(calendar);
 	}
 
 	public void setCalendar(Calendar calendar) {
@@ -68,10 +76,6 @@ public class Currency extends TradistaObject {
 		return isoCode;
 	}
 
-	public void setIsoCode(String isoCode) {
-		this.isoCode = isoCode;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -79,27 +83,16 @@ public class Currency extends TradistaObject {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String toString() {
 		return isoCode;
 	}
-	
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof Currency)) {
-			return false;
-		}
-		
-		return isoCode.equals(((Currency)o).getIsoCode());
-	}
-	
-	public int hashCode() {
-		return isoCode.hashCode();
+
+	@Override
+	public Currency clone() {
+		Currency currency = (Currency) super.clone();
+		currency.calendar = TradistaModelUtil.clone(calendar);
+		return currency;
 	}
 
 }

@@ -85,19 +85,15 @@ public class FXNDFTransferManager implements TransferManager<FXNDFTradeEvent> {
 	}
 
 	private CashTransfer createNewCashSettlementTransfer(FXNDFTrade trade) throws TradistaBusinessException {
-		CashTransfer cashSettlementTransfer = new CashTransfer();
+		CashTransfer cashSettlementTransfer = new CashTransfer(trade.getBook(), TransferPurpose.CASH_SETTLEMENT,
+				trade.getSettlementDate(), trade, trade.getCurrency());
 		cashSettlementTransfer.setCreationDateTime(LocalDateTime.now());
 		try {
 			cashSettlementTransfer.setFixingDateTime(fxNdfTradeBusinessDelegate.getFixingDate(trade).atStartOfDay());
 		} catch (TradistaBusinessException abe) {
 			// Should not happen here.
 		}
-		cashSettlementTransfer.setSettlementDate(trade.getSettlementDate());
-		cashSettlementTransfer.setPurpose(TransferPurpose.CASH_SETTLEMENT);
 		cashSettlementTransfer.setStatus(Transfer.Status.UNKNOWN);
-		cashSettlementTransfer.setTrade(trade);
-		cashSettlementTransfer.setBook(trade.getBook());
-		cashSettlementTransfer.setCurrency(trade.getCurrency());
 
 		return cashSettlementTransfer;
 	}

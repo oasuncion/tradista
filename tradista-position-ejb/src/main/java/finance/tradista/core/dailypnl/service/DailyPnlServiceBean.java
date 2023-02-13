@@ -6,11 +6,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.security.PermitAll;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
-import jakarta.interceptor.Interceptors;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.calendar.model.Calendar;
@@ -19,8 +14,6 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.util.DateUtil;
 import finance.tradista.core.dailypnl.model.DailyPnl;
 import finance.tradista.core.dailypnl.persistence.DailyPnlSQL;
-import finance.tradista.core.dailypnl.service.DailyPnlFilteringInterceptor;
-import finance.tradista.core.dailypnl.service.DailyPnlService;
 import finance.tradista.core.position.model.Position;
 import finance.tradista.core.position.model.PositionCalculationError;
 import finance.tradista.core.position.model.PositionDefinition;
@@ -28,6 +21,10 @@ import finance.tradista.core.position.service.PositionCalculationErrorService;
 import finance.tradista.core.position.service.PositionDefinitionProductScopeFilteringInterceptor;
 import finance.tradista.core.position.service.PositionDefinitionService;
 import finance.tradista.core.position.service.PositionService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2016 Olivier Asuncion
@@ -132,14 +129,11 @@ public class DailyPnlServiceBean implements DailyPnlService {
 		DailyPnl dailyPnl = getDailyPnlByPositionDefinitionCalendarAndValueDate(posDef, cal, valueDate);
 
 		if (dailyPnl == null) {
-			dailyPnl = new DailyPnl();
+			dailyPnl = new DailyPnl(positionDefinitionService.getPositionDefinitionByName(posDef.getName()), cal, valueDate);
 		}
-		dailyPnl.setCalendar(cal);
 		dailyPnl.setPnl(position.getPnl().subtract(previousDayPosition.getPnl()));
-		dailyPnl.setPositionDefinition(positionDefinitionService.getPositionDefinitionByName(posDef.getName()));
 		dailyPnl.setRealizedPnl(position.getRealizedPnl().subtract(previousDayPosition.getRealizedPnl()));
 		dailyPnl.setUnrealizedPnl(position.getUnrealizedPnl().subtract(previousDayPosition.getUnrealizedPnl()));
-		dailyPnl.setValueDate(valueDate);
 
 		return dailyPnl;
 

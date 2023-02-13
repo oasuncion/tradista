@@ -147,10 +147,10 @@ public abstract class LoanDepositTransferManager implements TransferManager<Loan
 	}
 
 	private CashTransfer createNewNotionalPayment(LoanDepositTrade trade) throws TradistaBusinessException {
-		CashTransfer transfer = new CashTransfer();
+		CashTransfer transfer = new CashTransfer(trade.getBook(), TransferPurpose.NOTIONAL_PAYMENT,
+				trade.getSettlementDate(), trade, trade.getCurrency());
 		transfer.setAmount(trade.getAmount());
 		transfer.setCreationDateTime(LocalDateTime.now());
-		transfer.setCurrency(trade.getCurrency());
 		Direction direction;
 		if (trade.getProductType().equals(LoanTrade.LOAN)) {
 			if (trade.isBuy()) {
@@ -167,20 +167,15 @@ public abstract class LoanDepositTransferManager implements TransferManager<Loan
 		}
 		transfer.setDirection(direction);
 		transfer.setFixingDateTime(LocalDateTime.now());
-		transfer.setProduct(trade.getProduct());
-		transfer.setPurpose(TransferPurpose.NOTIONAL_PAYMENT);
-		transfer.setSettlementDate(trade.getSettlementDate());
 		transfer.setStatus(Transfer.Status.KNOWN);
-		transfer.setTrade(trade);
-		transfer.setBook(trade.getBook());
 		return transfer;
 	}
 
 	private CashTransfer createNewNotionalRepayment(LoanDepositTrade trade) throws TradistaBusinessException {
-		CashTransfer transfer = new CashTransfer();
+		CashTransfer transfer = new CashTransfer(trade.getBook(), TransferPurpose.NOTIONAL_REPAYMENT,
+				trade.getEndDate(), trade, trade.getCurrency());
 		transfer.setAmount(trade.getAmount());
 		transfer.setCreationDateTime(LocalDateTime.now());
-		transfer.setCurrency(trade.getCurrency());
 		Direction direction;
 		if (trade.getProductType().equals(LoanTrade.LOAN)) {
 			if (trade.isBuy()) {
@@ -197,12 +192,7 @@ public abstract class LoanDepositTransferManager implements TransferManager<Loan
 		}
 		transfer.setDirection(direction);
 		transfer.setFixingDateTime(LocalDateTime.now());
-		transfer.setProduct(trade.getProduct());
-		transfer.setPurpose(TransferPurpose.NOTIONAL_REPAYMENT);
-		transfer.setSettlementDate(trade.getEndDate());
 		transfer.setStatus(Transfer.Status.KNOWN);
-		transfer.setTrade(trade);
-		transfer.setBook(trade.getBook());
 		return transfer;
 
 	}

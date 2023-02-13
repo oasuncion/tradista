@@ -1,5 +1,6 @@
 package finance.tradista.core.marketdata.model;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
@@ -40,16 +41,12 @@ public class FXCurve extends GenerableCurve {
 
 	private InterestRateCurve quoteCurrencyIRCurve;
 
-	public FXCurve() {
-		super();
-	}
-
 	public FXCurve(String name, LegalEntity po) {
 		super(name, po);
 	}
 
 	public Currency getPrimaryCurrency() {
-		return primaryCurrency;
+		return TradistaModelUtil.clone(primaryCurrency);
 	}
 
 	public void setPrimaryCurrency(Currency primaryCurrency) {
@@ -57,7 +54,7 @@ public class FXCurve extends GenerableCurve {
 	}
 
 	public Currency getQuoteCurrency() {
-		return quoteCurrency;
+		return TradistaModelUtil.clone(quoteCurrency);
 	}
 
 	public void setQuoteCurrency(Currency quoteCurrency) {
@@ -65,7 +62,7 @@ public class FXCurve extends GenerableCurve {
 	}
 
 	public InterestRateCurve getPrimaryCurrencyIRCurve() {
-		return primaryCurrencyIRCurve;
+		return TradistaModelUtil.clone(primaryCurrencyIRCurve);
 	}
 
 	public void setPrimaryCurrencyIRCurve(InterestRateCurve primaryCurrencyIRCurve) {
@@ -73,7 +70,7 @@ public class FXCurve extends GenerableCurve {
 	}
 
 	public InterestRateCurve getQuoteCurrencyIRCurve() {
-		return quoteCurrencyIRCurve;
+		return TradistaModelUtil.clone(quoteCurrencyIRCurve);
 	}
 
 	public void setQuoteCurrencyIRCurve(InterestRateCurve quoteCurrencyIRCurve) {
@@ -82,6 +79,16 @@ public class FXCurve extends GenerableCurve {
 
 	public String toString() {
 		return this.getName();
+	}
+
+	@Override
+	public FXCurve clone() {
+		FXCurve curve = (FXCurve) super.clone();
+		curve.primaryCurrency = TradistaModelUtil.clone(primaryCurrency);
+		curve.quoteCurrency = TradistaModelUtil.clone(quoteCurrency);
+		curve.primaryCurrencyIRCurve = TradistaModelUtil.clone(primaryCurrencyIRCurve);
+		curve.quoteCurrencyIRCurve = TradistaModelUtil.clone(quoteCurrencyIRCurve);
+		return curve;
 	}
 
 }

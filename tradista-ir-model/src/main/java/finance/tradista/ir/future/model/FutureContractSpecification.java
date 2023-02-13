@@ -3,6 +3,8 @@ package finance.tradista.ir.future.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.daterule.model.DateRule;
@@ -39,24 +41,32 @@ public class FutureContractSpecification extends TradistaObject implements Compa
 	private static final long serialVersionUID = -5750691520644097759L;
 
 	private Index referenceRateIndex;
+
 	private Tenor referenceRateIndexTenor;
+
 	private BigDecimal notional;
+
 	private Currency currency;
+
 	private DayCountConvention dayCountConvention;
+
+	@Id
 	private String name;
+
 	private Exchange exchange;
+
 	private DateRule maturityDatesDateRule;
+
+	public FutureContractSpecification(String name) {
+		this.name = name;
+	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public Index getReferenceRateIndex() {
-		return referenceRateIndex;
+		return TradistaModelUtil.clone(referenceRateIndex);
 	}
 
 	public void setReferenceRateIndex(Index referenceRateIndex) {
@@ -72,7 +82,7 @@ public class FutureContractSpecification extends TradistaObject implements Compa
 	}
 
 	public Currency getCurrency() {
-		return currency;
+		return TradistaModelUtil.clone(currency);
 	}
 
 	public void setCurrency(Currency currency) {
@@ -96,7 +106,7 @@ public class FutureContractSpecification extends TradistaObject implements Compa
 	}
 
 	public Exchange getExchange() {
-		return exchange;
+		return TradistaModelUtil.clone(exchange);
 	}
 
 	public void setExchange(Exchange exchange) {
@@ -112,43 +122,31 @@ public class FutureContractSpecification extends TradistaObject implements Compa
 	}
 
 	public DateRule getMaturityDatesDateRule() {
-		return maturityDatesDateRule;
+		return TradistaModelUtil.clone(maturityDatesDateRule);
 	}
 
 	public void setMaturityDatesDateRule(DateRule maturityDatesDateRule) {
 		this.maturityDatesDateRule = maturityDatesDateRule;
 	}
 
-	
 	@Override
 	public String toString() {
 		return name;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		FutureContractSpecification spec = null;
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof FutureContractSpecification)) {
-			return false;
-		}
-		spec = (FutureContractSpecification) o;
-		if (spec == this) {
-			return true;
-		}
-		return spec.getName().equals(name);
-	}
-
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-
-	@Override
 	public int compareTo(FutureContractSpecification fcs) {
 		return name.compareTo(fcs.getName());
+	}
+
+	@Override
+	public FutureContractSpecification clone() {
+		FutureContractSpecification futureContractSpecification = (FutureContractSpecification) super.clone();
+		futureContractSpecification.referenceRateIndex = TradistaModelUtil.clone(referenceRateIndex);
+		futureContractSpecification.currency = TradistaModelUtil.clone(currency);
+		futureContractSpecification.exchange = TradistaModelUtil.clone(exchange);
+		futureContractSpecification.maturityDatesDateRule = TradistaModelUtil.clone(maturityDatesDateRule);
+		return futureContractSpecification;
 	}
 
 }

@@ -1,5 +1,7 @@
 package finance.tradista.core.book.model;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
@@ -30,18 +32,22 @@ public class Book extends TradistaObject {
 	 */
 	private static final long serialVersionUID = 8145550319443892466L;
 
+	@Id
 	private String name;
+
+	@Id
+	private LegalEntity processingOrg;
 
 	private String description;
 
-	private LegalEntity processingOrg;
+	public Book(String name, LegalEntity processingOrg) {
+		super();
+		this.name = name;
+		this.processingOrg = processingOrg;
+	}
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getDescription() {
@@ -52,47 +58,19 @@ public class Book extends TradistaObject {
 		this.description = description;
 	}
 
+	public LegalEntity getProcessingOrg() {
+		return TradistaModelUtil.clone(processingOrg);
+	}
+
+	@Override
+	public Book clone() {
+		Book book = (Book) super.clone();
+		book.processingOrg = TradistaModelUtil.clone(processingOrg);
+		return book;
+	}
+
 	public String toString() {
 		return name;
-	}
-
-	public LegalEntity getProcessingOrg() {
-		return processingOrg;
-	}
-
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Book other = (Book) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		return true;
 	}
 
 }

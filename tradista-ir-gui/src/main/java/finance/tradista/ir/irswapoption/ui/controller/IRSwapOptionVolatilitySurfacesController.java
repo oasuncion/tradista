@@ -268,11 +268,14 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 				volatilitySurface);
 	}
 
-	private void buildSurface() throws TradistaBusinessException {
+	private void buildSurface(SwaptionVolatilitySurface surface) throws TradistaBusinessException {
 		if (surface == null) {
-			surface = new SwaptionVolatilitySurface();
+			String name = null;
+			if (volatilitySurface.getValue() != null) {
+				name = this.volatilitySurface.getValue().getName();
+			}
+			surface = new SwaptionVolatilitySurface(name, ClientUtil.getCurrentUser().getProcessingOrg());
 		}
-		SwaptionVolatilitySurface surface = new SwaptionVolatilitySurface();
 		surface.setQuotes(new ArrayList<Quote>(selectedQuotesList.getItems()));
 
 		List<SurfacePoint<Integer, Integer, BigDecimal>> surfacePoints = toSurfacePointList(pointsTable.getItems());
@@ -285,11 +288,7 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 			surface.setInterpolator(interpolatorComboBox.getValue());
 			surface.setAlgorithm(algorithmComboBox.getValue());
 		}
-		if (volatilitySurface.getValue() != null) {
-			surface.setName(this.volatilitySurface.getValue().getName());
-		}
 		surface.setQuoteDate(quoteDate.getValue());
-		surface.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 	}
 
 	@FXML
@@ -302,7 +301,7 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 
 			Optional<ButtonType> result = confirmation.showAndWait();
 			if (result.get() == ButtonType.OK) {
-				buildSurface();
+				buildSurface(surface);
 				surface.setId(swaptionVolatilitySurfaceBusinessDelegate.saveSwaptionVolatilitySurface(surface));
 				TradistaGUIUtil.fillComboBox(
 						swaptionVolatilitySurfaceBusinessDelegate.getAllSwaptionVolatilitySurfaces(),
@@ -317,7 +316,6 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 
 	@FXML
 	protected void copy() {
-		long oldVolatilitySurfaceId = 0;
 		boolean surfaceLoaded = (surface != null);
 		if (!surfaceLoaded) {
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, "Please select a volatility Surface.");
@@ -330,21 +328,18 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 				dialog.setContentText("Please choose a Surface name:");
 
 				Optional<String> result = dialog.showAndWait();
-				// The Java 8 way to get the response value (with lambda
-				// expression).
-				result.ifPresent(name -> surface.setName(name));
-
 				if (result.isPresent()) {
-					buildSurface();
-					oldVolatilitySurfaceId = surface.getId();
-					surface.setId(0);
-					surface.setId(swaptionVolatilitySurfaceBusinessDelegate.saveSwaptionVolatilitySurface(surface));
+					SwaptionVolatilitySurface copySwaptionVolatilitySurface = new SwaptionVolatilitySurface(
+							result.get(), ClientUtil.getCurrentUser().getProcessingOrg());
+					buildSurface(copySwaptionVolatilitySurface);
+					copySwaptionVolatilitySurface.setId(swaptionVolatilitySurfaceBusinessDelegate
+							.saveSwaptionVolatilitySurface(copySwaptionVolatilitySurface));
+					surface = copySwaptionVolatilitySurface;
 					TradistaGUIUtil.fillComboBox(
 							swaptionVolatilitySurfaceBusinessDelegate.getAllSwaptionVolatilitySurfaces(),
 							volatilitySurface);
 				}
 			} catch (TradistaBusinessException tbe) {
-				surface.setId(oldVolatilitySurfaceId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
@@ -546,10 +541,11 @@ public class IRSwapOptionVolatilitySurfacesController extends TradistaVolatility
 				String optionExpiry = point.getOptionExpiry().getValue();
 				String swapLength = point.getSwapLength().getValue();
 				if (!optionExpiry.isEmpty() && !swapLength.isEmpty()) {
-					surfacePointList.add(
-							new SurfacePoint<Integer, Integer, BigDecimal>(toPeriodInteger(point.getOptionExpiry().getValue()),
-									toPeriodInteger(point.getSwapLength().getValue()), point.getVolatility().getValue().isEmpty() ? null
-											: TradistaGUIUtil.parseAmount(point.getVolatility().getValue(), "Volatility")));
+					surfacePointList.add(new SurfacePoint<Integer, Integer, BigDecimal>(
+							toPeriodInteger(point.getOptionExpiry().getValue()),
+							toPeriodInteger(point.getSwapLength().getValue()),
+							point.getVolatility().getValue().isEmpty() ? null
+									: TradistaGUIUtil.parseAmount(point.getVolatility().getValue(), "Volatility")));
 				}
 			} catch (DateTimeParseException dtpe) {
 				// TODO Auto-generated catch block

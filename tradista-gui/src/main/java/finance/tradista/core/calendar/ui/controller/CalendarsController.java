@@ -112,14 +112,9 @@ public class CalendarsController extends TradistaControllerAdapter {
 			holidays.addAll(holidaysList.getItems());
 
 			try {
-				if (calendar == null) {
-					calendar = new Calendar();
-				}
 				if (code.isVisible()) {
-					calendar.setCode(code.getText());
+					calendar = new Calendar(code.getText());
 					codeLabel.setText(code.getText());
-				} else {
-					calendar.setCode(codeLabel.getText());
 				}
 				calendar.setName(name.getText());
 				calendar.setWeekEnd(weekEnd);
@@ -136,7 +131,6 @@ public class CalendarsController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldCalendarId = 0;
 		TradistaTextInputDialog dialog = new TradistaTextInputDialog();
 		dialog.setTitle("Calendar Copy");
 		dialog.setHeaderText("Do you want to copy this Calendar ?");
@@ -169,21 +163,16 @@ public class CalendarsController extends TradistaControllerAdapter {
 			Set<LocalDate> holidays = new HashSet<LocalDate>();
 			holidays.addAll(holidaysList.getItems());
 			try {
-				if (calendar == null) {
-					calendar = new Calendar();
-				}
-				calendar.setCode(result.get());
-				calendar.setName(name.getText());
-				calendar.setWeekEnd(weekEnd);
-				calendar.setHolidays(holidays);
-				oldCalendarId = calendar.getId();
-				calendar.setId(0);
-				calendar.setId(calendarBusinessDelegate.saveCalendar(calendar));
+				Calendar copyCalendar = new Calendar(result.get());
+				copyCalendar.setName(name.getText());
+				copyCalendar.setWeekEnd(weekEnd);
+				copyCalendar.setHolidays(holidays);
+				copyCalendar.setId(calendarBusinessDelegate.saveCalendar(copyCalendar));
+				calendar = copyCalendar;
 				code.setVisible(false);
 				codeLabel.setVisible(true);
 				codeLabel.setText(calendar.getCode());
 			} catch (TradistaBusinessException tbe) {
-				calendar.setId(oldCalendarId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}

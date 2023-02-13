@@ -2,7 +2,9 @@ package finance.tradista.security.equity.model;
 
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
+import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.security.common.model.Security;
 
@@ -35,10 +37,6 @@ public class Equity extends Security {
 
 	public static final String EQUITY = "Equity";
 
-	public Equity() {
-		super();
-	}
-
 	private long tradingSize;
 
 	private long totalIssued;
@@ -52,6 +50,10 @@ public class Equity extends Security {
 	private LocalDate activeFrom;
 
 	private LocalDate activeTo;
+
+	public Equity(Exchange exchange, String isin) {
+		super(exchange, isin);
+	}
 
 	public long getTradingSize() {
 		return tradingSize;
@@ -78,7 +80,7 @@ public class Equity extends Security {
 	}
 
 	public Currency getDividendCurrency() {
-		return dividendCurrency;
+		return TradistaModelUtil.clone(dividendCurrency);
 	}
 
 	public void setDividendCurrency(Currency dividendCurrency) {
@@ -119,25 +121,10 @@ public class Equity extends Security {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		Equity eq = null;
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof Equity)) {
-			return false;
-		}
-		eq = (Equity) o;
-		if (eq == this) {
-			return true;
-		}
-		return eq.getIsin().equals(getIsin())
-				&& eq.getExchange().equals(getExchange());
-	}
-
-	@Override
-	public int hashCode() {
-		return (getIsin() + "-" + getExchange()).hashCode();
+	public Equity clone() {
+		Equity equity = (Equity) super.clone();
+		equity.dividendCurrency = TradistaModelUtil.clone(dividendCurrency);
+		return equity;
 	}
 
 }

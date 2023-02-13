@@ -144,6 +144,7 @@
 				<TextField fx:id="isin" maxHeight="-Infinity"
 					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 					GridPane.columnIndex="3" GridPane.rowIndex="1" />
+				<Label fx:id="isinLabel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 				<Label maxHeight="-Infinity" maxWidth="-Infinity"
 					minHeight="-Infinity" minWidth="-Infinity" text="Dated date"
 					GridPane.rowIndex="1" />
@@ -217,6 +218,7 @@
 				<ComboBox fx:id="exchange" maxHeight="-Infinity"
 					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 					GridPane.columnIndex="3" GridPane.rowIndex="3" />
+				<Label fx:id="exchangeLabel" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 				<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
 					minHeight="-Infinity" minWidth="-Infinity" text="Bond Id"/>
 				<Label fx:id="bondId" styleClass="labelBold" maxHeight="-Infinity"

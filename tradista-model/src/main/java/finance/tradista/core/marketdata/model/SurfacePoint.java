@@ -1,5 +1,6 @@
 package finance.tradista.core.marketdata.model;
 
+import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -30,10 +31,13 @@ public class SurfacePoint<X extends Number, Y extends Number, Z extends Number> 
 	 */
 	private static final long serialVersionUID = -3013306908811949446L;
 
+	@Id
 	private X xAxis;
 
+	@Id
 	private Y yAxis;
 
+	@Id
 	private Z zAxis;
 
 	public SurfacePoint(X x, Y y, Z z) {
@@ -46,48 +50,18 @@ public class SurfacePoint<X extends Number, Y extends Number, Z extends Number> 
 		return xAxis;
 	}
 
-	public void setxAxis(X xAxis) {
-		this.xAxis = xAxis;
-	}
-
 	public Y getyAxis() {
 		return yAxis;
-	}
-
-	public void setyAxis(Y yAxis) {
-		this.yAxis = yAxis;
 	}
 
 	public Z getzAxis() {
 		return zAxis;
 	}
 
-	public void setzAxis(Z zAxis) {
-		this.zAxis = zAxis;
-	}
-
-	public boolean equals(Object o) {
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof SurfacePoint)) {
-			return false;
-		}
-		return ((SurfacePoint<?, ?, ?>) o).getxAxis().equals(this.getxAxis())
-				&& ((SurfacePoint<?, ?, ?>) o).getyAxis().equals(this.getyAxis());
-	}
-
-	public int hashCode() {
-		return (getxAxis().toString() + getyAxis().toString()).hashCode();
-	}
-
 	@Override
 	public int compareTo(SurfacePoint<X, Y, Z> o) {
-		return (getxAxis().toString() + getyAxis().toString())
-				.compareTo((o.getxAxis().toString() + o.getyAxis().toString()));
+		return (xAxis.toString() + yAxis.toString() + zAxis.toString())
+				.compareTo((o.xAxis.toString() + o.yAxis.toString() + o.zAxis.toString()));
 	}
 
-	public String toString() {
-		return "(X=" + getxAxis().toString() + ",Y=" + getyAxis().toString() + ",Z=" + getzAxis().toString() + ")";
-	}
 }

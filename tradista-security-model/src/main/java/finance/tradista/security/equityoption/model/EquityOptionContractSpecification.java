@@ -2,6 +2,8 @@ package finance.tradista.security.equityoption.model;
 
 import java.math.BigDecimal;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.daterule.model.DateRule;
@@ -38,6 +40,7 @@ public class EquityOptionContractSpecification extends TradistaObject {
 
 	private DateRule maturityDatesDateRule;
 
+	@Id
 	private String name;
 
 	private SettlementType settlementType;
@@ -54,8 +57,13 @@ public class EquityOptionContractSpecification extends TradistaObject {
 
 	private Currency premiumCurrency;
 
+	public EquityOptionContractSpecification(String name) {
+		super();
+		this.name = name;
+	}
+
 	public DateRule getMaturityDatesDateRule() {
-		return maturityDatesDateRule;
+		return TradistaModelUtil.clone(maturityDatesDateRule);
 	}
 
 	public void setMaturityDatesDateRule(DateRule maturityDatesDateRule) {
@@ -64,10 +72,6 @@ public class EquityOptionContractSpecification extends TradistaObject {
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public SettlementType getSettlementType() {
@@ -103,7 +107,7 @@ public class EquityOptionContractSpecification extends TradistaObject {
 	}
 
 	public Exchange getExchange() {
-		return exchange;
+		return TradistaModelUtil.clone(exchange);
 	}
 
 	public void setExchange(Exchange exchange) {
@@ -119,7 +123,7 @@ public class EquityOptionContractSpecification extends TradistaObject {
 	}
 
 	public Currency getPremiumCurrency() {
-		return premiumCurrency;
+		return TradistaModelUtil.clone(premiumCurrency);
 	}
 
 	public void setPremiumCurrency(Currency premiumCurrency) {
@@ -127,33 +131,18 @@ public class EquityOptionContractSpecification extends TradistaObject {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EquityOptionContractSpecification other = (EquityOptionContractSpecification) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public EquityOptionContractSpecification clone() {
+		EquityOptionContractSpecification equityOptionContractSpecification = (EquityOptionContractSpecification) super.clone();
+		equityOptionContractSpecification.maturityDatesDateRule = TradistaModelUtil.clone(maturityDatesDateRule);
+		equityOptionContractSpecification.exchange = TradistaModelUtil.clone(exchange);
+		equityOptionContractSpecification.premiumCurrency = TradistaModelUtil.clone(premiumCurrency);
+		
+		return equityOptionContractSpecification;
 	}
 
 }

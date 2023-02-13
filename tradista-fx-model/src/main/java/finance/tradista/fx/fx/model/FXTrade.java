@@ -2,6 +2,7 @@ package finance.tradista.fx.fx.model;
 
 import java.math.BigDecimal;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.fx.common.model.AbstractFXTrade;
@@ -37,6 +38,7 @@ public class FXTrade extends AbstractFXTrade<Product> {
 
 	public enum Type {
 		FX_SPOT, FX_FORWARD;
+
 		public String toString() {
 			switch (this) {
 			case FX_SPOT:
@@ -59,7 +61,7 @@ public class FXTrade extends AbstractFXTrade<Product> {
 	}
 
 	public Currency getCurrencyOne() {
-		return currencyOne;
+		return TradistaModelUtil.clone(currencyOne);
 	}
 
 	public void setCurrencyOne(Currency currencyOne) {
@@ -97,6 +99,13 @@ public class FXTrade extends AbstractFXTrade<Product> {
 		}
 
 		return "Unspecified FX trade";
+	}
+
+	@Override
+	public FXTrade clone() {
+		FXTrade fxTrade = (FXTrade) super.clone();
+		fxTrade.currencyOne = TradistaModelUtil.clone(currencyOne);
+		return fxTrade;
 	}
 
 }

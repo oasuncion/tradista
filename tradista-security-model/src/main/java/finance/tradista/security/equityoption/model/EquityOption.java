@@ -3,6 +3,8 @@ package finance.tradista.security.equityoption.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.core.product.model.Product;
@@ -50,33 +52,39 @@ public class EquityOption extends Product {
 
 	public static final String EQUITY_OPTION = "EquityOption";
 
+	@Id
 	private String code;
 
 	private Equity underlying;
 
+	@Id
 	private BigDecimal strike;
 
+	@Id
 	private LocalDate maturityDate;
 
+	@Id
 	private OptionTrade.Type type;
 
+	@Id
 	private EquityOptionContractSpecification equityOptionContractSpecification;
 
-	public EquityOptionContractSpecification getEquityOptionContractSpecification() {
-		return equityOptionContractSpecification;
+	public EquityOption(String code, OptionTrade.Type type, BigDecimal strike, LocalDate maturityDate,
+			EquityOptionContractSpecification equityOptionContractSpecification) {
+		super(equityOptionContractSpecification != null ? equityOptionContractSpecification.getExchange() : null);
+		this.code = code;
+		this.type = type;
+		this.strike = strike;
+		this.maturityDate = maturityDate;
+		this.equityOptionContractSpecification = equityOptionContractSpecification;
 	}
 
-	public void setEquityOptionContractSpecification(
-			EquityOptionContractSpecification equityOptionContractSpecification) {
-		this.equityOptionContractSpecification = equityOptionContractSpecification;
+	public EquityOptionContractSpecification getEquityOptionContractSpecification() {
+		return TradistaModelUtil.clone(equityOptionContractSpecification);
 	}
 
 	public OptionTrade.Type getType() {
 		return type;
-	}
-
-	public void setType(OptionTrade.Type type) {
-		this.type = type;
 	}
 
 	public SettlementType getSettlementType() {
@@ -97,12 +105,8 @@ public class EquityOption extends Product {
 		return code;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	public Equity getUnderlying() {
-		return underlying;
+		return TradistaModelUtil.clone(underlying);
 	}
 
 	public void setUnderlying(Equity underlying) {
@@ -146,16 +150,8 @@ public class EquityOption extends Product {
 		return strike;
 	}
 
-	public void setStrike(BigDecimal strike) {
-		this.strike = strike;
-	}
-
 	public LocalDate getMaturityDate() {
 		return maturityDate;
-	}
-
-	public void setMaturityDate(LocalDate maturityDate) {
-		this.maturityDate = maturityDate;
 	}
 
 	@Override
@@ -167,72 +163,11 @@ public class EquityOption extends Product {
 	}
 
 	@Override
-	public void setExchange(Exchange exchange) {
-		// Impossible to set the exchange, it is defined in the equity option
-		// specification.
-	}
-
-	@Override
-	public String toString() {
-		return code + " - " + getType() + " - " + getStrike() + " - " + getMaturityDate() + " - "
-				+ getEquityOptionContractSpecification();
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		EquityOption eqo = null;
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof EquityOption)) {
-			return false;
-		}
-		eqo = (EquityOption) o;
-		if (eqo == this) {
-			return true;
-		}
-
-		boolean sameCode;
-		if (eqo.getCode() == null) {
-			sameCode = (code == null);
-		} else {
-			sameCode = eqo.getCode().equals(code);
-		}
-		boolean sameType;
-		if (eqo.getType() == null) {
-			sameType = (type == null);
-		} else {
-			sameType = eqo.getType().equals(type);
-		}
-		boolean sameStrike;
-		if (eqo.getStrike() == null) {
-			sameStrike = (strike == null);
-		} else {
-			if (strike == null) {
-				sameStrike = false;
-			} else {
-				sameStrike = eqo.getStrike().compareTo(strike) == 0;
-			}
-		}
-		boolean sameSpecification;
-		if (eqo.getEquityOptionContractSpecification() == null) {
-			sameSpecification = (equityOptionContractSpecification == null);
-		} else {
-			sameSpecification = eqo.getEquityOptionContractSpecification().equals(equityOptionContractSpecification);
-		}
-		boolean sameMaturityDate;
-		if (eqo.getMaturityDate() == null) {
-			sameMaturityDate = (maturityDate == null);
-		} else {
-			sameMaturityDate = eqo.getMaturityDate().equals(maturityDate);
-		}
-
-		return sameCode && sameType && sameStrike && sameSpecification && sameMaturityDate;
-	}
-
-	@Override
-	public int hashCode() {
-		return toString().hashCode();
+	public EquityOption clone() {
+		EquityOption equityOption = (EquityOption) super.clone();
+		equityOption.equityOptionContractSpecification = TradistaModelUtil.clone(equityOptionContractSpecification);
+		equityOption.underlying = TradistaModelUtil.clone(underlying);
+		return equityOption;
 	}
 
 }

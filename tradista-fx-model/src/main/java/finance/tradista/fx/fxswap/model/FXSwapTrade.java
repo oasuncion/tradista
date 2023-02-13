@@ -3,6 +3,7 @@ package finance.tradista.fx.fxswap.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.fx.common.model.AbstractFXTrade;
@@ -28,11 +29,11 @@ specific language governing permissions and limitations
 under the License.    */
 /**
  * Class representing FX Swaps.
+ * 
  * @author Tradista
  * 
- * Please note that :
- *  - getAmount() gets the quote amount of the spot leg
- *  - getCurrency() gets the quote currency
+ *         Please note that : - getAmount() gets the quote amount of the spot
+ *         leg - getCurrency() gets the quote currency
  *
  * @param <P>
  */
@@ -44,19 +45,19 @@ public class FXSwapTrade extends AbstractFXTrade<Product> {
 	private static final long serialVersionUID = 6321516419712885556L;
 
 	private Currency currencyOne;
-	
+
 	private LocalDate settlementDateForward;
-	
+
 	private BigDecimal amountOneForward;
-	
+
 	private BigDecimal amountOneSpot;
-	
+
 	private BigDecimal amountTwoForward;
-	
+
 	public static final String FX_SWAP = "FXSwap";
 
 	public Currency getCurrencyOne() {
-		return currencyOne;
+		return TradistaModelUtil.clone(currencyOne);
 	}
 
 	public void setCurrencyOne(Currency currencyOne) {
@@ -94,9 +95,16 @@ public class FXSwapTrade extends AbstractFXTrade<Product> {
 	public void setAmountTwoForward(BigDecimal amountTwoForward) {
 		this.amountTwoForward = amountTwoForward;
 	}
-	
-	public String getProductType() {	
+
+	public String getProductType() {
 		return FX_SWAP;
-	}	
+	}
+
+	@Override
+	public FXSwapTrade clone() {
+		FXSwapTrade fxSwapTrade = (FXSwapTrade) super.clone();
+		fxSwapTrade.currencyOne = TradistaModelUtil.clone(currencyOne);
+		return fxSwapTrade;
+	}
 
 }

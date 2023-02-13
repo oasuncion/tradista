@@ -14,6 +14,7 @@ import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.core.marketdata.model.Quote;
 import finance.tradista.core.marketdata.model.SurfacePoint;
@@ -94,17 +95,18 @@ public class SwaptionVolatilitySurfaceSQL {
 				if (swaptionVolatilitySurfaces == null) {
 					swaptionVolatilitySurfaces = new HashSet<SwaptionVolatilitySurface>();
 				}
-				SwaptionVolatilitySurface swaptionVolatilitySurface = new SwaptionVolatilitySurface();
+				long poId = results.getLong("processing_org_id");
+				LegalEntity po = null;
+				if (poId > 0) {
+					po = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				SwaptionVolatilitySurface swaptionVolatilitySurface = new SwaptionVolatilitySurface(
+						results.getString("name"), po);
 				long id = results.getLong("id");
 				swaptionVolatilitySurface.setId(id);
-				swaptionVolatilitySurface.setName(results.getString("name"));
 				swaptionVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 				swaptionVolatilitySurface.setInterpolator(results.getString("interpolator"));
 				swaptionVolatilitySurface.setInstance(results.getString("instance"));
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					swaptionVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-				}
 				java.sql.Date quoteDate = results.getDate("quote_date");
 				if (quoteDate != null) {
 					swaptionVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());
@@ -137,17 +139,17 @@ public class SwaptionVolatilitySurfaceSQL {
 			stmtGetSwaptionVolatilitySurfaceByName.setString(1, surfaceName);
 			try (ResultSet results = stmtGetSwaptionVolatilitySurfaceByName.executeQuery()) {
 				while (results.next()) {
-					swaptionVolatilitySurface = new SwaptionVolatilitySurface();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity po = null;
+					if (poId > 0) {
+						po = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					swaptionVolatilitySurface = new SwaptionVolatilitySurface(results.getString("name"), po);
 					long id = results.getLong("id");
 					swaptionVolatilitySurface.setId(id);
-					swaptionVolatilitySurface.setName(results.getString("name"));
 					swaptionVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 					swaptionVolatilitySurface.setInterpolator(results.getString("interpolator"));
 					swaptionVolatilitySurface.setInstance(results.getString("instance"));
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						swaptionVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						swaptionVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());
@@ -179,20 +181,20 @@ public class SwaptionVolatilitySurfaceSQL {
 			stmtGetSwaptionVolatilitySurfaceById.setLong(1, surfaceId);
 			try (ResultSet results = stmtGetSwaptionVolatilitySurfaceById.executeQuery()) {
 				while (results.next()) {
-					swaptionVolatilitySurface = new SwaptionVolatilitySurface();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity po = null;
+					if (poId > 0) {
+						po = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					swaptionVolatilitySurface = new SwaptionVolatilitySurface(results.getString("name"), po);
 					long id = results.getLong("id");
 					swaptionVolatilitySurface.setId(id);
-					swaptionVolatilitySurface.setName(results.getString("name"));
 					swaptionVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 					swaptionVolatilitySurface.setInterpolator(results.getString("interpolator"));
 					swaptionVolatilitySurface.setInstance(results.getString("instance"));
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						swaptionVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());
-					}
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						swaptionVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
 					}
 					// Get the points linked to this surface
 					List<SurfacePoint<Integer, Integer, BigDecimal>> surfacePoints = getSwaptionVolatilitySurfacePointsBySurfaceId(

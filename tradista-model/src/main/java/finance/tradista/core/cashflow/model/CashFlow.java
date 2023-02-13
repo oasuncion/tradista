@@ -3,6 +3,8 @@ package finance.tradista.core.cashflow.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.transfer.model.TransferPurpose;
@@ -40,16 +42,20 @@ public class CashFlow extends TradistaObject implements Comparable<CashFlow> {
 
 	private BigDecimal discountFactor;
 
+	@Id
 	private LocalDate date;
 
+	@Id
 	private Currency currency;
 
+	@Id
 	private TransferPurpose purpose;
 
 	private Direction direction;
 
 	public static enum Direction {
 		PAY, RECEIVE;
+
 		public String toString() {
 			switch (this) {
 			case PAY:
@@ -78,7 +84,7 @@ public class CashFlow extends TradistaObject implements Comparable<CashFlow> {
 	}
 
 	public Currency getCurrency() {
-		return currency;
+		return TradistaModelUtil.clone(currency);
 	}
 
 	public void setCurrency(Currency currency) {
@@ -125,15 +131,10 @@ public class CashFlow extends TradistaObject implements Comparable<CashFlow> {
 		return date.compareTo(cf.getDate());
 	}
 
-	public Object clone() throws CloneNotSupportedException {
-		CashFlow cf = new CashFlow();
-		cf.setAmount(this.amount);
-		cf.setCurrency(this.currency);
-		cf.setDate(this.date);
-		cf.setDirection(this.direction);
-		cf.setDiscountedAmount(this.discountedAmount);
-		cf.setDiscountFactor(this.discountFactor);
-		cf.setPurpose(this.purpose);
+	@Override
+	public CashFlow clone() {
+		CashFlow cf = (CashFlow) super.clone();
+		cf.currency = TradistaModelUtil.clone(currency);
 		return cf;
 	}
 

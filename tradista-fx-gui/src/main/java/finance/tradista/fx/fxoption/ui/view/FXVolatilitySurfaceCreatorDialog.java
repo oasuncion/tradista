@@ -122,10 +122,9 @@ public class FXVolatilitySurfaceCreatorDialog extends TradistaDialog<FXVolatilit
 			public FXVolatilitySurface call(ButtonType b) {
 				if (b == buttonTypeOk) {
 					try {
-						FXVolatilitySurface surface = new FXVolatilitySurface(nameTextField.getText());
-						surface.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
+						FXVolatilitySurface surface = new FXVolatilitySurface(nameTextField.getText(),
+								ClientUtil.getCurrentUser().getProcessingOrg());
 						surface.setDeltas(FXVolatilitySurfacesController.toDeltaList(selectedDeltas.getItems()));
-
 						return surface;
 					} catch (TradistaBusinessException abe) {
 						TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());

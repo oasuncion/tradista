@@ -3,6 +3,7 @@ package finance.tradista.mm.loandeposit.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.interestpayment.model.InterestPayment;
@@ -86,7 +87,6 @@ public abstract class LoanDepositTrade extends Trade<Product> {
 	private Tenor maturity;
 	private InterestPayment interestPayment;
 	private InterestPayment interestFixing;
-	
 
 	public InterestPayment getInterestPayment() {
 		return interestPayment;
@@ -95,7 +95,7 @@ public abstract class LoanDepositTrade extends Trade<Product> {
 	public void setInterestPayment(InterestPayment interestPayment) {
 		this.interestPayment = interestPayment;
 	}
-	
+
 	public InterestPayment getInterestFixing() {
 		return interestFixing;
 	}
@@ -129,7 +129,7 @@ public abstract class LoanDepositTrade extends Trade<Product> {
 	}
 
 	public Index getFloatingRateIndex() {
-		return floatingRateIndex;
+		return TradistaModelUtil.clone(floatingRateIndex);
 	}
 
 	public void setFloatingRateIndex(Index floatingRateIndex) {
@@ -202,6 +202,13 @@ public abstract class LoanDepositTrade extends Trade<Product> {
 
 	public boolean isCompoundInterest() {
 		return (interestType != null && interestType.equals(InterestType.COMPOUND));
+	}
+
+	@Override
+	public LoanDepositTrade clone() {
+		LoanDepositTrade loanDepositTrade = (LoanDepositTrade) super.clone();
+		loanDepositTrade.floatingRateIndex = TradistaModelUtil.clone(floatingRateIndex);
+		return loanDepositTrade;
 	}
 
 }

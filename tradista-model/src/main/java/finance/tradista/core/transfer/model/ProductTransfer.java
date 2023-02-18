@@ -1,6 +1,11 @@
 package finance.tradista.core.transfer.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import finance.tradista.core.book.model.Book;
+import finance.tradista.core.product.model.Product;
+import finance.tradista.core.trade.model.Trade;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -24,22 +29,27 @@ under the License.    */
 
 public class ProductTransfer extends Transfer {
 
+	public ProductTransfer(Book book, TransferPurpose purpose, LocalDate settlementDate,
+			Trade<?> trade) {
+		super(book, null, purpose, settlementDate, trade);
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3528142875953447004L;
-	
+
 	public BigDecimal getQuantity() {
 		return quantityOrAmount;
 	}
-	
+
 	public void setQuantity(BigDecimal quantity) {
 		this.quantityOrAmount = quantity;
 	}
-	
+
 	@Override
 	public Type getType() {
 		return Transfer.Type.PRODUCT;
 	}
-	
+
 }

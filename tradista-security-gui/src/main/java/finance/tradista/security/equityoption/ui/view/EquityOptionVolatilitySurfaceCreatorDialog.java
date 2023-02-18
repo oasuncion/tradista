@@ -99,8 +99,9 @@ public class EquityOptionVolatilitySurfaceCreatorDialog extends TradistaDialog<E
 					if (selectedStrikePriceRatios.getItems() != null
 							&& !selectedStrikePriceRatios.getItems().isEmpty()) {
 						for (StrikeProperty prop : selectedStrikePriceRatios.getItems()) {
-							if (TradistaGUIUtil.parseAmount(prop.getValue().toString(), "Strike/Price Ratio").compareTo(TradistaGUIUtil
-									.parseAmount(addStrikePriceRatioTextField.getText(), "Strike/Price Ratio")) == 0) {
+							if (TradistaGUIUtil.parseAmount(prop.getValue().toString(), "Strike/Price Ratio")
+									.compareTo(TradistaGUIUtil.parseAmount(addStrikePriceRatioTextField.getText(),
+											"Strike/Price Ratio")) == 0) {
 								strikeExists = true;
 								break;
 							}
@@ -128,8 +129,7 @@ public class EquityOptionVolatilitySurfaceCreatorDialog extends TradistaDialog<E
 				if (b == buttonTypeOk) {
 					try {
 						EquityOptionVolatilitySurface surface = new EquityOptionVolatilitySurface(
-								nameTextField.getText());
-						surface.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
+								nameTextField.getText(), ClientUtil.getCurrentUser().getProcessingOrg());
 						surface.setStrikes(EquityOptionVolatilitySurfacesController
 								.toStrikeList(selectedStrikePriceRatios.getItems()));
 						return surface;

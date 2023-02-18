@@ -285,7 +285,6 @@ public class JobsController extends TradistaControllerAdapter {
 			if (result.get() == ButtonType.OK) {
 				Map<String, Object> properties = toMap(jobPropertiesTable.getItems());
 				currentJobInstance.setProperties(properties);
-				currentJobInstance.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 				batchBusinessDelegate.saveJobInstance(currentJobInstance);
 			}
 		} catch (TradistaBusinessException tbe) {
@@ -312,9 +311,9 @@ public class JobsController extends TradistaControllerAdapter {
 			// expression).
 			result.ifPresent(name -> jobName.append(name));
 			if (result.isPresent()) {
-				TradistaJobInstance job = new TradistaJobInstance(jobName.toString(), currentJobInstance.getJobType());
+				TradistaJobInstance job = new TradistaJobInstance(jobName.toString(), currentJobInstance.getJobType(),
+						ClientUtil.getCurrentUser().getProcessingOrg());
 				job.setProperties(properties);
-				job.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 				batchBusinessDelegate.saveJobInstance(job);
 
 				TradistaJobInstance jobInst = jobInstance.getValue();
@@ -408,7 +407,6 @@ public class JobsController extends TradistaControllerAdapter {
 
 			if (result.isPresent()) {
 				TradistaJobInstance job = result.get();
-				job.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 				batchBusinessDelegate.saveJobInstance(job);
 
 				TradistaGUIUtil.fillComboBox(batchBusinessDelegate.getAllJobInstances(po), jobInstance);

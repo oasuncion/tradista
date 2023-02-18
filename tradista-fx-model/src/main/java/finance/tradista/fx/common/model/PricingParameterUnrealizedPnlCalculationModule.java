@@ -1,10 +1,12 @@
 package finance.tradista.fx.common.model;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
+import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 
 /*
@@ -27,12 +29,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class PricingParameterUnrealizedPnlCalculationModule implements PricingParameterModule {
+public class PricingParameterUnrealizedPnlCalculationModule extends PricingParameterModule {
 
 	private static final long serialVersionUID = -1081293712767780488L;
 
 	public static enum UnrealizedPnlCalculation {
 		MARK_TO_MARKET, MARK_TO_MODEL;
+
 		public String toString() {
 			switch (this) {
 			case MARK_TO_MARKET:
@@ -50,11 +53,14 @@ public class PricingParameterUnrealizedPnlCalculationModule implements PricingPa
 		unrealizedPnlCalculations = new HashMap<BookProductTypePair, UnrealizedPnlCalculation>();
 	}
 
-	public static class BookProductTypePair implements Serializable {
+	public static class BookProductTypePair extends TradistaObject {
 
 		private static final long serialVersionUID = -3597503317831313942L;
 
+		@Id
 		private Book book;
+
+		@Id
 		private String ProductType;
 
 		public BookProductTypePair(Book book, String productType) {
@@ -64,50 +70,18 @@ public class PricingParameterUnrealizedPnlCalculationModule implements PricingPa
 		}
 
 		public Book getBook() {
-			return book;
-		}
-
-		public void setBook(Book book) {
-			this.book = book;
+			return TradistaModelUtil.clone(book);
 		}
 
 		public String getProductType() {
 			return ProductType;
 		}
 
-		public void setProductType(String productType) {
-			ProductType = productType;
-		}
-
 		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((ProductType == null) ? 0 : ProductType.hashCode());
-			result = prime * result + ((book == null) ? 0 : book.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			BookProductTypePair other = (BookProductTypePair) obj;
-			if (ProductType == null) {
-				if (other.ProductType != null)
-					return false;
-			} else if (!ProductType.equals(other.ProductType))
-				return false;
-			if (book == null) {
-				if (other.book != null)
-					return false;
-			} else if (!book.equals(other.book))
-				return false;
-			return true;
+		public BookProductTypePair clone() {
+			BookProductTypePair bookProductTypePair = (BookProductTypePair) super.clone();
+			bookProductTypePair.book = TradistaModelUtil.clone(book);
+			return bookProductTypePair;
 		}
 
 	}
@@ -123,12 +97,25 @@ public class PricingParameterUnrealizedPnlCalculationModule implements PricingPa
 	}
 
 	public Map<BookProductTypePair, UnrealizedPnlCalculation> getUnrealizedPnlCalculations() {
-		return unrealizedPnlCalculations;
+		if (unrealizedPnlCalculations == null) {
+			return null;
+		}
+		return new HashMap<>(unrealizedPnlCalculations);
 	}
 
 	public void setUnrealizedPnlCalculations(
 			Map<BookProductTypePair, UnrealizedPnlCalculation> unrealizedPnlCalculations) {
 		this.unrealizedPnlCalculations = unrealizedPnlCalculations;
+	}
+
+	@Override
+	public PricingParameterUnrealizedPnlCalculationModule clone() {
+		PricingParameterUnrealizedPnlCalculationModule pricingParameterUnrealizedPnlCalculationModule = (PricingParameterUnrealizedPnlCalculationModule) super.clone();
+		if (unrealizedPnlCalculations != null) {
+			pricingParameterUnrealizedPnlCalculationModule.unrealizedPnlCalculations = new HashMap<>(
+					unrealizedPnlCalculations);
+		}
+		return pricingParameterUnrealizedPnlCalculationModule;
 	}
 
 }

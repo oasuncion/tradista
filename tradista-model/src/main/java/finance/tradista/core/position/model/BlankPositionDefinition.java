@@ -32,7 +32,7 @@ public final class BlankPositionDefinition extends PositionDefinition {
 	private static final BlankPositionDefinition instance = new BlankPositionDefinition();
 
 	private BlankPositionDefinition() {
-		setName(StringUtils.EMPTY);
+		super(StringUtils.EMPTY, null);
 	}
 
 	public static BlankPositionDefinition getInstance() {

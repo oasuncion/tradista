@@ -116,11 +116,10 @@ public class BatchSQL {
 						jobInstance = new BatchBusinessDelegate().getJobInstanceByNameAndPo(jobInstanceName, po);
 					} catch (TradistaBusinessException tbe) {
 					}
-					TradistaJobExecution jobExecution = new TradistaJobExecution(trigger, jobInstance);
+					TradistaJobExecution jobExecution = new TradistaJobExecution(trigger, jobInstance, triggerName);
 					jobExecution.setId(results.getLong("id"));
 					jobExecution.setStatus(results.getString("status"));
 					jobExecution.setStartTime(results.getTimestamp("start_time").toLocalDateTime());
-					jobExecution.setName(triggerName);
 					jobExecution.setJobType(results.getString("job_type"));
 					Timestamp endTime = results.getTimestamp("end_time");
 					if (endTime != null) {
@@ -163,11 +162,10 @@ public class BatchSQL {
 						jobInstance = new BatchBusinessDelegate().getJobInstanceByNameAndPo(jobInstanceName, po);
 					} catch (TradistaBusinessException tbe) {
 					}
-					jobExecution = new TradistaJobExecution(trigger, jobInstance);
+					jobExecution = new TradistaJobExecution(trigger, jobInstance, triggerName);
 					jobExecution.setId(results.getLong("id"));
 					jobExecution.setStatus(results.getString("status"));
 					jobExecution.setStartTime(results.getTimestamp("start_time").toLocalDateTime());
-					jobExecution.setName(triggerName);
 					jobExecution.setJobType(results.getString("job_type"));
 					Timestamp endTime = results.getTimestamp("end_time");
 					if (endTime != null) {

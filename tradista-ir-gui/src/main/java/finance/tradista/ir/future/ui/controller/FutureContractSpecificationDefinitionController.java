@@ -94,10 +94,7 @@ public class FutureContractSpecificationDefinitionController implements Tradista
 
 	}
 
-	private void buildFutureContractSpecification() {
-		if (futureContractSpecification == null) {
-			futureContractSpecification = new FutureContractSpecification();
-		}
+	private void buildFutureContractSpecification(FutureContractSpecification futureContractSpecification) {
 		try {
 			futureContractSpecification.setExchange(exchange.getValue());
 			if (!notional.getText().isEmpty()) {
@@ -107,12 +104,6 @@ public class FutureContractSpecificationDefinitionController implements Tradista
 			futureContractSpecification.setReferenceRateIndex(referenceRateIndex.getValue());
 			futureContractSpecification.setReferenceRateIndexTenor(referenceRateIndexTenor.getValue());
 			futureContractSpecification.setDayCountConvention(dayCountConvention.getValue());
-			if (name.isVisible()) {
-				futureContractSpecification.setName(name.getText());
-				nameLabel.setText(name.getText());
-			} else {
-				futureContractSpecification.setName(nameLabel.getText());
-			}
 			futureContractSpecification.setMaturityDatesDateRule(maturityDatesDateRule.getValue());
 		} catch (TradistaBusinessException tbe) {
 			// Should not appear here.
@@ -131,7 +122,12 @@ public class FutureContractSpecificationDefinitionController implements Tradista
 			try {
 				checkAmounts();
 
-				buildFutureContractSpecification();
+				if (name.isVisible()) {
+					futureContractSpecification = new FutureContractSpecification(name.getText());
+					nameLabel.setText(name.getText());
+				}
+				
+				buildFutureContractSpecification(futureContractSpecification);
 
 				futureContractSpecification.setId(futureContractSpecificationBusinessDelegate
 						.saveFutureContractSpecification(futureContractSpecification));
@@ -151,25 +147,22 @@ public class FutureContractSpecificationDefinitionController implements Tradista
 		dialog.setHeaderText("Do you want to copy this Future Contract Specification ?");
 		dialog.setContentText("Please enter the name of the new Future Contract Specification:");
 
-		long oldFutureContractSpecificationId = 0;
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()) {
 			try {
 				checkAmounts();
-
-				buildFutureContractSpecification();
-				oldFutureContractSpecificationId = futureContractSpecification.getId();
-				futureContractSpecification.setId(0);
-				futureContractSpecification.setName(result.get());
-				futureContractSpecification.setId(futureContractSpecificationBusinessDelegate
-						.saveFutureContractSpecification(futureContractSpecification));
+				FutureContractSpecification copyFutureContractSpecification = new FutureContractSpecification(
+						result.get());
+				buildFutureContractSpecification(copyFutureContractSpecification);
+				copyFutureContractSpecification.setId(futureContractSpecificationBusinessDelegate
+						.saveFutureContractSpecification(copyFutureContractSpecification));
+				futureContractSpecification = copyFutureContractSpecification;
 				name.setVisible(false);
 				nameLabel.setVisible(true);
 				nameLabel.setText(futureContractSpecification.getName());
 				TradistaGUIUtil.fillComboBox(
 						futureContractSpecificationBusinessDelegate.getAllFutureContractSpecifications(), load);
 			} catch (TradistaBusinessException tbe) {
-				futureContractSpecification.setId(oldFutureContractSpecificationId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
@@ -246,8 +239,8 @@ public class FutureContractSpecificationDefinitionController implements Tradista
 		StringBuilder errMsg = new StringBuilder();
 		try {
 			TradistaGUIUtil.checkAmount(notional.getText(), "Notional");
-		} catch (TradistaBusinessException abe) {
-			errMsg.append(abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			errMsg.append(tbe.getMessage());
 		}
 		if (errMsg.length() > 0) {
 			throw new TradistaBusinessException(errMsg.toString());

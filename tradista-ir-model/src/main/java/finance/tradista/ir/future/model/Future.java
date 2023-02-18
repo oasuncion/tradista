@@ -2,6 +2,8 @@ package finance.tradista.ir.future.model;
 
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
 import finance.tradista.core.exchange.model.Exchange;
@@ -36,9 +38,17 @@ public class Future extends Product {
 	 */
 	private static final long serialVersionUID = 328506381431797478L;
 
+	@Id
 	private String symbol;
 
+	@Id
 	private FutureContractSpecification contractSpecification;
+
+	public Future(String symbol, FutureContractSpecification futureContractSpecification) {
+		super(futureContractSpecification != null ? futureContractSpecification.getExchange() : null);
+		this.symbol = symbol;
+		this.contractSpecification = futureContractSpecification;
+	}
 
 	private LocalDate maturityDate;
 
@@ -46,16 +56,8 @@ public class Future extends Product {
 		return symbol;
 	}
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
-
 	public FutureContractSpecification getContractSpecification() {
-		return contractSpecification;
-	}
-
-	public void setContractSpecification(FutureContractSpecification contractSpecification) {
-		this.contractSpecification = contractSpecification;
+		return TradistaModelUtil.clone(contractSpecification);
 	}
 
 	public LocalDate getMaturityDate() {
@@ -76,38 +78,6 @@ public class Future extends Product {
 	@Override
 	public String toString() {
 		return symbol + " - " + contractSpecification;
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((contractSpecification == null) ? 0 : contractSpecification.hashCode());
-		result = prime * result + ((symbol == null) ? 0 : symbol.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Future other = (Future) obj;
-		if (contractSpecification == null) {
-			if (other.contractSpecification != null)
-				return false;
-		} else if (!contractSpecification.equals(other.contractSpecification))
-			return false;
-		if (symbol == null) {
-			if (other.symbol != null)
-				return false;
-		} else if (!symbol.equals(other.symbol))
-			return false;
-		return true;
 	}
 
 	public DayCountConvention getDayCountConvention() {
@@ -145,9 +115,11 @@ public class Future extends Product {
 		return null;
 	}
 
-	public void setExchange(Exchange exchange) {
-		// Forbidden to set the exchange. The exchange is defined by the
-		// contract specification.
+	@Override
+	public Future clone() {
+		Future future = (Future) super.clone();
+		future.contractSpecification = TradistaModelUtil.clone(contractSpecification);
+		return future;
 	}
 
 }

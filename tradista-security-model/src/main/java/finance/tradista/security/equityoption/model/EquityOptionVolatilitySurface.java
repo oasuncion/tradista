@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.marketdata.model.SurfacePoint;
 import finance.tradista.core.marketdata.model.VolatilitySurface;
 
@@ -37,13 +38,9 @@ public class EquityOptionVolatilitySurface extends VolatilitySurface<Integer, Bi
 	private static final long serialVersionUID = -8402233398798004883L;
 
 	private List<BigDecimal> strikes;
-
-	public EquityOptionVolatilitySurface(String name) {
-		super(name);
-	}
-
-	public EquityOptionVolatilitySurface() {
-		super();
+	
+	public EquityOptionVolatilitySurface(String name, LegalEntity processingOrg) {
+		super(name, processingOrg);
 	}
 
 	public BigDecimal getVolatilityByOptionExpiry(long optionExpiry) throws TradistaBusinessException {
@@ -76,11 +73,23 @@ public class EquityOptionVolatilitySurface extends VolatilitySurface<Integer, Bi
 	}
 
 	public List<BigDecimal> getStrikes() {
-		return strikes;
+		if (strikes == null) {
+			return null;
+		}
+		return new ArrayList<>(strikes);
 	}
 
 	public void setStrikes(List<BigDecimal> strikes) {
 		this.strikes = strikes;
+	}
+	
+	@Override
+	public EquityOptionVolatilitySurface clone() {
+		EquityOptionVolatilitySurface equityOptionVolatilitySurface = (EquityOptionVolatilitySurface) super.clone();
+		if (strikes != null) {
+			equityOptionVolatilitySurface.strikes = new ArrayList<>(strikes);
+		}
+		return equityOptionVolatilitySurface;
 	}
 
 }

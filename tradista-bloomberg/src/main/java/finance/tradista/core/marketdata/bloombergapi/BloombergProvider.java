@@ -236,9 +236,8 @@ public abstract class BloombergProvider implements Provider {
 			List<QuoteValue> quoteValues) {
 		Element fieldData = securityData.getElement("fieldData");
 		int numFields = fieldData.numElements();
-		QuoteValue quoteValue = new QuoteValue(LocalDate.now());
+		QuoteValue quoteValue = new QuoteValue(LocalDate.now(), feedConfig.getMapping().get(security));
 		quoteValue.setEnteredDate(LocalDate.now());
-		quoteValue.setQuote(feedConfig.getMapping().get(security));
 		quoteValue.setSourceName(feedConfig.getFeedType().toString());
 		for (int j = 0; j < numFields; j++) {
 			Element field = fieldData.getValueAsElement(j);

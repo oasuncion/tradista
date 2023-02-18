@@ -2,6 +2,7 @@ package finance.tradista.ir.irswapoption.model;
 
 import java.math.BigDecimal;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.core.trade.model.VanillaOptionTrade;
@@ -33,15 +34,15 @@ public class IRSwapOptionTrade extends VanillaOptionTrade<SingleCurrencyIRSwapTr
 	 * 
 	 */
 	private static final long serialVersionUID = 8952352869490542697L;
-	
+
 	public static final String IR_SWAP_OPTION = "IRSwapOption";
-	
+
 	private BigDecimal cashSettlementAmount;
-	
+
 	private Index alternativeCashSettlementReferenceRateIndex;
-	
+
 	private Tenor alternativeCashSettlementReferenceRateIndexTenor;
-	
+
 	public BigDecimal getCashSettlementAmount() {
 		return cashSettlementAmount;
 	}
@@ -51,7 +52,7 @@ public class IRSwapOptionTrade extends VanillaOptionTrade<SingleCurrencyIRSwapTr
 	}
 
 	public Index getAlternativeCashSettlementReferenceRateIndex() {
-		return alternativeCashSettlementReferenceRateIndex;
+		return TradistaModelUtil.clone(alternativeCashSettlementReferenceRateIndex);
 	}
 
 	public void setAlternativeCashSettlementReferenceRateIndex(Index alternativeCashSettlementReferenceRateIndex) {
@@ -71,5 +72,13 @@ public class IRSwapOptionTrade extends VanillaOptionTrade<SingleCurrencyIRSwapTr
 	public String getProductType() {
 		return IR_SWAP_OPTION;
 	}
-	
+
+	@Override
+	public IRSwapOptionTrade clone() {
+		IRSwapOptionTrade irSwapOptionTrade = (IRSwapOptionTrade) super.clone();
+		irSwapOptionTrade.alternativeCashSettlementReferenceRateIndex = TradistaModelUtil
+				.clone(alternativeCashSettlementReferenceRateIndex);
+		return irSwapOptionTrade;
+	}
+
 }

@@ -3,6 +3,8 @@ package finance.tradista.core.marketdata.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -32,8 +34,10 @@ public class QuoteValue extends TradistaObject implements MarketData, Comparable
 	 */
 	private static final long serialVersionUID = -8712317853305269754L;
 
+	@Id
 	private QuoteSet quoteSet;
 
+	@Id
 	private LocalDate date;
 
 	private BigDecimal bid;
@@ -64,14 +68,11 @@ public class QuoteValue extends TradistaObject implements MarketData, Comparable
 
 	public static final String LAST = "Last";
 
+	@Id
 	private Quote quote;
 
 	public Quote getQuote() {
-		return quote;
-	}
-
-	public void setQuote(Quote quote) {
-		this.quote = quote;
+		return TradistaModelUtil.clone(quote);
 	}
 
 	private String sourceName;
@@ -154,11 +155,8 @@ public class QuoteValue extends TradistaObject implements MarketData, Comparable
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public QuoteValue(LocalDate date) {
+	public QuoteValue(LocalDate date, Quote quote) {
+		this.quote = quote;
 		this.date = date;
 	}
 
@@ -206,19 +204,30 @@ public class QuoteValue extends TradistaObject implements MarketData, Comparable
 		this.enteredDate = enteredDate;
 	}
 
-	public QuoteSet getQuoteSet() {
-		return quoteSet;
+	public QuoteValue(QuoteValue quoteValue, QuoteSet quoteSet) {
+		this.date = quoteValue.date;
+		this.bid = quoteValue.bid;
+		this.ask = quoteValue.ask;
+		this.open = quoteValue.open;
+		this.close = quoteValue.close;
+		this.high = quoteValue.high;
+		this.low = quoteValue.low;
+		this.last = quoteValue.last;
+		this.quote = quoteValue.quote;
+		this.sourceName = quoteValue.sourceName;
+		this.enteredDate = quoteValue.enteredDate;
+		this.quote = TradistaModelUtil.clone(quoteValue.quote);
+		this.quoteSet = quoteSet;
 	}
 
-	public void setQuoteSet(QuoteSet quoteSet) {
-		this.quoteSet = quoteSet;
+	public QuoteSet getQuoteSet() {
+		return TradistaModelUtil.clone(quoteSet);
 	}
 
 	/**
 	 * Returns the value for this value type. default to Last
 	 * 
-	 * @param valueType
-	 *            the value type: BID, ASK, OPEN, CLOSE, LAST, HIGH or MID
+	 * @param valueType the value type: BID, ASK, OPEN, CLOSE, LAST, HIGH or MID
 	 * @return the value for this value type. default to Last.
 	 */
 	public BigDecimal getValue(String valueType) {
@@ -248,29 +257,17 @@ public class QuoteValue extends TradistaObject implements MarketData, Comparable
 		}
 	}
 
-	public boolean equals(Object o) {
-		if (o == null) {
-			return false;
-		}
-
-		if (o == this) {
-			return true;
-		}
-
-		if (!(o instanceof QuoteValue)) {
-			return false;
-		}
-		return ((QuoteValue) o).getDate().isEqual(date) && ((QuoteValue) o).getQuote().equals(quote)
-				&& ((QuoteValue) o).getQuoteSet().equals(quoteSet);
-	}
-
-	public int hashCode() {
-		return date.toString().concat(quote.toString()).concat(quoteSet.toString()).hashCode();
-	}
-
 	@Override
 	public int compareTo(QuoteValue qv) {
 		return date.compareTo(qv.getDate());
+	}
+
+	@Override
+	public QuoteValue clone() {
+		QuoteValue quoteValue = (QuoteValue) super.clone();
+		quoteValue.quote = TradistaModelUtil.clone(quote);
+		quoteValue.quoteSet = TradistaModelUtil.clone(quoteSet);
+		return quoteValue;
 	}
 
 }

@@ -56,12 +56,11 @@ public class CashInventorySQL {
 			try (ResultSet results = stmtGetLastCashInventoryBeforeDateByCurrencyAndBookIds.executeQuery()) {
 				while (results.next()) {
 					if (cashInventory == null) {
-						cashInventory = new CashInventory();
+						cashInventory = new CashInventory(CurrencySQL.getCurrencyById(results.getLong("currency_id")),
+								results.getDate("from_date").toLocalDate(),
+								BookSQL.getBookById(results.getLong("book_id")));
 					}
-					cashInventory.setFrom(results.getDate("from_date").toLocalDate());
 					cashInventory.setId(results.getLong("id"));
-					cashInventory.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					cashInventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setAmount(results.getBigDecimal("amount"));
 					Date to = results.getDate("to_date");
 					if (to != null) {
@@ -93,12 +92,11 @@ public class CashInventorySQL {
 			try (ResultSet results = stmtGetFirstCashInventoryAfterDateByCurrencyAndBookIds.executeQuery()) {
 				while (results.next()) {
 					if (cashInventory == null) {
-						cashInventory = new CashInventory();
+						cashInventory = new CashInventory(CurrencySQL.getCurrencyById(results.getLong("currency_id")),
+								results.getDate("from_date").toLocalDate(),
+								BookSQL.getBookById(results.getLong("book_id")));
 					}
-					cashInventory.setFrom(results.getDate("from_date").toLocalDate());
 					cashInventory.setId(results.getLong("id"));
-					cashInventory.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					cashInventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setAmount(results.getBigDecimal("amount"));
 					Date to = results.getDate("to_date");
 					if (to != null) {
@@ -197,11 +195,11 @@ public class CashInventorySQL {
 					if (cashInventories == null) {
 						cashInventories = new TreeSet<CashInventory>();
 					}
-					CashInventory cashInventory = new CashInventory();
-					cashInventory.setFrom(results.getDate("from_date").toLocalDate());
+					CashInventory cashInventory = new CashInventory(
+							CurrencySQL.getCurrencyById(results.getLong("currency_id")),
+							results.getDate("from_date").toLocalDate(),
+							BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setId(results.getLong("id"));
-					cashInventory.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					cashInventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setAmount(results.getBigDecimal("amount"));
 					Date to = results.getDate("to_date");
 					if (to != null) {
@@ -235,11 +233,11 @@ public class CashInventorySQL {
 					if (cashInventories == null) {
 						cashInventories = new TreeSet<CashInventory>();
 					}
-					CashInventory cashInventory = new CashInventory();
-					cashInventory.setFrom(results.getDate("from_date").toLocalDate());
+					CashInventory cashInventory = new CashInventory(
+							CurrencySQL.getCurrencyById(results.getLong("currency_id")),
+							results.getDate("from_date").toLocalDate(),
+							BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setId(results.getLong("id"));
-					cashInventory.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					cashInventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setAmount(results.getBigDecimal("amount"));
 					Date to = results.getDate("to_date");
 					if (to != null) {
@@ -331,11 +329,11 @@ public class CashInventorySQL {
 					if (cashInventories == null) {
 						cashInventories = new HashSet<CashInventory>();
 					}
-					CashInventory cashInventory = new CashInventory();
-					cashInventory.setFrom(results.getDate("from_date").toLocalDate());
+					CashInventory cashInventory = new CashInventory(
+							CurrencySQL.getCurrencyById(results.getLong("currency_id")),
+							results.getDate("from_date").toLocalDate(),
+							BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setId(results.getLong("id"));
-					cashInventory.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					cashInventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setAmount(results.getBigDecimal("amount"));
 					Date to = results.getDate("to_date");
 					if (to != null) {
@@ -405,11 +403,11 @@ public class CashInventorySQL {
 					if (cashInventories == null) {
 						cashInventories = new TreeSet<CashInventory>();
 					}
-					CashInventory cashInventory = new CashInventory();
-					cashInventory.setFrom(results.getDate("from_date").toLocalDate());
+					CashInventory cashInventory = new CashInventory(
+							CurrencySQL.getCurrencyById(results.getLong("currency_id")),
+							results.getDate("from_date").toLocalDate(),
+							BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setId(results.getLong("id"));
-					cashInventory.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					cashInventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					cashInventory.setAmount(results.getBigDecimal("amount"));
 					Date toResult = results.getDate("to_date");
 					if (toResult != null) {

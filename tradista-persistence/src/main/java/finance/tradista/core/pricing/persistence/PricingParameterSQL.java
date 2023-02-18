@@ -169,19 +169,19 @@ public class PricingParameterSQL {
 						"SELECT * FROM PRICING_PARAMETER_CUSTOM_PRICER WHERE PRICING_PARAMETER_ID = ?");
 				ResultSet results = stmtGetAllPricingParameters.executeQuery()) {
 			while (results.next()) {
-				PricingParameter pricingParameter = new PricingParameter();
+				LegalEntity processingOrg = null;
+				long poId = results.getLong("processing_org_id");
+				if (poId > 0) {
+					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				PricingParameter pricingParameter = new PricingParameter(results.getString("name"), processingOrg);
 				Map<String, String> params = new HashMap<String, String>();
 				Map<Index, InterestRateCurve> indexCurves = new HashMap<Index, InterestRateCurve>();
 				Map<Currency, InterestRateCurve> discountCurves = new HashMap<Currency, InterestRateCurve>();
 				Map<CurrencyPair, FXCurve> fxCurves = new HashMap<CurrencyPair, FXCurve>();
 				Map<String, String> customPricers = new HashMap<String, String>();
 				pricingParameter.setId(results.getInt("id"));
-				pricingParameter.setName(results.getString("name"));
 				pricingParameter.setQuoteSet(QuoteSetSQL.getQuoteSetById(results.getLong("quote_set_id")));
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					pricingParameter.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-				}
 				stmtGetPricingParameterValueByPricingParameterId.setLong(1, results.getLong("id"));
 				try (ResultSet paramsResults = stmtGetPricingParameterValueByPricingParameterId.executeQuery()) {
 					while (paramsResults.next()) {
@@ -294,20 +294,19 @@ public class PricingParameterSQL {
 					ResultSet results = stmtGetPricingParameterById.executeQuery()) {
 				while (results.next()) {
 					if (pricingParameter == null) {
-						pricingParameter = new PricingParameter();
+						LegalEntity processingOrg = null;
+						long poId = results.getLong("processing_org_id");
+						if (poId > 0) {
+							processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+						}
+						pricingParameter = new PricingParameter(results.getString("name"), processingOrg);
 					}
 					Map<Index, InterestRateCurve> indexCurves = new HashMap<Index, InterestRateCurve>();
 					Map<Currency, InterestRateCurve> discountCurves = new HashMap<Currency, InterestRateCurve>();
 					Map<CurrencyPair, FXCurve> fxCurves = new HashMap<CurrencyPair, FXCurve>();
 					Map<String, String> customPricers = new HashMap<String, String>();
 					pricingParameter.setId(results.getInt("id"));
-					pricingParameter.setName(results.getString("name"));
 					pricingParameter.setQuoteSet(QuoteSetSQL.getQuoteSetById(results.getLong("quote_set_id")));
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						pricingParameter.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
-
 					stmtGetPricingParameterIndexCurveById.setLong(1, results.getLong("id"));
 					try (ResultSet indexCurvesResults = stmtGetPricingParameterIndexCurveById.executeQuery()) {
 						while (indexCurvesResults.next()) {
@@ -397,18 +396,17 @@ public class PricingParameterSQL {
 							"SELECT * FROM PRICING_PARAMETER_CUSTOM_PRICER WHERE PRICING_PARAMETER_ID = ?");
 					ResultSet results = stmtGetPricingParameterByNameAndPoId.executeQuery()) {
 				while (results.next()) {
-					pricingParameter = new PricingParameter();
+					LegalEntity processingOrg = null;
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					pricingParameter = new PricingParameter(results.getString("name"), processingOrg);
 					Map<Index, InterestRateCurve> indexCurves = new HashMap<Index, InterestRateCurve>();
 					Map<Currency, InterestRateCurve> discountCurves = new HashMap<Currency, InterestRateCurve>();
 					Map<CurrencyPair, FXCurve> fxCurves = new HashMap<CurrencyPair, FXCurve>();
 					Map<String, String> customPricers = new HashMap<String, String>();
 					pricingParameter.setId(results.getInt("id"));
-					pricingParameter.setName(results.getString("name"));
 					pricingParameter.setQuoteSet(QuoteSetSQL.getQuoteSetById(results.getLong("quote_set_id")));
-					if (poId > 0) {
-						pricingParameter.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
-
 					stmtGetPricingParameterIndexCurveById.setLong(1, results.getLong("id"));
 					try (ResultSet indexCurvesResults = stmtGetPricingParameterIndexCurveById.executeQuery()) {
 						while (indexCurvesResults.next()) {
@@ -565,60 +563,61 @@ public class PricingParameterSQL {
 					stmtDeletePricingParameterCustomPricers.setLong(1, pricingParamId);
 					stmtDeletePricingParameterCustomPricers.executeUpdate();
 				}
+			}
 
-				for (Map.Entry<String, String> entry : pricingParam.getParams().entrySet()) {
-					stmtSavePricingParameterValues.clearParameters();
-					stmtSavePricingParameterValues.setLong(1, pricingParamId);
-					stmtSavePricingParameterValues.setString(2, entry.getKey());
-					stmtSavePricingParameterValues.setString(3, entry.getValue());
-					stmtSavePricingParameterValues.addBatch();
-				}
-				stmtSavePricingParameterValues.executeBatch();
+			for (Map.Entry<String, String> entry : pricingParam.getParams().entrySet()) {
+				stmtSavePricingParameterValues.clearParameters();
+				stmtSavePricingParameterValues.setLong(1, pricingParamId);
+				stmtSavePricingParameterValues.setString(2, entry.getKey());
+				stmtSavePricingParameterValues.setString(3, entry.getValue());
+				stmtSavePricingParameterValues.addBatch();
+			}
+			stmtSavePricingParameterValues.executeBatch();
 
-				for (Map.Entry<Index, InterestRateCurve> entry : pricingParam.getIndexCurves().entrySet()) {
-					stmtSavePricingParameterIndexCurves.clearParameters();
-					stmtSavePricingParameterIndexCurves.setLong(1, pricingParamId);
-					stmtSavePricingParameterIndexCurves.setLong(2, entry.getKey().getId());
-					stmtSavePricingParameterIndexCurves.setLong(3, entry.getValue().getId());
-					stmtSavePricingParameterIndexCurves.addBatch();
-				}
-				stmtSavePricingParameterIndexCurves.executeBatch();
+			for (Map.Entry<Index, InterestRateCurve> entry : pricingParam.getIndexCurves().entrySet()) {
+				stmtSavePricingParameterIndexCurves.clearParameters();
+				stmtSavePricingParameterIndexCurves.setLong(1, pricingParamId);
+				stmtSavePricingParameterIndexCurves.setLong(2, entry.getKey().getId());
+				stmtSavePricingParameterIndexCurves.setLong(3, entry.getValue().getId());
+				stmtSavePricingParameterIndexCurves.addBatch();
+			}
+			stmtSavePricingParameterIndexCurves.executeBatch();
 
-				for (Map.Entry<Currency, InterestRateCurve> entry : pricingParam.getDiscountCurves().entrySet()) {
-					stmtSavePricingParameterDiscountCurves.clearParameters();
-					stmtSavePricingParameterDiscountCurves.setLong(1, pricingParamId);
-					stmtSavePricingParameterDiscountCurves.setLong(2, entry.getKey().getId());
-					stmtSavePricingParameterDiscountCurves.setLong(3, entry.getValue().getId());
-					stmtSavePricingParameterDiscountCurves.addBatch();
-				}
-				stmtSavePricingParameterDiscountCurves.executeBatch();
+			for (Map.Entry<Currency, InterestRateCurve> entry : pricingParam.getDiscountCurves().entrySet()) {
+				stmtSavePricingParameterDiscountCurves.clearParameters();
+				stmtSavePricingParameterDiscountCurves.setLong(1, pricingParamId);
+				stmtSavePricingParameterDiscountCurves.setLong(2, entry.getKey().getId());
+				stmtSavePricingParameterDiscountCurves.setLong(3, entry.getValue().getId());
+				stmtSavePricingParameterDiscountCurves.addBatch();
+			}
+			stmtSavePricingParameterDiscountCurves.executeBatch();
 
-				for (Map.Entry<CurrencyPair, FXCurve> entry : pricingParam.getFxCurves().entrySet()) {
-					stmtSavePricingParameterFXCurves.clearParameters();
-					stmtSavePricingParameterFXCurves.setLong(1, pricingParamId);
-					stmtSavePricingParameterFXCurves.setLong(2, entry.getKey().getPrimaryCurrency().getId());
-					stmtSavePricingParameterFXCurves.setLong(3, entry.getKey().getQuoteCurrency().getId());
-					stmtSavePricingParameterFXCurves.setLong(4, entry.getValue().getId());
-					stmtSavePricingParameterFXCurves.addBatch();
-				}
-				stmtSavePricingParameterFXCurves.executeBatch();
+			for (Map.Entry<CurrencyPair, FXCurve> entry : pricingParam.getFxCurves().entrySet()) {
+				stmtSavePricingParameterFXCurves.clearParameters();
+				stmtSavePricingParameterFXCurves.setLong(1, pricingParamId);
+				stmtSavePricingParameterFXCurves.setLong(2, entry.getKey().getPrimaryCurrency().getId());
+				stmtSavePricingParameterFXCurves.setLong(3, entry.getKey().getQuoteCurrency().getId());
+				stmtSavePricingParameterFXCurves.setLong(4, entry.getValue().getId());
+				stmtSavePricingParameterFXCurves.addBatch();
+			}
+			stmtSavePricingParameterFXCurves.executeBatch();
 
-				for (Map.Entry<String, String> entry : pricingParam.getCustomPricers().entrySet()) {
-					stmtSavePricingParameterCustomPricers.clearParameters();
-					stmtSavePricingParameterCustomPricers.setLong(1, pricingParamId);
-					stmtSavePricingParameterCustomPricers.setString(2, entry.getKey());
-					stmtSavePricingParameterCustomPricers.setString(3, entry.getValue());
-					stmtSavePricingParameterCustomPricers.addBatch();
-				}
-				stmtSavePricingParameterCustomPricers.executeBatch();
+			for (Map.Entry<String, String> entry : pricingParam.getCustomPricers().entrySet()) {
+				stmtSavePricingParameterCustomPricers.clearParameters();
+				stmtSavePricingParameterCustomPricers.setLong(1, pricingParamId);
+				stmtSavePricingParameterCustomPricers.setString(2, entry.getKey());
+				stmtSavePricingParameterCustomPricers.setString(3, entry.getValue());
+				stmtSavePricingParameterCustomPricers.addBatch();
+			}
+			stmtSavePricingParameterCustomPricers.executeBatch();
 
-				if (pricingParam.getModules() != null && !pricingParam.getModules().isEmpty()) {
-					for (PricingParameterModule module : pricingParam.getModules()) {
-						// Save the module
-						PricingParameterSQL.savePricingParameterModule(module, con, pricingParam.getId());
-					}
+			if (pricingParam.getModules() != null && !pricingParam.getModules().isEmpty()) {
+				for (PricingParameterModule module : pricingParam.getModules()) {
+					// Save the module
+					PricingParameterSQL.savePricingParameterModule(module, con, pricingParam.getId());
 				}
 			}
+
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			throw new TradistaTechnicalException(sqle);

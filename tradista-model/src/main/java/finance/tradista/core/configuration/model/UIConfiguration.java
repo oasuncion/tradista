@@ -2,6 +2,8 @@ package finance.tradista.core.configuration.model;
 
 import java.text.DecimalFormat;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.user.model.User;
 
@@ -25,27 +27,32 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class UIConfiguration extends TradistaObject{
+public class UIConfiguration extends TradistaObject {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 9187245529679559251L;
-	
-	public UIConfiguration() {
+
+	private DecimalFormat decimalFormat;
+
+	private String style;
+
+	@Id
+	private User user;
+
+	public UIConfiguration(User user) {
+		this.user = user;
 		decimalFormat = new DecimalFormat();
 		decimalFormat.setParseBigDecimal(true);
 		style = "Default";
 	}
-	
-	private DecimalFormat decimalFormat;
-	
-	private String style;
-	
-	private User user;
 
 	public DecimalFormat getDecimalFormat() {
-		return decimalFormat;
+		if (decimalFormat == null) {
+			return null;
+		}
+		return (DecimalFormat) decimalFormat.clone();
 	}
 
 	public void setDecimalFormat(DecimalFormat decimalFormat) {
@@ -61,36 +68,20 @@ public class UIConfiguration extends TradistaObject{
 	}
 
 	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UIConfiguration other = (UIConfiguration) obj;
 		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		return true;
+			return null;
+		}
+		return (User) user.clone();
 	}
-		
+
+	@Override
+	public UIConfiguration clone() {
+		UIConfiguration uiConfiguration = (UIConfiguration) super.clone();
+		uiConfiguration.user = TradistaModelUtil.clone(user);
+		if (decimalFormat != null) {
+			uiConfiguration.decimalFormat = (DecimalFormat) decimalFormat.clone();
+		}
+		return uiConfiguration;
+	}
+
 }

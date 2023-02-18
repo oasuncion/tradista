@@ -1,9 +1,14 @@
 package finance.tradista.core.transfer.model;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.time.LocalDate;
 
+import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
+import finance.tradista.core.product.model.Product;
+import finance.tradista.core.trade.model.Trade;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -27,27 +32,34 @@ under the License.    */
 
 public class CashTransfer extends Transfer {
 
-
+	public CashTransfer(Book book, TransferPurpose purpose, LocalDate settlementDate, Trade<?> trade,
+			Currency currency) {
+		super(book, null, purpose, settlementDate, trade);
+		this.currency = currency;
+	}
+	
+	public CashTransfer(Book book, Product product, TransferPurpose purpose, LocalDate settlementDate, 
+			Currency currency) {
+		super(book, product, purpose, settlementDate, null);
+		this.currency = currency;
+	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7123636684384971261L;
-	
+
+	@Id
 	private Currency currency;
 
 	public Currency getCurrency() {
-		return currency;
+		return TradistaModelUtil.clone(currency);
 	}
 
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
-	}
-	
 	public BigDecimal getAmount() {
 		return quantityOrAmount;
 	}
-	
+
 	public void setAmount(BigDecimal amount) {
 		this.quantityOrAmount = amount;
 	}
@@ -58,23 +70,10 @@ public class CashTransfer extends Transfer {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(currency);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CashTransfer other = (CashTransfer) obj;
-		return Objects.equals(currency, other.currency);
+	public CashTransfer clone() {
+		CashTransfer cashTransfer = (CashTransfer) super.clone();
+		cashTransfer.currency = TradistaModelUtil.clone(currency);
+		return cashTransfer;
 	}
 
 }

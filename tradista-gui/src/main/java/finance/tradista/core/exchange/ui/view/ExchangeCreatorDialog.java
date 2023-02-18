@@ -57,8 +57,7 @@ public class ExchangeCreatorDialog extends TradistaDialog<Exchange> {
 			@Override
 			public Exchange call(ButtonType b) {
 				if (b == buttonTypeOk) {
-					Exchange exchange = new Exchange();
-					exchange.setCode(codeTextField.getText());
+					Exchange exchange = new Exchange(codeTextField.getText());
 					exchange.setName(nameTextField.getText());
 					return exchange;
 				}

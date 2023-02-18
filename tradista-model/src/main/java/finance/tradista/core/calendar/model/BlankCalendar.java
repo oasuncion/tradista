@@ -32,7 +32,7 @@ public final class BlankCalendar extends Calendar {
 	private static final BlankCalendar instance = new BlankCalendar();
 
 	private BlankCalendar() {
-		setCode(StringUtils.EMPTY);
+		super(StringUtils.EMPTY);
 	}
 
 	public static BlankCalendar getInstance() {

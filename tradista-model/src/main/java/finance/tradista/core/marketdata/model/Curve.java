@@ -1,7 +1,10 @@
 package finance.tradista.core.marketdata.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
@@ -34,12 +37,11 @@ public abstract class Curve<X, Y> extends TradistaObject implements MarketData {
 
 	protected Map<X, Y> points;
 
+	@Id
 	private String name;
 
+	@Id
 	private LegalEntity processingOrg;
-
-	public Curve() {
-	}
 
 	public Curve(String name, LegalEntity po) {
 		this.name = name;
@@ -50,12 +52,11 @@ public abstract class Curve<X, Y> extends TradistaObject implements MarketData {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public Map<X, Y> getPoints() {
-		return points;
+		if (points == null) {
+			return null;
+		}
+		return new HashMap<>(points);
 	}
 
 	public void setPoints(Map<X, Y> points) {
@@ -63,42 +64,15 @@ public abstract class Curve<X, Y> extends TradistaObject implements MarketData {
 	}
 
 	public LegalEntity getProcessingOrg() {
-		return processingOrg;
+		return TradistaModelUtil.clone(processingOrg);
 	}
 
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
-	}
-
+	@SuppressWarnings("unchecked")
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Curve<?, ?> other = (Curve<?, ?>) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		return true;
+	public Curve<X, Y> clone() {
+		Curve<X, Y> curve = (Curve<X, Y>) super.clone();
+		curve.processingOrg = TradistaModelUtil.clone(processingOrg);
+		return curve;
 	}
 
 }

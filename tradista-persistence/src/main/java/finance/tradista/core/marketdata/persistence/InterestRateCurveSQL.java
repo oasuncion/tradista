@@ -20,6 +20,7 @@ import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.marketdata.model.Quote;
@@ -115,24 +116,24 @@ public class InterestRateCurveSQL {
 						&& results.getString("type").equals("ZeroCouponCurve");
 
 				InterestRateCurve interestRateCurve;
+				LegalEntity processingOrg = null;
+				long poId = results.getLong("processing_org_id");
+				if (poId > 0) {
+					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+				}
 				if (isZeroCoupon) {
-					interestRateCurve = new ZeroCouponCurve();
+					interestRateCurve = new ZeroCouponCurve(results.getString("name"), processingOrg);
 				} else {
-					interestRateCurve = new InterestRateCurve();
+					interestRateCurve = new InterestRateCurve(results.getString("name"), processingOrg);
 				}
 
 				interestRateCurve.setId(results.getLong("id"));
-				interestRateCurve.setName(results.getString("name"));
 				interestRateCurve.setAlgorithm(results.getString("algorithm"));
 				interestRateCurve.setInterpolator(results.getString("interpolator"));
 				interestRateCurve.setInstance(results.getString("instance"));
 				java.sql.Date quoteDate = results.getDate("quote_date");
 				if (quoteDate != null) {
 					interestRateCurve.setQuoteDate(quoteDate.toLocalDate());
-				}
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					interestRateCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
 				}
 				interestRateCurves.add(interestRateCurve);
 			}
@@ -153,19 +154,19 @@ public class InterestRateCurveSQL {
 				if (zeroCouponCurves == null) {
 					zeroCouponCurves = new HashSet<ZeroCouponCurve>();
 				}
-				ZeroCouponCurve zeroCouponCurve = new ZeroCouponCurve();
+				LegalEntity processingOrg = null;
+				long poId = results.getLong("processing_org_id");
+				if (poId > 0) {
+					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				ZeroCouponCurve zeroCouponCurve = new ZeroCouponCurve(results.getString("name"), processingOrg);
 				zeroCouponCurve.setId(results.getLong("id"));
-				zeroCouponCurve.setName(results.getString("name"));
 				zeroCouponCurve.setAlgorithm(results.getString("algorithm"));
 				zeroCouponCurve.setInterpolator(results.getString("interpolator"));
 				zeroCouponCurve.setInstance(results.getString("instance"));
 				java.sql.Date quoteDate = results.getDate("quote_date");
 				if (quoteDate != null) {
 					zeroCouponCurve.setQuoteDate(quoteDate.toLocalDate());
-				}
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					zeroCouponCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
 				}
 				zeroCouponCurves.add(zeroCouponCurve);
 			}
@@ -390,23 +391,23 @@ public class InterestRateCurveSQL {
 				while (results.next()) {
 					boolean isZeroCoupon = results.getString("type") != null
 							&& results.getString("type").equals("ZeroCouponCurve");
+					LegalEntity processingOrg = null;
+					long poId = results.getLong("processing_org_id");
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					}
 					if (isZeroCoupon) {
-						interestRateCurve = new ZeroCouponCurve();
+						interestRateCurve = new ZeroCouponCurve(results.getString("name"), processingOrg);
 					} else {
-						interestRateCurve = new InterestRateCurve();
+						interestRateCurve = new InterestRateCurve(results.getString("name"), processingOrg);
 					}
 					interestRateCurve.setId(results.getLong("id"));
-					interestRateCurve.setName(results.getString("name"));
 					interestRateCurve.setAlgorithm(results.getString("algorithm"));
 					interestRateCurve.setInterpolator(results.getString("interpolator"));
 					interestRateCurve.setInstance(results.getString("instance"));
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						interestRateCurve.setQuoteDate(quoteDate.toLocalDate());
-					}
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						interestRateCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
 					}
 				}
 			}
@@ -428,22 +429,22 @@ public class InterestRateCurveSQL {
 				while (results.next()) {
 					boolean isZeroCoupon = results.getString("type") != null
 							&& results.getString("type").equals("ZeroCouponCurve");
+					LegalEntity processingOrg = null;
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					}
 					if (isZeroCoupon) {
-						interestRateCurve = new ZeroCouponCurve();
+						interestRateCurve = new ZeroCouponCurve(results.getString("name"), processingOrg);
 					} else {
-						interestRateCurve = new InterestRateCurve();
+						interestRateCurve = new InterestRateCurve(results.getString("name"), processingOrg);
 					}
 					interestRateCurve.setId(results.getLong("id"));
-					interestRateCurve.setName(results.getString("name"));
 					interestRateCurve.setAlgorithm(results.getString("algorithm"));
 					interestRateCurve.setInterpolator(results.getString("interpolator"));
 					interestRateCurve.setInstance(results.getString("instance"));
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						interestRateCurve.setQuoteDate(quoteDate.toLocalDate());
-					}
-					if (poId > 0) {
-						interestRateCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
 					}
 				}
 			}
@@ -464,23 +465,23 @@ public class InterestRateCurveSQL {
 				while (results.next()) {
 					boolean isZeroCoupon = results.getString("type") != null
 							&& results.getString("type").equals("ZeroCouponCurve");
+					LegalEntity processingOrg = null;
+					long poId = results.getLong("processing_org_id");
+					if (poId > 0) {
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+					}
 					if (isZeroCoupon) {
-						interestRateCurve = new ZeroCouponCurve();
+						interestRateCurve = new ZeroCouponCurve(results.getString("name"), processingOrg);
 					} else {
-						interestRateCurve = new InterestRateCurve();
+						interestRateCurve = new InterestRateCurve(results.getString("name"), processingOrg);
 					}
 					interestRateCurve.setId(results.getLong("id"));
-					interestRateCurve.setName(results.getString("name"));
 					interestRateCurve.setAlgorithm(results.getString("algorithm"));
 					interestRateCurve.setInterpolator(results.getString("interpolator"));
 					interestRateCurve.setInstance(results.getString("instance"));
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						interestRateCurve.setQuoteDate(quoteDate.toLocalDate());
-					}
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						interestRateCurve.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
 					}
 				}
 			}

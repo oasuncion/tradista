@@ -58,12 +58,11 @@ public class ProductInventorySQL {
 			try (ResultSet results = stmtGetLastInventoryBeforeDateByProductAndBookIds.executeQuery()) {
 				while (results.next()) {
 					if (inventory == null) {
-						inventory = new ProductInventory();
+						inventory = new ProductInventory(BookSQL.getBookById(results.getLong("book_id")),
+								results.getDate("from_date").toLocalDate(),
+								ProductSQL.getProductById(results.getLong("product_id")));
 					}
-					inventory.setFrom(results.getDate("from_date").toLocalDate());
 					inventory.setId(results.getLong("id"));
-					inventory.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
-					inventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					inventory.setQuantity(results.getBigDecimal("quantity"));
 					inventory.setAveragePrice(results.getBigDecimal("average_price"));
 					Date to = results.getDate("to_date");
@@ -94,12 +93,11 @@ public class ProductInventorySQL {
 			try (ResultSet results = stmtGetFirstInventoryAfterDateByProductAndBookIds.executeQuery()) {
 				while (results.next()) {
 					if (inventory == null) {
-						inventory = new ProductInventory();
+						inventory = new ProductInventory(BookSQL.getBookById(results.getLong("book_id")),
+								results.getDate("from_date").toLocalDate(),
+								ProductSQL.getProductById(results.getLong("product_id")));
 					}
-					inventory.setFrom(results.getDate("from_date").toLocalDate());
 					inventory.setId(results.getLong("id"));
-					inventory.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
-					inventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					inventory.setQuantity(results.getBigDecimal("quantity"));
 					inventory.setAveragePrice(results.getBigDecimal("average_price"));
 					Date to = results.getDate("to_date");
@@ -203,11 +201,10 @@ public class ProductInventorySQL {
 					if (inventories == null) {
 						inventories = new TreeSet<ProductInventory>();
 					}
-					ProductInventory inventory = new ProductInventory();
-					inventory.setFrom(results.getDate("from_date").toLocalDate());
+					ProductInventory inventory = new ProductInventory(BookSQL.getBookById(results.getLong("book_id")),
+							results.getDate("from_date").toLocalDate(),
+							ProductSQL.getProductById(results.getLong("product_id")));
 					inventory.setId(results.getLong("id"));
-					inventory.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
-					inventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					inventory.setQuantity(results.getBigDecimal("quantity"));
 					inventory.setAveragePrice(results.getBigDecimal("average_price"));
 					Date to = results.getDate("to_date");
@@ -242,11 +239,10 @@ public class ProductInventorySQL {
 					if (inventories == null) {
 						inventories = new TreeSet<ProductInventory>();
 					}
-					ProductInventory inventory = new ProductInventory();
-					inventory.setFrom(results.getDate("from_date").toLocalDate());
+					ProductInventory inventory = new ProductInventory(BookSQL.getBookById(results.getLong("book_id")),
+							results.getDate("from_date").toLocalDate(),
+							ProductSQL.getProductById(results.getLong("product_id")));
 					inventory.setId(results.getLong("id"));
-					inventory.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
-					inventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					inventory.setQuantity(results.getBigDecimal("quantity"));
 					inventory.setAveragePrice(results.getBigDecimal("average_price"));
 					Date to = results.getDate("to_date");
@@ -376,11 +372,10 @@ public class ProductInventorySQL {
 					if (inventories == null) {
 						inventories = new HashSet<ProductInventory>();
 					}
-					ProductInventory inventory = new ProductInventory();
-					inventory.setFrom(results.getDate("from_date").toLocalDate());
+					ProductInventory inventory = new ProductInventory(BookSQL.getBookById(results.getLong("book_id")),
+							results.getDate("from_date").toLocalDate(),
+							ProductSQL.getProductById(results.getLong("product_id")));
 					inventory.setId(results.getLong("id"));
-					inventory.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
-					inventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					inventory.setQuantity(results.getBigDecimal("quantity"));
 					inventory.setAveragePrice(results.getBigDecimal("average_price"));
 					Date to = results.getDate("to_date");
@@ -454,11 +449,10 @@ public class ProductInventorySQL {
 					if (inventories == null) {
 						inventories = new TreeSet<ProductInventory>();
 					}
-					ProductInventory inventory = new ProductInventory();
-					inventory.setFrom(results.getDate("from_date").toLocalDate());
+					ProductInventory inventory = new ProductInventory(BookSQL.getBookById(results.getLong("book_id")),
+							results.getDate("from_date").toLocalDate(),
+							ProductSQL.getProductById(results.getLong("product_id")));
 					inventory.setId(results.getLong("id"));
-					inventory.setProduct(ProductSQL.getProductById(results.getLong("product_id")));
-					inventory.setBook(BookSQL.getBookById(results.getLong("book_id")));
 					inventory.setQuantity(results.getBigDecimal("quantity"));
 					inventory.setAveragePrice(results.getBigDecimal("average_price"));
 					Date toResult = results.getDate("to_date");

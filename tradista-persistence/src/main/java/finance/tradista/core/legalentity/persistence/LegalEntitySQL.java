@@ -78,9 +78,8 @@ public class LegalEntitySQL {
 			stmtGetLegalEntityById.setLong(1, id);
 			try (ResultSet results = stmtGetLegalEntityById.executeQuery()) {
 				while (results.next()) {
-					legalEntity = new LegalEntity();
+					legalEntity = new LegalEntity(results.getString("short_name"));
 					legalEntity.setId(results.getLong("id"));
-					legalEntity.setShortName(results.getString("short_name"));
 					legalEntity.setLongName(results.getString("long_name"));
 					legalEntity.setDescription(results.getString("description"));
 					legalEntity.setRole(LegalEntity.Role.valueOf(results.getString("role")));
@@ -102,9 +101,8 @@ public class LegalEntitySQL {
 				if (legalEntities == null) {
 					legalEntities = new HashSet<LegalEntity>();
 				}
-				LegalEntity legalEntity = new LegalEntity();
+				LegalEntity legalEntity = new LegalEntity(results.getString("short_name"));
 				legalEntity.setId(results.getInt("id"));
-				legalEntity.setShortName(results.getString("short_name"));
 				legalEntity.setLongName(results.getString("long_name"));
 				legalEntity.setDescription(results.getString("description"));
 				legalEntity.setRole(LegalEntity.Role.valueOf(results.getString("role")));
@@ -127,9 +125,8 @@ public class LegalEntitySQL {
 				if (pos == null) {
 					pos = new HashSet<LegalEntity>();
 				}
-				LegalEntity legalEntity = new LegalEntity();
+				LegalEntity legalEntity = new LegalEntity(results.getString("short_name"));
 				legalEntity.setId(results.getInt("id"));
-				legalEntity.setShortName(results.getString("short_name"));
 				legalEntity.setLongName(results.getString("long_name"));
 				legalEntity.setDescription(results.getString("description"));
 				legalEntity.setRole(LegalEntity.Role.valueOf(results.getString("role")));
@@ -152,9 +149,8 @@ public class LegalEntitySQL {
 				if (pos == null) {
 					pos = new HashSet<LegalEntity>();
 				}
-				LegalEntity legalEntity = new LegalEntity();
+				LegalEntity legalEntity = new LegalEntity(results.getString("short_name"));
 				legalEntity.setId(results.getInt("id"));
-				legalEntity.setShortName(results.getString("short_name"));
 				legalEntity.setLongName(results.getString("long_name"));
 				legalEntity.setDescription(results.getString("description"));
 				legalEntity.setRole(LegalEntity.Role.valueOf(results.getString("role")));
@@ -181,9 +177,8 @@ public class LegalEntitySQL {
 			}
 			try (ResultSet results = stmt.executeQuery(query)) {
 				while (results.next()) {
-					LegalEntity legalEntity = new LegalEntity();
+					LegalEntity legalEntity = new LegalEntity(results.getString("short_name"));
 					legalEntity.setId(results.getInt("id"));
-					legalEntity.setShortName(results.getString("short_name"));
 					legalEntity.setLongName(results.getString("long_name"));
 					legalEntity.setDescription(results.getString("description"));
 					legalEntity.setRole(LegalEntity.Role.valueOf(results.getString("role")));
@@ -207,9 +202,8 @@ public class LegalEntitySQL {
 			query += " = '" + shortName + "'";
 			try (ResultSet results = stmt.executeQuery(query)) {
 				while (results.next()) {
-					legalEntity = new LegalEntity();
+					legalEntity = new LegalEntity(results.getString("short_name"));
 					legalEntity.setId(results.getInt("id"));
-					legalEntity.setShortName(results.getString("short_name"));
 					legalEntity.setLongName(results.getString("long_name"));
 					legalEntity.setDescription(results.getString("description"));
 					legalEntity.setRole(LegalEntity.Role.valueOf(results.getString("role")));
@@ -229,9 +223,8 @@ public class LegalEntitySQL {
 			query += " = '" + longName + "'";
 			try (ResultSet results = stmt.executeQuery(query)) {
 				while (results.next()) {
-					legalEntity = new LegalEntity();
+					legalEntity = new LegalEntity(results.getString("short_name"));
 					legalEntity.setId(results.getInt("id"));
-					legalEntity.setShortName(results.getString("short_name"));
 					legalEntity.setLongName(results.getString("long_name"));
 					legalEntity.setDescription(results.getString("description"));
 					legalEntity.setRole(LegalEntity.Role.valueOf(results.getString("role")));

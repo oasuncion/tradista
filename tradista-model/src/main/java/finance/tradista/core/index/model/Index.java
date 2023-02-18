@@ -1,5 +1,6 @@
 package finance.tradista.core.index.model;
 
+import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -30,18 +31,17 @@ public class Index extends TradistaObject {
 	private static final long serialVersionUID = -3890592152599924134L;
 
 	public static final String INDEX = "Index";
-	
-	public Index() {
-	}
 
+	@Id
 	private String name;
 
 	private String description;
-	
+
 	private boolean isPrefixed;
-	
+
 	public static enum Fixing {
 		PREFIXED, POSTFIXED;
+
 		public String toString() {
 			switch (this) {
 			case PREFIXED:
@@ -53,6 +53,11 @@ public class Index extends TradistaObject {
 		}
 	}
 
+	public Index(String name) {
+		super();
+		this.name = name;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -61,16 +66,8 @@ public class Index extends TradistaObject {
 		this.description = description;
 	}
 
-	public Index(String name) {
-		this.name = name;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public boolean isPrefixed() {
@@ -79,28 +76,6 @@ public class Index extends TradistaObject {
 
 	public void setPrefixed(boolean isPrefixed) {
 		this.isPrefixed = isPrefixed;
-	}
-
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof Index)) {
-			return false;
-		}
-		
-		if (name == null) {
-			return ((Index)o).getName() == null;
-		}
-
-		return name.equals(((Index) o).getName());
-	}
-
-	public int hashCode() {
-		return name.hashCode();
 	}
 
 	public String toString() {

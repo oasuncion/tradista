@@ -98,11 +98,6 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 				} else {
 					for (Transfer transfer : transfers) {
 						transfer.setStatus(Transfer.Status.CANCELED);
-						// Need to set trade to the transfer because if it has a null trade date (not
-						// exercised equity
-						// option underlying), it was not set to the transfer in
-						// transferBusinessDelegate.getTransfersByTradeIdAndPurpose
-						transfer.setTrade(oldTrade);
 						transfersToBeSaved.add(transfer);
 					}
 				}
@@ -128,11 +123,6 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 				} else {
 					for (Transfer transfer : transfers) {
 						transfer.setStatus(Transfer.Status.CANCELED);
-						// Need to set trade to the transfer because if it has a null trade date (not
-						// exercised equity
-						// option underlying), it was not set to the transfer in
-						// transferBusinessDelegate.getTransfersByTradeIdAndPurpose
-						transfer.setTrade(oldTrade);
 						transfersToBeSaved.add(transfer);
 					}
 				}
@@ -157,21 +147,17 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 	}
 
 	private ProductTransfer createNewEquitySettlement(EquityTrade trade) throws TradistaBusinessException {
-		ProductTransfer productTransfer = new ProductTransfer();
+		ProductTransfer productTransfer = new ProductTransfer(trade.getBook(), TransferPurpose.EQUITY_SETTLEMENT,
+				trade.getSettlementDate(), trade);
 		productTransfer.setCreationDateTime(LocalDateTime.now());
 		if (trade.isBuy()) {
 			productTransfer.setDirection(Transfer.Direction.RECEIVE);
 		} else {
 			productTransfer.setDirection(Transfer.Direction.PAY);
 		}
-		productTransfer.setSettlementDate(trade.getSettlementDate());
-		productTransfer.setProduct(trade.getProduct());
-		productTransfer.setPurpose(TransferPurpose.EQUITY_SETTLEMENT);
 		productTransfer.setQuantity(trade.getQuantity());
 		productTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
 		productTransfer.setStatus(Transfer.Status.KNOWN);
-		productTransfer.setTrade(trade);
-		productTransfer.setBook(trade.getBook());
 
 		return productTransfer;
 	}
@@ -206,8 +192,8 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 	private CashTransfer createNewEquityPayment(List<CashTransfer> cashTransfers, EquityTrade trade)
 			throws TradistaBusinessException {
 
-		CashTransfer payment = new CashTransfer();
-		payment.setSettlementDate(trade.getSettlementDate());
+		CashTransfer payment = new CashTransfer(trade.getBook(), TransferPurpose.EQUITY_PAYMENT,
+				trade.getSettlementDate(), trade, trade.getCurrency());
 		payment.setCreationDateTime(LocalDateTime.now());
 		if (trade.isBuy()) {
 			payment.setDirection(Transfer.Direction.PAY);
@@ -215,12 +201,8 @@ public class EquityTransferManager implements TransferManager<EquityTradeEvent> 
 			payment.setDirection(Transfer.Direction.RECEIVE);
 		}
 		payment.setAmount(trade.getAmount().multiply(trade.getQuantity()));
-		payment.setCurrency(trade.getCurrency());
 		payment.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		payment.setPurpose(TransferPurpose.EQUITY_PAYMENT);
 		payment.setStatus(Transfer.Status.KNOWN);
-		payment.setTrade(trade);
-		payment.setBook(trade.getBook());
 
 		return payment;
 	}

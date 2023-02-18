@@ -1,5 +1,6 @@
 package finance.tradista.ai.agent.model;
 
+import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -29,18 +30,19 @@ public class Agent extends TradistaObject {
 	 */
 	private static final long serialVersionUID = -242917493894323568L;
 
+	@Id
 	private String name;
 
 	private boolean onlyInformative;
-
+	
 	private boolean started;
+	
+	public Agent(String name) {
+		this.name = name;
+	}
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public boolean isOnlyInformative() {
@@ -57,31 +59,6 @@ public class Agent extends TradistaObject {
 
 	public void setStarted(boolean started) {
 		this.started = started;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Agent other = (Agent) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
 	}
 
 }

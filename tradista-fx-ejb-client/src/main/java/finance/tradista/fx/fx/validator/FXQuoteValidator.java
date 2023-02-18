@@ -51,14 +51,13 @@ public class FXQuoteValidator extends DefaultQuoteValidator {
 		}
 		Set<Currency> currencies = new CurrencyBusinessDelegate().getAllCurrencies();
 		if (currencies != null && !currencies.isEmpty()) {
-			Currency curr = new Currency();
-			curr.setIsoCode(data[1]);
+			Currency curr = new Currency(data[1]);
 			if (!currencies.contains(curr)) {
 				errMsg.append(String.format(
 						"The currency one (%s) must exist in the system: %s%n.", data[1],
 						currencies));
 			}
-			curr.setIsoCode(data[2]);
+			curr = new Currency(data[2]);
 			if (!currencies.contains(curr)) {
 				errMsg.append(String.format(
 						"The currency two (%s) must exist in the system: %s%n.", data[2],

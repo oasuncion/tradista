@@ -101,10 +101,7 @@ public class EquityOptionContractSpecificationDefinitionController implements Tr
 		TradistaGUIUtil.fillCurrencyComboBox(premiumCurrency);
 	}
 
-	private void buildSpecification() {
-		if (equityOptionContractSpecification == null) {
-			equityOptionContractSpecification = new EquityOptionContractSpecification();
-		}
+	private void buildSpecification(EquityOptionContractSpecification equityOptionContractSpecification) {
 		try {
 			equityOptionContractSpecification.setExchange(exchange.getValue());
 			if (!quantity.getText().isEmpty()) {
@@ -113,10 +110,8 @@ public class EquityOptionContractSpecificationDefinitionController implements Tr
 			}
 			equityOptionContractSpecification.setStyle(style.getValue());
 			if (name.isVisible()) {
-				equityOptionContractSpecification.setName(name.getText());
+				equityOptionContractSpecification = new EquityOptionContractSpecification(name.getText());
 				nameLabel.setText(name.getText());
-			} else {
-				equityOptionContractSpecification.setName(nameLabel.getText());
 			}
 			if (!settlementDateOffset.getText().isEmpty()) {
 				equityOptionContractSpecification
@@ -146,7 +141,10 @@ public class EquityOptionContractSpecificationDefinitionController implements Tr
 			try {
 				checkAmounts();
 
-				buildSpecification();
+				if (name.isVisible()) {
+					equityOptionContractSpecification = new EquityOptionContractSpecification(name.getText());
+				}
+				buildSpecification(equityOptionContractSpecification);
 
 				equityOptionContractSpecification.setId(equityOptionSpecificationBusinessDelegate
 						.saveEquityOptionContractSpecification(equityOptionContractSpecification));
@@ -165,25 +163,22 @@ public class EquityOptionContractSpecificationDefinitionController implements Tr
 		dialog.setTitle("Equity Option Contract Specification Copy");
 		dialog.setHeaderText("Do you want to copy this Equity Option Contract Specification ?");
 		dialog.setContentText("Please enter the name of the new Equity Option Contract Specification:");
-		long oldEquityOptionContractSpecificationId = 0;
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()) {
 			try {
 				checkAmounts();
-
-				buildSpecification();
-				oldEquityOptionContractSpecificationId = equityOptionContractSpecification.getId();
-				equityOptionContractSpecification.setId(0);
-				equityOptionContractSpecification.setName(result.get());
-				equityOptionContractSpecification.setId(equityOptionSpecificationBusinessDelegate
-						.saveEquityOptionContractSpecification(equityOptionContractSpecification));
+				EquityOptionContractSpecification copyEquityOptionContractSpecification = new EquityOptionContractSpecification(
+						result.get());
+				buildSpecification(copyEquityOptionContractSpecification);
+				copyEquityOptionContractSpecification.setId(equityOptionSpecificationBusinessDelegate
+						.saveEquityOptionContractSpecification(copyEquityOptionContractSpecification));
+				equityOptionContractSpecification = copyEquityOptionContractSpecification;
 				name.setVisible(false);
 				nameLabel.setVisible(true);
 				nameLabel.setText(equityOptionContractSpecification.getName());
 				TradistaGUIUtil.fillComboBox(
 						equityOptionSpecificationBusinessDelegate.getAllEquityOptionContractSpecifications(), load);
 			} catch (TradistaBusinessException tbe) {
-				equityOptionContractSpecification.setId(oldEquityOptionContractSpecificationId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
@@ -211,8 +206,8 @@ public class EquityOptionContractSpecificationDefinitionController implements Tr
 			}
 
 			load(eos);
-		} catch (TradistaBusinessException abe) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, abe.getMessage());
+		} catch (TradistaBusinessException tbe) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}
 

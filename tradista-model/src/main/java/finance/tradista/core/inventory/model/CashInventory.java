@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 
@@ -34,22 +36,27 @@ public class CashInventory extends TradistaObject implements Comparable<CashInve
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Id
 	private Currency currency;
 
 	private BigDecimal amount;
 
+	@Id
 	private LocalDate from;
 
 	private LocalDate to;
 
+	@Id
 	private Book book;
 
-	public Currency getCurrency() {
-		return currency;
+	public CashInventory(Currency currency, LocalDate from, Book book) {
+		this.currency = currency;
+		this.from = from;
+		this.book = book;
 	}
 
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
+	public Currency getCurrency() {
+		return TradistaModelUtil.clone(currency);
 	}
 
 	public BigDecimal getAmount() {
@@ -64,10 +71,6 @@ public class CashInventory extends TradistaObject implements Comparable<CashInve
 		return from;
 	}
 
-	public void setFrom(LocalDate from) {
-		this.from = from;
-	}
-
 	public LocalDate getTo() {
 		return to;
 	}
@@ -77,48 +80,7 @@ public class CashInventory extends TradistaObject implements Comparable<CashInve
 	}
 
 	public Book getBook() {
-		return book;
-	}
-
-	public void setBook(Book book) {
-		this.book = book;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((book == null) ? 0 : book.hashCode());
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CashInventory other = (CashInventory) obj;
-		if (book == null) {
-			if (other.book != null)
-				return false;
-		} else if (!book.equals(other.book))
-			return false;
-		if (from == null) {
-			if (other.from != null)
-				return false;
-		} else if (!from.equals(other.from))
-			return false;
-		if (currency == null) {
-			if (other.currency != null)
-				return false;
-		} else if (!currency.equals(other.currency))
-			return false;
-		return true;
+		return TradistaModelUtil.clone(book);
 	}
 
 	@Override
@@ -139,9 +101,12 @@ public class CashInventory extends TradistaObject implements Comparable<CashInve
 	}
 
 	@Override
-	public String toString() {
-		return "CashInventory [currency=" + currency + ", amount=" + amount + ", from=" + from + ", to=" + to
-				+ ", book=" + book + "]";
+	public CashInventory clone() {
+		CashInventory ci = new CashInventory(currency, from, book);
+		ci.setAmount(amount);
+		ci.setId(getId());
+		ci.setTo(to);
+		return ci;
 	}
 
 }

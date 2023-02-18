@@ -78,14 +78,9 @@ public class IndexesController extends TradistaControllerAdapter {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
-				if (index == null) {
-					index = new Index(name.getText());
-				}
 				if (name.isVisible()) {
-					index.setName(name.getText());
+					new Index(name.getText());
 					nameLabel.setText(name.getText());
-				} else {
-					index.setName(nameLabel.getText());
 				}
 				index.setDescription(description.getText());
 				index.setPrefixed(fixing.getValue().equals(Fixing.PREFIXED));
@@ -101,7 +96,6 @@ public class IndexesController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldIndexId = 0;
 		try {
 			TradistaTextInputDialog dialog = new TradistaTextInputDialog();
 			dialog.setTitle("Index Copy");
@@ -109,22 +103,16 @@ public class IndexesController extends TradistaControllerAdapter {
 			dialog.setContentText("Please enter the name of the new Index:");
 			Optional<String> result = dialog.showAndWait();
 			if (result.isPresent()) {
-				if (index == null) {
-					index = new Index(name.getText());
-				}
-
-				index.setName(result.get());
-				index.setDescription(description.getText());
-				index.setPrefixed(fixing.getValue().equals(Fixing.PREFIXED));
-				oldIndexId = index.getId();
-				index.setId(0);
-				index.setId(indexBusinessDelegate.saveIndex(index));
+				Index copyIndex = new Index(result.get());
+				copyIndex.setDescription(description.getText());
+				copyIndex.setPrefixed(fixing.getValue().equals(Fixing.PREFIXED));
+				copyIndex.setId(indexBusinessDelegate.saveIndex(copyIndex));
+				index = copyIndex;
 				name.setVisible(false);
 				nameLabel.setVisible(true);
 				nameLabel.setText(index.getName());
 			}
 		} catch (TradistaBusinessException tbe) {
-			index.setId(oldIndexId);
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}

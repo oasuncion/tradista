@@ -117,7 +117,7 @@ public class Bootstrap implements InterestRateCurveGenerationAlgorithm {
 				// Get the Bond from key: ISIN + exchange
 				try {
 					instruments.put(key, handler.getInstrumentByKey(key, quoteDate));
-					quoteValues.put(key, quoteSet.getQuoteValueByNameAndDate(quoteName, quoteDate));
+					quoteValues.put(key, quoteSet.getQuoteValueByQuoteAndDate(quote, quoteDate));
 				} catch (TradistaBusinessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -2,6 +2,7 @@ package finance.tradista.fx.fxndf.model;
 
 import java.math.BigDecimal;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.fx.common.model.AbstractFXTrade;
@@ -40,7 +41,7 @@ public class FXNDFTrade extends AbstractFXTrade<Product> {
 	private BigDecimal ndfRate;
 
 	public Currency getNonDeliverableCurrency() {
-		return nonDeliverableCurrency;
+		return TradistaModelUtil.clone(nonDeliverableCurrency);
 	}
 
 	public void setNonDeliverableCurrency(Currency nonDeliverableCurrency) {
@@ -57,6 +58,13 @@ public class FXNDFTrade extends AbstractFXTrade<Product> {
 
 	public String getProductType() {
 		return FX_NDF;
+	}
+
+	@Override
+	public FXNDFTrade clone() {
+		FXNDFTrade fxNdfTrade = (FXNDFTrade) super.clone();
+		fxNdfTrade.nonDeliverableCurrency = TradistaModelUtil.clone(nonDeliverableCurrency);
+		return fxNdfTrade;
 	}
 
 }

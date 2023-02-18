@@ -102,13 +102,9 @@ public final class LoanDepositTransferUtil {
 	private static CashTransfer createInterestPayment(LoanDepositTrade mmTrade, LocalDate settlementDate,
 			LocalDate fixingDate, LocalDate endOfPeriod) {
 		BigDecimal paymentAmount = null;
-		CashTransfer ct = new CashTransfer();
-		ct.setSettlementDate(settlementDate);
-		ct.setCurrency(mmTrade.getCurrency());
+		CashTransfer ct = new CashTransfer(mmTrade.getBook(), TransferPurpose.INTEREST_PAYMENT, settlementDate, mmTrade,
+				mmTrade.getCurrency());
 		ct.setCreationDateTime(LocalDateTime.now());
-		ct.setPurpose(TransferPurpose.INTEREST_PAYMENT);
-		ct.setTrade(mmTrade);
-		ct.setBook(mmTrade.getBook());
 		if (mmTrade.isFixed()) {
 			try {
 				paymentAmount = loanDepositBusinessDelegate.getPaymentAmount(mmTrade, fixingDate, endOfPeriod, 0, 0);

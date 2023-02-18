@@ -1,6 +1,8 @@
 package finance.tradista.core.exchange.model;
 
 import finance.tradista.core.calendar.model.Calendar;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -37,15 +39,20 @@ public class Exchange extends TradistaObject implements Comparable<Exchange> {
 
 	private String name;
 
+	@Id
 	private String code;
 
 	private Calendar calendar;
+
+	public Exchange(String code) {
+		this.code = code;
+	}
 
 	// The Exchange class can also represents OTC markets
 	private boolean isOtc;
 
 	public Calendar getCalendar() {
-		return calendar;
+		return TradistaModelUtil.clone(calendar);
 	}
 
 	public void setCalendar(Calendar calendar) {
@@ -64,34 +71,12 @@ public class Exchange extends TradistaObject implements Comparable<Exchange> {
 		return code;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	public boolean isOtc() {
 		return isOtc;
 	}
 
 	public void setOtc(boolean isOtc) {
 		this.isOtc = isOtc;
-	}
-
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof Exchange)) {
-			return false;
-		}
-
-		return code.equals(((Exchange) o).getCode());
-	}
-
-	public int hashCode() {
-		return code.hashCode();
 	}
 
 	public String toString() {
@@ -101,6 +86,13 @@ public class Exchange extends TradistaObject implements Comparable<Exchange> {
 	@Override
 	public int compareTo(Exchange exchange) {
 		return code.compareTo(exchange.getCode());
+	}
+
+	@Override
+	public Exchange clone() {
+		Exchange exchange = (Exchange) super.clone();
+		exchange.calendar = TradistaModelUtil.clone(calendar);
+		return exchange;
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.ui.controller.TradistaController;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
@@ -114,6 +116,12 @@ public class EquityDefinitionController implements TradistaController {
 	@FXML
 	private Label productType;
 
+	@FXML
+	private Label isinLabel;
+
+	@FXML
+	private Label exchangeLabel;
+
 	// This method is called by the FXMLLoader when initialization is complete
 	public void initialize() {
 
@@ -141,11 +149,7 @@ public class EquityDefinitionController implements TradistaController {
 
 	}
 
-	private void buildProduct() {
-		if (equity == null) {
-			equity = new Equity();
-			equity.setCreationDate(LocalDate.now());
-		}
+	private void buildProduct(Equity equity) {
 		try {
 			equity.setActiveFrom(activeFrom.getValue());
 			equity.setActiveTo(activeTo.getValue());
@@ -154,8 +158,6 @@ public class EquityDefinitionController implements TradistaController {
 				equity.setDividendCurrency(dividendCurrency.getValue());
 				equity.setDividendFrequency(dividendFrequency.getValue());
 			}
-			equity.setExchange(exchange.getValue());
-			equity.setIsin(isin.getText());
 			equity.setIssueDate(issueDate.getValue());
 			if (!issuePrice.getText().isEmpty()) {
 
@@ -186,10 +188,21 @@ public class EquityDefinitionController implements TradistaController {
 			try {
 				checkAmounts();
 
-				buildProduct();
+				if (isin.isVisible()) {
+					equity = new Equity(exchange.getValue(), isin.getText());
+					equity.setCreationDate(LocalDate.now());
+				}
+
+				buildProduct(equity);
 
 				equity.setId(equityBusinessDelegate.saveEquity(equity));
 				productId.setText(String.valueOf(equity.getId()));
+				isinLabel.setText(isin.getText());
+				exchangeLabel.setText(exchange.getValue().toString());
+				isin.setVisible(false);
+				exchange.setVisible(false);
+				isinLabel.setVisible(true);
+				exchangeLabel.setVisible(true);
 
 			} catch (TradistaBusinessException tbe) {
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
@@ -203,23 +216,24 @@ public class EquityDefinitionController implements TradistaController {
 		EquityCreatorDialog dialog = new EquityCreatorDialog(exchange.getValue());
 		Optional<Equity> result = dialog.showAndWait();
 
-		long oldEquityId = 0;
 		if (result.isPresent()) {
 			try {
+				Equity copyEquity = null;
 				checkAmounts();
-
-				buildProduct();
-				oldEquityId = equity.getId();
-				equity.setIsin(result.get().getIsin());
-				equity.setExchange(result.get().getExchange());
-				equity.setId(0);
-				equity.setId(equityBusinessDelegate.saveEquity(equity));
+				copyEquity = new Equity(result.get().getExchange(), result.get().getIsin());
+				buildProduct(copyEquity);
+				copyEquity.setId(equityBusinessDelegate.saveEquity(copyEquity));
+				equity = copyEquity;
 				productId.setText(String.valueOf(equity.getId()));
 				isin.setText(equity.getIsin());
 				exchange.setValue(equity.getExchange());
-
+				isinLabel.setText(isin.getText());
+				exchangeLabel.setText(exchange.getValue().toString());
+				isin.setVisible(false);
+				exchange.setVisible(false);
+				isinLabel.setVisible(true);
+				exchangeLabel.setVisible(true);
 			} catch (TradistaBusinessException tbe) {
-				equity.setId(oldEquityId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}
@@ -294,19 +308,31 @@ public class EquityDefinitionController implements TradistaController {
 		payDividend.setSelected(equity.isPayDividend());
 		totalIssued.setText(Long.toString(equity.getTotalIssued()));
 		tradingSize.setText(Long.toString(equity.getTradingSize()));
+		isinLabel.setText(equity.getIsin());
+		exchangeLabel.setText(equity.getExchange().toString());
+		isin.setVisible(false);
+		exchange.setVisible(false);
+		isinLabel.setVisible(true);
+		exchangeLabel.setVisible(true);
 	}
 
 	@Override
 	@FXML
 	public void clear() {
 		equity = null;
-		productId.setText("");
+		productId.setText(StringUtils.EMPTY);
 		tradingSize.clear();
 		totalIssued.clear();
 		issuePrice.clear();
 		isin.clear();
 		activeFrom.setValue(null);
 		activeTo.setValue(null);
+		isinLabel.setText(StringUtils.EMPTY);
+		isin.setVisible(true);
+		isinLabel.setVisible(false);
+		exchangeLabel.setText(StringUtils.EMPTY);
+		exchange.setVisible(true);
+		exchangeLabel.setVisible(false);
 	}
 
 	@Override

@@ -130,16 +130,12 @@ public class FXSwapTransferManager implements TransferManager<FXSwapTradeEvent> 
 	}
 
 	private CashTransfer createNewPrimaryCurrencySpotTransfer(FXSwapTrade trade) throws TradistaBusinessException {
-		CashTransfer primaryTransfer = new CashTransfer();
+		CashTransfer primaryTransfer = new CashTransfer(trade.getBook(), TransferPurpose.PRIMARY_CURRENCY_SPOT,
+				trade.getSettlementDate(), trade, trade.getCurrencyOne());
 		primaryTransfer.setCreationDateTime(LocalDateTime.now());
 		primaryTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		primaryTransfer.setSettlementDate(trade.getSettlementDate());
-		primaryTransfer.setPurpose(TransferPurpose.PRIMARY_CURRENCY_SPOT);
 		primaryTransfer.setStatus(Transfer.Status.KNOWN);
-		primaryTransfer.setTrade(trade);
-		primaryTransfer.setBook(trade.getBook());
 		primaryTransfer.setAmount(trade.getAmountOneSpot());
-		primaryTransfer.setCurrency(trade.getCurrencyOne());
 
 		if (trade.isBuy()) {
 			primaryTransfer.setDirection(Transfer.Direction.RECEIVE);
@@ -151,16 +147,12 @@ public class FXSwapTransferManager implements TransferManager<FXSwapTradeEvent> 
 	}
 
 	private CashTransfer createNewQuoteCurrencySpotTransfer(FXSwapTrade trade) throws TradistaBusinessException {
-		CashTransfer quoteTransfer = new CashTransfer();
+		CashTransfer quoteTransfer = new CashTransfer(trade.getBook(), TransferPurpose.QUOTE_CURRENCY_SPOT,
+				trade.getSettlementDate(), trade, trade.getCurrency());
 		quoteTransfer.setCreationDateTime(LocalDateTime.now());
 		quoteTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		quoteTransfer.setSettlementDate(trade.getSettlementDate());
-		quoteTransfer.setPurpose(TransferPurpose.QUOTE_CURRENCY_SPOT);
 		quoteTransfer.setStatus(Transfer.Status.KNOWN);
-		quoteTransfer.setTrade(trade);
-		quoteTransfer.setBook(trade.getBook());
 		quoteTransfer.setAmount(trade.getAmount());
-		quoteTransfer.setCurrency(trade.getCurrency());
 
 		if (trade.isBuy()) {
 			quoteTransfer.setDirection(Transfer.Direction.PAY);
@@ -172,16 +164,12 @@ public class FXSwapTransferManager implements TransferManager<FXSwapTradeEvent> 
 	}
 
 	private CashTransfer createNewPrimaryCurrencyForwardTransfer(FXSwapTrade trade) throws TradistaBusinessException {
-		CashTransfer primaryTransfer = new CashTransfer();
+		CashTransfer primaryTransfer = new CashTransfer(trade.getBook(), TransferPurpose.PRIMARY_CURRENCY_FORWARD,
+				trade.getSettlementDateForward(), trade, trade.getCurrencyOne());
 		primaryTransfer.setCreationDateTime(LocalDateTime.now());
 		primaryTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		primaryTransfer.setSettlementDate(trade.getSettlementDateForward());
-		primaryTransfer.setPurpose(TransferPurpose.PRIMARY_CURRENCY_FORWARD);
 		primaryTransfer.setStatus(Transfer.Status.KNOWN);
-		primaryTransfer.setTrade(trade);
-		primaryTransfer.setBook(trade.getBook());
 		primaryTransfer.setAmount(trade.getAmountOneForward());
-		primaryTransfer.setCurrency(trade.getCurrencyOne());
 
 		if (trade.isBuy()) {
 			primaryTransfer.setDirection(Transfer.Direction.PAY);
@@ -193,16 +181,12 @@ public class FXSwapTransferManager implements TransferManager<FXSwapTradeEvent> 
 	}
 
 	private CashTransfer createNewQuoteCurrencyForwardTransfer(FXSwapTrade trade) throws TradistaBusinessException {
-		CashTransfer quoteTransfer = new CashTransfer();
+		CashTransfer quoteTransfer = new CashTransfer(trade.getBook(), TransferPurpose.QUOTE_CURRENCY_FORWARD,
+				trade.getSettlementDateForward(), trade, trade.getCurrency());
 		quoteTransfer.setCreationDateTime(LocalDateTime.now());
 		quoteTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		quoteTransfer.setSettlementDate(trade.getSettlementDateForward());
-		quoteTransfer.setPurpose(TransferPurpose.QUOTE_CURRENCY_FORWARD);
 		quoteTransfer.setStatus(Transfer.Status.KNOWN);
-		quoteTransfer.setTrade(trade);
-		quoteTransfer.setBook(trade.getBook());
 		quoteTransfer.setAmount(trade.getAmountTwoForward());
-		quoteTransfer.setCurrency(trade.getCurrency());
 
 		if (trade.isBuy()) {
 			quoteTransfer.setDirection(Transfer.Direction.RECEIVE);

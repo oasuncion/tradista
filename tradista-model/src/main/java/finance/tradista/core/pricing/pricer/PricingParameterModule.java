@@ -1,6 +1,6 @@
 package finance.tradista.core.pricing.pricer;
 
-import java.io.Serializable;
+import finance.tradista.core.common.model.TradistaObject;
 
 /*
  * Copyright 2019 Olivier Asuncion
@@ -22,10 +22,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public interface PricingParameterModule extends Serializable {
+public abstract class PricingParameterModule extends TradistaObject {
 
-	String getProductFamily();
 	
-	String getProductType();
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public abstract String getProductFamily();
+	
+	public abstract String getProductType();
 
 }

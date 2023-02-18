@@ -3,6 +3,7 @@ package finance.tradista.core.position.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -47,7 +48,7 @@ public class Position extends TradistaObject {
 	private BigDecimal averagePrice;
 
 	public PositionDefinition getPositionDefinition() {
-		return positionDefinition;
+		return TradistaModelUtil.clone(positionDefinition);
 	}
 
 	public void setPositionDefinition(PositionDefinition positionDefinition) {
@@ -100,6 +101,13 @@ public class Position extends TradistaObject {
 
 	public void setAveragePrice(BigDecimal averagePrice) {
 		this.averagePrice = averagePrice;
+	}
+
+	@Override
+	public Position clone() {
+		Position position = (Position) super.clone();
+		position.positionDefinition = TradistaModelUtil.clone(positionDefinition);
+		return position;
 	}
 
 }

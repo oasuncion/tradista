@@ -2,6 +2,7 @@ package finance.tradista.ai.reasoning.prm.model;
 
 import java.util.Set;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -30,25 +31,35 @@ public class FunctionCall extends TradistaObject {
 	 * 
 	 */
 	private static final long serialVersionUID = -3250890461242436439L;
-	
+
 	private Function function;
-	
+
 	private Set<Value> parameters;
 
 	public Function getFunction() {
-		return function;
+		return TradistaModelUtil.clone(function);
 	}
 
 	public void setFunction(Function function) {
 		this.function = function;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Set<Value> getParameters() {
-		return parameters;
+		return (Set<Value>) TradistaModelUtil.deepCopy(parameters);
 	}
 
 	public void setParameters(Set<Value> parameters) {
 		this.parameters = parameters;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public FunctionCall clone() {
+		FunctionCall functionCall = (FunctionCall) super.clone();
+		functionCall.function = TradistaModelUtil.clone(function);
+		functionCall.parameters = (Set<Value>) TradistaModelUtil.deepCopy(parameters);
+		return functionCall;
+	}
+
 }

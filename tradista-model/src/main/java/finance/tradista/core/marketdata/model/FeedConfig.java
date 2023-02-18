@@ -3,6 +3,8 @@ package finance.tradista.core.marketdata.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
@@ -27,8 +29,8 @@ specific language governing permissions and limitations
 under the License.    */
 
 /**
- * Structure defined to map provider data to Tradista data. Defined in this order :
- * Provider Data to Tradista Data
+ * Structure defined to map provider data to Tradista data. Defined in this
+ * order : Provider Data to Tradista Data
  * 
  * @author olivier_asuncion
  *
@@ -42,15 +44,25 @@ public class FeedConfig extends TradistaObject {
 
 	private FeedType feedType;
 
+	@Id
 	private String name;
 
 	private Map<String, Quote> mapping;
 
 	private Map<String, Map<String, String>> fieldsMapping;
 
+	@Id
 	private LegalEntity processingOrg;
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Map<String, String>> getFieldsMapping() {
+		Map<String, Map<String, String>> fieldsMapping = new HashMap<String, Map<String, String>>();
+		for (Map.Entry<String, Map<String, String>> entry : this.fieldsMapping.entrySet()) {
+			if (entry.getValue() != null) {
+				fieldsMapping.put(entry.getKey(),
+						(Map<String, String>) ((HashMap<String, String>) entry.getValue()).clone());
+			}
+		}
 		return fieldsMapping;
 	}
 
@@ -58,27 +70,20 @@ public class FeedConfig extends TradistaObject {
 		this.fieldsMapping = fieldsMapping;
 	}
 
-	public FeedConfig() {
-		super();
-		mapping = new HashMap<String, Quote>();
-		fieldsMapping = new HashMap<String, Map<String, String>>();
-	}
-
-	public FeedConfig(String name, FeedType feedType, LegalEntity po) {
-		super();
+	public FeedConfig(String name, LegalEntity po) {
 		this.name = name;
-		this.feedType = feedType;
 		processingOrg = po;
 		mapping = new HashMap<String, Quote>();
 		fieldsMapping = new HashMap<String, Map<String, String>>();
 	}
 
-	public String getName() {
-		return name;
+	public FeedConfig(String name, FeedType feedType, LegalEntity po) {
+		this(name, po);
+		this.feedType = feedType;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getName() {
+		return name;
 	}
 
 	public FeedType getFeedType() {
@@ -89,8 +94,9 @@ public class FeedConfig extends TradistaObject {
 		this.feedType = feedType;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Quote> getMapping() {
-		return mapping;
+		return (Map<String, Quote>) TradistaModelUtil.deepCopy(mapping);
 	}
 
 	public void setMapping(Map<String, Quote> mapping) {
@@ -98,11 +104,7 @@ public class FeedConfig extends TradistaObject {
 	}
 
 	public LegalEntity getProcessingOrg() {
-		return processingOrg;
-	}
-
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
+		return TradistaModelUtil.clone(processingOrg);
 	}
 
 	public Quote putAddress(String feedValue, Quote quote) {
@@ -117,39 +119,27 @@ public class FeedConfig extends TradistaObject {
 		return fldMapping.put(providerField, tradistaField);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FeedConfig other = (FeedConfig) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		return true;
-	}
-
 	public String toString() {
 		return name;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public FeedConfig clone() {
+		FeedConfig feedConfig = (FeedConfig) super.clone();
+		feedConfig.mapping = (Map<String, Quote>) TradistaModelUtil.deepCopy(mapping);
+		if (fieldsMapping != null) {
+			Map<String, Map<String, String>> fieldsMapping = new HashMap<String, Map<String, String>>();
+			for (Map.Entry<String, Map<String, String>> entry : this.fieldsMapping.entrySet()) {
+				if (entry.getValue() != null) {
+					fieldsMapping.put(entry.getKey(),
+							(Map<String, String>) ((HashMap<String, String>) entry.getValue()).clone());
+				}
+			}
+			feedConfig.fieldsMapping = fieldsMapping;
+		}
+		feedConfig.processingOrg = TradistaModelUtil.clone(processingOrg);
+		return feedConfig;
 	}
 
 }

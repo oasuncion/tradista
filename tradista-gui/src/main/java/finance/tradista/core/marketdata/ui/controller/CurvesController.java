@@ -18,7 +18,6 @@ import finance.tradista.core.common.ui.controller.TradistaControllerAdapter;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
 import finance.tradista.core.common.ui.view.TradistaAlert;
 import finance.tradista.core.marketdata.model.Curve;
-import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.marketdata.model.RatePoint;
 import finance.tradista.core.marketdata.service.CurveBusinessDelegate;
 import finance.tradista.core.marketdata.ui.view.CurveCreatorDialog;
@@ -445,8 +444,8 @@ public class CurvesController extends TradistaControllerAdapter {
 
 		if (!canGetCurvePoint || !canSaveCurvePoint) {
 			try {
-				curveBusinessDelegate.getCurvePointsByCurveAndDates(new InterestRateCurve(), LocalDate.now(),
-						LocalDate.now());
+				// Call only used to check connection to server and DB
+				curveBusinessDelegate.getCurveById(1);
 				canGetCurvePoint = true;
 				canSaveCurvePoint = true;
 			} catch (TradistaBusinessException tbe) {

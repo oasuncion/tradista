@@ -163,21 +163,17 @@ public class BondTransferManager implements TransferManager<BondTradeEvent> {
 	}
 
 	private ProductTransfer createNewBondSettlement(BondTrade trade) throws TradistaBusinessException {
-		ProductTransfer productTransfer = new ProductTransfer();
+		ProductTransfer productTransfer = new ProductTransfer(trade.getBook(), TransferPurpose.BOND_SETTLEMENT,
+				trade.getSettlementDate(), trade);
 		productTransfer.setCreationDateTime(LocalDateTime.now());
 		if (trade.isBuy()) {
 			productTransfer.setDirection(Transfer.Direction.RECEIVE);
 		} else {
 			productTransfer.setDirection(Transfer.Direction.PAY);
 		}
-		productTransfer.setSettlementDate(trade.getSettlementDate());
 		productTransfer.setFixingDateTime(trade.getCreationDate().atStartOfDay());
-		productTransfer.setProduct(trade.getProduct());
-		productTransfer.setPurpose(TransferPurpose.BOND_SETTLEMENT);
 		productTransfer.setQuantity(trade.getQuantity());
 		productTransfer.setStatus(Transfer.Status.KNOWN);
-		productTransfer.setTrade(trade);
-		productTransfer.setBook(trade.getBook());
 
 		return productTransfer;
 	}

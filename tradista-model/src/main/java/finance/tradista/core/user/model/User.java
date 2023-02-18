@@ -1,5 +1,7 @@
 package finance.tradista.core.user.model;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
@@ -30,11 +32,20 @@ public class User extends TradistaObject {
 	 */
 	private static final long serialVersionUID = 7677381398422965047L;
 
+	@Id
 	private String firstName;
 
+	@Id
 	private String surname;
 
+	@Id
 	private LegalEntity processingOrg;
+	
+	public User(String firstName, String surname, LegalEntity processingOrg) {
+		this.firstName = firstName;
+		this.surname = surname;
+		this.processingOrg = processingOrg;
+	}
 
 	private String login;
 
@@ -44,24 +55,12 @@ public class User extends TradistaObject {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
 	public String getSurname() {
 		return surname;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
 	public LegalEntity getProcessingOrg() {
-		return processingOrg;
-	}
-
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
+		return TradistaModelUtil.clone(processingOrg);
 	}
 
 	public String getLogin() {
@@ -79,47 +78,12 @@ public class User extends TradistaObject {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
-		return result;
+	public User clone() {
+		User user = (User) super.clone();
+		user.processingOrg = TradistaModelUtil.clone(processingOrg);
+		return user;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		if (surname == null) {
-			if (other.surname != null)
-				return false;
-		} else if (!surname.equals(other.surname))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return firstName + " " + surname + " - " + processingOrg;
-	}
-
+	
 }

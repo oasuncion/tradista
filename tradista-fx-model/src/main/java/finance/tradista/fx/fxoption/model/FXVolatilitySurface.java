@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.marketdata.model.Generable;
 import finance.tradista.core.marketdata.model.SurfacePoint;
 import finance.tradista.core.marketdata.model.VolatilitySurface;
@@ -39,16 +40,15 @@ public class FXVolatilitySurface extends VolatilitySurface<Integer, BigDecimal, 
 
 	private List<BigDecimal> deltas;
 
-	public FXVolatilitySurface(String name) {
-		super(name);
-	}
-
-	public FXVolatilitySurface() {
-		super();
+	public FXVolatilitySurface(String name, LegalEntity processingOrg) {
+		super(name, processingOrg);
 	}
 
 	public List<BigDecimal> getDeltas() {
-		return deltas;
+		if (deltas == null) {
+			return null;
+		}
+		return new ArrayList<>(deltas);
 	}
 
 	public void setDeltas(List<BigDecimal> deltas) {
@@ -71,7 +71,8 @@ public class FXVolatilitySurface extends VolatilitySurface<Integer, BigDecimal, 
 		}
 
 		if (volats.isEmpty()) {
-			throw new TradistaBusinessException(String.format("No values found for this option expiry: %", optionExpiry));
+			throw new TradistaBusinessException(
+					String.format("No values found for this option expiry: %", optionExpiry));
 		}
 
 		BigDecimal avgVolat = BigDecimal.valueOf(0);
@@ -82,6 +83,15 @@ public class FXVolatilitySurface extends VolatilitySurface<Integer, BigDecimal, 
 
 		return avgVolat.divide(BigDecimal.valueOf(volats.size()), RoundingMode.HALF_EVEN);
 
+	}
+
+	@Override
+	public FXVolatilitySurface clone() {
+		FXVolatilitySurface fxVolatilitySurface = (FXVolatilitySurface) super.clone();
+		if (deltas != null) {
+			fxVolatilitySurface.deltas = new ArrayList<>(deltas);
+		}
+		return fxVolatilitySurface;
 	}
 
 }

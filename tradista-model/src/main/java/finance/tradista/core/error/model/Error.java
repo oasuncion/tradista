@@ -69,7 +69,7 @@ public abstract class Error extends TradistaObject {
 	private static final long serialVersionUID = -2187943264623829665L;
 	
 	public Error() {
-		status = Status.UNSOLVED;;
+		status = Status.UNSOLVED;
 	}	
 	
 	public LocalDateTime getSolvingDate() {

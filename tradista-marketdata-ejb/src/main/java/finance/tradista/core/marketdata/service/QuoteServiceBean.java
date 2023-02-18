@@ -8,10 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.security.PermitAll;
-import jakarta.ejb.Stateless;
-import jakarta.interceptor.Interceptors;
-
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
@@ -21,11 +17,10 @@ import finance.tradista.core.marketdata.model.QuoteType;
 import finance.tradista.core.marketdata.model.QuoteValue;
 import finance.tradista.core.marketdata.persistence.QuoteSQL;
 import finance.tradista.core.marketdata.persistence.QuoteSetSQL;
-import finance.tradista.core.marketdata.service.FeedBusinessDelegate;
-import finance.tradista.core.marketdata.service.QuoteService;
-import finance.tradista.core.marketdata.service.QuoteSetFilteringInterceptor;
-import finance.tradista.core.marketdata.service.QuoteValueFilteringInterceptor;
 import finance.tradista.core.pricing.service.PricerBusinessDelegate;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2015 Olivier Asuncion

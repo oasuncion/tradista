@@ -432,13 +432,11 @@ public class QuoteSQL {
 					BigDecimal last = results.getBigDecimal("last_");
 					LocalDate enteredDate = results.getDate("entered_date").toLocalDate();
 					String sourceName = results.getString("source_name");
-					QuoteValue qv = new QuoteValue(date, bid, ask, open, close, high, low, last, sourceName,
-							enteredDate);
 					long quoteId = results.getLong("quote_id");
 					QuoteType resQuoteType = QuoteType.valueOf(results.getString("type"));
 					Quote quote = new Quote(quoteId, quoteName, resQuoteType);
-					qv.setQuote(quote);
-					qv.setQuoteSet(quoteSet);
+					QuoteValue qv = new QuoteValue(date, bid, ask, open, close, high, low, last, sourceName, quote,
+							enteredDate, quoteSet);
 					if (quotes == null) {
 						quotes = new ArrayList<QuoteValue>();
 					}

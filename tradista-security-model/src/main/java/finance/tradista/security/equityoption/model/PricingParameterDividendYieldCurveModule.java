@@ -3,6 +3,7 @@ package finance.tradista.security.equityoption.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 import finance.tradista.security.equity.model.Equity;
@@ -27,7 +28,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class PricingParameterDividendYieldCurveModule implements PricingParameterModule {
+public class PricingParameterDividendYieldCurveModule extends PricingParameterModule {
 
 	/**
 	 * 
@@ -51,12 +52,21 @@ public class PricingParameterDividendYieldCurveModule implements PricingParamete
 		return EquityOption.EQUITY_OPTION;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<Equity, InterestRateCurve> getDividendYieldCurves() {
-		return dividendYieldCurves;
+		return (Map<Equity, InterestRateCurve>) TradistaModelUtil.deepCopy(dividendYieldCurves);
 	}
 
 	public void setDividendYieldCurves(Map<Equity, InterestRateCurve> dividendYieldCurves) {
 		this.dividendYieldCurves = dividendYieldCurves;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public PricingParameterDividendYieldCurveModule clone() {
+		PricingParameterDividendYieldCurveModule pricingParameterDividendYieldCurveModule = (PricingParameterDividendYieldCurveModule) super.clone();
+		pricingParameterDividendYieldCurveModule.dividendYieldCurves = (Map<Equity, InterestRateCurve>) TradistaModelUtil.deepCopy(dividendYieldCurves);
+		return pricingParameterDividendYieldCurveModule;
 	}
 
 }

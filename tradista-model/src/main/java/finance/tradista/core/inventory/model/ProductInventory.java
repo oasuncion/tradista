@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.product.model.Product;
 
@@ -34,24 +36,30 @@ public class ProductInventory extends TradistaObject implements Comparable<Produ
 	 */
 	private static final long serialVersionUID = -386706153298729738L;
 
+	@Id
 	private Product product;
 
 	private BigDecimal quantity;
 
 	private BigDecimal averagePrice;
 
+	@Id
 	private LocalDate from;
 
 	private LocalDate to;
 
+	@Id
 	private Book book;
 
-	public Product getProduct() {
-		return product;
+	public ProductInventory(Book book, LocalDate from, Product product) {
+		super();
+		this.book = book;
+		this.from = from;
+		this.product = product;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public Product getProduct() {
+		return TradistaModelUtil.clone(product);
 	}
 
 	public BigDecimal getQuantity() {
@@ -64,10 +72,6 @@ public class ProductInventory extends TradistaObject implements Comparable<Produ
 
 	public LocalDate getFrom() {
 		return from;
-	}
-
-	public void setFrom(LocalDate from) {
-		this.from = from;
 	}
 
 	public LocalDate getTo() {
@@ -87,48 +91,7 @@ public class ProductInventory extends TradistaObject implements Comparable<Produ
 	}
 
 	public Book getBook() {
-		return book;
-	}
-
-	public void setBook(Book book) {
-		this.book = book;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((book == null) ? 0 : book.hashCode());
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductInventory other = (ProductInventory) obj;
-		if (book == null) {
-			if (other.book != null)
-				return false;
-		} else if (!book.equals(other.book))
-			return false;
-		if (from == null) {
-			if (other.from != null)
-				return false;
-		} else if (!from.equals(other.from))
-			return false;
-		if (product == null) {
-			if (other.product != null)
-				return false;
-		} else if (!product.equals(other.product))
-			return false;
-		return true;
+		return TradistaModelUtil.clone(book);
 	}
 
 	@Override
@@ -155,6 +118,14 @@ public class ProductInventory extends TradistaObject implements Comparable<Produ
 	public String toString() {
 		return "Inventory [product=" + product + ", quantity=" + quantity + ", averagePrice=" + averagePrice + ", from="
 				+ from + ", to=" + to + ", book=" + book + "]";
+	}
+
+	@Override
+	public ProductInventory clone() {
+		ProductInventory productInventory = (ProductInventory) super.clone();
+		productInventory.book = TradistaModelUtil.clone(book);
+		productInventory.product = TradistaModelUtil.clone(product);
+		return productInventory;
 	}
 
 }

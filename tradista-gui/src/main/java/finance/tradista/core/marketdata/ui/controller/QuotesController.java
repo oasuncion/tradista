@@ -776,9 +776,10 @@ public class QuotesController extends TradistaControllerAdapter {
 							quoteValue.getLast().getValue().isEmpty() ? null
 									: TradistaGUIUtil.parseAmount(quoteValue.getLast().getValue(), "Last"),
 							quoteValue.getSourceName().getValue().isEmpty() ? null
-									: quoteValue.getSourceName().getValue());
-					qv.setQuote(quoteBusinessDelegate.getQuoteByNameAndType(quoteValue.getName().getValue(),
-							QuoteType.getQuoteType(quoteValue.getType().getValue())));
+									: quoteValue.getSourceName().getValue(),
+							quoteBusinessDelegate.getQuoteByNameAndType(quoteValue.getName().getValue(),
+									QuoteType.getQuoteType(quoteValue.getType().getValue())),
+							LocalDate.now(), quoteSet.getValue());
 
 					quoteValueList.add(qv);
 

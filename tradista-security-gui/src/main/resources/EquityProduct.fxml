@@ -131,6 +131,7 @@
 				<TextField fx:id="isin" maxHeight="-Infinity"
 					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 					GridPane.columnIndex="3" GridPane.rowIndex="1" />
+				<Label fx:id="isinLabel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 				<Label maxHeight="-Infinity" maxWidth="-Infinity"
 					minHeight="-Infinity" minWidth="-Infinity" text="Trading size"
 					GridPane.rowIndex="1" />
@@ -209,6 +210,7 @@
 				<ComboBox fx:id="exchange" maxHeight="-Infinity"
 					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 					GridPane.columnIndex="1" GridPane.rowIndex="5" />
+				<Label fx:id="exchangeLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -60,7 +60,7 @@ public class EquityOptionContractSpecificationBusinessDelegate implements Serial
 		StringBuilder errMsg = new StringBuilder();
 
 		if (StringUtils.isEmpty(eos.getName())) {
-			errMsg.append("The name is mandatory.\\n");
+			errMsg.append("The name is mandatory.\n");
 		}
 
 		if (eos.getExchange() == null) {

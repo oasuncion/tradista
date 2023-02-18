@@ -112,21 +112,17 @@ public class FutureTransferManager implements TransferManager<FutureTradeEvent> 
 
 	private ProductTransfer createNewFutureSettlement(FutureTrade trade) throws TradistaBusinessException {
 
-		ProductTransfer futureSettlement = new ProductTransfer();
+		ProductTransfer futureSettlement = new ProductTransfer(trade.getBook(), TransferPurpose.FUTURE_SETTLEMENT,
+				trade.getSettlementDate(), trade);
 		futureSettlement.setCreationDateTime(LocalDateTime.now());
 		if (trade.isBuy()) {
 			futureSettlement.setDirection(Transfer.Direction.RECEIVE);
 		} else {
 			futureSettlement.setDirection(Transfer.Direction.PAY);
 		}
-		futureSettlement.setSettlementDate(trade.getSettlementDate());
-		futureSettlement.setProduct(trade.getProduct());
-		futureSettlement.setPurpose(TransferPurpose.FUTURE_SETTLEMENT);
 		futureSettlement.setFixingDateTime(trade.getCreationDate().atStartOfDay());
 		futureSettlement.setQuantity(trade.getQuantity());
 		futureSettlement.setStatus(Transfer.Status.KNOWN);
-		futureSettlement.setTrade(trade);
-		futureSettlement.setBook(trade.getBook());
 
 		return futureSettlement;
 	}
@@ -134,16 +130,11 @@ public class FutureTransferManager implements TransferManager<FutureTradeEvent> 
 	private CashTransfer createCashSettlement(List<CashTransfer> existingTransfers, FutureTrade trade)
 			throws TradistaBusinessException {
 
-		CashTransfer cashSettlement = new CashTransfer();
+		CashTransfer cashSettlement = new CashTransfer(trade.getBook(), trade.getProduct(),
+				TransferPurpose.CASH_SETTLEMENT, trade.getSettlementDate(), trade.getCurrency());
 		cashSettlement.setCreationDateTime(LocalDateTime.now());
 		cashSettlement.setFixingDateTime(trade.getMaturityDate().atStartOfDay());
-		cashSettlement.setSettlementDate(trade.getSettlementDate());
-		cashSettlement.setCurrency(trade.getCurrency());
-		cashSettlement.setProduct(trade.getProduct());
-		cashSettlement.setPurpose(TransferPurpose.CASH_SETTLEMENT);
 		cashSettlement.setStatus(Transfer.Status.UNKNOWN);
-		cashSettlement.setCurrency(trade.getCurrency());
-		cashSettlement.setBook(trade.getBook());
 		boolean exists = false;
 		if (existingTransfers != null) {
 			for (CashTransfer existingTransfer : existingTransfers) {

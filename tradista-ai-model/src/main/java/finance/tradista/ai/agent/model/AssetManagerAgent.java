@@ -1,5 +1,6 @@
 package finance.tradista.ai.agent.model;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 
 /*
@@ -33,12 +34,12 @@ public class AssetManagerAgent extends Agent {
 
 	private PricingParameter pricingParameter;
 
-	public AssetManagerAgent() {
-		super();
+	public AssetManagerAgent(String name) {
+		super(name);
 	}
 
 	public Mandate getMandate() {
-		return mandate;
+		return TradistaModelUtil.clone(mandate);
 	}
 
 	public void setMandate(Mandate mandate) {
@@ -46,11 +47,19 @@ public class AssetManagerAgent extends Agent {
 	}
 
 	public PricingParameter getPricingParameter() {
-		return pricingParameter;
+		return TradistaModelUtil.clone(pricingParameter);
 	}
 
 	public void setPricingParameter(PricingParameter pricingParameter) {
 		this.pricingParameter = pricingParameter;
+	}
+
+	@Override
+	public AssetManagerAgent clone() {
+		AssetManagerAgent agent = (AssetManagerAgent) super.clone();
+		agent.mandate = TradistaModelUtil.clone(mandate);
+		agent.pricingParameter = TradistaModelUtil.clone(pricingParameter);
+		return agent;
 	}
 
 }

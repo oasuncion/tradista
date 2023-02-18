@@ -23,18 +23,18 @@ specific language governing permissions and limitations
 under the License.    */
 
 public final class BlankLegalEntity extends LegalEntity {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -169563912556871116L;
-	
+
 	private static final BlankLegalEntity instance = new BlankLegalEntity();
-	
+
 	private BlankLegalEntity() {
-		setShortName(StringUtils.EMPTY);
+		super(StringUtils.EMPTY);
 	}
-	
+
 	public static BlankLegalEntity getInstance() {
 		return instance;
 	}

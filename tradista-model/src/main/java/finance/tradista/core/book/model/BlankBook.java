@@ -28,13 +28,13 @@ public final class BlankBook extends Book {
 	 * 
 	 */
 	private static final long serialVersionUID = -1355461317489696329L;
-	
+
 	private static final BlankBook instance = new BlankBook();
-	
+
 	private BlankBook() {
-		setName(StringUtils.EMPTY);
+		super(StringUtils.EMPTY, null);
 	}
-	
+
 	public static BlankBook getInstance() {
 		return instance;
 	}

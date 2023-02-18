@@ -125,9 +125,9 @@ public class EquitySQL {
 					if (equities == null) {
 						equities = new HashSet<Equity>();
 					}
-					Equity equity = new Equity();
+					Equity equity = new Equity(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					equity.setId(results.getLong("id"));
-					equity.setIsin(results.getString("isin"));
 					equity.setActiveFrom(results.getDate("active_from").toLocalDate());
 					equity.setActiveTo(results.getDate("active_to").toLocalDate());
 					equity.setCreationDate(results.getDate("creation_date").toLocalDate());
@@ -143,7 +143,6 @@ public class EquitySQL {
 					equity.setIssueDate(results.getDate("issue_date").toLocalDate());
 					equity.setIssuePrice(results.getBigDecimal("issue_price"));
 					equity.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					equity.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					equities.add(equity);
 				}
 			}
@@ -189,9 +188,9 @@ public class EquitySQL {
 					if (equities == null) {
 						equities = new HashSet<Equity>();
 					}
-					Equity equity = new Equity();
+					Equity equity = new Equity(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					equity.setId(results.getLong("id"));
-					equity.setIsin(results.getString("isin"));
 					equity.setActiveFrom(results.getDate("active_from").toLocalDate());
 					equity.setActiveTo(results.getDate("active_to").toLocalDate());
 					equity.setCreationDate(results.getDate("creation_date").toLocalDate());
@@ -207,7 +206,6 @@ public class EquitySQL {
 					equity.setIssueDate(results.getDate("issue_date").toLocalDate());
 					equity.setIssuePrice(results.getBigDecimal("issue_price"));
 					equity.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					equity.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					equities.add(equity);
 				}
 			}
@@ -235,9 +233,9 @@ public class EquitySQL {
 				if (equities == null) {
 					equities = new HashSet<Equity>();
 				}
-				Equity equity = new Equity();
+				Equity equity = new Equity(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+						results.getString("isin"));
 				equity.setId(results.getLong("id"));
-				equity.setIsin(results.getString("isin"));
 				equity.setActiveFrom(results.getDate("active_from").toLocalDate());
 				equity.setActiveTo(results.getDate("active_to").toLocalDate());
 				equity.setCreationDate(results.getDate("creation_date").toLocalDate());
@@ -252,7 +250,6 @@ public class EquitySQL {
 				equity.setIssueDate(results.getDate("issue_date").toLocalDate());
 				equity.setIssuePrice(results.getBigDecimal("issue_price"));
 				equity.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-				equity.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 				equities.add(equity);
 			}
 		} catch (SQLException sqle) {
@@ -278,10 +275,10 @@ public class EquitySQL {
 			try (ResultSet results = stmtGetEquityById.executeQuery()) {
 				while (results.next()) {
 					if (equity == null) {
-						equity = new Equity();
+						equity = new Equity(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+								results.getString("isin"));
 					}
 					equity.setId(results.getLong("id"));
-					equity.setIsin(results.getString("isin"));
 					equity.setActiveFrom(results.getDate("active_from").toLocalDate());
 					equity.setActiveTo(results.getDate("active_to").toLocalDate());
 					equity.setCreationDate(results.getDate("creation_date").toLocalDate());
@@ -297,8 +294,6 @@ public class EquitySQL {
 					equity.setIssueDate(results.getDate("issue_date").toLocalDate());
 					equity.setIssuePrice(results.getBigDecimal("issue_price"));
 					equity.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					equity.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
-
 				}
 			}
 		} catch (SQLException sqle) {
@@ -326,9 +321,9 @@ public class EquitySQL {
 					if (equities == null) {
 						equities = new HashSet<Equity>();
 					}
-					Equity equity = new Equity();
+					Equity equity = new Equity(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					equity.setId(results.getLong("id"));
-					equity.setIsin(results.getString("isin"));
 					equity.setActiveFrom(results.getDate("active_from").toLocalDate());
 					equity.setActiveTo(results.getDate("active_to").toLocalDate());
 					equity.setCreationDate(results.getDate("creation_date").toLocalDate());
@@ -344,7 +339,6 @@ public class EquitySQL {
 					equity.setIssueDate(results.getDate("issue_date").toLocalDate());
 					equity.setIssuePrice(results.getBigDecimal("issue_price"));
 					equity.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					equity.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 					equities.add(equity);
 				}
 			}
@@ -373,9 +367,9 @@ public class EquitySQL {
 			stmtGetEquityByIsinAndExchangeCode.setString(2, exchangeCode);
 			try (ResultSet results = stmtGetEquityByIsinAndExchangeCode.executeQuery()) {
 				while (results.next()) {
-					equity = new Equity();
+					equity = new Equity(ExchangeSQL.getExchangeById(results.getLong("exchange_id")),
+							results.getString("isin"));
 					equity.setId(results.getLong("id"));
-					equity.setIsin(results.getString("isin"));
 					equity.setActiveFrom(results.getDate("active_from").toLocalDate());
 					equity.setActiveTo(results.getDate("active_to").toLocalDate());
 					equity.setCreationDate(results.getDate("creation_date").toLocalDate());
@@ -391,7 +385,6 @@ public class EquitySQL {
 					equity.setIssueDate(results.getDate("issue_date").toLocalDate());
 					equity.setIssuePrice(results.getBigDecimal("issue_price"));
 					equity.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
-					equity.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
 				}
 			}
 		} catch (SQLException sqle) {

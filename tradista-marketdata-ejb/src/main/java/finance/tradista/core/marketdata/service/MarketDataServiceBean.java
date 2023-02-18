@@ -102,8 +102,8 @@ public class MarketDataServiceBean implements MarketDataService {
 
 			for (QuoteValue qv : values) {
 				for (QuoteSet qs : quoteSets) {
-					qv.setQuoteSet(qs);
-					resultValues.add(qv);
+					QuoteValue newQv = new QuoteValue(qv, qs);
+					resultValues.add(newQv);
 				}
 			}
 		}

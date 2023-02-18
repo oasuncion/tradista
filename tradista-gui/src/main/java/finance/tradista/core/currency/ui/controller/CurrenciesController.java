@@ -126,17 +126,15 @@ public class CurrenciesController extends TradistaControllerAdapter {
 		if (result.get() == ButtonType.OK) {
 			try {
 				checkAmounts();
-				if (currency == null) {
-					currency = new Currency();
+
+				if (isoCode.isVisible()) {
+					currency = new Currency(isoCode.getText());
+					isoCodeLabel.setText(isoCode.getText());
 				}
 				if (calendar.getValue() != null && !calendar.getValue().equals(BlankCalendar.getInstance())) {
 					currency.setCalendar(calendar.getValue());
-				}
-				if (isoCode.isVisible()) {
-					currency.setIsoCode(isoCode.getText());
-					isoCodeLabel.setText(isoCode.getText());
 				} else {
-					currency.setIsoCode(isoCodeLabel.getText());
+					currency.setCalendar(null);
 				}
 				currency.setName(name.getText());
 				if (nonDeliverable.isSelected()) {
@@ -157,7 +155,6 @@ public class CurrenciesController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldCurrencyId = 0;
 		try {
 			TradistaTextInputDialog dialog = new TradistaTextInputDialog();
 			dialog.setTitle("Currency Copy");
@@ -166,29 +163,24 @@ public class CurrenciesController extends TradistaControllerAdapter {
 			Optional<String> result = dialog.showAndWait();
 			if (result.isPresent()) {
 				checkAmounts();
-				if (currency == null) {
-					currency = new Currency();
-				}
+				Currency copyCurrency = new Currency(result.get());
 				if (calendar.getValue() != null && !calendar.getValue().equals(BlankCalendar.getInstance())) {
-					currency.setCalendar(calendar.getValue());
+					copyCurrency.setCalendar(calendar.getValue());
 				}
-				currency.setIsoCode(result.get());
-				currency.setName(name.getText());
+				copyCurrency.setName(name.getText());
 				if (nonDeliverable.isSelected()) {
-					currency.setNonDeliverable(true);
-					currency.setFixingDateOffset(Integer.parseInt(fixingDateOffset.getText()));
+					copyCurrency.setNonDeliverable(true);
+					copyCurrency.setFixingDateOffset(Integer.parseInt(fixingDateOffset.getText()));
 				} else {
-					currency.setNonDeliverable(false);
+					copyCurrency.setNonDeliverable(false);
 				}
-				oldCurrencyId = currency.getId();
-				currency.setId(0);
-				currency.setId(currencyBusinessDelegate.saveCurrency(currency));
+				copyCurrency.setId(currencyBusinessDelegate.saveCurrency(copyCurrency));
+				currency = copyCurrency;
 				isoCode.setVisible(false);
 				isoCodeLabel.setVisible(true);
 				isoCodeLabel.setText(currency.getIsoCode());
 			}
 		} catch (TradistaBusinessException tbe) {
-			currency.setId(oldCurrencyId);
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}
@@ -222,7 +214,11 @@ public class CurrenciesController extends TradistaControllerAdapter {
 
 	private void load(Currency currency) {
 		this.currency = currency;
-		calendar.setValue(currency.getCalendar());
+		if (currency.getCalendar() != null) {
+			calendar.setValue(currency.getCalendar());
+		} else {
+			calendar.setValue(BlankCalendar.getInstance());
+		}
 		fixingDateOffset.setText(Integer.toString(currency.getFixingDateOffset()));
 		isoCode.setText(currency.getIsoCode());
 		name.setText(currency.getName());

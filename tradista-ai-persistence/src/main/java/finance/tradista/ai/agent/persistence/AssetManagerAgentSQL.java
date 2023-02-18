@@ -91,9 +91,8 @@ public class AssetManagerAgentSQL {
 			try (ResultSet results = stmtGetAssetManagerAgentByName.executeQuery()) {
 
 				while (results.next()) {
-					agent = new AssetManagerAgent();
+					agent = new AssetManagerAgent(results.getString("name"));
 					agent.setId(results.getLong("id"));
-					agent.setName(results.getString("name"));
 					agent.setOnlyInformative(results.getBoolean("only_informative"));
 					agent.setStarted(results.getBoolean("started"));
 					agent.setMandate(MandateSQL.getMandateById(results.getLong("mandate_id")));
@@ -121,9 +120,8 @@ public class AssetManagerAgentSQL {
 				if (agents == null) {
 					agents = new HashSet<AssetManagerAgent>();
 				}
-				AssetManagerAgent agent = new AssetManagerAgent();
+				AssetManagerAgent agent = new AssetManagerAgent(results.getString("name"));
 				agent.setId(results.getLong("id"));
-				agent.setName(results.getString("name"));
 				agent.setOnlyInformative(results.getBoolean("only_informative"));
 				agent.setStarted(results.getBoolean("started"));
 				agent.setMandate(MandateSQL.getMandateById(results.getLong("mandate_id")));

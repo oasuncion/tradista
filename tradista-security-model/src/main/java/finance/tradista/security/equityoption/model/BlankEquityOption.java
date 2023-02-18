@@ -23,7 +23,7 @@ specific language governing permissions and limitations
 under the License.    */
 
 public class BlankEquityOption extends EquityOption {
-	
+
 	/**
 	* 
 	*/
@@ -32,6 +32,7 @@ public class BlankEquityOption extends EquityOption {
 	public static final BlankEquityOption instance = new BlankEquityOption();
 
 	private BlankEquityOption() {
+		super(null, null, null, null, null);
 	}
 
 	public static BlankEquityOption getInstance() {

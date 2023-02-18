@@ -77,18 +77,12 @@ public class BooksController extends TradistaControllerAdapter {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
-				if (book == null) {
-					book = new Book();
-				}
 				if (name.isVisible()) {
-					book.setName(name.getText());
-					nameLabel.setText(name.getText());
-				} else {
-					book.setName(nameLabel.getText());
+					book = new Book(name.getText(), ClientUtil.getCurrentUser().getProcessingOrg());
 				}
 				book.setDescription(description.getText());
-				book.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 				book.setId(bookBusinessDelegate.saveBook(book));
+				nameLabel.setText(name.getText());
 				name.setVisible(false);
 				nameLabel.setVisible(true);
 				bookChartPane.updateBookChart(book);
@@ -101,7 +95,6 @@ public class BooksController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldBookId = 0;
 		try {
 			TradistaTextInputDialog dialog = new TradistaTextInputDialog();
 			dialog.setTitle("Book Copy");
@@ -109,21 +102,16 @@ public class BooksController extends TradistaControllerAdapter {
 			dialog.setContentText("Please enter the name of the new Book:");
 			Optional<String> result = dialog.showAndWait();
 			if (result.isPresent()) {
-				if (book == null) {
-					book = new Book();
-				}
-				book.setName(result.get());
-				book.setDescription(description.getText());
-				book.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
-				book.setId(0);
-				book.setId(bookBusinessDelegate.saveBook(book));
+				Book copyBook = new Book(result.get(), ClientUtil.getCurrentUser().getProcessingOrg());
+				copyBook.setDescription(description.getText());
+				copyBook.setId(bookBusinessDelegate.saveBook(copyBook));
+				book = copyBook;
 				name.setVisible(false);
 				nameLabel.setVisible(true);
 				nameLabel.setText(book.getName());
 				bookChartPane.updateBookChart(book);
 			}
 		} catch (TradistaBusinessException tbe) {
-			book.setId(oldBookId);
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}

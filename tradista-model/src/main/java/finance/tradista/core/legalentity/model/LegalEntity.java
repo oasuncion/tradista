@@ -1,5 +1,6 @@
 package finance.tradista.core.legalentity.model;
 
+import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -31,6 +32,7 @@ public class LegalEntity extends TradistaObject {
 
 	public static enum Role {
 		PROCESSING_ORG, COUNTERPARTY;
+
 		public String toString() {
 			switch (this) {
 			case PROCESSING_ORG:
@@ -59,6 +61,7 @@ public class LegalEntity extends TradistaObject {
 		}
 	}
 
+	@Id
 	private String shortName;
 
 	private String longName;
@@ -67,12 +70,12 @@ public class LegalEntity extends TradistaObject {
 
 	private Role role;
 
-	public String getShortName() {
-		return shortName;
+	public LegalEntity(String shortName) {
+		this.shortName = shortName;
 	}
 
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
+	public String getShortName() {
+		return shortName;
 	}
 
 	public String getLongName() {
@@ -101,28 +104,6 @@ public class LegalEntity extends TradistaObject {
 
 	public String toString() {
 		return shortName;
-	}
-
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof LegalEntity)) {
-			return false;
-		}
-
-		if (shortName == null) {
-			return ((LegalEntity) o).getShortName() == null;
-		}
-
-		return shortName.equals(((LegalEntity) o).getShortName());
-	}
-
-	public int hashCode() {
-		return shortName.hashCode();
 	}
 
 }

@@ -1,12 +1,13 @@
 package finance.tradista.ai.agent.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 
@@ -39,6 +40,7 @@ public class Mandate extends TradistaObject {
 
 	public static enum RiskLevel {
 		VERY_LOW, LOW, AVERAGE, HIGH, VERY_HIGH;
+
 		public String toString() {
 			switch (this) {
 			case VERY_LOW:
@@ -64,6 +66,7 @@ public class Mandate extends TradistaObject {
 
 	private LocalDate endDate;
 
+	@Id
 	private String name;
 
 	private Map<String, Allocation> productTypeAllocations;
@@ -76,7 +79,7 @@ public class Mandate extends TradistaObject {
 
 	private Book book;
 
-	public class Allocation implements Serializable {
+	public class Allocation extends TradistaObject {
 
 		/**
 		 * 
@@ -102,6 +105,10 @@ public class Mandate extends TradistaObject {
 		public void setMaxAllocation(short maxAllocation) {
 			this.maxAllocation = maxAllocation;
 		}
+	}
+
+	public Mandate(String name) {
+		this.name = name;
 	}
 
 	public RiskLevel getAcceptedRiskLevel() {
@@ -132,20 +139,18 @@ public class Mandate extends TradistaObject {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	@SuppressWarnings("unchecked")
 	public Map<String, Allocation> getProductTypeAllocations() {
-		return productTypeAllocations;
+		return (Map<String, Allocation>) TradistaModelUtil.deepCopy(productTypeAllocations);
 	}
 
 	public void setProductTypeAllocations(Map<String, Allocation> productTypeAllocations) {
 		this.productTypeAllocations = productTypeAllocations;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Allocation> getCurrencyAllocations() {
-		return currencyAllocations;
+		return (Map<String, Allocation>) TradistaModelUtil.deepCopy(currencyAllocations);
 	}
 
 	public void setCurrencyAllocations(Map<String, Allocation> currencyAllocations) {
@@ -161,7 +166,7 @@ public class Mandate extends TradistaObject {
 	}
 
 	public Currency getInitialCashCurrency() {
-		return initialCashCurrency;
+		return TradistaModelUtil.clone(initialCashCurrency);
 	}
 
 	public void setInitialCashCurrency(Currency initialCashCurrency) {
@@ -169,7 +174,7 @@ public class Mandate extends TradistaObject {
 	}
 
 	public Book getBook() {
-		return book;
+		return TradistaModelUtil.clone(book);
 	}
 
 	public void setBook(Book book) {
@@ -184,29 +189,15 @@ public class Mandate extends TradistaObject {
 		this.endDate = endDate;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Mandate other = (Mandate) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public Mandate clone() {
+		Mandate mandate = (Mandate) super.clone();
+		mandate.currencyAllocations = (Map<String, Allocation>) TradistaModelUtil.deepCopy(currencyAllocations);
+		mandate.productTypeAllocations = (Map<String, Allocation>) TradistaModelUtil.deepCopy(productTypeAllocations);
+		mandate.book = TradistaModelUtil.clone(book);
+		mandate.initialCashCurrency = TradistaModelUtil.clone(initialCashCurrency);
+		return mandate;
 	}
 
 }

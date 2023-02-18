@@ -3,8 +3,8 @@ package finance.tradista.core.trade.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.product.model.Product;
-
 
 /*
  * Copyright 2014 Olivier Asuncion
@@ -37,6 +37,7 @@ public abstract class OptionTrade<T extends Trade<? extends Product>> extends Tr
 
 	public static enum Type {
 		CALL, PUT;
+
 		public String toString() {
 			switch (this) {
 			case CALL:
@@ -46,7 +47,7 @@ public abstract class OptionTrade<T extends Trade<? extends Product>> extends Tr
 			}
 			return super.toString();
 		}
-		
+
 		public static Type getType(String displayValue) {
 			switch (displayValue) {
 			case "Call":
@@ -60,6 +61,7 @@ public abstract class OptionTrade<T extends Trade<? extends Product>> extends Tr
 
 	public static enum SettlementType {
 		CASH, PHYSICAL;
+
 		public String toString() {
 			switch (this) {
 			case CASH:
@@ -69,7 +71,7 @@ public abstract class OptionTrade<T extends Trade<? extends Product>> extends Tr
 			}
 			return super.toString();
 		}
-		
+
 		public static SettlementType getType(String displayValue) {
 			switch (displayValue) {
 			case "Cash":
@@ -145,7 +147,7 @@ public abstract class OptionTrade<T extends Trade<? extends Product>> extends Tr
 	}
 
 	public T getUnderlying() {
-		return underlying;
+		return TradistaModelUtil.clone(underlying);
 	}
 
 	public void setUnderlying(T underlying) {
@@ -182,6 +184,14 @@ public abstract class OptionTrade<T extends Trade<? extends Product>> extends Tr
 			return getUnderlying().getTradeDate();
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public OptionTrade<T> clone() {
+		OptionTrade<T> optionTrade = (OptionTrade<T>) super.clone();
+		optionTrade.underlying = TradistaModelUtil.clone(underlying);
+		return optionTrade;
 	}
 
 }

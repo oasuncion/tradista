@@ -11,7 +11,6 @@ import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
-import finance.tradista.core.exchange.persistence.ExchangeSQL;
 import finance.tradista.ir.future.model.Future;
 
 /*
@@ -46,16 +45,13 @@ public class FutureSQL {
 			try (ResultSet results = stmtGetFutureById.executeQuery()) {
 				while (results.next()) {
 					if (future == null) {
-						future = new Future();
+						future = new Future(results.getString("symbol"),
+								FutureContractSpecificationSQL.getFutureContractSpecificationById(
+										results.getLong("future_contract_specification_id")));
 					}
-
-					future.setContractSpecification(FutureContractSpecificationSQL
-							.getFutureContractSpecificationById(results.getLong("future_contract_specification_id")));
 					future.setId(results.getLong("future_id"));
 					future.setCreationDate(results.getDate("creation_date").toLocalDate());
 					future.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-					future.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
-					future.setSymbol(results.getString("symbol"));
 				}
 			}
 		} catch (SQLException sqle) {
@@ -77,16 +73,13 @@ public class FutureSQL {
 			try (ResultSet results = stmtGetFutureByContractSpecificationAndSymbol.executeQuery()) {
 				while (results.next()) {
 					if (future == null) {
-						future = new Future();
+						future = new Future(results.getString("symbol"),
+								FutureContractSpecificationSQL.getFutureContractSpecificationById(
+										results.getLong("future_contract_specification_id")));
 					}
-
-					future.setContractSpecification(FutureContractSpecificationSQL
-							.getFutureContractSpecificationById(results.getLong("future_contract_specification_id")));
 					future.setId(results.getLong("future_id"));
 					future.setCreationDate(results.getDate("creation_date").toLocalDate());
 					future.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-					future.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
-					future.setSymbol(results.getString("symbol"));
 				}
 			}
 		} catch (SQLException sqle) {
@@ -108,18 +101,12 @@ public class FutureSQL {
 				if (futures == null) {
 					futures = new HashSet<Future>();
 				}
-
-				Future future = new Future();
-
-				future.setContractSpecification(FutureContractSpecificationSQL
+				Future future = new Future(results.getString("symbol"), FutureContractSpecificationSQL
 						.getFutureContractSpecificationById(results.getLong("future_contract_specification_id")));
 				future.setId(results.getLong("future_id"));
 				future.setCreationDate(results.getDate("creation_date").toLocalDate());
 				future.setMaturityDate(results.getDate("maturity_date").toLocalDate());
-				future.setExchange(ExchangeSQL.getExchangeById(results.getLong("exchange_id")));
-				future.setSymbol(results.getString("symbol"));
 				futures.add(future);
-
 			}
 		} catch (SQLException sqle) {
 			// TODO Manage logs

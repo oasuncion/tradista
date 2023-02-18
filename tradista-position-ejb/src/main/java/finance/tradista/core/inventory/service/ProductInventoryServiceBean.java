@@ -101,11 +101,9 @@ public class ProductInventoryServiceBean implements ProductInventoryService {
 				}
 				inventory.setQuantity(inventory.getQuantity().add(transfer.getQuantity()));
 			} else {
-				ProductInventory newInventory = new ProductInventory();
-				newInventory.setFrom(transfer.getSettlementDate());
+				ProductInventory newInventory = new ProductInventory(inventory.getBook(), transfer.getSettlementDate(),
+						inventory.getProduct());
 				newInventory.setTo(inventory.getTo());
-				newInventory.setProduct(inventory.getProduct());
-				newInventory.setBook(inventory.getBook());
 				if ((inventory.getQuantity().add(transfer.getQuantity())).signum() != 0) {
 					newInventory.setAveragePrice(inventory.getAveragePrice().multiply(inventory.getQuantity())
 							.add(transfer.getTrade().getAmount().multiply(transfer.getQuantity()))
@@ -155,14 +153,12 @@ public class ProductInventoryServiceBean implements ProductInventoryService {
 		}
 
 		if (!inventoryFound) {
-			ProductInventory newInventory = new ProductInventory();
+			ProductInventory newInventory = new ProductInventory(transfer.getBook(), transfer.getSettlementDate(),
+					transfer.getProduct());
 			LocalDate to = null;
 			if (firstInventoryFromDateAfterTradeSettlementDate != null) {
 				to = firstInventoryFromDateAfterTradeSettlementDate.minusDays(1);
 			}
-			newInventory.setFrom(transfer.getSettlementDate());
-			newInventory.setProduct(transfer.getProduct());
-			newInventory.setBook(transfer.getBook());
 			newInventory.setQuantity(transfer.getQuantity());
 			newInventory.setAveragePrice(transfer.getTrade().getAmount());
 			newInventory.setTo(to);

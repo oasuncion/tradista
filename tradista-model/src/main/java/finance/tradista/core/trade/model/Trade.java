@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.exchange.model.Exchange;
@@ -36,9 +37,10 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 3681323495299195621L;
-	
+
 	public static enum Direction {
 		BUY, SELL;
+
 		public String toString() {
 			switch (this) {
 			case BUY:
@@ -62,11 +64,10 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 
 	private LegalEntity counterparty;
 
-	private Book book;	
+	private Book book;
 
 	// true : BUY, false : SELL
 	private boolean buySell;
-	
 
 	public Trade(P product) {
 		this.product = product;
@@ -75,9 +76,8 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 	public Trade() {
 	}
 
-
 	public Book getBook() {
-		return book;
+		return TradistaModelUtil.clone(book);
 	}
 
 	public void setBook(Book book) {
@@ -85,7 +85,7 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 	}
 
 	public LegalEntity getCounterparty() {
-		return counterparty;
+		return TradistaModelUtil.clone(counterparty);
 	}
 
 	public void setCounterparty(LegalEntity counterparty) {
@@ -93,7 +93,7 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 	}
 
 	public Currency getCurrency() {
-		return currency;
+		return TradistaModelUtil.clone(currency);
 	}
 
 	public void setCurrency(Currency currency) {
@@ -147,7 +147,7 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 	private LocalDate creationDate;
 
 	public P getProduct() {
-		return product;
+		return TradistaModelUtil.clone(product);
 	}
 
 	public void setProduct(P product) {
@@ -173,6 +173,17 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 			return product.getExchange();
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Trade<P> clone() {
+		Trade<P> trade = (Trade<P>) super.clone();
+		trade.product = TradistaModelUtil.clone(product);
+		trade.counterparty = TradistaModelUtil.clone(counterparty);
+		trade.currency = TradistaModelUtil.clone(currency);
+		trade.book = TradistaModelUtil.clone(book);
+		return trade;
 	}
 
 }

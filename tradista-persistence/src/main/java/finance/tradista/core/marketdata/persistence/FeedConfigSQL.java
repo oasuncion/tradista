@@ -13,6 +13,7 @@ import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.core.marketdata.model.FeedConfig;
 import finance.tradista.core.marketdata.model.FeedType;
@@ -75,6 +76,11 @@ public class FeedConfigSQL {
 						feedConfigs = new HashSet<FeedConfig>();
 					}
 					if (results.getLong("id") != feedConfigId) {
+						long poId = results.getLong("processing_org_id");
+						LegalEntity processingOrg = null;
+						if (poId > 0) {
+							processingOrg = LegalEntitySQL.getLegalEntityById(poId);
+						}
 						if (feedConfig != null) {
 							feedConfig.setMapping(mapping);
 							feedConfig.setFieldsMapping(fieldsMapping);
@@ -83,14 +89,9 @@ public class FeedConfigSQL {
 							fieldsMapping = new HashMap<String, Map<String, String>>();
 						}
 						feedConfigId = results.getLong("id");
-						feedConfig = new FeedConfig();
+						feedConfig = new FeedConfig(results.getString("name"), processingOrg);
 						feedConfig.setId(feedConfigId);
-						feedConfig.setName(results.getString("name"));
 						feedConfig.setFeedType(FeedType.valueOf(results.getString("feed_type")));
-						long poId = results.getLong("processing_org_id");
-						if (poId > 0) {
-							feedConfig.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-						}
 					}
 
 					String fieldName = results.getString("feed_quote_name");
@@ -134,13 +135,13 @@ public class FeedConfigSQL {
 			try (ResultSet results = stmtGetFeedConfigByName.executeQuery()) {
 				while (results.next()) {
 					if (feedConfig == null) {
-						feedConfig = new FeedConfig();
-						feedConfig.setId(results.getLong("id"));
-						feedConfig.setName(results.getString("name"));
-						feedConfig.setFeedType(FeedType.valueOf(results.getString("feed_type")));
+						LegalEntity processingOrg = null;
 						if (poId > 0) {
-							feedConfig.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
+							processingOrg = LegalEntitySQL.getLegalEntityById(poId);
 						}
+						feedConfig = new FeedConfig(results.getString("name"), processingOrg);
+						feedConfig.setId(results.getLong("id"));
+						feedConfig.setFeedType(FeedType.valueOf(results.getString("feed_type")));
 					}
 					String fieldName = results.getString("feed_quote_name");
 					if (fieldName != null) {
@@ -180,14 +181,14 @@ public class FeedConfigSQL {
 			try (ResultSet results = stmtGetFeedConfigById.executeQuery()) {
 				while (results.next()) {
 					if (feedConfig == null) {
-						feedConfig = new FeedConfig();
-						feedConfig.setId(results.getLong("id"));
-						feedConfig.setName(results.getString("name"));
-						feedConfig.setFeedType(FeedType.valueOf(results.getString("feed_type")));
 						long poId = results.getLong("processing_org_id");
+						LegalEntity processingOrg = null;
 						if (poId > 0) {
-							feedConfig.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
+							processingOrg = LegalEntitySQL.getLegalEntityById(poId);
 						}
+						feedConfig = new FeedConfig(results.getString("name"), processingOrg);
+						feedConfig.setId(results.getLong("id"));
+						feedConfig.setFeedType(FeedType.valueOf(results.getString("feed_type")));
 					}
 					String fieldName = results.getString("feed_quote_name");
 					if (fieldName != null) {
@@ -239,15 +240,15 @@ public class FeedConfigSQL {
 						mapping = new HashMap<String, Quote>();
 						fieldsMapping = new HashMap<String, Map<String, String>>();
 					}
-					feedConfigId = results.getLong("id");
-					feedConfig = new FeedConfig();
-					feedConfig.setId(feedConfigId);
-					feedConfig.setName(results.getString("name"));
-					feedConfig.setFeedType(FeedType.valueOf(results.getString("feed_type")));
 					long poId = results.getLong("processing_org_id");
+					LegalEntity processingOrg = null;
 					if (poId > 0) {
-						feedConfig.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
+						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
 					}
+					feedConfigId = results.getLong("id");
+					feedConfig = new FeedConfig(results.getString("name"), processingOrg);
+					feedConfig.setId(feedConfigId);
+					feedConfig.setFeedType(FeedType.valueOf(results.getString("feed_type")));
 				}
 
 				String fieldName = results.getString("feed_quote_name");

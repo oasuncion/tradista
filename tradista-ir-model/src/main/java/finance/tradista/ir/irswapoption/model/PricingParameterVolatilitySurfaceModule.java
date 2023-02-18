@@ -3,6 +3,7 @@ package finance.tradista.ir.irswapoption.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 
@@ -26,7 +27,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class PricingParameterVolatilitySurfaceModule implements PricingParameterModule {
+public class PricingParameterVolatilitySurfaceModule extends PricingParameterModule {
 
 	/**
 	 * 
@@ -49,19 +50,34 @@ public class PricingParameterVolatilitySurfaceModule implements PricingParameter
 		return IRSwapOptionTrade.IR_SWAP_OPTION;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<Index, SwaptionVolatilitySurface> getVolatilitySurfaces() {
-		return volatilitySurfaces;
+		if (volatilitySurfaces == null) {
+			return null;
+		}
+		return (Map<Index, SwaptionVolatilitySurface>) TradistaModelUtil.deepCopy(volatilitySurfaces);
 	}
 
 	public void setVolatilitySurfaces(Map<Index, SwaptionVolatilitySurface> volatilitySurfaces) {
 		this.volatilitySurfaces = volatilitySurfaces;
 	}
-	
+
 	public SwaptionVolatilitySurface getSwaptionVolatilitySurface(Index index) {
-		if (index == null) {
+		if (index == null || volatilitySurfaces == null) {
 			return null;
 		}
-		return volatilitySurfaces.get(index);
+		return TradistaModelUtil.clone(volatilitySurfaces.get(index));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public PricingParameterVolatilitySurfaceModule clone() {
+		PricingParameterVolatilitySurfaceModule pricingParameterVolatilitySurfaceModule = (PricingParameterVolatilitySurfaceModule) super.clone();
+		if (volatilitySurfaces != null) {
+			pricingParameterVolatilitySurfaceModule.volatilitySurfaces = (Map<Index, SwaptionVolatilitySurface>) TradistaModelUtil
+					.deepCopy(volatilitySurfaces);
+		}
+		return pricingParameterVolatilitySurfaceModule;
 	}
 
 }

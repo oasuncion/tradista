@@ -35,41 +35,12 @@ public class InterestRateCurve extends GenerableCurve {
 		super(name, po);
 	}
 
-	public InterestRateCurve() {
-		super();
-	}
-
 	public String getType() {
 		return INTEREST_RATE_CURVE;
 	}
 
 	public String toString() {
 		return this.getName();
-	}
-
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof InterestRateCurve))
-			return false;
-		Curve<?, ?> other = (Curve<?, ?>) obj;
-		if (getName() == null) {
-			if (other.getName() != null)
-				return false;
-		} else if (!getName().equals(other.getName()))
-			return false;
-		if (getProcessingOrg() == null) {
-			if (other.getProcessingOrg() != null)
-				return false;
-		} else if (!getProcessingOrg().equals(other.getProcessingOrg()))
-			return false;
-		return true;
-	}
-
-	public int hashCode() {
-		return getName().hashCode();
 	}
 
 }

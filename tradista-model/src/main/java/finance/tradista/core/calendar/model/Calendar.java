@@ -2,9 +2,12 @@ package finance.tradista.core.calendar.model;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -33,15 +36,18 @@ public class Calendar extends TradistaObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 8619460945695027871L;
+
+	@Id
 	private String code;
 	private String name;
 
-	public String getCode() {
-		return code;
+	public Calendar(String code) {
+		super();
+		this.code = code;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public String getCode() {
+		return code;
 	}
 
 	public String getName() {
@@ -57,7 +63,10 @@ public class Calendar extends TradistaObject {
 	private Set<LocalDate> holidays;
 
 	public Set<DayOfWeek> getWeekEnd() {
-		return weekEnd;
+		if (weekEnd == null) {
+			return null;
+		}
+		return new HashSet<>(weekEnd);
 	}
 
 	public void setWeekEnd(Set<DayOfWeek> weekEnd) {
@@ -65,7 +74,10 @@ public class Calendar extends TradistaObject {
 	}
 
 	public Set<LocalDate> getHolidays() {
-		return holidays;
+		if (holidays == null) {
+			return null;
+		}
+		return new HashSet<>(holidays);
 	}
 
 	public void setHolidays(Set<LocalDate> holidays) {
@@ -94,32 +106,6 @@ public class Calendar extends TradistaObject {
 		}
 
 		return true;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		Calendar cal = null;
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof Calendar)) {
-			return false;
-		}
-		cal = (Calendar) o;
-		if (cal == this) {
-			return true;
-		}
-		
-		if (cal.getCode() == null) {
-			return (code == null);
-		}
-		
-		return cal.getCode().equals(code);
-	}
-
-	@Override
-	public int hashCode() {
-		return code.hashCode();
 	}
 
 	public void addHolidays(Set<LocalDate> holidays) {

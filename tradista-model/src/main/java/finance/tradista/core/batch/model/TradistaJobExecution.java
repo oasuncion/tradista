@@ -3,7 +3,10 @@ package finance.tradista.core.batch.model;
 import java.time.LocalDateTime;
 
 import org.quartz.Trigger;
+import org.quartz.impl.triggers.AbstractTrigger;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -28,7 +31,6 @@ under the License.    */
 
 public class TradistaJobExecution extends TradistaObject {
 
-
 	/**
 	 * 
 	 */
@@ -36,39 +38,42 @@ public class TradistaJobExecution extends TradistaObject {
 
 	private Trigger trigger;
 
-	private String status, errorCause, name, jobType;
+	private String status;
+
+	private String errorCause;
+
+	@Id
+	private String name;
+
+	private String jobType;
 
 	private LocalDateTime startTime, endTime;
 
 	private TradistaJobInstance jobInstance;
 
 	public TradistaJobInstance getJobInstance() {
-		return jobInstance;
+		return TradistaModelUtil.clone(jobInstance);
 	}
 
-	public TradistaJobExecution(Trigger trigger, TradistaJobInstance jobInstance) {
-		super();
+	public TradistaJobExecution(Trigger trigger, TradistaJobInstance jobInstance, String name) {
 		this.jobInstance = jobInstance;
 		this.trigger = trigger;
+		this.name = name;
 	}
 
 	/**
 	 * Note: the name field of this TradistaJobExecution instance is created in
-	 * BatchSQL and is, in reality, the fireInstanceId data in the Quartz API.
-	 * In quartz, fireInstanceId is different of name because a trigger can
-	 * launch several job executions, each having its own fireInstanceId. But in
-	 * Tradista (at least Tradista 1.0), a trigger launches only one immediate
-	 * execution, so, the fireInstanceId identifies a trigger. FireInstanceId
-	 * are used in the Quartz API to interrupt triggers.
+	 * BatchSQL and is, in reality, the fireInstanceId data in the Quartz API. In
+	 * quartz, fireInstanceId is different of name because a trigger can launch
+	 * several job executions, each having its own fireInstanceId. But in Tradista
+	 * (at least Tradista 1.0), a trigger launches only one immediate execution, so,
+	 * the fireInstanceId identifies a trigger. FireInstanceId are used in the
+	 * Quartz API to interrupt triggers.
 	 * 
 	 * @return
 	 */
 	public String getName() {
 		return name;
-	}	
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getStatus() {
@@ -113,6 +118,17 @@ public class TradistaJobExecution extends TradistaObject {
 
 	public void setJobType(String jobType) {
 		this.jobType = jobType;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public TradistaJobExecution clone() {
+		TradistaJobExecution tradistaJobExecution = (TradistaJobExecution) super.clone();
+		if (trigger != null) {
+			tradistaJobExecution.trigger = (Trigger) ((AbstractTrigger) trigger).clone();
+		}
+		tradistaJobExecution.jobInstance = TradistaModelUtil.clone(jobInstance);
+		return tradistaJobExecution;
 	}
 
 }

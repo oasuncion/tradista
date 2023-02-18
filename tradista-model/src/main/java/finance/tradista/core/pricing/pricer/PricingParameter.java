@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.model.CurrencyPair;
@@ -41,17 +43,7 @@ public class PricingParameter extends TradistaObject {
 	 */
 	private static final long serialVersionUID = -5219479844754106015L;
 
-	public PricingParameter() {
-		super();
-		params = new HashMap<String, String>();
-		indexCurves = new HashMap<Index, InterestRateCurve>();
-		discountCurves = new HashMap<Currency, InterestRateCurve>();
-		fxCurves = new HashMap<CurrencyPair, FXCurve>();
-		customPricers = new HashMap<String, String>();
-		modules = new ArrayList<PricingParameterModule>();
-	}
-
-	public PricingParameter(String name, QuoteSet quoteSet, LegalEntity po) {
+	public PricingParameter(String name, LegalEntity po) {
 		super();
 		params = new HashMap<String, String>();
 		indexCurves = new HashMap<Index, InterestRateCurve>();
@@ -60,14 +52,20 @@ public class PricingParameter extends TradistaObject {
 		customPricers = new HashMap<String, String>();
 		modules = new ArrayList<PricingParameterModule>();
 		this.name = name;
-		this.quoteSet = quoteSet;
 		this.processingOrg = po;
 	}
 
+	public PricingParameter(String name, QuoteSet quoteSet, LegalEntity po) {
+		this(name, po);
+		this.quoteSet = quoteSet;
+	}
+
+	@Id
 	private String name;
 
 	private QuoteSet quoteSet;
 
+	@Id
 	private LegalEntity processingOrg;
 
 	private List<PricingParameterModule> modules;
@@ -83,7 +81,7 @@ public class PricingParameter extends TradistaObject {
 	private Map<String, String> customPricers;
 
 	public QuoteSet getQuoteSet() {
-		return quoteSet;
+		return TradistaModelUtil.clone(quoteSet);
 	}
 
 	public void setQuoteSet(QuoteSet quoteSet) {
@@ -94,12 +92,11 @@ public class PricingParameter extends TradistaObject {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public Map<String, String> getParams() {
-		return params;
+		if (params == null) {
+			return null;
+		}
+		return new HashMap<String, String>(params);
 	}
 
 	public void setParams(Map<String, String> params) {
@@ -107,31 +104,30 @@ public class PricingParameter extends TradistaObject {
 	}
 
 	public LegalEntity getProcessingOrg() {
-		return processingOrg;
+		return TradistaModelUtil.clone(processingOrg);
 	}
 
-	public void setProcessingOrg(LegalEntity processingOrg) {
-		this.processingOrg = processingOrg;
-	}
-
+	@SuppressWarnings("unchecked")
 	public Map<Currency, InterestRateCurve> getDiscountCurves() {
-		return discountCurves;
+		return (Map<Currency, InterestRateCurve>) TradistaModelUtil.deepCopy(discountCurves);
 	}
 
 	public void setDiscountCurves(Map<Currency, InterestRateCurve> discountCurves) {
 		this.discountCurves = discountCurves;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<Index, InterestRateCurve> getIndexCurves() {
-		return indexCurves;
+		return (Map<Index, InterestRateCurve>) TradistaModelUtil.deepCopy(indexCurves);
 	}
 
 	public void setIndexCurves(Map<Index, InterestRateCurve> indexCurves) {
 		this.indexCurves = indexCurves;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<CurrencyPair, FXCurve> getFxCurves() {
-		return fxCurves;
+		return (Map<CurrencyPair, FXCurve>) TradistaModelUtil.deepCopy(fxCurves);
 	}
 
 	public void setFxCurves(Map<CurrencyPair, FXCurve> fxCurves) {
@@ -139,7 +135,10 @@ public class PricingParameter extends TradistaObject {
 	}
 
 	public Map<String, String> getCustomPricers() {
-		return customPricers;
+		if (customPricers == null) {
+			return null;
+		}
+		return new HashMap<String, String>(customPricers);
 	}
 
 	public void setCustomPricers(Map<String, String> customPricers) {
@@ -150,8 +149,9 @@ public class PricingParameter extends TradistaObject {
 		return name;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<PricingParameterModule> getModules() {
-		return modules;
+		return (List<PricingParameterModule>) TradistaModelUtil.deepCopy(modules);
 	}
 
 	public void setModules(List<PricingParameterModule> modules) {
@@ -162,38 +162,26 @@ public class PricingParameter extends TradistaObject {
 		if (currency == null) {
 			return null;
 		}
-		return discountCurves.get(currency);
+		return TradistaModelUtil.clone(discountCurves.get(currency));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((processingOrg == null) ? 0 : processingOrg.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PricingParameter other = (PricingParameter) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (processingOrg == null) {
-			if (other.processingOrg != null)
-				return false;
-		} else if (!processingOrg.equals(other.processingOrg))
-			return false;
-		return true;
+	public PricingParameter clone() {
+		PricingParameter pricingParameter = (PricingParameter) super.clone();
+		pricingParameter.quoteSet = TradistaModelUtil.clone(quoteSet);
+		pricingParameter.processingOrg = TradistaModelUtil.clone(processingOrg);
+		pricingParameter.modules = (List<PricingParameterModule>) TradistaModelUtil.deepCopy(modules);
+		pricingParameter.discountCurves = (Map<Currency, InterestRateCurve>) TradistaModelUtil.deepCopy(discountCurves);
+		pricingParameter.indexCurves = (Map<Index, InterestRateCurve>) TradistaModelUtil.deepCopy(indexCurves);
+		pricingParameter.fxCurves = (Map<CurrencyPair, FXCurve>) TradistaModelUtil.deepCopy(fxCurves);
+		if (params != null) {
+			pricingParameter.params = new HashMap<String, String>(params);
+		}
+		if (customPricers != null) {
+			pricingParameter.customPricers = new HashMap<String, String>(customPricers);
+		}
+		return pricingParameter;
 	}
 
 }

@@ -134,20 +134,15 @@ public class EquityOptionCreatorDialog extends TradistaDialog<EquityOption> {
 					BigDecimal strike = null;
 					try {
 						strike = TradistaGUIUtil.parseAmount(strikeTextField.getText(), "Strike");
-					} catch (TradistaBusinessException abe) {
+					} catch (TradistaBusinessException tbe) {
 						Alert error = new Alert(AlertType.ERROR);
 						error.setContentText(
 								String.format("The strike (%s) is not a valid number.", strikeTextField.getText()));
 						error.showAndWait();
 						return null;
 					}
-					EquityOption equityOption = new EquityOption();
-					equityOption.setCode(codeTextField.getText());
-					equityOption.setEquityOptionContractSpecification(contractSpecificationComboBox.getValue());
-					equityOption.setType(typeComboBox.getValue());
-					equityOption.setMaturityDate(maturityDateDatePicker.getValue());
-					equityOption.setStrike(strike);
-					return equityOption;
+					return new EquityOption(codeTextField.getText(), typeComboBox.getValue(), strike,
+							maturityDateDatePicker.getValue(), contractSpecificationComboBox.getValue());
 				}
 				return null;
 			}

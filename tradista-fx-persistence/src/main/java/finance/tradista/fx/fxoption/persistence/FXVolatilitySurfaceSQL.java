@@ -14,6 +14,7 @@ import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.core.marketdata.model.Quote;
 import finance.tradista.core.marketdata.model.SurfacePoint;
@@ -89,17 +90,18 @@ public class FXVolatilitySurfaceSQL {
 				if (fxVolatilitySurfaces == null) {
 					fxVolatilitySurfaces = new HashSet<FXVolatilitySurface>();
 				}
-				FXVolatilitySurface fxVolatilitySurface = new FXVolatilitySurface();
+				long poId = results.getLong("processing_org_id");
+				LegalEntity po = null;
+				if (poId > 0) {
+					po = LegalEntitySQL.getLegalEntityById(poId);
+				}
+				FXVolatilitySurface fxVolatilitySurface = new FXVolatilitySurface(results.getString("name"), po);
 				long id = results.getLong("id");
 				fxVolatilitySurface.setId(id);
-				fxVolatilitySurface.setName(results.getString("name"));
 				fxVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 				fxVolatilitySurface.setInterpolator(results.getString("interpolator"));
 				fxVolatilitySurface.setInstance(results.getString("instance"));
-				long poId = results.getLong("processing_org_id");
-				if (poId > 0) {
-					fxVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-				}
+
 				java.sql.Date quoteDate = results.getDate("quote_date");
 				if (quoteDate != null) {
 					fxVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());
@@ -141,7 +143,7 @@ public class FXVolatilitySurfaceSQL {
 
 	public static FXVolatilitySurface getFXVolatilitySurfaceByName(String surfaceName) {
 
-		FXVolatilitySurface fxVolatilitySurface = new FXVolatilitySurface();
+		FXVolatilitySurface fxVolatilitySurface = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetFXVolatilitySurfaceByName = con
 						.prepareStatement("SELECT * FROM VOLATILITY_SURFACE WHERE NAME = ?");
@@ -152,17 +154,17 @@ public class FXVolatilitySurfaceSQL {
 			try (ResultSet results = stmtGetFXVolatilitySurfaceByName.executeQuery()) {
 
 				while (results.next()) {
-					fxVolatilitySurface = new FXVolatilitySurface();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity po = null;
+					if (poId > 0) {
+						po = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					fxVolatilitySurface = new FXVolatilitySurface(results.getString("name"), po);
 					long id = results.getLong("id");
 					fxVolatilitySurface.setId(id);
-					fxVolatilitySurface.setName(results.getString("name"));
 					fxVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 					fxVolatilitySurface.setInterpolator(results.getString("interpolator"));
 					fxVolatilitySurface.setInstance(results.getString("instance"));
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						fxVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						fxVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());
@@ -215,17 +217,17 @@ public class FXVolatilitySurfaceSQL {
 			try (ResultSet results = stmtGetFXVolatilitySurfaceById.executeQuery()) {
 
 				while (results.next()) {
-					fxVolatilitySurface = new FXVolatilitySurface();
+					long poId = results.getLong("processing_org_id");
+					LegalEntity po = null;
+					if (poId > 0) {
+						po = LegalEntitySQL.getLegalEntityById(poId);
+					}
+					fxVolatilitySurface = new FXVolatilitySurface(results.getString("name"), po);
 					long id = results.getLong("id");
 					fxVolatilitySurface.setId(id);
-					fxVolatilitySurface.setName(results.getString("name"));
 					fxVolatilitySurface.setAlgorithm(results.getString("algorithm"));
 					fxVolatilitySurface.setInterpolator(results.getString("interpolator"));
 					fxVolatilitySurface.setInstance(results.getString("instance"));
-					long poId = results.getLong("processing_org_id");
-					if (poId > 0) {
-						fxVolatilitySurface.setProcessingOrg(LegalEntitySQL.getLegalEntityById(poId));
-					}
 					java.sql.Date quoteDate = results.getDate("quote_date");
 					if (quoteDate != null) {
 						fxVolatilitySurface.setQuoteDate(quoteDate.toLocalDate());

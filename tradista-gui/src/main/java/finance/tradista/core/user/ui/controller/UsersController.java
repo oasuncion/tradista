@@ -83,11 +83,9 @@ public class UsersController extends TradistaControllerAdapter {
 		if (result.get() == ButtonType.OK) {
 			try {
 				if (user == null) {
-					user = new User();
+					user = new User(firstName.getText(), surname.getText(),
+							ClientUtil.getCurrentUser().getProcessingOrg());
 				}
-				user.setFirstName(firstName.getText());
-				user.setSurname(surname.getText());
-				user.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 				user.setLogin(login.getText());
 				user.setPassword(password.getText());
 				user.setId(userBusinessDelegate.saveUser(user));
@@ -109,11 +107,9 @@ public class UsersController extends TradistaControllerAdapter {
 			Optional<String> result = dialog.showAndWait();
 			if (result.isPresent()) {
 				if (user == null) {
-					user = new User();
+					user = new User(firstName.getText(), surname.getText(),
+							ClientUtil.getCurrentUser().getProcessingOrg());
 				}
-				user.setFirstName(firstName.getText());
-				user.setSurname(surname.getText());
-				user.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 				user.setLogin(result.get());
 				user.setPassword(password.getText());
 				oldUserId = user.getId();

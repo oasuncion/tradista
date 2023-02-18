@@ -1,5 +1,7 @@
 package finance.tradista.ai.reasoning.prm.model;
 
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -28,18 +30,26 @@ public class Parameter extends TradistaObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 2523448749272012352L;
-	
-	private int position;
-	
+
+	@Id
+	private short position;
+
 	private Type type;
-	
+
+	@Id
 	private Function function;
 
-	public int getPosition() {
+	public Parameter(Function function, short position) {
+		super();
+		this.function = function;
+		this.position = position;
+	}
+
+	public short getPosition() {
 		return position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(short position) {
 		this.position = position;
 	}
 
@@ -52,7 +62,7 @@ public class Parameter extends TradistaObject {
 	}
 
 	public Function getFunction() {
-		return function;
+		return TradistaModelUtil.clone(function);
 	}
 
 	public void setFunction(Function function) {
@@ -60,32 +70,10 @@ public class Parameter extends TradistaObject {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((function == null) ? 0 : function.hashCode());
-		result = prime * result + position;
-		return result;
+	public Parameter clone() {
+		Parameter parameter = (Parameter) super.clone();
+		parameter.function = TradistaModelUtil.clone(function);
+		return parameter;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Parameter other = (Parameter) obj;
-		if (function == null) {
-			if (other.function != null)
-				return false;
-		} else if (!function.equals(other.function))
-			return false;
-		if (position != other.position)
-			return false;
-		return true;
-	}	
-	
 
 }

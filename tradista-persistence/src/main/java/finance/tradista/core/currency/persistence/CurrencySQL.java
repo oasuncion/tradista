@@ -44,9 +44,8 @@ public class CurrencySQL {
 			stmtGetCurrencyById.setLong(1, id);
 			try (ResultSet results = stmtGetCurrencyById.executeQuery()) {
 				while (results.next()) {
-					currency = new Currency();
+					currency = new Currency(results.getString("iso_code"));
 					currency.setId(results.getLong("id"));
-					currency.setIsoCode(results.getString("iso_code"));
 					currency.setName(results.getString("name"));
 					currency.setNonDeliverable(results.getBoolean("non_deliverable"));
 					currency.setFixingDateOffset(results.getInt("fixing_date_offset"));
@@ -69,9 +68,8 @@ public class CurrencySQL {
 			stmtGetCurrencyByName.setString(1, name);
 			try (ResultSet results = stmtGetCurrencyByName.executeQuery()) {
 				while (results.next()) {
-					currency = new Currency();
+					currency = new Currency(results.getString("iso_code"));
 					currency.setId(results.getLong("id"));
-					currency.setIsoCode(results.getString("iso_code"));
 					currency.setName(results.getString("name"));
 					currency.setNonDeliverable(results.getBoolean("non_deliverable"));
 					currency.setFixingDateOffset(results.getInt("fixing_date_offset"));
@@ -95,9 +93,8 @@ public class CurrencySQL {
 				if (currencies == null) {
 					currencies = new HashSet<Currency>();
 				}
-				Currency currency = new Currency();
-				currency.setId(results.getInt("id"));
-				currency.setIsoCode(results.getString("iso_code"));
+				Currency currency = new Currency(results.getString("iso_code"));
+				currency.setId(results.getLong("id"));
 				currency.setName(results.getString("name"));
 				currency.setNonDeliverable(results.getBoolean("non_deliverable"));
 				currency.setFixingDateOffset(results.getInt("fixing_date_offset"));
@@ -185,9 +182,8 @@ public class CurrencySQL {
 			stmtGetCurrencyByIsoCode.setString(1, isoCode);
 			try (ResultSet results = stmtGetCurrencyByIsoCode.executeQuery()) {
 				while (results.next()) {
-					currency = new Currency();
+					currency = new Currency(results.getString("iso_code"));
 					currency.setId(results.getLong("id"));
-					currency.setIsoCode(results.getString("iso_code"));
 					currency.setName(results.getString("name"));
 					currency.setNonDeliverable(results.getBoolean("non_deliverable"));
 					currency.setFixingDateOffset(results.getInt("fixing_date_offset"));
@@ -212,9 +208,8 @@ public class CurrencySQL {
 				if (currencies == null) {
 					currencies = new HashSet<Currency>();
 				}
-				Currency currency = new Currency();
-				currency.setId(results.getInt("id"));
-				currency.setIsoCode(results.getString("iso_code"));
+				Currency currency = new Currency(results.getString("iso_code"));
+				currency.setId(results.getLong("id"));
 				currency.setName(results.getString("name"));
 				currency.setNonDeliverable(results.getBoolean("non_deliverable"));
 				currency.setFixingDateOffset(results.getInt("fixing_date_offset"));
@@ -239,9 +234,8 @@ public class CurrencySQL {
 				if (currencies == null) {
 					currencies = new HashSet<Currency>();
 				}
-				Currency currency = new Currency();
-				currency.setId(results.getInt("id"));
-				currency.setIsoCode(results.getString("iso_code"));
+				Currency currency = new Currency(results.getString("iso_code"));
+				currency.setId(results.getLong("id"));
 				currency.setName(results.getString("name"));
 				currency.setNonDeliverable(results.getBoolean("non_deliverable"));
 				currency.setFixingDateOffset(results.getInt("fixing_date_offset"));

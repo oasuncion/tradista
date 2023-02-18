@@ -114,6 +114,7 @@
 				<TextField fx:id="code" maxHeight="-Infinity"
 					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 					GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<Label fx:id="codeLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 				<Label maxHeight="-Infinity" maxWidth="-Infinity"
 					minHeight="-Infinity" minWidth="-Infinity" text="Type"
 					GridPane.rowIndex="3" />
@@ -123,12 +124,14 @@
 				<ComboBox fx:id="type" maxHeight="-Infinity"
 					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 					GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<Label fx:id="typeLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 				<Label maxHeight="-Infinity" maxWidth="-Infinity"
 					minHeight="-Infinity" minWidth="-Infinity" text="Strike"
 					GridPane.columnIndex="2" GridPane.rowIndex="3" />
 				<TextField fx:id="strike" maxHeight="-Infinity"
 					maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 					GridPane.columnIndex="3" GridPane.rowIndex="3" />
+				<Label fx:id="strikeLabel" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 				<Label styleClass="labelBold" maxHeight="-Infinity" maxWidth="-Infinity"
 					minHeight="-Infinity" minWidth="-Infinity" text="Equity Option Id"/>
 				<Label fx:id="equityOptionId" styleClass="labelBold" maxHeight="-Infinity"
@@ -137,10 +140,12 @@
 				<Label text="Contract Specification" GridPane.rowIndex="2" />
 				<ComboBox fx:id="contractSpecification"
 					GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Label fx:id="contractSpecificationLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 				<Label text="Maturity Date" GridPane.columnIndex="2"
 					GridPane.rowIndex="2" />
 				<DatePicker fx:id="maturityDate" GridPane.columnIndex="3"
 					GridPane.rowIndex="2" />
+				<Label fx:id="maturityDateLabel" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -2,6 +2,7 @@ package finance.tradista.ir.ircapfloorcollar.model;
 
 import java.math.BigDecimal;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
 import finance.tradista.ir.irforward.model.IRForwardTrade;
@@ -27,9 +28,10 @@ specific language governing permissions and limitations
 under the License.    */
 /**
  * 
- * Class designed to represent Caps, Floors and Collars.
- * Please note that the trade amount and currency refer to premium amount and currency.
- * In the case of the collar, the premium is : premium of the cap - premium of the floor
+ * Class designed to represent Caps, Floors and Collars. Please note that the
+ * trade amount and currency refer to premium amount and currency. In the case
+ * of the collar, the premium is : premium of the cap - premium of the floor
+ * 
  * @author OA
  *
  *
@@ -40,17 +42,18 @@ public class IRCapFloorCollarTrade extends Trade<Product> {
 	 * 
 	 */
 	private static final long serialVersionUID = 2669121671559387940L;
-	
+
 	private BigDecimal capStrike;
-	
+
 	private BigDecimal floorStrike;
-	
+
 	private IRForwardTrade<Product> irForwardTrade;
-	
+
 	public static String IR_CAP_FLOOR_COLLAR = "IRCapFloorCollar";
-	
+
 	public static enum Type {
-		CAP,FLOOR,COLLAR;
+		CAP, FLOOR, COLLAR;
+
 		public String toString() {
 			switch (this) {
 			case CAP:
@@ -75,7 +78,7 @@ public class IRCapFloorCollarTrade extends Trade<Product> {
 	public boolean isCollar() {
 		return (capStrike != null && floorStrike != null);
 	}
-	
+
 	public String getProductType() {
 		if (isCap()) {
 			return "IRCap";
@@ -104,14 +107,20 @@ public class IRCapFloorCollarTrade extends Trade<Product> {
 	public void setFloorStrike(BigDecimal floorStrike) {
 		this.floorStrike = floorStrike;
 	}
-	
-	
+
 	public IRForwardTrade<Product> getIrForwardTrade() {
-		return irForwardTrade;
+		return TradistaModelUtil.clone(irForwardTrade);
 	}
 
 	public void setIrForwardTrade(IRForwardTrade<Product> irForwardTrade) {
 		this.irForwardTrade = irForwardTrade;
 	}
-	
+
+	@Override
+	public IRCapFloorCollarTrade clone() {
+		IRCapFloorCollarTrade irCapFloorCollarTrade = (IRCapFloorCollarTrade) super.clone();
+		irCapFloorCollarTrade.irForwardTrade = TradistaModelUtil.clone(irForwardTrade);
+		return irCapFloorCollarTrade;
+	}
+
 }

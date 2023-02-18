@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.TreeMap;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.legalentity.model.LegalEntity;
 
 /*
@@ -34,11 +35,6 @@ public abstract class GenerableCurve extends Curve<LocalDate, BigDecimal> implem
 	 */
 	private static final long serialVersionUID = -984285608945441710L;
 
-	public GenerableCurve() {
-		super();
-		points = new TreeMap<LocalDate, BigDecimal>();
-	}
-
 	public GenerableCurve(String name, LegalEntity po) {
 		super(name, po);
 		points = new TreeMap<LocalDate, BigDecimal>();
@@ -49,15 +45,15 @@ public abstract class GenerableCurve extends Curve<LocalDate, BigDecimal> implem
 	private String interpolator;
 
 	private String instance;
-	
+
 	private QuoteSet quoteSet;
-	
+
 	private List<Quote> quotes;
-	
+
 	private LocalDate quoteDate;
 
 	public QuoteSet getQuoteSet() {
-		return quoteSet;
+		return TradistaModelUtil.clone(quoteSet);
 	}
 
 	public void setQuoteSet(QuoteSet quoteSet) {
@@ -91,9 +87,10 @@ public abstract class GenerableCurve extends Curve<LocalDate, BigDecimal> implem
 	public boolean isGenerated() {
 		return (algorithm != null);
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public List<Quote> getQuotes() {
-		return quotes;
+		return (List<Quote>) TradistaModelUtil.deepCopy(quotes);
 	}
 
 	public void setQuotes(List<Quote> quotes) {
@@ -106,6 +103,15 @@ public abstract class GenerableCurve extends Curve<LocalDate, BigDecimal> implem
 
 	public void setQuoteDate(LocalDate quoteDate) {
 		this.quoteDate = quoteDate;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public GenerableCurve clone() {
+		GenerableCurve curve = (GenerableCurve) super.clone();
+		curve.quoteSet = TradistaModelUtil.clone(quoteSet);
+		curve.quotes = (List<Quote>) TradistaModelUtil.deepCopy(quotes);
+		return curve;
 	}
 
 }

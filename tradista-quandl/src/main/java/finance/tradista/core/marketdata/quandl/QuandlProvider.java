@@ -75,9 +75,9 @@ public class QuandlProvider implements Provider {
 				for (Map.Entry<String, String> entry : fieldMapping.entrySet()) {
 					if (!StringUtils.isEmpty(entry.getValue())) {
 						for (final Row row : result) {
-							QuoteValue quoteValue = new QuoteValue(java.time.LocalDate.now());
+							QuoteValue quoteValue = new QuoteValue(java.time.LocalDate.now(),
+									feedConfig.getMapping().get(data));
 							quoteValue.setEnteredDate(java.time.LocalDate.now());
-							quoteValue.setQuote(feedConfig.getMapping().get(data));
 							quoteValue.setSourceName(feedConfig.getFeedType().toString());
 							Double quandlValue = row.getDouble(entry.getValue());
 							if (quandlValue != null) {

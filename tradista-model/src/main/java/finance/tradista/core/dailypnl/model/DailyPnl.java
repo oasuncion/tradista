@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import finance.tradista.core.calendar.model.Calendar;
+import finance.tradista.core.common.model.Id;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 import finance.tradista.core.position.model.PositionDefinition;
 
@@ -33,41 +35,39 @@ public class DailyPnl extends TradistaObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 8562519011584539331L;
-	
+
+	@Id
 	private PositionDefinition positionDefinition;
-	
+
+	@Id
 	private Calendar calendar;
-	
+
+	@Id
 	private LocalDate valueDate;
-	
+
 	private BigDecimal pnl;
-	
+
 	private BigDecimal realizedPnl;
-	
+
 	private BigDecimal unrealizedPnl;
 
-	public PositionDefinition getPositionDefinition() {
-		return positionDefinition;
+	public DailyPnl(PositionDefinition positionDefinition, Calendar calendar, LocalDate valueDate) {
+		super();
+		this.positionDefinition = positionDefinition;
+		this.calendar = calendar;
+		this.valueDate = valueDate;
 	}
 
-	public void setPositionDefinition(PositionDefinition positionDefinition) {
-		this.positionDefinition = positionDefinition;
+	public PositionDefinition getPositionDefinition() {
+		return (PositionDefinition) TradistaModelUtil.clone(positionDefinition);
 	}
 
 	public Calendar getCalendar() {
-		return calendar;
-	}
-
-	public void setCalendar(Calendar calendar) {
-		this.calendar = calendar;
+		return TradistaModelUtil.clone(calendar);
 	}
 
 	public LocalDate getValueDate() {
 		return valueDate;
-	}
-
-	public void setValueDate(LocalDate valueDate) {
-		this.valueDate = valueDate;
 	}
 
 	public BigDecimal getPnl() {
@@ -95,40 +95,11 @@ public class DailyPnl extends TradistaObject {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((calendar == null) ? 0 : calendar.hashCode());
-		result = prime * result + ((positionDefinition == null) ? 0 : positionDefinition.hashCode());
-		result = prime * result + ((valueDate == null) ? 0 : valueDate.hashCode());
-		return result;
+	public DailyPnl clone() {
+		DailyPnl dailyPnl = (DailyPnl) super.clone();
+		dailyPnl.calendar = TradistaModelUtil.clone(calendar);
+		dailyPnl.positionDefinition = TradistaModelUtil.clone(positionDefinition);
+		return dailyPnl;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DailyPnl other = (DailyPnl) obj;
-		if (calendar == null) {
-			if (other.calendar != null)
-				return false;
-		} else if (!calendar.equals(other.calendar))
-			return false;
-		if (positionDefinition == null) {
-			if (other.positionDefinition != null)
-				return false;
-		} else if (!positionDefinition.equals(other.positionDefinition))
-			return false;
-		if (valueDate == null) {
-			if (other.valueDate != null)
-				return false;
-		} else if (!valueDate.equals(other.valueDate))
-			return false;
-		return true;
-	}		
-	
 }

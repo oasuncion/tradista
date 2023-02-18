@@ -1,5 +1,6 @@
 package finance.tradista.ai.reasoning.prm.probability.model;
 
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
@@ -34,25 +35,25 @@ public class IfExpression extends TradistaObject {
 	private ProbabilityDistribution ifClause;
 
 	private ProbabilityDistribution elseClause;
-	
+
 	private ComplexProbabilityDistribution complexProbabilityDistribution;
-	
+
 	private short position;
 
 	public Predicate getCondition() {
-		return condition;
+		return TradistaModelUtil.clone(condition);
 	}
 
 	public ProbabilityDistribution getIfClause() {
-		return ifClause;
+		return TradistaModelUtil.clone(ifClause);
 	}
 
 	public ProbabilityDistribution getElseClause() {
-		return elseClause;
+		return TradistaModelUtil.clone(elseClause);
 	}
 
 	public ComplexProbabilityDistribution getComplexProbabilityDistribution() {
-		return complexProbabilityDistribution;
+		return TradistaModelUtil.clone(complexProbabilityDistribution);
 	}
 
 	public void setComplexProbabilityDistribution(ComplexProbabilityDistribution complexProbabilityDistribution) {
@@ -77,6 +78,16 @@ public class IfExpression extends TradistaObject {
 
 	public void setElseClause(ProbabilityDistribution elseClause) {
 		this.elseClause = elseClause;
-	}	
+	}
+
+	@Override
+	public IfExpression clone() {
+		IfExpression ifExpression = (IfExpression) super.clone();
+		ifExpression.condition = TradistaModelUtil.clone(condition);
+		ifExpression.ifClause = TradistaModelUtil.clone(ifClause);
+		ifExpression.elseClause = TradistaModelUtil.clone(elseClause);
+		ifExpression.complexProbabilityDistribution = TradistaModelUtil.clone(complexProbabilityDistribution);
+		return ifExpression;
+	}
 
 }

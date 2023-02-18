@@ -44,7 +44,7 @@ public class UIConfigurationSQL {
 			stmtGetUIConfiguration.setLong(1, user.getId());
 			try (ResultSet results = stmtGetUIConfiguration.executeQuery()) {
 				while (results.next()) {
-					uiConfiguration = new UIConfiguration();
+					uiConfiguration = new UIConfiguration(user);
 					uiDecimalFormat = new DecimalFormat();
 					uiDecimalFormat.setParseBigDecimal(true);
 					DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -61,7 +61,6 @@ public class UIConfigurationSQL {
 					if (roundingMode != null) {
 						uiDecimalFormat.setRoundingMode(RoundingMode.valueOf(roundingMode));
 					}
-					uiConfiguration.setUser(user);
 					uiConfiguration.setDecimalFormat(uiDecimalFormat);
 					uiConfiguration.setStyle(results.getString("style"));
 				}

@@ -156,8 +156,7 @@ public class DateRulesController extends TradistaControllerAdapter {
 			}
 		});
 		dateRuleName.setCellValueFactory(cellData -> cellData.getValue().getDateRuleName());
-		dateRuleDuration
-				.setCellValueFactory(cellData -> cellData.getValue().getDateRuleDuration());
+		dateRuleDuration.setCellValueFactory(cellData -> cellData.getValue().getDateRuleDuration());
 
 		dateRuleMove.setCellValueFactory(new PropertyValueFactory<DateRuleDurationProperty, List<Button>>("moves"));
 
@@ -181,7 +180,8 @@ public class DateRulesController extends TradistaControllerAdapter {
 							subDateRuleDay.setValue(period.getDays());
 							subDateRuleMonth.setValue(period.getMonths());
 							subDateRuleYear.setValue(period.getYears());
-							subDateRuleName.getSelectionModel().select(new DateRule(newValue.getDateRuleName().getValue()));
+							subDateRuleName.getSelectionModel()
+									.select(new DateRule(newValue.getDateRuleName().getValue()));
 						}
 
 					}
@@ -235,14 +235,9 @@ public class DateRulesController extends TradistaControllerAdapter {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
-				if (dateRule == null) {
-					dateRule = new DateRule();
-				}
 				if (name.isVisible()) {
-					dateRule.setName(name.getText());
+					dateRule = new DateRule(name.getText());
 					nameLabel.setText(name.getText());
-				} else {
-					dateRule.setName(nameLabel.getText());
 				}
 				dateRule.setSequence(isSequence.isSelected());
 				if (isSequence.isSelected()) {
@@ -312,7 +307,6 @@ public class DateRulesController extends TradistaControllerAdapter {
 
 	@FXML
 	protected void copy() {
-		long oldDateRuleId = 0;
 		try {
 			TradistaTextInputDialog dialog = new TradistaTextInputDialog();
 			dialog.setTitle("Date Rule Copy");
@@ -320,14 +314,11 @@ public class DateRulesController extends TradistaControllerAdapter {
 			dialog.setContentText("Please enter the name of the new Date Rule:");
 			Optional<String> result = dialog.showAndWait();
 			if (result.isPresent()) {
-				if (dateRule == null) {
-					dateRule = new DateRule();
-				}
-				dateRule.setName(result.get());
-				dateRule.setSequence(isSequence.isSelected());
+				DateRule copyDateRule = new DateRule(result.get());
+				copyDateRule.setSequence(isSequence.isSelected());
 				if (isSequence.isSelected()) {
 					Map<DateRule, Period> dateRulesPeriods = toDateRulesPeriods(dateRulesDurations.getItems());
-					dateRule.setDateRulesPeriods(dateRulesPeriods);
+					copyDateRule.setDateRulesPeriods(dateRulesPeriods);
 				} else {
 					Set<Month> months = new HashSet<Month>();
 					if (january.isSelected()) {
@@ -366,30 +357,28 @@ public class DateRulesController extends TradistaControllerAdapter {
 					if (december.isSelected()) {
 						months.add(Month.DECEMBER);
 					}
-					dateRule.setDateRollingConvention(drc.getValue());
-					dateRule.setMonths(months);
-					dateRule.setPosition(position.getValue());
+					copyDateRule.setDateRollingConvention(drc.getValue());
+					copyDateRule.setMonths(months);
+					copyDateRule.setPosition(position.getValue());
 					if (day.getValue() != null && !day.getValue().equals("Any")) {
-						dateRule.setDay(DayOfWeek.valueOf(day.getValue()));
+						copyDateRule.setDay(DayOfWeek.valueOf(day.getValue()));
 					}
-					dateRule.setPosition(position.getValue());
+					copyDateRule.setPosition(position.getValue());
 					List<Calendar> calendars = calendarsList.getItems();
 					if (!calendars.isEmpty()) {
-						dateRule.setCalendars(new HashSet<Calendar>(calendars));
+						copyDateRule.setCalendars(new HashSet<Calendar>(calendars));
 					}
 					if (dateOffset.getText() != null) {
-						dateRule.setDateOffset(Short.parseShort(dateOffset.getText()));
+						copyDateRule.setDateOffset(Short.parseShort(dateOffset.getText()));
 					}
 				}
-				oldDateRuleId = dateRule.getId();
-				dateRule.setId(0);
-				dateRule.setId(dateRuleBusinessDelegate.saveDateRule(dateRule));
+				copyDateRule.setId(dateRuleBusinessDelegate.saveDateRule(copyDateRule));
+				dateRule = copyDateRule;
 				name.setVisible(false);
 				nameLabel.setVisible(true);
 				nameLabel.setText(dateRule.getName());
 			}
 		} catch (TradistaBusinessException tbe) {
-			dateRule.setId(oldDateRuleId);
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 			alert.showAndWait();
 		}

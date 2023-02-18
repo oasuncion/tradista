@@ -288,9 +288,14 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 				volatilitySurface);
 	}
 
-	private void buildSurface() throws TradistaBusinessException {
+	private void buildSurface(EquityOptionVolatilitySurface equityOptionVolatilitySurface)
+			throws TradistaBusinessException {
 		if (surface == null) {
-			surface = new EquityOptionVolatilitySurface();
+			String name = null;
+			if (volatilitySurface.getValue() != null) {
+				name = this.volatilitySurface.getValue().getName();
+			}
+			surface = new EquityOptionVolatilitySurface(name, ClientUtil.getCurrentUser().getProcessingOrg());
 		}
 		surface.setQuotes(new ArrayList<Quote>(selectedQuotesList.getItems()));
 
@@ -298,7 +303,6 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 		surface.setPoints(surfacePoints);
 
 		surface.setQuoteSet(quoteSet.getValue());
-		surface.setProcessingOrg(ClientUtil.getCurrentUser().getProcessingOrg());
 
 		List<BigDecimal> strikes = TradistaGUIUtil.parseAmounts(selectedStrikes.getItems(), "Strike/Price Ratio");
 		surface.setStrikes(strikes);
@@ -306,9 +310,6 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 			surface.setInstance(instanceComboBox.getValue());
 			surface.setInterpolator(interpolatorComboBox.getValue());
 			surface.setAlgorithm(algorithmComboBox.getValue());
-		}
-		if (volatilitySurface.getValue() != null) {
-			surface.setName(this.volatilitySurface.getValue().getName());
 		}
 		surface.setQuoteDate(quoteDate.getValue());
 	}
@@ -323,7 +324,7 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
-				buildSurface();
+				buildSurface(surface);
 				surface.setId(equityOptionVolatilitySurfaceBusinessDelegate.saveEquityOptionVolatilitySurface(surface));
 				// Refresh of the surfaces combobox
 				TradistaGUIUtil.fillComboBox(
@@ -338,7 +339,6 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 
 	@FXML
 	protected void copy() {
-		long oldVolatilitySurfaceId = 0;
 		boolean surfaceLoaded = (surface != null);
 		if (!surfaceLoaded) {
 			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, "Please select a volatility Surface.");
@@ -350,24 +350,20 @@ public class EquityOptionVolatilitySurfacesController extends TradistaVolatility
 				dialog.setHeaderText("Surface name selection");
 				dialog.setContentText("Please choose a Surface name:");
 
-				// Traditional way to get the response value.
 				Optional<String> result = dialog.showAndWait();
-				// The Java 8 way to get the response value (with lambda
-				// expression).
-				result.ifPresent(name -> surface.setName(name));
 				if (result.isPresent()) {
-					buildSurface();
-					oldVolatilitySurfaceId = surface.getId();
-					surface.setId(0);
-					surface.setId(
-							equityOptionVolatilitySurfaceBusinessDelegate.saveEquityOptionVolatilitySurface(surface));
+					EquityOptionVolatilitySurface copyEquityOptionVolatilitySurface = new EquityOptionVolatilitySurface(
+							result.get(), ClientUtil.getCurrentUser().getProcessingOrg());
+					buildSurface(copyEquityOptionVolatilitySurface);
+					copyEquityOptionVolatilitySurface.setId(equityOptionVolatilitySurfaceBusinessDelegate
+							.saveEquityOptionVolatilitySurface(copyEquityOptionVolatilitySurface));
+					surface = copyEquityOptionVolatilitySurface;
 					// Refresh of the surfaces combobox
 					TradistaGUIUtil.fillComboBox(
 							equityOptionVolatilitySurfaceBusinessDelegate.getAllEquityOptionVolatilitySurfaces(),
 							volatilitySurface);
 				}
 			} catch (TradistaBusinessException tbe) {
-				surface.setId(oldVolatilitySurfaceId);
 				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
 				alert.showAndWait();
 			}

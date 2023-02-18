@@ -704,7 +704,6 @@ public class PricingParameterController extends TradistaControllerAdapter {
 			Optional<ButtonType> result = confirmation.showAndWait();
 			if (result.get() == ButtonType.OK) {
 				buildPricingParameter(pricingParameter);
-				// pricingParameter.setId(pricingParam.getSelectionModel().getSelectedItem().getId());
 				pricingParameter.setId(pricerBusinessDelegate.savePricingParameter(pricingParameter));
 			}
 

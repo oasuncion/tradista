@@ -279,8 +279,6 @@ public class BondDefinitionController implements TradistaController {
 			bond.setCouponType(couponType.getValue());
 			bond.setCurrency(currency.getValue());
 			bond.setDatedDate(datedDate.getValue());
-			// bond.setExchange(exchange.getValue());
-			// bond.setIsin(isin.getText());
 			bond.setIssueDate(issueDate.getValue());
 			if (!issuePrice.getText().isEmpty()) {
 				bond.setIssuePrice(TradistaGUIUtil.parseAmount(issuePrice.getText(), "Issue Price"));

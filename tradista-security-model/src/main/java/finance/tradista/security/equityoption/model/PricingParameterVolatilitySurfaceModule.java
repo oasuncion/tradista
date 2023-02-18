@@ -70,10 +70,8 @@ public class PricingParameterVolatilitySurfaceModule extends PricingParameterMod
 	@Override
 	public PricingParameterVolatilitySurfaceModule clone() {
 		PricingParameterVolatilitySurfaceModule pricingParameterVolatilitySurfaceModule = (PricingParameterVolatilitySurfaceModule) super.clone();
-		if (volatilitySurfaces != null) {
-			pricingParameterVolatilitySurfaceModule.volatilitySurfaces = (Map<Equity, EquityOptionVolatilitySurface>) TradistaModelUtil
-					.deepCopy(volatilitySurfaces);
-		}
+		pricingParameterVolatilitySurfaceModule.volatilitySurfaces = (Map<Equity, EquityOptionVolatilitySurface>) TradistaModelUtil
+				.deepCopy(volatilitySurfaces);
 		return pricingParameterVolatilitySurfaceModule;
 	}
 

@@ -47,7 +47,6 @@ public class BookSQL {
 					LegalEntity processingOrg = null;
 					if (poId > 0) {
 						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
-						;
 					}
 					book = new Book(results.getString("name"), processingOrg);
 					book.setId(results.getLong("id"));

@@ -112,7 +112,6 @@ public class FXCurveSQL {
 				LegalEntity processingOrg = null;
 				if (poId > 0) {
 					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
-					;
 				}
 				FXCurve fxCurve = new FXCurve(results.getString("name"), processingOrg);
 				fxCurve.setId(results.getLong("id"));
@@ -385,7 +384,6 @@ public class FXCurveSQL {
 					LegalEntity processingOrg = null;
 					if (poId > 0) {
 						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
-						;
 					}
 					fxCurve = new FXCurve(results.getString("name"), processingOrg);
 					fxCurve.setId(results.getLong("id"));

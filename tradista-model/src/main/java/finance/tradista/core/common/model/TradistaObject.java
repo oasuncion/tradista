@@ -50,10 +50,22 @@ public abstract class TradistaObject implements Serializable, Cloneable {
 		return id;
 	}
 
+	/**
+	 * Important: Use with caution, setId is expected to be used in the DAL only.
+	 * Modifying the id programmatically can have undesired side effects as the id
+	 * is used in the equals method.
+	 * 
+	 * @param id the id identifies an object in Tradista.
+	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
+	/**
+	 * hashCode is calculated using the object composite key (@see
+	 * finance.tradista.core.common.model.Id). If the object doesn't have a
+	 * composite key, Object's hashCode implementation is used.
+	 */
 	@Override
 	public int hashCode() {
 		List<Object> values = getAllIdValues();
@@ -63,6 +75,14 @@ public abstract class TradistaObject implements Serializable, Cloneable {
 		return Objects.hash(values);
 	}
 
+	/**
+	 * Two Tradista objects are equal if they have the same id and if this id is
+	 * positive (this means that they both refer to the same object that have been
+	 * persisted in Tradista). If they don't have both positive ids, they are equal
+	 * if they have the same composite key (@see
+	 * finance.tradista.core.common.model.Id). In all other cases, they are
+	 * different.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -73,6 +93,10 @@ public abstract class TradistaObject implements Serializable, Cloneable {
 		}
 		if (getClass() != obj.getClass()) {
 			return false;
+		}
+		// If both objects were persisted, they are equal only if they have the same id
+		if (id > 0 && ((TradistaObject) obj).getId() > 0) {
+			return (id == ((TradistaObject) obj).getId());
 		}
 		List<Field> ids = getAllIds();
 		if (ids.isEmpty()) {

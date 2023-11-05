@@ -100,6 +100,10 @@ public abstract class Security extends Product {
 		this.issuePrice = issuePrice;
 	}
 
+	public String toString() {
+		return getIsin() + " - " + getExchange();
+	}
+
 	@Override
 	public Security clone() {
 		Security security = (Security) super.clone();

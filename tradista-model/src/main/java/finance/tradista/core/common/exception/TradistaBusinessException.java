@@ -33,5 +33,9 @@ public class TradistaBusinessException extends Exception {
 	public TradistaBusinessException(String msg) {
 		super(msg);
 	}
+	
+	public TradistaBusinessException(Exception exception) {
+		super(exception);
+	}
 
 }

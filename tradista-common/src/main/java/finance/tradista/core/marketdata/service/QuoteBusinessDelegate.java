@@ -173,6 +173,40 @@ public class QuoteBusinessDelegate {
 				quoteType, value));
 	}
 
+	public Set<QuoteValue> getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(long quoteSetId, String quoteName,
+			QuoteType quoteType, LocalDate startDate, LocalDate endDate) throws TradistaBusinessException {
+		StringBuilder errMsg = new StringBuilder();
+		if (quoteSetId <= 0) {
+			errMsg.append(String.format("The quote set id must be positive.%n"));
+		}
+		if (quoteName == null) {
+			errMsg.append(String.format("The quote name cannot be null.%n"));
+		} else {
+			if (quoteName.isEmpty()) {
+				errMsg.append(String.format("The quote name cannot be empty.%n"));
+			}
+		}
+		if (quoteType == null) {
+			errMsg.append(String.format("The quote type cannot be null.%n"));
+		}
+		if (startDate == null) {
+			errMsg.append(String.format("The start date cannot be null.%n"));
+		}
+		if (endDate == null) {
+			errMsg.append(String.format("The end date cannot be null.%n"));
+		}
+		if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+			errMsg.append(
+					String.format("The start date (%tD) cannot be after the end date (%tD).%n", startDate, endDate));
+		}
+
+		if (errMsg.length() > 0) {
+			throw new TradistaBusinessException(errMsg.toString());
+		}
+		return SecurityUtil.run(() -> quoteService.getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(quoteSetId, quoteName,
+				quoteType, startDate, endDate));
+	}
+
 	public Set<QuoteValue> getQuoteValuesByQuoteSetIdTypeDateAndQuoteNames(long quoteSetId, QuoteType quoteType,
 			LocalDate date, String... quoteNames) {
 		return SecurityUtil.run(() -> quoteService.getQuoteValuesByQuoteSetIdTypeDateAndQuoteNames(quoteSetId,

@@ -186,6 +186,8 @@ public class TransferReportController extends TradistaControllerAdapter {
 					TableRow<?> currentRow = getTableRow();
 
 					if (!isEmpty()) {
+						// See https://www.htmlcodes.ws/color/html-color-tester.cfm
+						// TO DO: use a Util class for colors
 						if (item.equals(Transfer.Status.KNOWN)) {
 							// lightgreen color
 							currentRow.setStyle("-fx-background-color:rgba(144, 238, 144, .7)");
@@ -197,6 +199,10 @@ public class TransferReportController extends TradistaControllerAdapter {
 						if (item.equals(Transfer.Status.CANCELED)) {
 							// indianred color
 							currentRow.setStyle("-fx-background-color:rgba(205,92,92,.7)");
+						}
+						if (item.equals(Transfer.Status.POTENTIAL)) {
+							// lightskyblue
+							currentRow.setStyle("-fx-background-color:rgba(135, 206, 250,.7)");
 						}
 					}
 				}

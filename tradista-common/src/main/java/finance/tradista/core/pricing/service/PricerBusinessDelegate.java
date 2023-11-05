@@ -103,6 +103,20 @@ public class PricerBusinessDelegate {
 		return SecurityUtil.run(() -> pricerService.getPricingParameterById(id));
 	}
 
+	public PricingParameter getPricingParameterByNameAndPoId(String name, long poId) throws TradistaBusinessException {
+		StringBuilder errMsg = new StringBuilder();
+		if (StringUtils.isEmpty(name)) {
+			errMsg.append(String.format("The name is mandatory."));
+		} 
+		if (poId < 0) {
+			errMsg.append(String.format("The po id (%s) cannot be negative.", poId));
+		} 
+		if (!errMsg.isEmpty()) {
+			throw new TradistaBusinessException("The name is mandatory.");
+		}
+		return SecurityUtil.run(() -> pricerService.getPricingParameterByNameAndPoId(name, poId));
+	}
+
 	public Set<PricingParameter> getAllPricingParameters() {
 		return SecurityUtil.run(() -> pricerService.getAllPricingParameters());
 	}

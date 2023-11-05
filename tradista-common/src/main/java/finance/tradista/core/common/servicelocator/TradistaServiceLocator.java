@@ -47,6 +47,7 @@ import finance.tradista.core.trade.service.TradeService;
 import finance.tradista.core.transfer.service.FixingErrorService;
 import finance.tradista.core.transfer.service.TransferService;
 import finance.tradista.core.user.service.UserService;
+import finance.tradista.core.workflow.service.WorkflowService;
 import finance.tradista.fx.common.service.FXInformationService;
 import finance.tradista.fx.fx.service.FXPricerService;
 import finance.tradista.fx.fx.service.FXTradeService;
@@ -88,6 +89,9 @@ import finance.tradista.security.equityoption.service.EquityOptionPricerService;
 import finance.tradista.security.equityoption.service.EquityOptionService;
 import finance.tradista.security.equityoption.service.EquityOptionTradeService;
 import finance.tradista.security.equityoption.service.EquityOptionVolatilitySurfaceService;
+import finance.tradista.security.gcrepo.service.GCBasketService;
+import finance.tradista.security.gcrepo.service.GCRepoPricerService;
+import finance.tradista.security.gcrepo.service.GCRepoTradeService;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -128,6 +132,8 @@ public class TradistaServiceLocator {
 	private static final String SECURITY_COMMON_SERVICE_PACKAGE = "finance.tradista.security.common.service";
 
 	private static final String BOND_SERVICE_PACKAGE = "finance.tradista.security.bond.service";
+
+	private static final String GC_REPO_SERVICE_PACKAGE = "finance.tradista.security.gcrepo.service";
 
 	private static final String EQUITY_SERVICE_PACKAGE = "finance.tradista.security.equity.service";
 
@@ -174,6 +180,8 @@ public class TradistaServiceLocator {
 	private static final String POSITION_SERVICE_PACKAGE = "finance.tradista.core.position.service";
 
 	private static final String TRANSFER_SERVICE_PACKAGE = "finance.tradista.core.transfer.service";
+	
+	private static final String WORKFLOW_SERVICE_PACKAGE = "finance.tradista.core.workflow.service";
 
 	private static final String CONFIGURATION_SERVICE_PACKAGE = "finance.tradista.core.configuration.service";
 
@@ -425,6 +433,18 @@ public class TradistaServiceLocator {
 		return (BondPricerService) getService(APP, SECURITY_EJB, BOND_SERVICE_PACKAGE, "BondPricerService");
 	}
 
+	public GCRepoTradeService getGCRepoTradeService() {
+		return (GCRepoTradeService) getService(APP, SECURITY_EJB, GC_REPO_SERVICE_PACKAGE, "GCRepoTradeService");
+	}
+
+	public GCBasketService getGCBasketService() {
+		return (GCBasketService) getService(APP, SECURITY_EJB, GC_REPO_SERVICE_PACKAGE, "GCBasketService");
+	}
+
+	public GCRepoPricerService getGCRepoPricerService() {
+		return (GCRepoPricerService) getService(APP, SECURITY_EJB, GC_REPO_SERVICE_PACKAGE, "GCRepoPricerService");
+	}
+
 	public CcySwapTradeService getCcySwapTradeService() {
 		return (CcySwapTradeService) getService(APP, IR_EJB, CCY_SWAP_SERVICE_PACKAGE, "CcySwapTradeService");
 	}
@@ -539,8 +559,8 @@ public class TradistaServiceLocator {
 	}
 
 	public MarketDataConfigurationService getMarketDataConfigurationService() {
-		return (MarketDataConfigurationService) getService(APP, MARKET_DATA_EJB, MARKET_DATA_SERVICE_PACKAGE,
-				"MarketDataConfigurationService");
+		return (MarketDataConfigurationService) getService(MARKET_DATA_APP, MARKET_DATA_EJB,
+				MARKET_DATA_SERVICE_PACKAGE, "MarketDataConfigurationService");
 	}
 
 	public BatchService getBatchService() {
@@ -619,6 +639,10 @@ public class TradistaServiceLocator {
 		}
 
 		return null;
+	}
+
+	public WorkflowService getWorkflowService() {
+		return (WorkflowService) getService(APP, CORE_EJB, WORKFLOW_SERVICE_PACKAGE, "WorkflowService");
 	}
 
 }

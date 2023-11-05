@@ -5,17 +5,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
-
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
+import finance.tradista.core.currency.ui.CurrencyConverter;
 import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.trade.model.Trade;
 import finance.tradista.core.trade.model.Trade.Direction;
@@ -24,6 +19,11 @@ import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.model.EquityTrade;
 import finance.tradista.security.equity.service.EquityBusinessDelegate;
 import finance.tradista.security.equity.service.EquityTradeBusinessDelegate;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 
 /*
  * Copyright 2022 Olivier Asuncion

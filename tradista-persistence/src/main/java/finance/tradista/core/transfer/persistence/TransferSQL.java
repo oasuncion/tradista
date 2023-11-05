@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -269,7 +271,12 @@ public class TransferSQL {
 							stmtSaveTransfer.setNull(5, java.sql.Types.BIGINT);
 						}
 						stmtSaveTransfer.setTimestamp(6, Timestamp.valueOf(transfer.getCreationDateTime()));
-						stmtSaveTransfer.setTimestamp(7, Timestamp.valueOf(transfer.getFixingDateTime()));
+						LocalDateTime fixingDateTime = transfer.getFixingDateTime();
+						if (fixingDateTime != null) {
+							stmtSaveTransfer.setTimestamp(7, Timestamp.valueOf(fixingDateTime));
+						} else {
+							stmtSaveTransfer.setNull(7, Types.TIMESTAMP);
+						}
 						stmtSaveTransfer.setDate(8, Date.valueOf(transfer.getSettlementDate()));
 						stmtSaveTransfer.setString(9, transfer.getPurpose().name());
 						if (transfer.getType().equals(Transfer.Type.CASH)) {
@@ -733,9 +740,16 @@ public class TransferSQL {
 					}
 					((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
 				} else {
-					transfer = new ProductTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
-							results.getDate("settlement_date").toLocalDate(), trade);
-					((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
+					if (product != null) {
+						transfer = new ProductTransfer(book, product,
+								TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade);
+						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
+					} else {
+						transfer = new ProductTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade);
+						((ProductTransfer) transfer).setQuantity(results.getBigDecimal("quantity"));
+					}
 				}
 				transfer.setId(results.getLong("id"));
 				transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));

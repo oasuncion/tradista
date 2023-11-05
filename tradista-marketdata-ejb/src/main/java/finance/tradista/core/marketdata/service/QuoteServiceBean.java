@@ -142,6 +142,13 @@ public class QuoteServiceBean implements QuoteService {
 	}
 
 	@Override
+	public Set<QuoteValue> getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(long quoteSetId, String quoteName,
+			QuoteType quoteType, LocalDate startDate, LocalDate endDate) {
+		return QuoteSQL.getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(quoteSetId, quoteName, quoteType, startDate,
+				endDate);
+	}
+
+	@Override
 	public Set<QuoteValue> getQuoteValuesByQuoteSetIdTypeDateAndQuoteNames(long quoteSetId, QuoteType quoteType,
 			LocalDate date, String... quoteNames) {
 		return QuoteSQL.getQuoteValuesByQuoteSetIdTypeDateAndQuoteNames(quoteSetId, quoteType, date, quoteNames);

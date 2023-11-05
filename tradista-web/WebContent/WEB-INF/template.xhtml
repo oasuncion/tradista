@@ -17,72 +17,15 @@
 	<h:outputScript name="js/layout.js" library="poseidon-layout" />
 	<h:outputScript name="js/prism.js" library="poseidon-layout" />
 	<ui:insert name="head" />
-	<style type="text/css">
-
-.ui-panel {
-	margin: 40px;
-}
-
-
-.ui-column-filter{
-
-    /*overrides default value*/
-    width : 80px !important;
-}
-
-.ui-sortable-column{
-
-    /*overrides default value*/
-    width : 80px !important;
-}
-
-.ui-panelgrid td {
-   padding: 10px !important;
- }
-
-.TradistaOneMenu.ui-selectonemenu .ui-selectonemenu-label {
-font-size: 12px;
-height: 10px !important;
-}
-
-.TradistaOneMenu.ui-selectonemenu {
-font-size: 12px;
-height: 30px !important;
-}
-
-.TradistaOneMenu.ui-selectonemenu .ui-selectonemenu-trigger {
-height: 30px !important;
-}
-
-.TradistaInput input
-{
-    font-size: 12px;
-height: 30px !important;
-width: 100px
-}
-
-.ui-inputfield
-{
-    font-size: 12px;
-height: 30px !important;
-width: 100px
-}
-
-.ui-widget-content .ui-panelgrid-even  {
-    height: 10px !important;
-}
-
-.tradista {
-
-font-weight: bold;
-font-size: 25px;
-}
-
-
-</style>
+	<h:outputStylesheet name="tradista.css" />
+	  <style>
+            body {
+                background-color: #197B84;         
+            }
+        </style>
 </h:head>
 
-<h:body styleClass="main-body #{guestPreferences.inputStyleClass}">
+<h:body>
 
 	<div
 		class="layout-wrapper layout-horizontal layout-topbar-#{guestPreferences.topbarTheme}  layout-menu-horizontal  #{guestPreferences.menuMode} #{guestPreferences.orientationRTL ? 'layout-rtl' : null}">

@@ -7,19 +7,19 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
-
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.util.ClientUtil;
 import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.trade.model.Trade;
 import finance.tradista.core.trade.service.TradeBusinessDelegate;
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.model.EquityTrade;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 
 /*
  * Copyright 2022 Olivier Asuncion
@@ -52,7 +52,7 @@ public class TradesListView implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		posDef = new PositionDefinition(StringUtils.EMPTY, LoginView.getCurrentUser().getProcessingOrg());
+		posDef = new PositionDefinition(StringUtils.EMPTY, ClientUtil.getCurrentUser().getProcessingOrg());
 		posDef.setProductType(Equity.EQUITY);
 		try {
 			posDef.setBook(new BookBusinessDelegate().getBookByName("Demo Book"));

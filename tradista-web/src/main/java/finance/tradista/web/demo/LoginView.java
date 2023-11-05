@@ -2,6 +2,8 @@ package finance.tradista.web.demo;
 
 import java.io.Serializable;
 
+import finance.tradista.core.common.util.ClientUtil;
+import finance.tradista.core.user.service.UserBusinessDelegate;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
@@ -9,9 +11,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-
-import finance.tradista.core.user.model.User;
-import finance.tradista.core.user.service.UserBusinessDelegate;
 
 /*
  * Copyright 2022 Olivier Asuncion
@@ -43,12 +42,6 @@ public class LoginView implements Serializable {
 
 	private String password;
 
-	public static User getCurrentUser() {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		ExternalContext externalContext = fc.getExternalContext();
-		return new UserBusinessDelegate().getUserByLogin(externalContext.getUserPrincipal().getName());
-	}
-
 	public String getLogin() {
 		return login;
 	}
@@ -68,10 +61,12 @@ public class LoginView implements Serializable {
 	public String login() {
 
 		FacesContext context = FacesContext.getCurrentInstance();
+		ExternalContext externalContext = context.getExternalContext();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-
 		try {
 			request.login(getLogin(), getPassword());
+			ClientUtil.setCurrentUser(
+					new UserBusinessDelegate().getUserByLogin(externalContext.getUserPrincipal().getName()));
 		} catch (ServletException e) {
 			e.printStackTrace();
 			context.addMessage(null, new FacesMessage("Login failed " + e));

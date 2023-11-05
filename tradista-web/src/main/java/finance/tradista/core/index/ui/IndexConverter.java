@@ -1,7 +1,10 @@
-package finance.tradista.web.demo;
+package finance.tradista.core.index.ui;
 
 import java.io.Serializable;
 
+import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.index.model.Index;
+import finance.tradista.core.index.service.IndexBusinessDelegate;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
@@ -9,12 +12,8 @@ import jakarta.faces.convert.ConverterException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
-import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.currency.model.Currency;
-import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
-
 /*
- * Copyright 2022 Olivier Asuncion
+ * Copyright 2023 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -35,32 +34,32 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class CurrencyConverter implements Serializable, Converter<Currency> {
+public class IndexConverter implements Serializable, Converter<Index> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3802860683043711768L;
-	private CurrencyBusinessDelegate currencyBusinessDelegate;
+	private static final long serialVersionUID = 1L;
+	private IndexBusinessDelegate indexBusinessDelegate;
 
-	public CurrencyConverter() {
-		currencyBusinessDelegate = new CurrencyBusinessDelegate();
+	public IndexConverter() {
+		indexBusinessDelegate = new IndexBusinessDelegate();
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component, Currency currency) {
-		return currency.toString();
+	public String getAsString(FacesContext context, UIComponent component, Index index) {
+		return index.toString();
 	}
 
 	@Override
-	public Currency getAsObject(FacesContext context, UIComponent component, String value) {
-		Currency currency = null;
+	public Index getAsObject(FacesContext context, UIComponent component, String value) {
+		Index index = null;
 		try {
-			currency = currencyBusinessDelegate.getCurrencyByIsoCode(value);
+			index = indexBusinessDelegate.getIndexByName(value);
 		} catch (TradistaBusinessException tbe) {
-			throw new ConverterException(String.format("Could not convert currency %s", value), tbe);
+			throw new ConverterException(String.format("Could not convert index %s", value), tbe);
 		}
-		return currency;
+		return index;
 	}
 
 }

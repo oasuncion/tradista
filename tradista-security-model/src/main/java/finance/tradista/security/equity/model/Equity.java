@@ -116,10 +116,6 @@ public class Equity extends Security {
 		return EQUITY;
 	}
 
-	public String toString() {
-		return getIsin() + " - " + getExchange();
-	}
-
 	@Override
 	public Equity clone() {
 		Equity equity = (Equity) super.clone();

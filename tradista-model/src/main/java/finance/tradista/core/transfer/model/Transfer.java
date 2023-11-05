@@ -39,7 +39,7 @@ public abstract class Transfer extends TradistaObject {
 	private static final long serialVersionUID = 3471863038215096341L;
 
 	public static enum Status {
-		UNKNOWN, KNOWN, CANCELED;
+		UNKNOWN, KNOWN, POTENTIAL, CANCELED;
 
 		public String toString() {
 			switch (this) {
@@ -49,6 +49,8 @@ public abstract class Transfer extends TradistaObject {
 				return "Known";
 			case CANCELED:
 				return "Canceled";
+			case POTENTIAL:
+				return "Potential";
 			}
 			return super.toString();
 		}
@@ -68,6 +70,8 @@ public abstract class Transfer extends TradistaObject {
 				return KNOWN;
 			case "Canceled":
 				return CANCELED;
+			case "Potential":
+				return POTENTIAL;
 			}
 			return null;
 		}

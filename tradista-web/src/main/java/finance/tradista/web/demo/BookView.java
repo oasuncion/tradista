@@ -46,43 +46,67 @@ public class BookView implements Serializable {
 
 	private static final long serialVersionUID = -7107650532883558795L;
 
-	private DonutChartModel donutModel;
+	private DonutChartModel productDonutModel;
+
+	private DonutChartModel cashDonutModel;
 
 	private BookBusinessDelegate bookBusinessDelegate;
 
 	@PostConstruct
 	public void init() {
 		bookBusinessDelegate = new BookBusinessDelegate();
-		donutModel = new DonutChartModel();
+		productDonutModel = new DonutChartModel();
+		cashDonutModel = new DonutChartModel();
 		loadBook();
 	}
 
-	public DonutChartModel getDonutModel() {
-		return donutModel;
+	public DonutChartModel getProductDonutModel() {
+		return productDonutModel;
 	}
 
-	public void setDonutModel(DonutChartModel donutModel) {
-		this.donutModel = donutModel;
+	public void setProductDonutModel(DonutChartModel productDonutModel) {
+		this.productDonutModel = productDonutModel;
+	}
+
+	public DonutChartModel getCashDonutModel() {
+		return cashDonutModel;
+	}
+
+	public void setCashDonutModel(DonutChartModel cashDonutModel) {
+		this.cashDonutModel = cashDonutModel;
 	}
 
 	public void loadBook() {
-		ChartData data = new ChartData();
+		try {
+			refresh(new BookBusinessDelegate().getBookByName("Demo Book"));
+		} catch (TradistaBusinessException tbe) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+		}
+	}
+
+	public void refresh(Book book) {
+		ChartData productData = new ChartData();
+		ChartData currencyData = new ChartData();
 		Map<String, Map<String, BigDecimal>> bookContent = null;
 
-		DonutChartDataSet dataSet = new DonutChartDataSet();
-		List<Number> values = new ArrayList<>();
+		DonutChartDataSet productDataSet = new DonutChartDataSet();
+		DonutChartDataSet currencyDataSet = new DonutChartDataSet();
+		List<Number> productValues = new ArrayList<>();
+		List<Number> currencyValues = new ArrayList<>();
 
-		List<String> bgColors = new ArrayList<>();
-		bgColors.add(ColorUtil.getColorsList().get(0));
-		bgColors.add(ColorUtil.getColorsList().get(1));
-		bgColors.add(ColorUtil.getColorsList().get(2));
+		List<String> blueColors = new ArrayList<>();
+		blueColors.addAll(ColorUtil.getBlueColorsList());
 
-		data.addChartDataSet(dataSet);
-		List<String> labels = new ArrayList<>();
+		List<String> redColors = new ArrayList<>();
+		redColors.addAll(ColorUtil.getRedColorsList());
 
-		Book book = null;
+		productData.addChartDataSet(productDataSet);
+		currencyData.addChartDataSet(currencyDataSet);
+		List<String> productLabels = new ArrayList<>();
+		List<String> currencyLabels = new ArrayList<>();
+
 		try {
-			book = new BookBusinessDelegate().getBookByName("Demo Book");
 			bookContent = bookBusinessDelegate.getBookContent(book.getId());
 		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(null,
@@ -93,16 +117,27 @@ public class BookView implements Serializable {
 			Map<String, BigDecimal> products = bookContent.get("Product");
 			if (products != null && !products.isEmpty()) {
 				for (Map.Entry<String, BigDecimal> entry : products.entrySet()) {
-					labels.add(entry.getKey());
-					values.add(entry.getValue().doubleValue());
+					productLabels.add(entry.getKey());
+					productValues.add(entry.getValue().doubleValue());
+				}
+			}
+			Map<String, BigDecimal> currencies = bookContent.get("Currency");
+			if (currencies != null && !currencies.isEmpty()) {
+				for (Map.Entry<String, BigDecimal> entry : currencies.entrySet()) {
+					currencyLabels.add(entry.getKey());
+					currencyValues.add(entry.getValue().doubleValue());
 				}
 			}
 		}
 
-		dataSet.setBackgroundColor(bgColors);
-		dataSet.setData(values);
-		data.setLabels(labels);
-		donutModel.setData(data);
+		productDataSet.setBackgroundColor(blueColors);
+		productDataSet.setData(productValues);
+		currencyDataSet.setBackgroundColor(redColors);
+		currencyDataSet.setData(currencyValues);
+		productData.setLabels(productLabels);
+		currencyData.setLabels(currencyLabels);
+		productDonutModel.setData(productData);
+		cashDonutModel.setData(currencyData);
 	}
 
 }

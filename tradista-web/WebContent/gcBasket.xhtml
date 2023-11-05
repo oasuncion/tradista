@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Test Page</ui:define>
+	<ui:define name="viewname">Test Page</ui:define>
+	<ui:define name="content">
+		<div class="card">
+			<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+			<h:form id="dashboardForm">
+				<p:panel id="gcBasket" header="GC Basket"
+					style="width:50%;margin-left:auto;margin-right:auto">
+					<p:messages showDetail="true" closable="true" id="msg">
+						<p:autoUpdate />
+					</p:messages>
+					<div class="card">
+						<p:outputLabel value="GC Basket name :" style="margin-bottom:10px" />
+
+						<p:inputText value="#{gCBasketView.gcBasket.name}"
+							style="font-weight: bold;margin-left:10px;margin-bottom:10px" />
+
+						<p:pickList id="gcBasketPickList"
+							value="#{gCBasketView.securities}" var="security"
+							itemValue="#{security}" itemLabel="#{security.isin}"
+							showSourceControls="true" showTargetControls="true"
+							showCheckbox="true" showSourceFilter="true"
+							showTargetFilter="true" filterMatchMode="contains"
+							responsive="true" converter="securityConverter">
+							<f:facet name="sourceCaption">Available securities</f:facet>
+							<f:facet name="targetCaption">Constituents of GC Basket</f:facet>
+							<p:column style="width:94%">
+								<div class="flex align-items-center">
+									<h:outputText value="#{security.isin} - #{security.exchange}" />
+								</div>
+							</p:column>
+						</p:pickList>
+
+					</div>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="6">
+								<p:commandButton value="Save" styleClass="rounded-button"
+									update="@form">
+									<f:actionListener binding="#{gCBasketView.save()}" />
+								</p:commandButton>
+								<p:commandButton value="Copy" type="button"
+									style="margin-left:10px" styleClass="rounded-button"
+									update="@form" onclick="PF('copy').show()" />
+								<p:commandButton value="New" style="margin-left:10px"
+									styleClass="rounded-button" action="#{gCBasketView.clear()}"
+									update="@form" />
+								<p:outputLabel value="Load by security" style="margin-left:10px" />
+								<p:selectOneMenu value="#{gCBasketView.loadingCriterion}"
+									styleClass="TradistaOneMenu" style="margin-left:10px">
+									<f:selectItems value="#{gCBasketView.allLoadingCriteria}" />
+								</p:selectOneMenu>
+								<p:inputText value="#{gCBasketView.idOrName}"
+									style="margin-left:10px" styleClass="TradistaInput" />
+								<p:commandButton value="Load" style="margin-left:10px"
+									styleClass="rounded-button" action="#{gCBasketView.load()}"
+									update="@form" />
+							</p:column>
+						</p:row>
+					</f:facet>
+
+				</p:panel>
+			</h:form>
+			<h:form>
+				<p:dialog header="Header" widgetVar="copy" minHeight="40"
+					width="350" showEffect="fade" modal="true">
+
+					<p:outputLabel value="Please choose a GC Basket name :"
+						style="margin-bottom:30px" />
+
+					<p:inputText value="#{gCBasketView.copyGCBasketName}"
+						style="font-weight: bold;margin-left:10px;margin-bottom:10px" />
+					<f:facet name="footer">
+						<p:commandButton value="Ok" styleClass="rounded-button"
+							style="width: 6rem" onclick="PF('copy').hide()" update="@form">
+							<f:actionListener binding="#{gCBasketView.copy()}" />
+						</p:commandButton>
+						<p:commandButton value="Cancel" styleClass="rounded-button"
+							onclick="PF('copy').hide()" />
+					</f:facet>
+
+				</p:dialog>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

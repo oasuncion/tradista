@@ -75,6 +75,12 @@ public class PricerServiceBean implements PricerService {
 	public PricingParameter getPricingParameterById(long id) {
 		return PricingParameterSQL.getPricingParameterById(id);
 	}
+	
+	@Interceptors(PricingParameterFilteringInterceptor.class)
+	@Override
+	public PricingParameter getPricingParameterByNameAndPoId(String name, long poId) {
+		return PricingParameterSQL.getPricingParameterByNameAndPoId(name, poId);
+	}
 
 	@Interceptors(PricingParameterFilteringInterceptor.class)
 	@Override

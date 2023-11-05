@@ -137,6 +137,15 @@ public class PricingParameterFilteringInterceptor extends TradistaAuthorizationF
 					}
 				}
 			}
+			if (parameters[0] instanceof String && parameters[1] instanceof Long) {
+				long poId = (Long) parameters[1];
+				if (getCurrentUser().getProcessingOrg().getId() != 0) {
+					if (poId != getCurrentUser().getProcessingOrg().getId()) {
+						errMsg.append(String
+								.format("You are not allowed to access Pricing Parameters of this Processing Org.%n"));
+					}
+				}
+			}
 			if (errMsg.length() > 0) {
 				throw new TradistaBusinessException(errMsg.toString());
 			}

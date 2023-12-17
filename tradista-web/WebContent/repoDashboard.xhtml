@@ -278,16 +278,24 @@
 															styleClass="rounded-button" update="@form">
 															<f:actionListener binding="#{gCRepoTradeView.copy()}" />
 															<f:actionListener binding="#{bookView.loadBook()}" />
+															<f:actionListener
+																binding="#{collateralView.refresh(gCRepoTradeView.id)}" />
 														</p:commandButton>
 														<p:commandButton value="New" style="margin-left:10px"
 															styleClass="rounded-button"
-															action="#{gCRepoTradeView.clear}" update="@form" />
+															action="#{gCRepoTradeView.clear}" update="@form">
+															<f:actionListener
+																binding="#{collateralView.refresh(gCRepoTradeView.id)}" />
+														</p:commandButton>
 														<p:outputLabel value="Load by Id" style="margin-left:10px" />
 														<p:inputText value="#{gCRepoTradeView.idToBeLoaded}"
 															style="margin-left:10px" styleClass="TradistaInput" />
 														<p:commandButton value="Load" style="margin-left:10px"
 															styleClass="rounded-button"
-															action="#{gCRepoTradeView.load}" update="@form" />
+															action="#{gCRepoTradeView.load}" update="@form">
+															<f:actionListener
+																binding="#{collateralView.refresh(gCRepoTradeView.idToBeLoaded)}" />
+														</p:commandButton>
 													</p:column>
 												</p:row>
 											</f:facet>
@@ -299,6 +307,10 @@
 												<p:panelGrid styleClass="nested">
 													<p:row>
 														<p:column>
+															<p:outputLabel value="#{collateralView.context}"
+																style="font-weight:bold;" />
+															<br />
+															<br />
 															<p:outputLabel value="Collateral" class="label" />
 															<p:dataTable id="collateralDataTable" var="coll"
 																value="#{collateralView.collateralValues}"
@@ -316,22 +328,62 @@
 													</p:row>
 													<p:row>
 														<p:column>
-															<p:outputLabel value="Add collateral: " class="label" />
-															<p:panelGrid styleClass="nested">
-																<p:row>
-																	<p:column>
-																		<p:selectOneMenu label="Security:" />
-																	</p:column>	
-																	<p:column>
-																		<p:inputNumber decimalPlaces="4" />
-																	</p:column>
-																</p:row>
-															</p:panelGrid>
+															<p:outputLabel value="Available Collateral :"
+																class="label" />
+															<p:dataTable id="availableCollateralDataTable" var="coll"
+																value="#{collateralView.availableCollateralValues}"
+																allowUnsorting="true" sortMode="single"
+																tableStyle="table-layout: auto;" size="small">
+																<p:column headerText="ISIN" sortBy="#{coll.security}">
+																	<p:outputLabel value="#{coll.security}" />
+																</p:column>
+																<p:column headerText="Quantity"
+																	sortBy="#{coll.quantity}">
+																	<p:outputLabel value="#{coll.quantity}" />
+																</p:column>
+																<p:column headerText="Book"
+																	sortBy="#{coll.book}">
+																	<p:outputLabel value="#{coll.book}" />
+																</p:column>
+																<p:column>
+																	<p:commandButton style="margin-left:10px"
+																		styleClass="rounded-button" icon="pi pi-plus"
+																		action="#{collateralView.addCollateral(coll.security, coll.book)}"
+																		update="@form">
+																	</p:commandButton>
+																</p:column>
+															</p:dataTable>
+														</p:column>
+													</p:row>
+													<p:row>
+														<p:column>
+															<p:outputLabel value="Added :" class="label" />
+															<p:dataTable id="addedCollateralDataTable" var="coll"
+																value="#{collateralView.addedCollateralValues}"
+																allowUnsorting="true" sortMode="single"
+																tableStyle="table-layout: auto;" size="small">
+																<p:column headerText="ISIN" sortBy="#{coll.security}">
+																	<p:outputLabel value="#{coll.security}" />
+																</p:column>
+																<p:column headerText="Quantity"
+																	sortBy="#{coll.quantity}">
+																	<p:outputLabel value="#{coll.quantity}" />
+																</p:column>
+																<p:column headerText="From Book"
+																	sortBy="#{coll.book}">
+																	<p:outputLabel value="#{coll.book}" />
+																</p:column>
+																<p:column>
+																	<p:commandButton style="margin-left:10px"
+																		styleClass="rounded-button" icon="pi pi-minus"
+																		action="{collateralView.removeCollateral(coll.security, coll.book)}" update="@form">
+																	</p:commandButton>
+																</p:column>
+															</p:dataTable>
 														</p:column>
 													</p:row>
 												</p:panelGrid>
 												<p:divider layout="vertical" />
-
 												<p:outputLabel>Gauge</p:outputLabel>
 											</div>
 										</div>

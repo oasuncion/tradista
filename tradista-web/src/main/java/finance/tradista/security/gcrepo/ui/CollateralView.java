@@ -2,13 +2,22 @@ package finance.tradista.security.gcrepo.ui;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.inventory.model.ProductInventory;
+import finance.tradista.core.productinventory.service.ProductInventoryBusinessDelegate;
+import finance.tradista.security.bond.model.Bond;
 import finance.tradista.security.common.model.Security;
+import finance.tradista.security.equity.model.Equity;
+import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.service.GCRepoTradeBusinessDelegate;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
@@ -40,9 +49,20 @@ public class CollateralView implements Serializable {
 
     private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
 
+    private ProductInventoryBusinessDelegate productInventoryBusinessDelegate;
+
+    private String context;
+
+    private Set<Collateral> collateralValues;
+
+    private Set<Collateral> availableCollateralValues;
+
+    private Set<Collateral> addedCollateralValues;
+
     @PostConstruct
     public void init() {
 	gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
+	productInventoryBusinessDelegate = new ProductInventoryBusinessDelegate();
     }
 
     public class Collateral implements Serializable {
@@ -52,6 +72,8 @@ public class CollateralView implements Serializable {
 	private BigDecimal quantity;
 
 	private String security;
+
+	private String book;
 
 	public BigDecimal getQuantity() {
 	    return quantity;
@@ -69,12 +91,21 @@ public class CollateralView implements Serializable {
 	    this.security = security;
 	}
 
+	public String getBook() {
+	    return book;
+	}
+
+	public void setBook(String book) {
+	    this.book = book;
+	}
+
 	@Override
 	public int hashCode() {
 	    final int prime = 31;
 	    int result = 1;
 	    result = prime * result + getEnclosingInstance().hashCode();
 	    result = prime * result + Objects.hash(security);
+	    result = prime * result + Objects.hash(book);
 	    return result;
 	}
 
@@ -93,7 +124,7 @@ public class CollateralView implements Serializable {
 	    if (!getEnclosingInstance().equals(other.getEnclosingInstance())) {
 		return false;
 	    }
-	    return Objects.equals(security, other.security);
+	    return Objects.equals(security, other.security) && Objects.equals(book, other.book);
 	}
 
 	private CollateralView getEnclosingInstance() {
@@ -101,8 +132,6 @@ public class CollateralView implements Serializable {
 	}
 
     }
-
-    private Set<Collateral> collateralValues;
 
     public Set<Collateral> getCollateralValues() {
 	return collateralValues;
@@ -112,9 +141,91 @@ public class CollateralView implements Serializable {
 	this.collateralValues = collateralValues;
     }
 
+    public Set<Collateral> getAddedCollateralValues() {
+	return addedCollateralValues;
+    }
+
+    public void setAddedCollateralValues(Set<Collateral> addedCollateralValues) {
+	this.addedCollateralValues = addedCollateralValues;
+    }
+
+    public Set<Collateral> getAvailableCollateralValues() {
+	return availableCollateralValues;
+    }
+
+    public void setAvailableCollateralValues(Set<Collateral> availableCollateralValues) {
+	this.availableCollateralValues = availableCollateralValues;
+    }
+
+    public void addColateral(String security, String book) {
+
+    }
+
     public void refresh(long tradeId) {
+	if (collateralValues == null) {
+	    collateralValues = new HashSet<>();
+	}
+	if (availableCollateralValues == null) {
+	    availableCollateralValues = new HashSet<>();
+	}
 	collateralValues.clear();
-	Map<Security, BigDecimal> sec = gcRepoTradeBusinessDelegate.getAllocatedCollateral(tradeId);
+	availableCollateralValues.clear();
+	Map<Security, BigDecimal> sec = null;
+	Set<ProductInventory> inventory = null;
+	try {
+	    GCRepoTrade trade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
+	    // TODO Think about a configurable mechanism for context determination
+	    if (trade.getStatus().getName().equals("UNDER_ALLOCATED")) {
+		context = "ALLOCATION";
+	    }
+	    sec = gcRepoTradeBusinessDelegate.getAllocatedCollateral(tradeId);
+
+	    if (sec != null) {
+		for (Map.Entry<Security, BigDecimal> entry : sec.entrySet()) {
+		    Collateral col = new Collateral();
+		    col.setQuantity(entry.getValue());
+		    col.setSecurity(entry.getKey().toString());
+		    collateralValues.add(col);
+		}
+	    }
+
+	    inventory = productInventoryBusinessDelegate.getProductInventories(null, null, Bond.BOND, tradeId, tradeId,
+		    true);
+
+	    if (inventory != null) {
+		for (ProductInventory inv : inventory) {
+		    Collateral col = new Collateral();
+		    col.setQuantity(inv.getQuantity());
+		    col.setSecurity(((Bond) inv.getProduct()).getIsin());
+		    col.setBook(inv.getBook().getName());
+		    availableCollateralValues.add(col);
+		}
+	    }
+
+	    inventory = productInventoryBusinessDelegate.getProductInventories(null, null, Equity.EQUITY, tradeId,
+		    tradeId, true);
+
+	    if (inventory != null) {
+		for (ProductInventory inv : inventory) {
+		    Collateral col = new Collateral();
+		    col.setQuantity(inv.getQuantity());
+		    col.setSecurity(((Bond) inv.getProduct()).getIsin());
+		    col.setBook(inv.getBook().getName());
+		    availableCollateralValues.add(col);
+		}
+	    }
+	} catch (TradistaBusinessException tbe) {
+	    FacesContext.getCurrentInstance().addMessage(null,
+		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+	}
+    }
+
+    public String getContext() {
+	return context;
+    }
+
+    public void setContext(String context) {
+	this.context = context;
     }
 
 }

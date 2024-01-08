@@ -36,7 +36,10 @@ public interface GCRepoTradeService {
 	
 	GCRepoTrade getGCRepoTradeById(long id);
 	
-	Map<Security, BigDecimal> getAllocatedCollateral(long tradeId); 
-	
+	Map<Security, BigDecimal> getAllocatedCollateral(long tradeId) throws TradistaBusinessException;
 
+	BigDecimal getCollateralMarketToMarket(long tradeId) throws TradistaBusinessException;
+
+	BigDecimal getExposure(long tradeId) throws TradistaBusinessException;
+	
 }

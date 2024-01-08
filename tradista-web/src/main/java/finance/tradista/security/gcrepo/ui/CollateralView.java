@@ -2,10 +2,17 @@ package finance.tradista.security.gcrepo.ui;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.donut.DonutChartDataSet;
+import org.primefaces.model.charts.donut.DonutChartModel;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.inventory.model.ProductInventory;
@@ -15,6 +22,7 @@ import finance.tradista.security.common.model.Security;
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.service.GCRepoTradeBusinessDelegate;
+import finance.tradista.web.demo.ColorUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -59,10 +67,21 @@ public class CollateralView implements Serializable {
 
     private Set<Collateral> addedCollateralValues;
 
+    private DonutChartModel collateralMarketValueDonutModel;
+
+    private String securityToAdd;
+
+    private String fromBookToAdd;
+
+    private BigDecimal maxQuantityToAdd;
+
+    private BigDecimal quantityToAdd;
+
     @PostConstruct
     public void init() {
 	gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
 	productInventoryBusinessDelegate = new ProductInventoryBusinessDelegate();
+	collateralMarketValueDonutModel = new DonutChartModel();
     }
 
     public class Collateral implements Serializable {
@@ -157,7 +176,140 @@ public class CollateralView implements Serializable {
 	this.availableCollateralValues = availableCollateralValues;
     }
 
-    public void addColateral(String security, String book) {
+    public void setCollateralToAdd(String security, String book, BigDecimal quantity) {
+	securityToAdd = security;
+	fromBookToAdd = book;
+	maxQuantityToAdd = quantity;
+    }
+
+    public void updateCollateralToAdd(BigDecimal quantity) {
+
+	if (quantity.compareTo(maxQuantityToAdd) > 0) {
+	    FacesContext.getCurrentInstance().addMessage("colError", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+		    "Error", String.format("You cannot allocate more than %.2f", maxQuantityToAdd.doubleValue())));
+	    clearCollateralToAdd();
+	    return;
+	}
+
+	if (collateralValues != null) {
+	    boolean found = false;
+	    for (Collateral coll : collateralValues) {
+		if (coll.security.equals(securityToAdd)) {
+		    coll.setQuantity(coll.quantity.add(quantity));
+		    found = true;
+		    break;
+		}
+	    }
+	    if (!found) {
+		Collateral collToAdd = new Collateral();
+		collToAdd.setQuantity(quantity);
+		collToAdd.setSecurity(securityToAdd);
+		collateralValues.add(collToAdd);
+	    }
+	} else {
+	    collateralValues = new HashSet<>();
+	    Collateral coll = new Collateral();
+	    coll.setQuantity(quantity);
+	    coll.setSecurity(securityToAdd);
+	    collateralValues.add(coll);
+	}
+
+	if (availableCollateralValues != null) {
+	    Collateral toBeRemoved = null;
+	    for (Collateral coll : availableCollateralValues) {
+		if (coll.security.equals(securityToAdd)) {
+		    coll.setQuantity(coll.quantity.subtract(quantity));
+		    if (coll.getQuantity().compareTo(BigDecimal.ZERO) == 0) {
+			toBeRemoved = coll;
+		    }
+		    break;
+		}
+	    }
+	    if (toBeRemoved != null) {
+		availableCollateralValues.remove(toBeRemoved);
+	    }
+	}
+
+	if (addedCollateralValues != null) {
+	    boolean found = false;
+	    for (Collateral coll : addedCollateralValues) {
+		if (coll.security.equals(securityToAdd) && coll.book.equals(fromBookToAdd)) {
+		    coll.setQuantity(coll.quantity.add(quantity));
+		    found = true;
+		    break;
+		}
+	    }
+	    if (!found) {
+		Collateral collToAdd = new Collateral();
+		collToAdd.setQuantity(quantity);
+		collToAdd.setBook(fromBookToAdd);
+		collToAdd.setSecurity(securityToAdd);
+		addedCollateralValues.add(collToAdd);
+	    }
+	} else {
+	    addedCollateralValues = new HashSet<>();
+	    Collateral coll = new Collateral();
+	    coll.setQuantity(quantity);
+	    coll.setSecurity(securityToAdd);
+	    coll.setBook(fromBookToAdd);
+	    addedCollateralValues.add(coll);
+	}
+    }
+
+    public void removeCollateral(String security, String fromBook, BigDecimal quantity) {
+
+	if (collateralValues != null) {
+	    Collateral toBeRemoved = null;
+	    for (Collateral coll : collateralValues) {
+		if (coll.security.equals(securityToAdd)) {
+		    coll.setQuantity(coll.quantity.subtract(quantity));
+		    if (coll.getQuantity().compareTo(BigDecimal.ZERO) == 0) {
+			toBeRemoved = coll;
+		    }
+		    break;
+		}
+	    }
+	    if (toBeRemoved != null) {
+		collateralValues.remove(toBeRemoved);
+	    }
+	}
+
+	if (addedCollateralValues != null) {
+	    addedCollateralValues = addedCollateralValues.stream()
+		    .filter(c -> !c.security.equals(securityToAdd) || !c.book.equals(fromBookToAdd))
+		    .collect(Collectors.toSet());
+	}
+
+	if (availableCollateralValues != null) {
+	    boolean found = false;
+	    for (Collateral coll : availableCollateralValues) {
+		if (coll.security.equals(securityToAdd) && coll.book.equals(fromBookToAdd)) {
+		    coll.setQuantity(coll.quantity.add(quantity));
+		    found = true;
+		    break;
+		}
+	    }
+	    if (!found) {
+		Collateral removedColl = new Collateral();
+		removedColl.setQuantity(quantity);
+		removedColl.setBook(fromBook);
+		removedColl.setSecurity(securityToAdd);
+		availableCollateralValues.add(removedColl);
+	    }
+	} else {
+	    collateralValues = new HashSet<>();
+	    Collateral coll = new Collateral();
+	    coll.setQuantity(quantity);
+	    coll.setBook(fromBook);
+	    coll.setSecurity(securityToAdd);
+	    availableCollateralValues.add(coll);
+	}
+    }
+
+    public void clearCollateralToAdd() {
+	securityToAdd = null;
+	fromBookToAdd = null;
+	maxQuantityToAdd = null;
 
     }
 
@@ -189,8 +341,7 @@ public class CollateralView implements Serializable {
 		}
 	    }
 
-	    inventory = productInventoryBusinessDelegate.getProductInventories(null, null, Bond.BOND, tradeId, tradeId,
-		    true);
+	    inventory = productInventoryBusinessDelegate.getProductInventories(null, null, Bond.BOND, 0, 0, true);
 
 	    if (inventory != null) {
 		for (ProductInventory inv : inventory) {
@@ -202,14 +353,13 @@ public class CollateralView implements Serializable {
 		}
 	    }
 
-	    inventory = productInventoryBusinessDelegate.getProductInventories(null, null, Equity.EQUITY, tradeId,
-		    tradeId, true);
+	    inventory = productInventoryBusinessDelegate.getProductInventories(null, null, Equity.EQUITY, 0, 0, true);
 
 	    if (inventory != null) {
 		for (ProductInventory inv : inventory) {
 		    Collateral col = new Collateral();
 		    col.setQuantity(inv.getQuantity());
-		    col.setSecurity(((Bond) inv.getProduct()).getIsin());
+		    col.setSecurity(((Equity) inv.getProduct()).getIsin());
 		    col.setBook(inv.getBook().getName());
 		    availableCollateralValues.add(col);
 		}
@@ -218,6 +368,8 @@ public class CollateralView implements Serializable {
 	    FacesContext.getCurrentInstance().addMessage(null,
 		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 	}
+
+	refreshDonutModel(tradeId);
     }
 
     public String getContext() {
@@ -226,6 +378,77 @@ public class CollateralView implements Serializable {
 
     public void setContext(String context) {
 	this.context = context;
+    }
+
+    public DonutChartModel getCollateralMarketValueDonutModel() {
+	return collateralMarketValueDonutModel;
+    }
+
+    public void setCollateralMarketValueDonutModel(DonutChartModel collateralMarketValueDonutModel) {
+	this.collateralMarketValueDonutModel = collateralMarketValueDonutModel;
+    }
+
+    public String getSecurityToAdd() {
+	return securityToAdd;
+    }
+
+    public void setSecurityToAdd(String securityToAdd) {
+	this.securityToAdd = securityToAdd;
+    }
+
+    public String getFromBookToAdd() {
+	return fromBookToAdd;
+    }
+
+    public void setFromBookToAdd(String fromBookToAdd) {
+	this.fromBookToAdd = fromBookToAdd;
+    }
+
+    public BigDecimal getMaxQuantityToAdd() {
+	return maxQuantityToAdd;
+    }
+
+    public void setMaxQuantityToAdd(BigDecimal maxQuantityToAdd) {
+	this.maxQuantityToAdd = maxQuantityToAdd;
+    }
+
+    public BigDecimal getQuantityToAdd() {
+	return quantityToAdd;
+    }
+
+    public void setQuantityToAdd(BigDecimal quantityToAdd) {
+	this.quantityToAdd = quantityToAdd;
+    }
+
+    public void refreshDonutModel(long tradeId) {
+	ChartData data = new ChartData();
+	DonutChartDataSet dataSet = new DonutChartDataSet();
+
+	try {
+	    BigDecimal collateralMarketValue = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(tradeId);
+	    BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(tradeId);
+
+	    List<Number> values = new ArrayList<>();
+	    values.add(collateralMarketValue);
+	    values.add(exposure.subtract(collateralMarketValue));
+	    dataSet.setData(values);
+
+	    List<String> bgColors = new ArrayList<>();
+	    bgColors.add(ColorUtil.getBlueColorsList().get(0));
+	    bgColors.add(ColorUtil.getRedColorsList().get(0));
+	    dataSet.setBackgroundColor(bgColors);
+
+	    data.addChartDataSet(dataSet);
+	    List<String> labels = new ArrayList<>();
+	    labels.add("Collateral Mark to Market");
+	    labels.add("Uncovered exposure");
+	    data.setLabels(labels);
+
+	    collateralMarketValueDonutModel.setData(data);
+	} catch (TradistaBusinessException tbe) {
+	    FacesContext.getCurrentInstance().addMessage(null,
+		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+	}
     }
 
 }

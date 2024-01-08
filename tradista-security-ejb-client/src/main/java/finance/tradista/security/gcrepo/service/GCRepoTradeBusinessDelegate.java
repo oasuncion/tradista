@@ -58,7 +58,21 @@ public class GCRepoTradeBusinessDelegate {
 	if (tradeId <= 0) {
 	    throw new TradistaBusinessException("The trade id must be positive.");
 	}
-	return SecurityUtil.run(() -> gcRepoTradeService.getAllocatedCollateral(tradeId));
+	return SecurityUtil.runEx(() -> gcRepoTradeService.getAllocatedCollateral(tradeId));
+    }
+    
+    public BigDecimal getCollateralMarketToMarket(long tradeId) throws TradistaBusinessException {
+	if (tradeId <= 0) {
+	    throw new TradistaBusinessException("The trade id must be positive.");
+	}
+	return SecurityUtil.runEx(() -> gcRepoTradeService.getCollateralMarketToMarket(tradeId));
+    }
+    
+    public BigDecimal getExposure(long tradeId) throws TradistaBusinessException {
+	if (tradeId <= 0) {
+	    throw new TradistaBusinessException("The trade id must be positive.");
+	}
+	return SecurityUtil.runEx(() -> gcRepoTradeService.getExposure(tradeId));
     }
 
 }

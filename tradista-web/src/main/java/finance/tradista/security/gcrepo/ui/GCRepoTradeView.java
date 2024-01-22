@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ import finance.tradista.core.workflow.model.Status;
 import finance.tradista.core.workflow.model.Workflow;
 import finance.tradista.core.workflow.service.WorkflowBusinessDelegate;
 import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
+import finance.tradista.security.common.model.Security;
 import finance.tradista.security.gcrepo.model.GCBasket;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.service.GCBasketBusinessDelegate;
@@ -110,6 +112,8 @@ public class GCRepoTradeView implements Serializable {
     private String action;
 
     private String[] allAvailableActions;
+
+    private static final String TRADE_MSG = "tradeMsg";
 
     @PostConstruct
     public void init() throws TradistaBusinessException {
@@ -426,10 +430,10 @@ public class GCRepoTradeView implements Serializable {
 		allAvailableActions = availableActions.stream().map(a -> a.getName()).collect(Collectors.toSet())
 			.toArray(new String[availableActions.size()]);
 	    }
-	    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 		    "Trade " + gcRepoTrade.getId() + " successfully saved"));
 	} catch (TradistaBusinessException tbe) {
-	    FacesContext.getCurrentInstance().addMessage(null,
+	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 	}
     }
@@ -456,11 +460,11 @@ public class GCRepoTradeView implements Serializable {
 		allAvailableActions = availableActions.stream().map(a -> a.getName()).collect(Collectors.toSet())
 			.toArray(new String[availableActions.size()]);
 	    }
-	    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 		    "Trade " + gcRepoTrade.getId() + " successfully created"));
 	} catch (TradistaBusinessException tbe) {
 	    gcRepoTrade.setId(oldId);
-	    FacesContext.getCurrentInstance().addMessage(null,
+	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 	}
     }
@@ -499,17 +503,17 @@ public class GCRepoTradeView implements Serializable {
 		    allAvailableActions = availableActions.stream().map(a -> a.getName()).collect(Collectors.toSet())
 			    .toArray(new String[availableActions.size()]);
 		}
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-			"Trade " + gcRepoTrade.getId() + " successfully loaded."));
+		FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO,
+			"Info", "Trade " + gcRepoTrade.getId() + " successfully loaded."));
 	    } else {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+		FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 			"Error", "Trade " + idToBeLoaded + " was not found."));
 	    }
 	} catch (NumberFormatException nfe) {
-	    FacesContext.getCurrentInstance().addMessage(null,
+	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Please type a valid id."));
 	} catch (TradistaBusinessException tbe) {
-	    FacesContext.getCurrentInstance().addMessage(null,
+	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 	}
 
@@ -519,7 +523,7 @@ public class GCRepoTradeView implements Serializable {
 	gcRepoTrade = new GCRepoTrade();
 	setTradeDate(LocalDate.now());
 	setStartDate(LocalDate.now());
-	FacesContext.getCurrentInstance().addMessage(null,
+	FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 		new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Form cleared"));
     }
 
@@ -577,6 +581,12 @@ public class GCRepoTradeView implements Serializable {
 
     public void setAllAvailableActions(String[] allAvailableActions) {
 	this.allAvailableActions = allAvailableActions;
+    }
+    
+    public void refreshCollateral(Map<Security, Map<Book, BigDecimal>> securities) {
+	if (securities != null && !securities.isEmpty()) {
+	    gcRepoTrade.setCollateralToAdd(securities);
+	}
     }
 
 }

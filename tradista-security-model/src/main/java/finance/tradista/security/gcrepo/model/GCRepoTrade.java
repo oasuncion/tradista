@@ -2,11 +2,14 @@ package finance.tradista.security.gcrepo.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
+import finance.tradista.core.book.model.Book;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.core.trade.model.Trade;
+import finance.tradista.security.common.model.Security;
 
 /*
  * Copyright 2023 Olivier Asuncion
@@ -64,6 +67,8 @@ public class GCRepoTrade extends Trade<Product> {
     private boolean terminableOnDemand;
 
     private short noticePeriod;
+    
+    private Map<Security, Map<Book, BigDecimal>> collateralToAdd;
 
     @Override
     public String getWorkflow() {
@@ -177,6 +182,14 @@ public class GCRepoTrade extends Trade<Product> {
 
     public void setGcBasket(GCBasket gcBasket) {
 	this.gcBasket = gcBasket;
+    }
+
+    public Map<Security, Map<Book, BigDecimal>> getCollateralToAdd() {
+        return collateralToAdd;
+    }
+
+    public void setCollateralToAdd(Map<Security, Map<Book, BigDecimal>> collateralToAdd) {
+        this.collateralToAdd = collateralToAdd;
     }
 
 }

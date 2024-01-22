@@ -28,7 +28,8 @@
 							<p:panel>
 								<p:tabView>
 									<p:tab id="tradeBooking" title="Trade Booking">
-										<p:messages showDetail="true" closable="true" id="msg" />
+										<p:messages showDetail="true" closable="true" id="tradeMsg"
+											for="tradeMsg" />
 										<p:panelGrid styleClass="nested">
 											<p:row>
 												<p:column>
@@ -271,6 +272,7 @@
 														</p:selectOneMenu>
 														<p:commandButton value="Save" style="margin-left:10px"
 															styleClass="rounded-button" update="@form">
+															<f:actionListener binding="#{gCRepoTradeView.refreshCollateral(collateralView.getAddedSecurities())}" />
 															<f:actionListener binding="#{gCRepoTradeView.save()}" />
 															<f:actionListener binding="#{bookView.loadBook()}" />
 														</p:commandButton>
@@ -285,7 +287,7 @@
 															styleClass="rounded-button"
 															action="#{gCRepoTradeView.clear}" update="@form">
 															<f:actionListener
-																binding="#{collateralView.refresh(gCRepoTradeView.id)}" />
+																binding="#{collateralView.clear()}" />
 														</p:commandButton>
 														<p:outputLabel value="Load by Id" style="margin-left:10px" />
 														<p:inputText value="#{gCRepoTradeView.idToBeLoaded}"
@@ -302,7 +304,8 @@
 										</p:panelGrid>
 									</p:tab>
 									<p:tab title="Collateral">
-										<p:messages showDetail="true" closable="true" id="colError" />
+										<p:messages showDetail="true" closable="true" id="colMsg"
+											for="colMsg" />
 										<div class="card">
 											<div class="flex">
 
@@ -330,7 +333,7 @@
 															</p:dataTable>
 														</p:column>
 													</p:row>
-													<p:row>
+													<p:row rendered="#{not (collateralView.context eq null)}" >
 														<p:column>
 															<p:outputLabel value="Available Collateral :"
 																class="label" />
@@ -355,12 +358,12 @@
 																		styleClass="rounded-button" icon="pi pi-plus"
 																		oncomplete="PF('addCol').show();"
 																		update=":dashboardForm:addCol"
-																		action="#{collateralView.setCollateralToAdd(coll.security, coll.book, coll.quantity)}" />
+																		action="#{collateralView.setCollateralToAdd(coll.security, coll.exchange, coll.book, coll.quantity)}" />
 																</p:column>
 															</p:dataTable>
 														</p:column>
 													</p:row>
-													<p:row>
+													<p:row rendered="#{not (collateralView.context eq null)}" >
 														<p:column>
 															<p:outputLabel value="Added :" class="label" />
 															<p:dataTable id="addedCollateralDataTable" var="coll"
@@ -382,7 +385,7 @@
 																<p:column>
 																	<p:commandButton style="margin-left:10px"
 																		styleClass="rounded-button" icon="pi pi-minus"
-																		action="#{collateralView.removeCollateral(coll.security, coll.book, coll.quantity)}"
+																		action="#{collateralView.removeCollateral(coll.security, coll.exchange, coll.book, coll.quantity)}"
 																		update="@form">
 																	</p:commandButton>
 																</p:column>

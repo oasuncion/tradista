@@ -3,6 +3,7 @@ package finance.tradista.security.gcrepo.service;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
@@ -37,6 +38,8 @@ public class GCRepoTradeBusinessDelegate {
 
     private GCRepoTradeValidator validator;
 
+    private static final String TRADE_ID_MUST_BE_POSITIVE = "The trade id must be positive.";
+
     public GCRepoTradeBusinessDelegate() {
 	gcRepoTradeService = TradistaServiceLocator.getInstance().getGCRepoTradeService();
 	validator = new GCRepoTradeValidator();
@@ -49,28 +52,43 @@ public class GCRepoTradeBusinessDelegate {
 
     public GCRepoTrade getGCRepoTradeById(long tradeId) throws TradistaBusinessException {
 	if (tradeId <= 0) {
-	    throw new TradistaBusinessException("The trade id must be positive.");
+	    throw new TradistaBusinessException(TRADE_ID_MUST_BE_POSITIVE);
 	}
 	return SecurityUtil.run(() -> gcRepoTradeService.getGCRepoTradeById(tradeId));
     }
 
-    public Map<Security, BigDecimal> getAllocatedCollateral(long tradeId) throws TradistaBusinessException {
+    public Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(long tradeId) throws TradistaBusinessException {
 	if (tradeId <= 0) {
-	    throw new TradistaBusinessException("The trade id must be positive.");
+	    throw new TradistaBusinessException(TRADE_ID_MUST_BE_POSITIVE);
 	}
 	return SecurityUtil.runEx(() -> gcRepoTradeService.getAllocatedCollateral(tradeId));
     }
-    
+
     public BigDecimal getCollateralMarketToMarket(long tradeId) throws TradistaBusinessException {
 	if (tradeId <= 0) {
-	    throw new TradistaBusinessException("The trade id must be positive.");
+	    throw new TradistaBusinessException(TRADE_ID_MUST_BE_POSITIVE);
 	}
 	return SecurityUtil.runEx(() -> gcRepoTradeService.getCollateralMarketToMarket(tradeId));
     }
-    
+
+    public BigDecimal getCollateralMarketToMarket(Map<Security, Map<Book, BigDecimal>> securities, long poId)
+	    throws TradistaBusinessException {
+	StringBuilder errMsg = new StringBuilder();
+	if (poId < 0) {
+	    errMsg.append("The Processing Org id cannot be negative.\n");
+	}
+	if (securities == null || securities.isEmpty()) {
+	    errMsg.append("Securities are mandatory.");
+	}
+	if (!errMsg.isEmpty()) {
+	    throw new TradistaBusinessException(errMsg.toString());
+	}
+	return SecurityUtil.runEx(() -> gcRepoTradeService.getCollateralMarketToMarket(securities, poId));
+    }
+
     public BigDecimal getExposure(long tradeId) throws TradistaBusinessException {
 	if (tradeId <= 0) {
-	    throw new TradistaBusinessException("The trade id must be positive.");
+	    throw new TradistaBusinessException(TRADE_ID_MUST_BE_POSITIVE);
 	}
 	return SecurityUtil.runEx(() -> gcRepoTradeService.getExposure(tradeId));
     }

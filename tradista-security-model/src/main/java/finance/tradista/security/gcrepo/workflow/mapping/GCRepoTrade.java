@@ -2,6 +2,7 @@ package finance.tradista.security.gcrepo.workflow.mapping;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.index.model.Index;
@@ -10,6 +11,7 @@ import finance.tradista.core.workflow.model.mapping.StatusMapper;
 import finance.tradista.flow.model.Status;
 import finance.tradista.flow.model.Workflow;
 import finance.tradista.flow.model.WorkflowObject;
+import finance.tradista.security.common.model.Security;
 
 /*
  * Copyright 2023 Olivier Asuncion
@@ -148,6 +150,14 @@ public class GCRepoTrade implements WorkflowObject {
 
     public void setGcRepoTrade(finance.tradista.security.gcrepo.model.GCRepoTrade gcRepoTrade) {
 	this.gcRepoTrade = gcRepoTrade;
+    }
+
+    public Map<Security, Map<Book, BigDecimal>> getCollateralToAdd() {
+	Map<Security, Map<Book, BigDecimal>> collateralToAdd = null;
+	if (gcRepoTrade != null) {
+	    collateralToAdd = gcRepoTrade.getCollateralToAdd();
+	}
+	return collateralToAdd;
     }
 
     @Override

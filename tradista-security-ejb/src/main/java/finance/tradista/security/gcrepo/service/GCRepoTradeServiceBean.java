@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
 
+import finance.tradista.core.book.model.Book;
+import finance.tradista.core.book.service.BookService;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.marketdata.model.QuoteType;
@@ -31,7 +33,9 @@ import finance.tradista.flow.exception.TradistaFlowBusinessException;
 import finance.tradista.flow.model.Workflow;
 import finance.tradista.flow.service.WorkflowManager;
 import finance.tradista.security.bond.model.Bond;
+import finance.tradista.security.bond.service.BondService;
 import finance.tradista.security.common.model.Security;
+import finance.tradista.security.equity.service.EquityService;
 import finance.tradista.security.gcrepo.messaging.GCRepoTradeEvent;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.persistence.GCRepoTradeSQL;
@@ -83,11 +87,20 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
     @EJB
     private PricerService pricerService;
 
+    @EJB
+    private BondService bondService;
+
+    @EJB
+    private EquityService equityService;
+
+    @EJB
+    private BookService bookService;
+
     private TransferBusinessDelegate transferBusinessDelegate;
 
     private QuoteBusinessDelegate quoteBusinessDelegate;
 
-    protected static final String DEFAULT_PRICING_PARAMETER = "DefautPP";
+    protected static final String DEFAULT_PRICING_PARAMETER = "DefaultPP";
 
     @PostConstruct
     private void initialize() {
@@ -103,6 +116,44 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	if (trade.getId() != 0) {
 	    GCRepoTrade oldTrade = GCRepoTradeSQL.getTradeById(trade.getId());
 	    event.setOldTrade(oldTrade);
+	}
+
+	// Checking business consistency of collateral to add
+	StringBuilder errMsg = new StringBuilder();
+	if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
+	    for (Map.Entry<Security, Map<Book, BigDecimal>> entry : trade.getCollateralToAdd().entrySet()) {
+		// 1. Security must exist
+		Security secInDb = bondService.getBondById(entry.getKey().getId());
+		if (secInDb == null) {
+		    secInDb = equityService.getEquityById(entry.getKey().getId());
+		}
+		if (secInDb == null) {
+		    errMsg.append(String.format(
+			    "The security %s cannot be found in the system, it cannot be added as collateral.%n",
+			    entry.getKey()));
+		    continue;
+		}
+		// 2. Security must be part of the GC Basket
+		if (!trade.getGcBasket().getSecurities().contains(entry.getKey())) {
+		    errMsg.append(String.format(
+			    "The security %s cannot be found in the GC Basket %s, it cannot be added as collateral.%n",
+			    entry.getKey(), trade.getGcBasket().getName()));
+		    continue;
+		}
+		// 3. Books should exist
+		Map<Book, BigDecimal> bookMap = entry.getValue();
+		for (Map.Entry<Book, BigDecimal> bookEntry : bookMap.entrySet()) {
+		    Book bookInDb = bookService.getBookById(bookEntry.getKey().getId());
+		    if (bookInDb == null) {
+			errMsg.append(String.format(
+				"The origin book %s cannot be found in the system, it cannot be used as collateral source.%n",
+				bookEntry.getKey().getName()));
+		    }
+		}
+	    }
+	    if (!errMsg.isEmpty()) {
+		throw new TradistaBusinessException(errMsg.toString());
+	    }
 	}
 
 	if (action != null) {
@@ -137,7 +188,7 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
     }
 
     @Override
-    public Map<Security, BigDecimal> getAllocatedCollateral(long tradeId) throws TradistaBusinessException {
+    public Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(long tradeId) throws TradistaBusinessException {
 
 	GCRepoTrade trade = getGCRepoTradeById(tradeId);
 
@@ -145,7 +196,7 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	    throw new TradistaBusinessException(String.format("The trade %d doesn't exist.", tradeId));
 	}
 
-	Map<Security, BigDecimal> securities = null;
+	Map<Security, Map<Book, BigDecimal>> securities = null;
 	List<Transfer> givenCollateral = null;
 
 	try {
@@ -162,10 +213,15 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	    securities = new HashMap<>(givenCollateral.size());
 	    for (Transfer t : givenCollateral) {
 		if (securities.containsKey(t.getProduct())) {
-		    BigDecimal newQty = securities.get(t.getProduct()).add(((ProductTransfer) t).getQuantity());
-		    securities.put((Security) t.getProduct(), newQty);
+		    Map<Book, BigDecimal> bookMap = securities.get(t.getProduct());
+		    BigDecimal newQty = bookMap.get(trade.getBook()).add(((ProductTransfer) t).getQuantity());
+		    bookMap.put(trade.getBook(), newQty);
+		    securities.put((Security) t.getProduct(), bookMap);
 		} else {
-		    securities.put((Security) t.getProduct(), ((ProductTransfer) t).getQuantity());
+		    Map<Book, BigDecimal> bookMap = new HashMap<>();
+		    BigDecimal newQty = ((ProductTransfer) t).getQuantity();
+		    bookMap.put(trade.getBook(), newQty);
+		    securities.put((Security) t.getProduct(), bookMap);
 		}
 	    }
 	}
@@ -184,8 +240,10 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	    securities = new HashMap<>(returnedCollateral.size());
 	    for (Transfer t : returnedCollateral) {
 		if (securities.containsKey(t.getProduct())) {
-		    BigDecimal newQty = securities.get(t.getProduct()).subtract(((ProductTransfer) t).getQuantity());
-		    securities.put((Security) t.getProduct(), newQty);
+		    Map<Book, BigDecimal> bookMap = securities.get(t.getProduct());
+		    BigDecimal newQty = bookMap.get(trade.getBook()).subtract(((ProductTransfer) t).getQuantity());
+		    bookMap.put(trade.getBook(), newQty);
+		    securities.put((Security) t.getProduct(), bookMap);
 		}
 	    }
 	}
@@ -197,21 +255,34 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
     public BigDecimal getCollateralMarketToMarket(long tradeId) throws TradistaBusinessException {
 	// 1. Get the current collateral
 
-	Map<Security, BigDecimal> securities = getAllocatedCollateral(tradeId);
+	Map<Security, Map<Book, BigDecimal>> securities = getAllocatedCollateral(tradeId);
 	GCRepoTrade trade = getGCRepoTradeById(tradeId);
 
 	if (trade == null) {
 	    throw new TradistaBusinessException(String.format("The trade %d doesn't exist.", tradeId));
 	}
 
+	return getCollateralMarketToMarket(securities, trade.getBook().getProcessingOrg().getId());
+
+    }
+
+    @Override
+    public BigDecimal getCollateralMarketToMarket(Map<Security, Map<Book, BigDecimal>> securities, long poId)
+	    throws TradistaBusinessException {
+
 	BigDecimal mtm = BigDecimal.ZERO;
-	PricingParameter pp = pricerService.getPricingParameterByNameAndPoId(DEFAULT_PRICING_PARAMETER,
-		trade.getBook().getProcessingOrg().getId());
+
+	PricingParameter pp = pricerService.getPricingParameterByNameAndPoId(DEFAULT_PRICING_PARAMETER, poId);
+
+	if (pp == null) {
+	    throw new TradistaBusinessException(
+		    String.format("The %s pricing parameters set has not been found.", DEFAULT_PRICING_PARAMETER));
+	}
 
 	// Calculate the total MTM value of the collateral
 
 	if (securities != null) {
-	    for (Map.Entry<Security, BigDecimal> entry : securities.entrySet()) {
+	    for (Map.Entry<Security, Map<Book, BigDecimal>> entry : securities.entrySet()) {
 		String quoteName = entry.getKey().getProductType() + "." + entry.getKey().getIsin() + "."
 			+ entry.getKey().getExchange();
 		QuoteValue qv = quoteBusinessDelegate.getQuoteValueByQuoteSetIdQuoteNameTypeAndDate(
@@ -230,7 +301,9 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 			    "The closing or last price of the product %s could not be found on quote set %s as of %tD",
 			    entry.getKey(), pp.getQuoteSet(), LocalDate.now()));
 		}
-		mtm = mtm.add(price.multiply(entry.getValue()));
+		for (BigDecimal qty : entry.getValue().values()) {
+		    mtm = mtm.add(price.multiply(qty));
+		}
 	    }
 	}
 
@@ -249,14 +322,18 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	    throw new TradistaBusinessException(String.format("The trade %d doesn't exist.", tradeId));
 	}
 
-	PricingParameter pp = pricerService.getPricingParameterByNameAndPoId(DEFAULT_PRICING_PARAMETER,
-		trade.getBook().getProcessingOrg().getId());
-
 	// Calculate the required exposure
 
 	if (trade.isFixedRepoRate()) {
 	    rate = trade.getRepoRate();
 	} else {
+	    PricingParameter pp = pricerService.getPricingParameterByNameAndPoId(DEFAULT_PRICING_PARAMETER,
+		    trade.getBook().getProcessingOrg().getId());
+
+	    if (pp == null) {
+		throw new TradistaBusinessException(
+			String.format("The %s pricing parameters set has not been found.", DEFAULT_PRICING_PARAMETER));
+	    }
 	    String quoteName = Index.INDEX + "." + trade.getIndex() + "." + trade.getIndexTenor();
 	    QuoteValue qv = quoteBusinessDelegate.getQuoteValueByQuoteSetIdQuoteNameTypeAndDate(
 		    pp.getQuoteSet().getId(), quoteName, QuoteType.INTEREST_RATE, LocalDate.now());

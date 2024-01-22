@@ -3,6 +3,7 @@ package finance.tradista.security.gcrepo.ui;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,16 @@ import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.donut.DonutChartDataSet;
 import org.primefaces.model.charts.donut.DonutChartModel;
 
+import finance.tradista.core.book.model.Book;
+import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.inventory.model.ProductInventory;
 import finance.tradista.core.productinventory.service.ProductInventoryBusinessDelegate;
 import finance.tradista.security.bond.model.Bond;
+import finance.tradista.security.bond.service.BondBusinessDelegate;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.equity.model.Equity;
+import finance.tradista.security.equity.service.EquityBusinessDelegate;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.service.GCRepoTradeBusinessDelegate;
 import finance.tradista.web.demo.ColorUtil;
@@ -59,6 +64,12 @@ public class CollateralView implements Serializable {
 
     private ProductInventoryBusinessDelegate productInventoryBusinessDelegate;
 
+    private BondBusinessDelegate bondBusinessDelegate;
+
+    private EquityBusinessDelegate equityBusinessDelegate;
+
+    private BookBusinessDelegate bookBusinessDelegate;
+
     private String context;
 
     private Set<Collateral> collateralValues;
@@ -77,11 +88,20 @@ public class CollateralView implements Serializable {
 
     private BigDecimal quantityToAdd;
 
+    private String exchangeToAdd;
+
+    private GCRepoTrade trade;
+
+    private static final String COL_MSG = "colMsg";
+
     @PostConstruct
     public void init() {
 	gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
 	productInventoryBusinessDelegate = new ProductInventoryBusinessDelegate();
 	collateralMarketValueDonutModel = new DonutChartModel();
+	bondBusinessDelegate = new BondBusinessDelegate();
+	equityBusinessDelegate = new EquityBusinessDelegate();
+	bookBusinessDelegate = new BookBusinessDelegate();
     }
 
     public class Collateral implements Serializable {
@@ -93,6 +113,8 @@ public class CollateralView implements Serializable {
 	private String security;
 
 	private String book;
+
+	private String exchange;
 
 	public BigDecimal getQuantity() {
 	    return quantity;
@@ -118,6 +140,14 @@ public class CollateralView implements Serializable {
 	    this.book = book;
 	}
 
+	public String getExchange() {
+	    return exchange;
+	}
+
+	public void setExchange(String exchange) {
+	    this.exchange = exchange;
+	}
+
 	@Override
 	public int hashCode() {
 	    final int prime = 31;
@@ -125,6 +155,7 @@ public class CollateralView implements Serializable {
 	    result = prime * result + getEnclosingInstance().hashCode();
 	    result = prime * result + Objects.hash(security);
 	    result = prime * result + Objects.hash(book);
+	    result = prime * result + Objects.hash(exchange);
 	    return result;
 	}
 
@@ -143,7 +174,8 @@ public class CollateralView implements Serializable {
 	    if (!getEnclosingInstance().equals(other.getEnclosingInstance())) {
 		return false;
 	    }
-	    return Objects.equals(security, other.security) && Objects.equals(book, other.book);
+	    return Objects.equals(security, other.security) && Objects.equals(book, other.book)
+		    && Objects.equals(exchange, other.exchange);
 	}
 
 	private CollateralView getEnclosingInstance() {
@@ -176,8 +208,9 @@ public class CollateralView implements Serializable {
 	this.availableCollateralValues = availableCollateralValues;
     }
 
-    public void setCollateralToAdd(String security, String book, BigDecimal quantity) {
+    public void setCollateralToAdd(String security, String exchange, String book, BigDecimal quantity) {
 	securityToAdd = security;
+	exchangeToAdd = exchange;
 	fromBookToAdd = book;
 	maxQuantityToAdd = quantity;
     }
@@ -185,8 +218,8 @@ public class CollateralView implements Serializable {
     public void updateCollateralToAdd(BigDecimal quantity) {
 
 	if (quantity.compareTo(maxQuantityToAdd) > 0) {
-	    FacesContext.getCurrentInstance().addMessage("colError", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-		    "Error", String.format("You cannot allocate more than %.2f", maxQuantityToAdd.doubleValue())));
+	    FacesContext.getCurrentInstance().addMessage(COL_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+		    String.format("You cannot allocate more than %.2f", maxQuantityToAdd.doubleValue())));
 	    clearCollateralToAdd();
 	    return;
 	}
@@ -194,7 +227,7 @@ public class CollateralView implements Serializable {
 	if (collateralValues != null) {
 	    boolean found = false;
 	    for (Collateral coll : collateralValues) {
-		if (coll.security.equals(securityToAdd)) {
+		if (coll.security.equals(securityToAdd) && coll.exchange.equals(exchangeToAdd)) {
 		    coll.setQuantity(coll.quantity.add(quantity));
 		    found = true;
 		    break;
@@ -204,6 +237,7 @@ public class CollateralView implements Serializable {
 		Collateral collToAdd = new Collateral();
 		collToAdd.setQuantity(quantity);
 		collToAdd.setSecurity(securityToAdd);
+		collToAdd.setExchange(exchangeToAdd);
 		collateralValues.add(collToAdd);
 	    }
 	} else {
@@ -211,13 +245,14 @@ public class CollateralView implements Serializable {
 	    Collateral coll = new Collateral();
 	    coll.setQuantity(quantity);
 	    coll.setSecurity(securityToAdd);
+	    coll.setExchange(exchangeToAdd);
 	    collateralValues.add(coll);
 	}
 
 	if (availableCollateralValues != null) {
 	    Collateral toBeRemoved = null;
 	    for (Collateral coll : availableCollateralValues) {
-		if (coll.security.equals(securityToAdd)) {
+		if (coll.security.equals(securityToAdd) && coll.exchange.equals(exchangeToAdd)) {
 		    coll.setQuantity(coll.quantity.subtract(quantity));
 		    if (coll.getQuantity().compareTo(BigDecimal.ZERO) == 0) {
 			toBeRemoved = coll;
@@ -233,7 +268,8 @@ public class CollateralView implements Serializable {
 	if (addedCollateralValues != null) {
 	    boolean found = false;
 	    for (Collateral coll : addedCollateralValues) {
-		if (coll.security.equals(securityToAdd) && coll.book.equals(fromBookToAdd)) {
+		if (coll.security.equals(securityToAdd) && coll.exchange.equals(exchangeToAdd)
+			&& coll.book.equals(fromBookToAdd)) {
 		    coll.setQuantity(coll.quantity.add(quantity));
 		    found = true;
 		    break;
@@ -244,6 +280,7 @@ public class CollateralView implements Serializable {
 		collToAdd.setQuantity(quantity);
 		collToAdd.setBook(fromBookToAdd);
 		collToAdd.setSecurity(securityToAdd);
+		collToAdd.setExchange(exchangeToAdd);
 		addedCollateralValues.add(collToAdd);
 	    }
 	} else {
@@ -251,17 +288,20 @@ public class CollateralView implements Serializable {
 	    Collateral coll = new Collateral();
 	    coll.setQuantity(quantity);
 	    coll.setSecurity(securityToAdd);
+	    coll.setExchange(exchangeToAdd);
 	    coll.setBook(fromBookToAdd);
 	    addedCollateralValues.add(coll);
 	}
+
+	refreshDonutModel();
     }
 
-    public void removeCollateral(String security, String fromBook, BigDecimal quantity) {
+    public void removeCollateral(String security, String exchange, String fromBook, BigDecimal quantity) {
 
 	if (collateralValues != null) {
 	    Collateral toBeRemoved = null;
 	    for (Collateral coll : collateralValues) {
-		if (coll.security.equals(securityToAdd)) {
+		if (coll.security.equals(security) && coll.exchange.equals(exchange)) {
 		    coll.setQuantity(coll.quantity.subtract(quantity));
 		    if (coll.getQuantity().compareTo(BigDecimal.ZERO) == 0) {
 			toBeRemoved = coll;
@@ -275,15 +315,15 @@ public class CollateralView implements Serializable {
 	}
 
 	if (addedCollateralValues != null) {
-	    addedCollateralValues = addedCollateralValues.stream()
-		    .filter(c -> !c.security.equals(securityToAdd) || !c.book.equals(fromBookToAdd))
+	    addedCollateralValues = addedCollateralValues.stream().filter(
+		    c -> !c.security.equals(security) || !c.book.equals(fromBook) || !c.exchange.equals(exchange))
 		    .collect(Collectors.toSet());
 	}
 
 	if (availableCollateralValues != null) {
 	    boolean found = false;
 	    for (Collateral coll : availableCollateralValues) {
-		if (coll.security.equals(securityToAdd) && coll.book.equals(fromBookToAdd)) {
+		if (coll.security.equals(security) && coll.exchange.equals(exchange) && coll.book.equals(fromBook)) {
 		    coll.setQuantity(coll.quantity.add(quantity));
 		    found = true;
 		    break;
@@ -293,24 +333,39 @@ public class CollateralView implements Serializable {
 		Collateral removedColl = new Collateral();
 		removedColl.setQuantity(quantity);
 		removedColl.setBook(fromBook);
-		removedColl.setSecurity(securityToAdd);
+		removedColl.setSecurity(security);
+		removedColl.setExchange(exchange);
 		availableCollateralValues.add(removedColl);
 	    }
 	} else {
-	    collateralValues = new HashSet<>();
+	    availableCollateralValues = new HashSet<>();
 	    Collateral coll = new Collateral();
 	    coll.setQuantity(quantity);
 	    coll.setBook(fromBook);
-	    coll.setSecurity(securityToAdd);
+	    coll.setSecurity(security);
+	    coll.setExchange(exchange);
 	    availableCollateralValues.add(coll);
 	}
+
+	refreshDonutModel();
     }
 
     public void clearCollateralToAdd() {
 	securityToAdd = null;
 	fromBookToAdd = null;
 	maxQuantityToAdd = null;
+	exchangeToAdd = null;
 
+    }
+
+    public void clear() {
+	clearCollateralToAdd();
+	context = null;
+	trade = null;
+	collateralValues = null;
+	addedCollateralValues = null;
+	availableCollateralValues = null;
+	collateralMarketValueDonutModel.setData(null);
     }
 
     public void refresh(long tradeId) {
@@ -322,7 +377,7 @@ public class CollateralView implements Serializable {
 	}
 	collateralValues.clear();
 	availableCollateralValues.clear();
-	Map<Security, BigDecimal> sec = null;
+	Map<Security, Map<Book, BigDecimal>> sec = null;
 	Set<ProductInventory> inventory = null;
 	try {
 	    GCRepoTrade trade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
@@ -333,11 +388,17 @@ public class CollateralView implements Serializable {
 	    sec = gcRepoTradeBusinessDelegate.getAllocatedCollateral(tradeId);
 
 	    if (sec != null) {
-		for (Map.Entry<Security, BigDecimal> entry : sec.entrySet()) {
-		    Collateral col = new Collateral();
-		    col.setQuantity(entry.getValue());
-		    col.setSecurity(entry.getKey().toString());
-		    collateralValues.add(col);
+		for (Map.Entry<Security, Map<Book, BigDecimal>> entry : sec.entrySet()) {
+		    if (entry.getValue() != null) {
+			for (BigDecimal qty : entry.getValue().values()) {
+			    Collateral col = new Collateral();
+			    col.setQuantity(qty);
+			    col.setSecurity(entry.getKey().toString());
+			    col.setExchange(entry.getKey().getExchange().getCode());
+			    collateralValues.add(col);
+			}
+		    }
+
 		}
 	    }
 
@@ -345,11 +406,14 @@ public class CollateralView implements Serializable {
 
 	    if (inventory != null) {
 		for (ProductInventory inv : inventory) {
-		    Collateral col = new Collateral();
-		    col.setQuantity(inv.getQuantity());
-		    col.setSecurity(((Bond) inv.getProduct()).getIsin());
-		    col.setBook(inv.getBook().getName());
-		    availableCollateralValues.add(col);
+		    if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
+			Collateral col = new Collateral();
+			col.setQuantity(inv.getQuantity());
+			col.setSecurity(((Bond) inv.getProduct()).getIsin());
+			col.setExchange(((Bond) inv.getProduct()).getExchange().getCode());
+			col.setBook(inv.getBook().getName());
+			availableCollateralValues.add(col);
+		    }
 		}
 	    }
 
@@ -357,19 +421,25 @@ public class CollateralView implements Serializable {
 
 	    if (inventory != null) {
 		for (ProductInventory inv : inventory) {
-		    Collateral col = new Collateral();
-		    col.setQuantity(inv.getQuantity());
-		    col.setSecurity(((Equity) inv.getProduct()).getIsin());
-		    col.setBook(inv.getBook().getName());
-		    availableCollateralValues.add(col);
+		    if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
+			Collateral col = new Collateral();
+			col.setQuantity(inv.getQuantity());
+			col.setSecurity(((Equity) inv.getProduct()).getIsin());
+			col.setExchange(((Equity) inv.getProduct()).getExchange().getCode());
+			col.setBook(inv.getBook().getName());
+			availableCollateralValues.add(col);
+		    }
 		}
 	    }
+
+	    this.trade = trade;
+
+	    refreshDonutModel();
+
 	} catch (TradistaBusinessException tbe) {
-	    FacesContext.getCurrentInstance().addMessage(null,
+	    FacesContext.getCurrentInstance().addMessage(COL_MSG,
 		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 	}
-
-	refreshDonutModel(tradeId);
     }
 
     public String getContext() {
@@ -420,13 +490,36 @@ public class CollateralView implements Serializable {
 	this.quantityToAdd = quantityToAdd;
     }
 
-    public void refreshDonutModel(long tradeId) {
+    public String getExchangeToAdd() {
+	return exchangeToAdd;
+    }
+
+    public void setExchangeToAdd(String exchangeToAdd) {
+	this.exchangeToAdd = exchangeToAdd;
+    }
+
+    public GCRepoTrade getTrade() {
+	return trade;
+    }
+
+    public void setTrade(GCRepoTrade trade) {
+	this.trade = trade;
+    }
+
+    public void refreshDonutModel() {
 	ChartData data = new ChartData();
 	DonutChartDataSet dataSet = new DonutChartDataSet();
 
 	try {
-	    BigDecimal collateralMarketValue = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(tradeId);
-	    BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(tradeId);
+	    BigDecimal collateralMarketValue = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getId());
+	    BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(trade.getId());
+
+	    // Add collateral added from the GUI
+	    Map<Security, Map<Book, BigDecimal>> addedSecurities = getAddedSecurities();
+	    if (addedSecurities != null && !addedSecurities.isEmpty()) {
+		collateralMarketValue = collateralMarketValue.add(gcRepoTradeBusinessDelegate
+			.getCollateralMarketToMarket(addedSecurities, trade.getBook().getProcessingOrg().getId()));
+	    }
 
 	    List<Number> values = new ArrayList<>();
 	    values.add(collateralMarketValue);
@@ -434,8 +527,8 @@ public class CollateralView implements Serializable {
 	    dataSet.setData(values);
 
 	    List<String> bgColors = new ArrayList<>();
-	    bgColors.add(ColorUtil.getBlueColorsList().get(0));
-	    bgColors.add(ColorUtil.getRedColorsList().get(0));
+	    bgColors.add(ColorUtil.getTurquoise());
+	    bgColors.add(ColorUtil.getBloodRed());
 	    dataSet.setBackgroundColor(bgColors);
 
 	    data.addChartDataSet(dataSet);
@@ -446,9 +539,40 @@ public class CollateralView implements Serializable {
 
 	    collateralMarketValueDonutModel.setData(data);
 	} catch (TradistaBusinessException tbe) {
-	    FacesContext.getCurrentInstance().addMessage(null,
+	    FacesContext.getCurrentInstance().addMessage(COL_MSG,
 		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 	}
+    }
+
+    public Map<Security, Map<Book, BigDecimal>> getAddedSecurities() {
+	if (addedCollateralValues == null || addedCollateralValues.isEmpty()) {
+	    return null;
+	}
+	// Add collateral added from the GUI
+	Map<Security, Map<Book, BigDecimal>> securities = new HashMap<>();
+	for (Collateral col : addedCollateralValues) {
+	    Security security = bondBusinessDelegate.getBondByIsinAndExchangeCode(col.security, col.exchange);
+	    if (security == null) {
+		security = equityBusinessDelegate.getEquityByIsinAndExchangeCode(col.security, col.exchange);
+	    }
+	    Book book = null;
+	    try {
+		book = bookBusinessDelegate.getBookByName(col.book);
+	    } catch (TradistaBusinessException tbe) {
+		// Not expected here
+	    }
+	    Map<Book, BigDecimal> bookMap = null;
+	    if (securities.containsKey(security)) {
+		bookMap = securities.get(security);
+	    } else {
+		bookMap = new HashMap<>();
+	    }
+	    bookMap.put(book, col.quantity);
+	    securities.put(security, bookMap);
+
+	}
+	return securities;
+
     }
 
 }

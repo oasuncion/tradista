@@ -25,6 +25,11 @@ public class IsAllocated extends Condition<GCRepoTrade> {
 	    // Calculate the total MTM value of the collateral
 	    BigDecimal mtm = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getId());
 
+	    if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
+		mtm = mtm.add(gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getCollateralToAdd(),
+			trade.getBook().getProcessingOrg().getId()));
+	    }
+
 	    // Calculate the exposure (required collateral)
 	    BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(trade.getId());
 

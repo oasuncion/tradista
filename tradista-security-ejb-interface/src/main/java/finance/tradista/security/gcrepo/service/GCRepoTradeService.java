@@ -3,6 +3,7 @@ package finance.tradista.security.gcrepo.service;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.workflow.model.Action;
 import finance.tradista.security.common.model.Security;
@@ -31,15 +32,18 @@ under the License.    */
 
 @Remote
 public interface GCRepoTradeService {
-	
-	long saveGCRepoTrade(GCRepoTrade trade, Action action) throws TradistaBusinessException;
-	
-	GCRepoTrade getGCRepoTradeById(long id);
-	
-	Map<Security, BigDecimal> getAllocatedCollateral(long tradeId) throws TradistaBusinessException;
 
-	BigDecimal getCollateralMarketToMarket(long tradeId) throws TradistaBusinessException;
+    long saveGCRepoTrade(GCRepoTrade trade, Action action) throws TradistaBusinessException;
 
-	BigDecimal getExposure(long tradeId) throws TradistaBusinessException;
-	
+    GCRepoTrade getGCRepoTradeById(long id);
+
+    Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(long tradeId) throws TradistaBusinessException;
+
+    BigDecimal getCollateralMarketToMarket(long tradeId) throws TradistaBusinessException;
+
+    BigDecimal getExposure(long tradeId) throws TradistaBusinessException;
+
+    BigDecimal getCollateralMarketToMarket(Map<Security, Map<Book, BigDecimal>> securities, long poId)
+	    throws TradistaBusinessException;
+
 }

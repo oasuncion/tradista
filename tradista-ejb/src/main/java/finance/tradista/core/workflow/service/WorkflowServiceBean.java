@@ -58,32 +58,21 @@ public class WorkflowServiceBean implements WorkflowService {
     }
 
     @Override
-    public Set<Action> getAvailableActionsFromStatus(String workflowName, Status status)
+    public Set<String> getAvailableActionsFromStatus(String workflowName, Status status)
 	    throws TradistaBusinessException {
 	finance.tradista.flow.model.Workflow workflow;
-	Set<finance.tradista.flow.model.Action> actions = null;
-	Set<Action> actionsResult = null;
+	Set<String> actionNames = null;
 	try {
 	    workflow = WorkflowManager.getWorkflowByName(workflowName);
 	} catch (TradistaFlowBusinessException tfbe) {
 	    throw new TradistaBusinessException(tfbe);
 	}
 	if (workflow != null) {
-	    actions = workflow.getAvailableActionsFromStatus(StatusMapper.map(status, workflow));
-	    if (actions != null) {
-		actionsResult = new HashSet<>(actions.size());
-		for (finance.tradista.flow.model.Action action : actions) {
-		    Action currentAction = ActionMapper.map(action);
-		    if (currentAction != null) {
-			currentAction.setWorkflowName(workflowName);
-			actionsResult.add(currentAction);
-		    }
-		}
-	    }
+	    actionNames = workflow.getAvailableActionsFromStatus(StatusMapper.map(status, workflow));
 	} else {
 	    throw new TradistaBusinessException(String.format("The workflow %s cannot be found", workflowName));
 	}
-	return actionsResult;
+	return actionNames;
     }
 
     @Override

@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
@@ -416,19 +415,15 @@ public class GCRepoTradeView implements Serializable {
 		gcRepoTrade.setIndexTenor(null);
 		gcRepoTrade.setIndexOffset(null);
 	    }
-	    Action ac = workflowBusinessDelegate
-		    .getAvailableActionsFromStatus(gcRepoTrade.getWorkflow(), gcRepoTrade.getStatus()).stream()
-		    .filter(a -> a.getName().equals(actionToApply)).findAny().get();
-	    long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, ac);
+	    long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, actionToApply);
 	    if (gcRepoTrade.getId() == 0) {
 		gcRepoTrade.setId(tradeId);
 	    }
 	    gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
-	    Set<Action> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
+	    Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
 		    gcRepoTrade.getStatus());
-	    if (availableActions != null) {
-		allAvailableActions = availableActions.stream().map(a -> a.getName()).collect(Collectors.toSet())
-			.toArray(new String[availableActions.size()]);
+	    if (availableActions != null && !availableActions.isEmpty()) {
+		allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 	    }
 	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 		    "Trade " + gcRepoTrade.getId() + " successfully saved"));
@@ -449,16 +444,12 @@ public class GCRepoTradeView implements Serializable {
 		gcRepoTrade.setIndexTenor(null);
 		gcRepoTrade.setIndexOffset(null);
 	    }
-	    Action ac = workflowBusinessDelegate
-		    .getAvailableActionsFromStatus(gcRepoTrade.getWorkflow(), gcRepoTrade.getStatus()).stream()
-		    .filter(a -> a.getName().equals(Action.NEW)).findAny().get();
-	    long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, ac);
+	    long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, Action.NEW);
 	    gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
-	    Set<Action> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
+	    Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
 		    gcRepoTrade.getStatus());
-	    if (availableActions != null) {
-		allAvailableActions = availableActions.stream().map(a -> a.getName()).collect(Collectors.toSet())
-			.toArray(new String[availableActions.size()]);
+	    if (availableActions != null && !availableActions.isEmpty()) {
+		allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 	    }
 	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 		    "Trade " + gcRepoTrade.getId() + " successfully created"));
@@ -497,11 +488,10 @@ public class GCRepoTradeView implements Serializable {
 		gcRepoTrade.setRightOfSubstitution(gcTrade.isRightOfSubstitution());
 		gcRepoTrade.setTerminableOnDemand(gcTrade.isTerminableOnDemand());
 		gcRepoTrade.setStatus(gcTrade.getStatus());
-		Set<Action> availableActions = workflowBusinessDelegate
+		Set<String> availableActions = workflowBusinessDelegate
 			.getAvailableActionsFromStatus(workflow.getName(), gcTrade.getStatus());
-		if (availableActions != null) {
-		    allAvailableActions = availableActions.stream().map(a -> a.getName()).collect(Collectors.toSet())
-			    .toArray(new String[availableActions.size()]);
+		if (availableActions != null && !availableActions.isEmpty()) {
+		    allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 		}
 		FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO,
 			"Info", "Trade " + gcRepoTrade.getId() + " successfully loaded."));
@@ -582,7 +572,7 @@ public class GCRepoTradeView implements Serializable {
     public void setAllAvailableActions(String[] allAvailableActions) {
 	this.allAvailableActions = allAvailableActions;
     }
-    
+
     public void refreshCollateral(Map<Security, Map<Book, BigDecimal>> securities) {
 	if (securities != null && !securities.isEmpty()) {
 	    gcRepoTrade.setCollateralToAdd(securities);

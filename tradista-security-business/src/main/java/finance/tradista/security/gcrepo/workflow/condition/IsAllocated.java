@@ -11,9 +11,6 @@ import jakarta.persistence.Transient;
 @Entity
 public class IsAllocated extends Condition<GCRepoTrade> {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     @Transient

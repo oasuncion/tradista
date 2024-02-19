@@ -45,7 +45,7 @@ public class GCRepoTradeBusinessDelegate {
 	validator = new GCRepoTradeValidator();
     }
 
-    public long saveGCRepoTrade(GCRepoTrade trade, Action action) throws TradistaBusinessException {
+    public long saveGCRepoTrade(GCRepoTrade trade, String action) throws TradistaBusinessException {
 	validator.validateTrade(trade);
 	return SecurityUtil.runEx(() -> gcRepoTradeService.saveGCRepoTrade(trade, action));
     }

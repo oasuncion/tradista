@@ -33,8 +33,8 @@ public interface WorkflowService {
 
     Workflow getWorkflowByName(String name) throws TradistaBusinessException;
 
-    Set<Action> getAvailableActionsFromStatus(String workflowName, Status status) throws TradistaBusinessException;
-
     Status getInitialStatus(String workflowName) throws TradistaBusinessException;
+
+    Set<String> getAvailableActionsFromStatus(String workflowName, Status status) throws TradistaBusinessException;
 
 }

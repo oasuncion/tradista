@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.book.model.Book;
@@ -111,7 +112,7 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 
     @Interceptors({ GCRepoProductScopeFilteringInterceptor.class, TradeAuthorizationFilteringInterceptor.class })
     @Override
-    public long saveGCRepoTrade(GCRepoTrade trade, Action action) throws TradistaBusinessException {
+    public long saveGCRepoTrade(GCRepoTrade trade, String action) throws TradistaBusinessException {
 	GCRepoTradeEvent event = new GCRepoTradeEvent();
 	if (trade.getId() != 0) {
 	    GCRepoTrade oldTrade = GCRepoTradeSQL.getTradeById(trade.getId());
@@ -156,12 +157,12 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	    }
 	}
 
-	if (action != null) {
+	if (!StringUtils.isEmpty(action)) {
 	    try {
 		Workflow workflow = WorkflowManager.getWorkflowByName(trade.getWorkflow());
 		finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade mappedTrade = GCRepoTradeMapper.map(trade,
 			workflow);
-		mappedTrade = WorkflowManager.applyAction(mappedTrade, ActionMapper.map(action, workflow));
+		mappedTrade = WorkflowManager.applyAction(mappedTrade, action);
 		trade.setStatus(StatusMapper.map(mappedTrade.getStatus()));
 	    } catch (TradistaFlowBusinessException tfbe) {
 		throw new TradistaBusinessException(tfbe);

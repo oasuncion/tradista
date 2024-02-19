@@ -46,7 +46,7 @@ public class WorkflowBusinessDelegate {
 	return SecurityUtil.runEx(() -> workflowService.getWorkflowByName(name));
     }
 
-    public Set<Action> getAvailableActionsFromStatus(String workflowName, Status status)
+    public Set<String> getAvailableActionsFromStatus(String workflowName, Status status)
 	    throws TradistaBusinessException {
 	StringBuilder errMsg = new StringBuilder();
 	if (StringUtils.isEmpty(workflowName)) {
@@ -60,7 +60,7 @@ public class WorkflowBusinessDelegate {
 	}
 	return SecurityUtil.runEx(() -> workflowService.getAvailableActionsFromStatus(workflowName, status));
     }
-    
+
     public Status getInitialStatus(String workflowName) throws TradistaBusinessException {
 	StringBuilder errMsg = new StringBuilder();
 	if (StringUtils.isEmpty(workflowName)) {

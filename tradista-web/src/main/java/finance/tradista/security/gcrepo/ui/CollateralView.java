@@ -398,7 +398,6 @@ public class CollateralView implements Serializable {
 			    collateralValues.add(col);
 			}
 		    }
-
 		}
 	    }
 

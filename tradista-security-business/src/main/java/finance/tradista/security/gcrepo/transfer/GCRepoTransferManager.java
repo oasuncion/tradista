@@ -174,7 +174,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 
 	// Returned cash settlement (closing leg)
 	CashTransfer newCashPayment = new CashTransfer(trade.getBook(), TransferPurpose.RETURNED_CASH_PLUS_INTEREST,
-		trade.getSettlementDate(), trade, trade.getCurrency());
+		trade.getEndDate(), trade, trade.getCurrency());
 	if (trade.isFixedRepoRate()) {
 	    BigDecimal repoRate = trade.getRepoRate().divide(new BigDecimal(100),
 		    configurationBusinessDelegate.getScale(), configurationBusinessDelegate.getRoundingMode());

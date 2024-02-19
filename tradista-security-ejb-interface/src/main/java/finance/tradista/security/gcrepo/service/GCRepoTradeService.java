@@ -33,7 +33,7 @@ under the License.    */
 @Remote
 public interface GCRepoTradeService {
 
-    long saveGCRepoTrade(GCRepoTrade trade, Action action) throws TradistaBusinessException;
+    long saveGCRepoTrade(GCRepoTrade trade, String action) throws TradistaBusinessException;
 
     GCRepoTrade getGCRepoTradeById(long id);
 

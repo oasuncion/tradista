@@ -1,5 +1,6 @@
 package finance.tradista.core.workflow.model.mapping;
 
+import finance.tradista.core.workflow.model.PseudoStatus;
 import finance.tradista.core.workflow.model.Status;
 import finance.tradista.flow.model.Workflow;
 
@@ -25,25 +26,36 @@ under the License.    */
 
 public final class StatusMapper {
 
-	public static Status map(finance.tradista.flow.model.Status status) {
-		Status statusResult = null;
-		if (status != null) {
-			statusResult = new Status();
-			statusResult.setId(status.getId());
-			statusResult.setName(status.getName());
-		}
-		return statusResult;
+    private StatusMapper() {
+    }
+
+    public static Status map(finance.tradista.flow.model.Status status) {
+	Status statusResult = null;
+	if (status != null) {
+	    if (status instanceof finance.tradista.flow.model.PseudoStatus) {
+		statusResult = new PseudoStatus();
+	    } else {
+		statusResult = new Status();
+	    }
+	    statusResult.setId(status.getId());
+	    statusResult.setName(status.getName());
 	}
-	
-	public static finance.tradista.flow.model.Status map(Status status, Workflow workflow) {
-		finance.tradista.flow.model.Status statusResult = null;
-		if (status != null) {
-			statusResult = new finance.tradista.flow.model.Status();
-			statusResult.setId(status.getId());
-			statusResult.setName(status.getName());
-			statusResult.setWorkflow(workflow);
-		}
-		return statusResult;
+	return statusResult;
+    }
+
+    public static finance.tradista.flow.model.Status map(Status status, Workflow workflow) {
+	finance.tradista.flow.model.Status statusResult = null;
+	if (status != null) {
+	    if (status instanceof PseudoStatus) {
+		statusResult = new finance.tradista.flow.model.PseudoStatus();
+	    } else {
+		statusResult = new finance.tradista.flow.model.Status();
+	    }
+	    statusResult.setId(status.getId());
+	    statusResult.setName(status.getName());
+	    statusResult.setWorkflow(workflow);
 	}
+	return statusResult;
+    }
 
 }

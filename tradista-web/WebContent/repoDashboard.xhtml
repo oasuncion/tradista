@@ -272,9 +272,12 @@
 														</p:selectOneMenu>
 														<p:commandButton value="Save" style="margin-left:10px"
 															styleClass="rounded-button" update="@form">
-															<f:actionListener binding="#{gCRepoTradeView.refreshCollateral(collateralView.getAddedSecurities())}" />
+															<f:actionListener
+																binding="#{gCRepoTradeView.refreshCollateral(collateralView.getAddedSecurities())}" />
 															<f:actionListener binding="#{gCRepoTradeView.save()}" />
 															<f:actionListener binding="#{bookView.loadBook()}" />
+															<f:actionListener
+																binding="#{collateralView.refresh(gCRepoTradeView.id)}" />
 														</p:commandButton>
 														<p:commandButton value="Copy" style="margin-left:10px"
 															styleClass="rounded-button" update="@form">
@@ -286,8 +289,7 @@
 														<p:commandButton value="New" style="margin-left:10px"
 															styleClass="rounded-button"
 															action="#{gCRepoTradeView.clear}" update="@form">
-															<f:actionListener
-																binding="#{collateralView.clear()}" />
+															<f:actionListener binding="#{collateralView.clear()}" />
 														</p:commandButton>
 														<p:outputLabel value="Load by Id" style="margin-left:10px" />
 														<p:inputText value="#{gCRepoTradeView.idToBeLoaded}"
@@ -333,7 +335,7 @@
 															</p:dataTable>
 														</p:column>
 													</p:row>
-													<p:row rendered="#{not (collateralView.context eq null)}" >
+													<p:row rendered="#{not (collateralView.context eq null)}">
 														<p:column>
 															<p:outputLabel value="Available Collateral :"
 																class="label" />
@@ -363,7 +365,7 @@
 															</p:dataTable>
 														</p:column>
 													</p:row>
-													<p:row rendered="#{not (collateralView.context eq null)}" >
+													<p:row rendered="#{not (collateralView.context eq null)}">
 														<p:column>
 															<p:outputLabel value="Added :" class="label" />
 															<p:dataTable id="addedCollateralDataTable" var="coll"

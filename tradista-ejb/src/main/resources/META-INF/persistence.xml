@@ -17,6 +17,8 @@
 		<class>finance.tradista.flow.model.PseudoStatus</class>
 		<class>finance.tradista.flow.model.TradistaFlowObject</class>
 		<class>finance.tradista.security.gcrepo.workflow.condition.IsAllocated</class>
+		<class>finance.tradista.security.gcrepo.workflow.guard.AllocationChanged</class>
+		<class>finance.tradista.security.gcrepo.workflow.guard.IsPartiallyTerminated</class>
 		<properties>
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.DerbyDialect" />

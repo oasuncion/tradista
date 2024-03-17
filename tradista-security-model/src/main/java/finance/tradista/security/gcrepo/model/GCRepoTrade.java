@@ -2,9 +2,11 @@ package finance.tradista.security.gcrepo.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.tenor.model.Tenor;
@@ -67,8 +69,12 @@ public class GCRepoTrade extends Trade<Product> {
     private boolean terminableOnDemand;
 
     private short noticePeriod;
-    
+
     private Map<Security, Map<Book, BigDecimal>> collateralToAdd;
+
+    private Map<Security, Map<Book, BigDecimal>> collateralToRemove;
+    
+    private Map<LocalDate, BigDecimal> partialTerminations;
 
     @Override
     public String getWorkflow() {
@@ -184,12 +190,41 @@ public class GCRepoTrade extends Trade<Product> {
 	this.gcBasket = gcBasket;
     }
 
+    @SuppressWarnings("unchecked")
     public Map<Security, Map<Book, BigDecimal>> getCollateralToAdd() {
-        return collateralToAdd;
+	return (Map<Security, Map<Book, BigDecimal>>) TradistaModelUtil.deepCopy(collateralToAdd);
     }
 
     public void setCollateralToAdd(Map<Security, Map<Book, BigDecimal>> collateralToAdd) {
-        this.collateralToAdd = collateralToAdd;
+	this.collateralToAdd = collateralToAdd;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<Security, Map<Book, BigDecimal>> getCollateralToRemove() {
+	return (Map<Security, Map<Book, BigDecimal>>) TradistaModelUtil.deepCopy(collateralToRemove);
+    }
+
+    public void setCollateralToRemove(Map<Security, Map<Book, BigDecimal>> collateralToRemove) {
+	this.collateralToRemove = collateralToRemove;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<LocalDate, BigDecimal> getPartialTerminations() {
+        return (Map<LocalDate, BigDecimal>) TradistaModelUtil.deepCopy(partialTerminations);
+    }
+
+    public void setPartialTerminations(Map<LocalDate, BigDecimal> partialTerminations) {
+        this.partialTerminations = partialTerminations;
+    }
+    
+    public void addParTialTermination(LocalDate date, BigDecimal reduction) {
+	if (partialTerminations == null) {
+	    partialTerminations = new HashMap<>();
+	}
+	if (!partialTerminations.containsKey(date)) {
+	    partialTerminations.put(date, BigDecimal.ZERO);
+	}
+	partialTerminations.put(date, partialTerminations.get(date).add(reduction));
     }
 
 }

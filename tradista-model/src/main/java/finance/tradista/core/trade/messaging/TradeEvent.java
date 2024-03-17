@@ -23,14 +23,46 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public interface TradeEvent<X extends Trade<?>> extends Event {
+public abstract class TradeEvent<X extends Trade<?>> implements Event {
 
-	X getTrade();
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5889419872185649873L;
 
-	void setTrade(X trade);
+    private String appliedAction;
 
-	X getOldTrade();
+    private X trade;
 
-	void setOldTrade(X oldTrade);
+    private X oldTrade;
+
+    public X getTrade() {
+	return trade;
+    }
+
+    public void setTrade(X trade) {
+	this.trade = trade;
+    }
+
+    public X getOldTrade() {
+	return oldTrade;
+    }
+
+    public void setOldTrade(X oldTrade) {
+	this.oldTrade = oldTrade;
+    }
+
+    /**
+     * Return the last action applied to the object.
+     * 
+     * @return the last action applied to the object.
+     */
+    public String getAppliedAction() {
+	return appliedAction;
+    }
+
+    public void setAppliedAction(String action) {
+	appliedAction = action;
+    }
 
 }

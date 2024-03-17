@@ -65,6 +65,7 @@ run '../sql/EQUITY.sql';
 run '../sql/EQUITY_OPTION.sql';
 run '../sql/BOND.sql';
 run '../sql/TRADE.sql';
+run '../sql/PARTIAL_TERMINATION.sql';
 run '../sql/GCREPO_TRADE.sql';
 run '../sql/TRANSFER.sql';
 run '../sql/FIXING_ERROR.sql';

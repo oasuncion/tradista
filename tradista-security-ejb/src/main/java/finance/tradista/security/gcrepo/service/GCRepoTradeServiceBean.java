@@ -26,8 +26,6 @@ import finance.tradista.core.transfer.model.Transfer.Direction;
 import finance.tradista.core.transfer.model.Transfer.Type;
 import finance.tradista.core.transfer.model.TransferPurpose;
 import finance.tradista.core.transfer.service.TransferBusinessDelegate;
-import finance.tradista.core.workflow.model.Action;
-import finance.tradista.core.workflow.model.mapping.ActionMapper;
 import finance.tradista.core.workflow.model.mapping.StatusMapper;
 import finance.tradista.core.workflow.service.WorkflowService;
 import finance.tradista.flow.exception.TradistaFlowBusinessException;
@@ -114,6 +112,7 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
     @Override
     public long saveGCRepoTrade(GCRepoTrade trade, String action) throws TradistaBusinessException {
 	GCRepoTradeEvent event = new GCRepoTradeEvent();
+	long result = trade.getId();
 	if (trade.getId() != 0) {
 	    GCRepoTrade oldTrade = GCRepoTradeSQL.getTradeById(trade.getId());
 	    event.setOldTrade(oldTrade);
@@ -152,9 +151,38 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 		    }
 		}
 	    }
-	    if (!errMsg.isEmpty()) {
-		throw new TradistaBusinessException(errMsg.toString());
+
+	}
+
+	// Checking business consistency of collateral to remove
+	if (trade.getCollateralToRemove() != null && !trade.getCollateralToRemove().isEmpty()) {
+	    for (Map.Entry<Security, Map<Book, BigDecimal>> entry : trade.getCollateralToRemove().entrySet()) {
+		// 1. Security must exist
+		Security secInDb = bondService.getBondById(entry.getKey().getId());
+		if (secInDb == null) {
+		    secInDb = equityService.getEquityById(entry.getKey().getId());
+		}
+		if (secInDb == null) {
+		    errMsg.append(String.format(
+			    "The security %s cannot be found in the system, it cannot be removed from collateral.%n",
+			    entry.getKey()));
+		    continue;
+		}
+		// 2. Books should exist
+		Map<Book, BigDecimal> bookMap = entry.getValue();
+		for (Map.Entry<Book, BigDecimal> bookEntry : bookMap.entrySet()) {
+		    Book bookInDb = bookService.getBookById(bookEntry.getKey().getId());
+		    if (bookInDb == null) {
+			errMsg.append(String.format(
+				"The  book %s cannot be found in the system, it cannot be used as collateral source.%n",
+				bookEntry.getKey().getName()));
+		    }
+		}
 	    }
+	}
+
+	if (!errMsg.isEmpty()) {
+	    throw new TradistaBusinessException(errMsg.toString());
 	}
 
 	if (!StringUtils.isEmpty(action)) {
@@ -170,8 +198,8 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	}
 
 	event.setTrade(trade);
-	long result = GCRepoTradeSQL.saveGCRepoTrade(trade);
-
+	event.setAppliedAction(action);
+	result = GCRepoTradeSQL.saveGCRepoTrade(trade);
 	context.createProducer().send(destination, event);
 
 	return result;
@@ -209,7 +237,8 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 
 	if (givenCollateral != null && !givenCollateral.isEmpty()) {
 	    givenCollateral = givenCollateral.stream()
-		    .filter(t -> t.getSettlementDate() == null || t.getSettlementDate().isBefore(LocalDate.now()))
+		    .filter(t -> t.getSettlementDate() == null || t.getSettlementDate().isBefore(LocalDate.now())
+			    || t.getSettlementDate().isEqual(LocalDate.now()))
 		    .toList();
 	    securities = new HashMap<>(givenCollateral.size());
 	    for (Transfer t : givenCollateral) {
@@ -236,15 +265,20 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	}
 	if (returnedCollateral != null && !returnedCollateral.isEmpty()) {
 	    returnedCollateral = returnedCollateral.stream()
-		    .filter(t -> t.getSettlementDate() == null || t.getSettlementDate().isBefore(LocalDate.now()))
+		    .filter(t -> t.getSettlementDate() == null || t.getSettlementDate().isBefore(LocalDate.now())
+			    || t.getSettlementDate().isEqual(LocalDate.now()))
 		    .toList();
-	    securities = new HashMap<>(returnedCollateral.size());
-	    for (Transfer t : returnedCollateral) {
-		if (securities.containsKey(t.getProduct())) {
-		    Map<Book, BigDecimal> bookMap = securities.get(t.getProduct());
-		    BigDecimal newQty = bookMap.get(trade.getBook()).subtract(((ProductTransfer) t).getQuantity());
-		    bookMap.put(trade.getBook(), newQty);
-		    securities.put((Security) t.getProduct(), bookMap);
+	    if (!returnedCollateral.isEmpty()) {
+		if (securities == null) {
+		    securities = new HashMap<>(returnedCollateral.size());
+		}
+		for (Transfer t : returnedCollateral) {
+		    if (securities.containsKey(t.getProduct())) {
+			Map<Book, BigDecimal> bookMap = securities.get(t.getProduct());
+			BigDecimal newQty = bookMap.get(trade.getBook()).subtract(((ProductTransfer) t).getQuantity());
+			bookMap.put(trade.getBook(), newQty);
+			securities.put((Security) t.getProduct(), bookMap);
+		    }
 		}
 	    }
 	}

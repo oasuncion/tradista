@@ -23,36 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class IRCapFloorCollarTradeEvent implements TradeEvent<IRCapFloorCollarTrade> {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5369396492638098532L;
+public class IRCapFloorCollarTradeEvent extends TradeEvent<IRCapFloorCollarTrade> {
 
-	private IRCapFloorCollarTrade trade;
-
-	private IRCapFloorCollarTrade oldTrade;
-
-	@Override
-	public IRCapFloorCollarTrade getTrade() {
-		return trade;
-	}
-
-	@Override
-	public void setTrade(IRCapFloorCollarTrade trade) {
-		this.trade = trade;
-	}
-
-	@Override
-	public IRCapFloorCollarTrade getOldTrade() {
-		return oldTrade;
-	}
-
-	@Override
-	public void setOldTrade(IRCapFloorCollarTrade oldTrade) {
-		this.oldTrade = oldTrade;
-	}
-
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5369396492638098532L;
 
 }

@@ -23,38 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class GCRepoTradeEvent implements TradeEvent<GCRepoTrade> {
+public class GCRepoTradeEvent extends TradeEvent<GCRepoTrade> {
 
-
-
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7483119942010467086L;
-
-	private GCRepoTrade trade;
-
-	private GCRepoTrade oldTrade;
-
-	@Override
-	public GCRepoTrade getTrade() {
-		return trade;
-	}
-
-	@Override
-	public void setTrade(GCRepoTrade trade) {
-		this.trade = trade;
-	}
-
-	@Override
-	public GCRepoTrade getOldTrade() {
-		return oldTrade;
-	}
-
-	@Override
-	public void setOldTrade(GCRepoTrade oldTrade) {
-		this.oldTrade = oldTrade;
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7483119942010467086L;
 
 }

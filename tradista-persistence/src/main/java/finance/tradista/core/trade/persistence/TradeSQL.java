@@ -352,6 +352,7 @@ public class TradeSQL {
 	    join += " LEFT OUTER JOIN EQUITY_TRADE UNDERLYING_EQUITY ON VANILLA_OPTION_TRADE.UNDERLYING_TRADE_ID = UNDERLYING_EQUITY.EQUITY_TRADE_ID";
 	    // TODO Check if outer join on und_trade is needed in the case of options, I
 	    // think so.
+	    join += " LEFT OUTER JOIN GCREPO_TRADE ON GCREPO_TRADE.GCREPO_TRADE_ID=TRADE.TRADE_ID";
 	    join += " LEFT OUTER JOIN TRADE UND_EQUITY_TRADE ON UNDERLYING_EQUITY.EQUITY_TRADE_ID=UND_EQUITY_TRADE.ID";
 	    join += " LEFT OUTER JOIN TRADE UND_FXSPOT_TRADE ON UNDERLYING_FXSPOT.FXSPOT_TRADE_ID=UND_FXSPOT_TRADE.ID";
 	    join += " LEFT OUTER JOIN TRADE UND_IRSWAP_TRADE ON UNDERLYING_IRSWAP.IRSWAP_TRADE_ID=UND_IRSWAP_TRADE.ID";
@@ -589,6 +590,8 @@ public class TradeSQL {
 
 	    aliases.append("EQUITY_TRADE.EQUITY_TRADE_ID EQUITY_TRADE_ID,");
 	    aliases.append("EQUITY_TRADE.QUANTITY EQUITY_QUANTITY");
+	    
+	    aliases.append("GCREPO_TRADE.END_DATE GCREPO_END_DATE");
 
 	    return aliases.toString();
 	}
@@ -724,6 +727,10 @@ public class TradeSQL {
 	    aliases.append("EQUITY_TRADE.QUANTITY EQUITY_QUANTITY");
 	    break;
 	}
+	case "GCRepo": {
+	    aliases.append("GCREPO_TRADE.END_DATE GCREPO_END_DATE");
+	    break;
+	}
 	case "FXOption": {
 	    aliases.append("VANILLA_OPTION_TRADE.VANILLA_OPTION_TRADE_ID VANILLA_OPTION_TRADE_ID,");
 	    aliases.append("VANILLA_OPTION_TRADE.STYLE STYLE,");
@@ -856,6 +863,10 @@ public class TradeSQL {
     private static String buildJoin(String productType) {
 	String where = " WHERE ";
 	switch (productType) {
+	case "GCRepo": {
+	    where += "TRADE.ID = GCREPO_TRADE.GCREPO_TRADE_ID";
+	    break;
+	}
 	case "CcySwap": {
 	    where += "TRADE.ID = IRSWAP_TRADE.IRSWAP_TRADE_ID AND IRSWAP_TRADE.IRSWAP_TRADE_ID=CCYSWAP_TRADE.CCYSWAP_TRADE_ID";
 	    break;
@@ -925,6 +936,8 @@ public class TradeSQL {
 	    return "CCYSWAP_TRADE, IRSWAP_TRADE";
 	case "EquityOption":
 	    return "VANILLA_OPTION_TRADE, EQUITY_TRADE UNDERLYING_EQUITY, TRADE UND_EQUITY_TRADE";
+	case "GCRepo":
+	    return "GCREPO_TRADE";
 	case "FXNDF":
 	    return "FXNDF_TRADE";
 	case "IRSwap":

@@ -23,36 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class FutureTradeEvent implements TradeEvent<FutureTrade> {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 216390350630481005L;
+public class FutureTradeEvent extends TradeEvent<FutureTrade> {
 
-	private FutureTrade trade;
-
-	private FutureTrade oldTrade;
-
-	@Override
-	public FutureTrade getTrade() {
-		return trade;
-	}
-
-	@Override
-	public void setTrade(FutureTrade trade) {
-		this.trade = trade;
-	}
-
-	@Override
-	public FutureTrade getOldTrade() {
-		return oldTrade;
-	}
-
-	@Override
-	public void setOldTrade(FutureTrade oldTrade) {
-		this.oldTrade = oldTrade;
-	}
-
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 216390350630481005L;
 
 }

@@ -1,6 +1,7 @@
 package finance.tradista.security.gcrepo.validator;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Map;
 
 import finance.tradista.core.book.model.Book;
@@ -113,6 +114,65 @@ public class GCRepoTradeValidator extends DefaultTradeValidator {
 			}
 		    }
 
+		}
+	    }
+	}
+
+	// surface checks of collateral to remove
+	if (gcRepoTrade.getCollateralToRemove() != null && !gcRepoTrade.getCollateralToRemove().isEmpty()) {
+	    for (Map.Entry<Security, Map<Book, BigDecimal>> entry : gcRepoTrade.getCollateralToRemove().entrySet()) {
+		if (entry.getKey() == null) {
+		    errMsg.append("One of the securities to remove as collateral is null, please check.%n");
+		    continue;
+		}
+		if (entry.getValue() == null) {
+		    errMsg.append(String.format(
+			    "Book and quantity of the security %s to remove as collateral is null , please check.%n",
+			    entry.getKey()));
+		} else {
+		    Map<Book, BigDecimal> bookMap = entry.getValue();
+		    for (Map.Entry<Book, BigDecimal> bookEntry : bookMap.entrySet()) {
+			if (bookEntry.getKey() == null) {
+			    errMsg.append(String.format(
+				    "Book of the security %s to remove as collateral is null , please check.%n",
+				    entry.getKey()));
+			    continue;
+			}
+			if (bookEntry.getValue() == null) {
+			    errMsg.append(String.format(
+				    "Quantity of the security %s with book %s to remove as collateral is null , please check.%n",
+				    entry.getKey(), bookEntry.getKey()));
+			}
+		    }
+
+		}
+	    }
+	}
+
+	// surface checks of partial terminations values
+	if (gcRepoTrade.getPartialTerminations() != null && !gcRepoTrade.getPartialTerminations().isEmpty()) {
+	    for (Map.Entry<LocalDate, BigDecimal> entry : gcRepoTrade.getPartialTerminations().entrySet()) {
+		if (entry.getKey() == null) {
+		    errMsg.append("One of the partial termination dates is null, please check.%n");
+		    continue;
+		} else {
+		    if (entry.getKey().isBefore(gcRepoTrade.getSettlementDate())
+			    || entry.getKey().isAfter(gcRepoTrade.getEndDate())) {
+			errMsg.append(String.format(
+				"One of the partial termination date (%tD) is not between trade settlement and end dates, please check.%n",
+				entry.getKey()));
+		    }
+		}
+		if (entry.getValue() == null) {
+		    errMsg.append(
+			    String.format("Partial termination reduction amount is null for date %tD , please check.%n",
+				    entry.getKey()));
+		} else {
+		    if (entry.getValue().signum() <= 0) {
+			errMsg.append(String.format(
+				"Partial termination amount (%s) for date %tD must be positive, please check.%n",
+				entry.getValue(), entry.getKey()));
+		    }
 		}
 	    }
 	}

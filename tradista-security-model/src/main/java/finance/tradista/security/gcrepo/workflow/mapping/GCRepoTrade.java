@@ -148,6 +148,14 @@ public class GCRepoTrade implements WorkflowObject {
 	return marginRate;
     }
 
+    public Map<LocalDate, BigDecimal> getPartialTerminations() {
+	Map<LocalDate, BigDecimal> partialTerminations = null;
+	if (gcRepoTrade != null) {
+	    partialTerminations = gcRepoTrade.getPartialTerminations();
+	}
+	return partialTerminations;
+    }
+
     public void setGcRepoTrade(finance.tradista.security.gcrepo.model.GCRepoTrade gcRepoTrade) {
 	this.gcRepoTrade = gcRepoTrade;
     }
@@ -158,6 +166,14 @@ public class GCRepoTrade implements WorkflowObject {
 	    collateralToAdd = gcRepoTrade.getCollateralToAdd();
 	}
 	return collateralToAdd;
+    }
+
+    public Map<Security, Map<Book, BigDecimal>> getCollateralToRemove() {
+	Map<Security, Map<Book, BigDecimal>> collateralToRemove = null;
+	if (gcRepoTrade != null) {
+	    collateralToRemove = gcRepoTrade.getCollateralToRemove();
+	}
+	return collateralToRemove;
     }
 
     @Override

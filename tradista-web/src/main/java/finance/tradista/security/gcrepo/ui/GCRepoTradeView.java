@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
+import finance.tradista.core.action.constants.ActionConstants;
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
@@ -111,6 +112,9 @@ public class GCRepoTradeView implements Serializable {
     private String action;
 
     private String[] allAvailableActions;
+
+    // Used to get the reduction amount in case of partial termination
+    private BigDecimal originalCashAmount;
 
     private static final String TRADE_MSG = "tradeMsg";
 
@@ -493,6 +497,7 @@ public class GCRepoTradeView implements Serializable {
 		if (availableActions != null && !availableActions.isEmpty()) {
 		    allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 		}
+		originalCashAmount = gcTrade.getAmount();
 		FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO,
 			"Info", "Trade " + gcRepoTrade.getId() + " successfully loaded."));
 	    } else {
@@ -573,9 +578,24 @@ public class GCRepoTradeView implements Serializable {
 	this.allAvailableActions = allAvailableActions;
     }
 
-    public void refreshCollateral(Map<Security, Map<Book, BigDecimal>> securities) {
-	if (securities != null && !securities.isEmpty()) {
-	    gcRepoTrade.setCollateralToAdd(securities);
+    public BigDecimal getOriginalCashAmount() {
+	return originalCashAmount;
+    }
+
+    public void setOriginalCashAmount(BigDecimal originalCashAmount) {
+	this.originalCashAmount = originalCashAmount;
+    }
+
+    public void updateTrade(Map<Security, Map<Book, BigDecimal>> securitiesToAdd,
+	    Map<Security, Map<Book, BigDecimal>> securitiesToRemove) {
+	if (securitiesToAdd != null && !securitiesToAdd.isEmpty()) {
+	    gcRepoTrade.setCollateralToAdd(securitiesToAdd);
+	}
+	if (securitiesToRemove != null && !securitiesToRemove.isEmpty()) {
+	    gcRepoTrade.setCollateralToRemove(securitiesToRemove);
+	}
+	if (action != null && action.equals(ActionConstants.PARTIALLY_TERMINATE)) {
+	    gcRepoTrade.addParTialTermination(LocalDate.now(), originalCashAmount.subtract(gcRepoTrade.getAmount()));
 	}
     }
 

@@ -1,5 +1,6 @@
 package finance.tradista.security.gcrepo.persistence;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
@@ -42,13 +45,20 @@ public class GCRepoTradeSQL {
 	GCRepoTrade gcRepoTrade = null;
 
 	try (Connection con = TradistaDB.getConnection();
-		PreparedStatement stmtGetTradeById = con.prepareStatement("SELECT * FROM GCREPO_TRADE, TRADE WHERE "
-			+ " TRADE.ID = GCREPO_TRADE.GCREPO_TRADE_ID AND GCREPO_TRADE.GCREPO_TRADE_ID = ?")) {
+		PreparedStatement stmtGetTradeById = con.prepareStatement(
+			"SELECT * FROM GCREPO_TRADE INNER JOIN TRADE ON TRADE.ID = GCREPO_TRADE.GCREPO_TRADE_ID"
+				+ " LEFT OUTER JOIN PARTIAL_TERMINATION ON PARTIAL_TERMINATION.TRADE_ID = GCREPO_TRADE.GCREPO_TRADE_ID"
+				+ " WHERE GCREPO_TRADE.GCREPO_TRADE_ID = ?")) {
 	    stmtGetTradeById.setLong(1, id);
 	    try (ResultSet results = stmtGetTradeById.executeQuery()) {
 		while (results.next()) {
 		    if (gcRepoTrade == null) {
 			gcRepoTrade = new GCRepoTrade();
+		    }
+		    java.sql.Date partialTerminationDate = results.getDate("date");
+		    if (partialTerminationDate != null) {
+			gcRepoTrade.addParTialTermination(partialTerminationDate.toLocalDate(),
+				results.getBigDecimal("reduction"));
 		    }
 		    TradeSQL.setTradeCommonFields(gcRepoTrade, results);
 		    gcRepoTrade.setCrossCurrencyCollateral(results.getBoolean("cross_currency_collateral"));
@@ -92,12 +102,18 @@ public class GCRepoTradeSQL {
 		PreparedStatement stmtSaveGCTrade = (trade.getId() == 0) ? con.prepareStatement(
 			"INSERT INTO GCREPO_TRADE(CROSS_CURRENCY_COLLATERAL, END_DATE, INDEX_ID, INDEX_TENOR, INDEX_OFFSET, MARGIN_RATE, NOTICE_PERIOD, REPO_RATE, RIGHT_OF_REUSE, RIGHT_OF_SUBSTITUTION, TERMINABLE_ON_DEMAND, GCBASKET_ID, GCREPO_TRADE_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ")
 			: con.prepareStatement(
-				"UPDATE GCREPO_TRADE SET CROSS_CURRENCY_COLLATERAL = ?, END_DATE = ?, INDEX_ID = ?, INDEX_TENOR = ?, INDEX_OFFSET = ?, MARGIN_RATE = ?, NOTICE_PERIOD = ?, REPO_RATE = ?, RIGHT_OF_REUSE = ?, RIGHT_OF_SUBSTITUTION = ?, TERMINABLE_ON_DEMAND = ?, GCBASKET_ID = ? WHERE GCREPO_TRADE_ID = ?")) {
+				"UPDATE GCREPO_TRADE SET CROSS_CURRENCY_COLLATERAL = ?, END_DATE = ?, INDEX_ID = ?, INDEX_TENOR = ?, INDEX_OFFSET = ?, MARGIN_RATE = ?, NOTICE_PERIOD = ?, REPO_RATE = ?, RIGHT_OF_REUSE = ?, RIGHT_OF_SUBSTITUTION = ?, TERMINABLE_ON_DEMAND = ?, GCBASKET_ID = ? WHERE GCREPO_TRADE_ID = ?");
+		PreparedStatement stmtDeletePartialTerminations = con
+			.prepareStatement("DELETE FROM PARTIAL_TERMINATION WHERE TRADE_ID = ?");
+		PreparedStatement stmtSavePartialTermination = con.prepareStatement(
+			"INSERT INTO PARTIAL_TERMINATION(TRADE_ID, DATE, REDUCTION) VALUES(?, ?, ?)")) {
 	    boolean isBuy = trade.isBuy();
 	    if (trade.getId() == 0) {
 		stmtSaveTrade.setDate(10, java.sql.Date.valueOf(LocalDate.now()));
 	    } else {
 		stmtSaveTrade.setLong(10, trade.getId());
+		stmtDeletePartialTerminations.setLong(1, trade.getId());
+		stmtDeletePartialTerminations.executeUpdate();
 	    }
 	    stmtSaveTrade.setBoolean(1, isBuy);
 	    stmtSaveTrade.setDate(2, java.sql.Date.valueOf(trade.getTradeDate()));
@@ -108,6 +124,19 @@ public class GCRepoTradeSQL {
 	    stmtSaveTrade.setDate(7, java.sql.Date.valueOf(trade.getSettlementDate()));
 	    stmtSaveTrade.setLong(8, trade.getCurrency().getId());
 	    stmtSaveTrade.setLong(9, trade.getStatus().getId());
+	    if (trade.getPartialTerminations() != null && !trade.getPartialTerminations().isEmpty()) {
+		for (Map.Entry<LocalDate, BigDecimal> partialTerminationEntry : trade.getPartialTerminations()
+			.entrySet()) {
+
+		    stmtSavePartialTermination.clearParameters();
+		    stmtSavePartialTermination.setLong(1, trade.getId());
+		    stmtSavePartialTermination.setDate(2, java.sql.Date.valueOf(partialTerminationEntry.getKey()));
+		    stmtSavePartialTermination.setBigDecimal(3, partialTerminationEntry.getValue());
+		    stmtSavePartialTermination.addBatch();
+
+		}
+	    }
+	    stmtSavePartialTermination.executeBatch();
 	    stmtSaveTrade.executeUpdate();
 
 	    if (trade.getId() == 0) {
@@ -167,7 +196,7 @@ public class GCRepoTradeSQL {
 	    gcRepoTrade = new GCRepoTrade();
 	    gcRepoTrade.setCrossCurrencyCollateral(rs.getBoolean("cross_currency_collateral"));
 	    gcRepoTrade.setGcBasket(GCBasketSQL.getGCBasketById(rs.getLong("gcbasket_id")));
-	    java.sql.Date endDate = rs.getDate("end_date");
+	    java.sql.Date endDate = rs.getDate("gcrepo_end_date");
 	    if (endDate != null) {
 		gcRepoTrade.setEndDate(endDate.toLocalDate());
 	    }
@@ -183,6 +212,7 @@ public class GCRepoTradeSQL {
 	    gcRepoTrade.setRightOfReuse(rs.getBoolean("right_of_reuse"));
 	    gcRepoTrade.setRightOfSubstitution(rs.getBoolean("right_of_substitution"));
 	    gcRepoTrade.setTerminableOnDemand(rs.getBoolean("terminable_on_demand"));
+	    gcRepoTrade.setPartialTerminations(GCRepoTradeSQL.getPartialTerminations(rs.getLong("gcrepo_trade_id")));
 
 	    // Commmon fields
 	    TradeSQL.setTradeCommonFields(gcRepoTrade, rs);
@@ -192,6 +222,29 @@ public class GCRepoTradeSQL {
 	}
 
 	return gcRepoTrade;
+    }
+
+    private static Map<LocalDate, BigDecimal> getPartialTerminations(long gcRepoTradeId) {
+	Map<LocalDate, BigDecimal> partialTerminations = null;
+
+	try (Connection con = TradistaDB.getConnection();
+		PreparedStatement stmtGetTradeById = con
+			.prepareStatement("SELECT * FROM PARTIAL_TERMINATION WHERE TRADE_ID = ?")) {
+	    stmtGetTradeById.setLong(1, gcRepoTradeId);
+	    try (ResultSet results = stmtGetTradeById.executeQuery()) {
+		while (results.next()) {
+		    if (partialTerminations == null) {
+			partialTerminations = new HashMap<>();
+		    }
+		    partialTerminations.put(results.getDate("date").toLocalDate(), results.getBigDecimal("reduction"));
+
+		}
+	    }
+	} catch (SQLException sqle) {
+	    sqle.printStackTrace();
+	    throw new TradistaTechnicalException(sqle);
+	}
+	return partialTerminations;
     }
 
 }

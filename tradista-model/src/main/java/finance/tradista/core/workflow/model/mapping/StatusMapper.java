@@ -39,6 +39,7 @@ public final class StatusMapper {
 	    }
 	    statusResult.setId(status.getId());
 	    statusResult.setName(status.getName());
+	    statusResult.setWorkflowName(status.getWorkflow().getName());
 	}
 	return statusResult;
     }

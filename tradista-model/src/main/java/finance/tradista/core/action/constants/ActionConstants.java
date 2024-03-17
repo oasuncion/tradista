@@ -1,9 +1,7 @@
-package finance.tradista.core.transfer.messaging;
-
-import finance.tradista.core.transfer.model.CashTransfer;
+package finance.tradista.core.action.constants;
 
 /*
- * Copyright 2018 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,11 +20,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class CashTransferEvent extends TransferEvent<CashTransfer> {
+public final class ActionConstants {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -8806725404338297390L;
+    private ActionConstants() {
+    }
+
+    public static final String PARTIALLY_TERMINATE = "PARTIALLY_TERMINATE";
 
 }

@@ -64,13 +64,18 @@ public abstract class TradistaObject implements Serializable, Cloneable {
 	/**
 	 * hashCode is calculated using the object composite key (@see
 	 * finance.tradista.core.common.model.Id). If the object doesn't have a
-	 * composite key, Object's hashCode implementation is used.
+	 * composite key, id will be used if positive, otherwise Object's hashCode
+	 * implementation is used.
 	 */
 	@Override
 	public int hashCode() {
 		List<Object> values = getAllIdValues();
 		if (values.isEmpty()) {
-			return super.hashCode();
+			if (id > 0) {
+				return Objects.hashCode(id);
+			} else {
+				return super.hashCode();
+			}
 		}
 		return Objects.hash(values);
 	}

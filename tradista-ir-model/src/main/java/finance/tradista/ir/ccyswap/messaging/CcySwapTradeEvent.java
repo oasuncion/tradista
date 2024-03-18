@@ -25,9 +25,9 @@ under the License.    */
 
 public class CcySwapTradeEvent extends TradeEvent<CcySwapTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 5835414921138470671L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5835414921138470671L;
 
 }

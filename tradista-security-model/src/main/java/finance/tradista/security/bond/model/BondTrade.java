@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.trade.model.Trade;
+
 /*
  * Copyright 2014 Olivier Asuncion
  * 
@@ -24,9 +25,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 /**
- * Class representing a trade on Bond.
- * Amount represents the unit price of a bond for this deal.
- *  *
+ * Class representing a trade on Bond. Amount represents the unit price of a
+ * bond for this deal. *
+ * 
  * @param <B> the traded bond.
  */
 public class BondTrade extends Trade<Bond> {
@@ -35,7 +36,7 @@ public class BondTrade extends Trade<Bond> {
 	 * 
 	 */
 	private static final long serialVersionUID = 198715914648744270L;
-	
+
 	private BigDecimal quantity;
 
 	public BigDecimal getQuantity() {
@@ -54,10 +55,10 @@ public class BondTrade extends Trade<Bond> {
 	public BondTrade() {
 		super();
 	}
-	
+
 	public Currency getCurrency() {
 		if (getProduct() != null) {
-			return ((Bond)getProduct()).getCurrency();
+			return ((Bond) getProduct()).getCurrency();
 		}
 		return null;
 	}

@@ -64,539 +64,553 @@ under the License.    */
 @ViewScoped
 public class GCRepoTradeView implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private GCRepoTrade gcRepoTrade;
+	private GCRepoTrade gcRepoTrade;
 
-    private Set<LegalEntity> allCounterparties;
+	private Set<LegalEntity> allCounterparties;
 
-    private Set<Currency> allCurrencies;
+	private Set<Currency> allCurrencies;
 
-    private Set<Index> allIndexes;
+	private Set<Index> allIndexes;
 
-    private Set<Book> allBooks;
+	private Set<Book> allBooks;
 
-    private Direction[] allDirections;
+	private Direction[] allDirections;
 
-    private Set<GCBasket> allBaskets;
+	private Set<GCBasket> allBaskets;
 
-    private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
+	private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
 
-    private CurrencyBusinessDelegate currencyBusinessDelegate;
+	private CurrencyBusinessDelegate currencyBusinessDelegate;
 
-    private BookBusinessDelegate bookBusinessDelegate;
+	private BookBusinessDelegate bookBusinessDelegate;
 
-    private LegalEntityBusinessDelegate legalEntityBusinessDelegate;
+	private LegalEntityBusinessDelegate legalEntityBusinessDelegate;
 
-    private IndexBusinessDelegate indexBusinessDelegate;
+	private IndexBusinessDelegate indexBusinessDelegate;
 
-    private GCBasketBusinessDelegate gcBasketBusinessDelegate;
+	private GCBasketBusinessDelegate gcBasketBusinessDelegate;
 
-    private WorkflowBusinessDelegate workflowBusinessDelegate;
+	private WorkflowBusinessDelegate workflowBusinessDelegate;
 
-    private String idToBeLoaded;
+	private String idToBeLoaded;
 
-    private String[] allInterestTypes;
+	private String[] allInterestTypes;
 
-    private String interestType;
+	private String interestType;
 
-    private Tenor[] allIndexTenors;
+	private Tenor[] allIndexTenors;
 
-    private String[] quoteNames;
+	private String[] quoteNames;
 
-    private Workflow workflow;
+	private Workflow workflow;
 
-    private String action;
+	private String action;
 
-    private String[] allAvailableActions;
+	private String[] allAvailableActions;
 
-    // Used to get the reduction amount in case of partial termination
-    private BigDecimal originalCashAmount;
+	// Used to get the reduction amount in case of partial termination
+	private BigDecimal originalCashAmount;
 
-    private static final String TRADE_MSG = "tradeMsg";
+	private static final String TRADE_MSG = "tradeMsg";
 
-    @PostConstruct
-    public void init() throws TradistaBusinessException {
-	gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
-	gcBasketBusinessDelegate = new GCBasketBusinessDelegate();
-	currencyBusinessDelegate = new CurrencyBusinessDelegate();
-	bookBusinessDelegate = new BookBusinessDelegate();
-	legalEntityBusinessDelegate = new LegalEntityBusinessDelegate();
-	indexBusinessDelegate = new IndexBusinessDelegate();
-	workflowBusinessDelegate = new WorkflowBusinessDelegate();
-	allCurrencies = currencyBusinessDelegate.getAllCurrencies();
-	allCounterparties = legalEntityBusinessDelegate.getAllCounterparties();
-	allIndexes = indexBusinessDelegate.getAllIndexes();
-	allBooks = bookBusinessDelegate.getAllBooks();
-	allDirections = Trade.Direction.values();
-	gcRepoTrade = new GCRepoTrade();
-	allInterestTypes = new String[] { "Fixed", "Floating" };
-	allIndexTenors = Arrays.asList(Tenor.values()).stream().filter(t -> !t.equals(Tenor.NO_TENOR))
-		.toArray(Tenor[]::new);
-	allBaskets = gcBasketBusinessDelegate.getAllGCBaskets();
-	setTradeDate(LocalDate.now());
-	setStartDate(LocalDate.now());
-	workflow = workflowBusinessDelegate.getWorkflowByName(GCRepoTrade.GC_REPO);
-    }
-
-    public String getId() {
-	return gcRepoTrade.getId() == 0 ? "" : Long.toString(gcRepoTrade.getId());
-    }
-
-    public void setId(String id) {
-	gcRepoTrade.setId(Long.parseLong(id));
-    }
-
-    public Direction[] getAllDirections() {
-	return allDirections;
-    }
-
-    public void setAllDirections(Direction[] allDirections) {
-	this.allDirections = allDirections;
-    }
-
-    public BigDecimal getAmount() {
-	return gcRepoTrade.getAmount();
-    }
-
-    public void setAmount(BigDecimal amount) {
-	gcRepoTrade.setAmount(amount);
-    }
-
-    public Status getStatus() {
-	return gcRepoTrade.getStatus();
-    }
-
-    public void setStatus(Status status) {
-	gcRepoTrade.setStatus(status);
-    }
-
-    public GCRepoTrade getGcRepoTrade() {
-	return gcRepoTrade;
-    }
-
-    public void setGcRepoTrade(GCRepoTrade gcRepoTrade) {
-	this.gcRepoTrade = gcRepoTrade;
-    }
-
-    public BigDecimal getRepoRate() {
-	return gcRepoTrade.getRepoRate();
-    }
-
-    public void setRepoRate(BigDecimal repoRate) {
-	gcRepoTrade.setRepoRate(repoRate);
-    }
-
-    public Trade.Direction getDirection() {
-	return (gcRepoTrade.isBuy() ? Direction.BUY : Direction.SELL);
-    }
-
-    public void setDirection(Trade.Direction direction) {
-	gcRepoTrade.setBuySell(Direction.BUY.equals(direction));
-    }
-
-    public LocalDate getTradeDate() {
-	return gcRepoTrade.getTradeDate();
-    }
-
-    public void setTradeDate(LocalDate tradeDate) {
-	gcRepoTrade.setTradeDate(tradeDate);
-    }
-
-    public LocalDate getStartDate() {
-	return gcRepoTrade.getSettlementDate();
-    }
-
-    public void setStartDate(LocalDate startDate) {
-	gcRepoTrade.setSettlementDate(startDate);
-    }
-
-    public LocalDate getEndDate() {
-	return gcRepoTrade.getEndDate();
-    }
-
-    public void setEndDate(LocalDate endDate) {
-	gcRepoTrade.setEndDate(endDate);
-    }
-
-    public Currency getCurrency() {
-	return gcRepoTrade.getCurrency();
-    }
-
-    public void setCurrency(Currency currency) {
-	gcRepoTrade.setCurrency(currency);
-    }
-
-    public LegalEntity getCounterparty() {
-	return gcRepoTrade.getCounterparty();
-    }
-
-    public void setCounterparty(LegalEntity legalEntity) {
-	gcRepoTrade.setCounterparty(legalEntity);
-    }
-
-    public Book getBook() {
-	return gcRepoTrade.getBook();
-    }
-
-    public void setBook(Book book) {
-	gcRepoTrade.setBook(book);
-    }
-
-    public Index getIndex() {
-	return gcRepoTrade.getIndex();
-    }
-
-    public void setIndex(Index index) {
-	gcRepoTrade.setIndex(index);
-    }
-
-    public Tenor getIndexTenor() {
-	return gcRepoTrade.getIndexTenor();
-    }
-
-    public void setIndexTenor(Tenor indexTenor) {
-	gcRepoTrade.setIndexTenor(indexTenor);
-    }
-
-    public BigDecimal getIndexOffset() {
-	return gcRepoTrade.getIndexOffset();
-    }
-
-    public void setIndexOffset(BigDecimal indexOffset) {
-	gcRepoTrade.setIndexOffset(indexOffset);
-    }
-
-    public boolean getRightOfSubstitution() {
-	return gcRepoTrade.isRightOfSubstitution();
-    }
-
-    public void setRightOfSubstitution(boolean rightOfSubstitution) {
-	gcRepoTrade.setRightOfSubstitution(rightOfSubstitution);
-    }
-
-    public boolean getRightOfReuse() {
-	return gcRepoTrade.isRightOfReuse();
-    }
-
-    public void setRightOfReuse(boolean rightOfReuse) {
-	gcRepoTrade.setRightOfReuse(rightOfReuse);
-    }
-
-    public boolean getCrossCurrencyCollateral() {
-	return gcRepoTrade.isCrossCurrencyCollateral();
-    }
-
-    public void setCrossCurrencyCollateral(boolean crossCurrencyCollateral) {
-	gcRepoTrade.setCrossCurrencyCollateral(crossCurrencyCollateral);
-    }
-
-    public boolean getTerminableOnDemand() {
-	return gcRepoTrade.isTerminableOnDemand();
-    }
-
-    public void setTerminableOnDemand(boolean terminableOnDemand) {
-	gcRepoTrade.setTerminableOnDemand(terminableOnDemand);
-    }
-
-    public Short getNoticePeriod() {
-	return gcRepoTrade.getNoticePeriod();
-    }
-
-    public void setNoticePeriod(Short noticePeriod) {
-	gcRepoTrade.setNoticePeriod(noticePeriod);
-    }
-
-    public BigDecimal getMarginRate() {
-	return gcRepoTrade.getMarginRate();
-    }
-
-    public void setMarginRate(BigDecimal marginRate) {
-	gcRepoTrade.setMarginRate(marginRate);
-    }
-
-    public GCBasket getBasket() {
-	return gcRepoTrade.getGcBasket();
-    }
-
-    public void setBasket(GCBasket gcBasket) {
-	gcRepoTrade.setGcBasket(gcBasket);
-    }
-
-    public Set<Currency> getAllCurrencies() {
-	return allCurrencies;
-    }
-
-    public void setAllCurrencies(Set<Currency> allCurrencies) {
-	this.allCurrencies = allCurrencies;
-    }
-
-    public Set<Index> getAllIndexes() {
-	return allIndexes;
-    }
-
-    public void setAllIndexes(Set<Index> allIndexes) {
-	this.allIndexes = allIndexes;
-    }
-
-    public Set<LegalEntity> getAllCounterparties() {
-	return allCounterparties;
-    }
-
-    public void setAllCounterparties(Set<LegalEntity> allCounterparties) {
-	this.allCounterparties = allCounterparties;
-    }
-
-    public Set<Book> getAllBooks() {
-	return allBooks;
-    }
-
-    public void setAllBooks(Set<Book> allBooks) {
-	this.allBooks = allBooks;
-    }
-
-    public String getInterestType() {
-	return interestType;
-    }
-
-    public void setInterestType(String interestType) {
-	this.interestType = interestType;
-    }
-
-    public String[] getAllInterestTypes() {
-	return allInterestTypes;
-    }
-
-    public void setAllInterestTypes(String[] allInterestTypes) {
-	this.allInterestTypes = allInterestTypes;
-    }
-
-    public Tenor[] getAllIndexTenors() {
-	return allIndexTenors;
-    }
-
-    public void setAllIndexTenors(Tenor[] allIndexTenors) {
-	this.allIndexTenors = allIndexTenors;
-    }
-
-    public Set<GCBasket> getAllBaskets() {
-	return allBaskets;
-    }
-
-    public void setAllBaskets(Set<GCBasket> allBaskets) {
-	this.allBaskets = allBaskets;
-    }
-
-    public String getIdToBeLoaded() {
-	return idToBeLoaded;
-    }
-
-    public void setIdToBeLoaded(String idToBeLoaded) {
-	this.idToBeLoaded = idToBeLoaded;
-    }
-
-    public String getAction() {
-	return action;
-    }
-
-    public void setAction(String action) {
-	this.action = action;
-    }
-
-    public void save() {
-	try {
-	    final String actionToApply = (action != null) ? action : Action.NEW;
-	    if (gcRepoTrade.getId() == 0) {
-		gcRepoTrade.setCreationDate(LocalDate.now());
-		gcRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
-
-	    }
-	    if (interestType == null || interestType.equals("Fixed")) {
-		gcRepoTrade.setIndex(null);
-		gcRepoTrade.setIndexTenor(null);
-		gcRepoTrade.setIndexOffset(null);
-	    }
-	    long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, actionToApply);
-	    if (gcRepoTrade.getId() == 0) {
-		gcRepoTrade.setId(tradeId);
-	    }
-	    gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
-	    Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
-		    gcRepoTrade.getStatus());
-	    if (availableActions != null && !availableActions.isEmpty()) {
-		allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
-	    }
-	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-		    "Trade " + gcRepoTrade.getId() + " successfully saved"));
-	} catch (TradistaBusinessException tbe) {
-	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
-		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+	@PostConstruct
+	public void init() throws TradistaBusinessException {
+		gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
+		gcBasketBusinessDelegate = new GCBasketBusinessDelegate();
+		currencyBusinessDelegate = new CurrencyBusinessDelegate();
+		bookBusinessDelegate = new BookBusinessDelegate();
+		legalEntityBusinessDelegate = new LegalEntityBusinessDelegate();
+		indexBusinessDelegate = new IndexBusinessDelegate();
+		workflowBusinessDelegate = new WorkflowBusinessDelegate();
+		allCurrencies = currencyBusinessDelegate.getAllCurrencies();
+		allCounterparties = legalEntityBusinessDelegate.getAllCounterparties();
+		allIndexes = indexBusinessDelegate.getAllIndexes();
+		allBooks = bookBusinessDelegate.getAllBooks();
+		allDirections = Trade.Direction.values();
+		gcRepoTrade = new GCRepoTrade();
+		allInterestTypes = new String[] { "Fixed", "Floating" };
+		allIndexTenors = Arrays.asList(Tenor.values()).stream().filter(t -> !t.equals(Tenor.NO_TENOR))
+				.toArray(Tenor[]::new);
+		allBaskets = gcBasketBusinessDelegate.getAllGCBaskets();
+		setTradeDate(LocalDate.now());
+		setStartDate(LocalDate.now());
+		workflow = workflowBusinessDelegate.getWorkflowByName(GCRepoTrade.GC_REPO);
 	}
-    }
 
-    public void copy() {
-	long oldId = gcRepoTrade.getId();
-	try {
-	    gcRepoTrade.setCreationDate(LocalDate.now());
-	    gcRepoTrade.setId(0);
-	    gcRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
-	    if (interestType == null || interestType.equals("Fixed")) {
-		gcRepoTrade.setIndex(null);
-		gcRepoTrade.setIndexTenor(null);
-		gcRepoTrade.setIndexOffset(null);
-	    }
-	    long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, Action.NEW);
-	    gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
-	    Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
-		    gcRepoTrade.getStatus());
-	    if (availableActions != null && !availableActions.isEmpty()) {
-		allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
-	    }
-	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-		    "Trade " + gcRepoTrade.getId() + " successfully created"));
-	} catch (TradistaBusinessException tbe) {
-	    gcRepoTrade.setId(oldId);
-	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
-		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+	public String getId() {
+		return gcRepoTrade.getId() == 0 ? "" : Long.toString(gcRepoTrade.getId());
 	}
-    }
 
-    public void load() {
-	long tradeId;
-	try {
-	    tradeId = Long.parseLong(idToBeLoaded);
-	    GCRepoTrade gcTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
-	    if (gcTrade != null) {
-		gcRepoTrade.setId(gcTrade.getId());
-		gcRepoTrade.setBuySell(gcTrade.isBuy());
-		gcRepoTrade.setCounterparty(gcTrade.getCounterparty());
-		gcRepoTrade.setCurrency(gcTrade.getCurrency());
-		gcRepoTrade.setProduct(gcTrade.getProduct());
-		gcRepoTrade.setAmount(gcTrade.getAmount());
-		gcRepoTrade.setSettlementDate(gcTrade.getSettlementDate());
-		gcRepoTrade.setTradeDate(gcTrade.getTradeDate());
-		gcRepoTrade.setBook(gcTrade.getBook());
-		gcRepoTrade.setCreationDate(gcTrade.getCreationDate());
-		gcRepoTrade.setCrossCurrencyCollateral(gcTrade.isCrossCurrencyCollateral());
-		gcRepoTrade.setGcBasket(gcTrade.getGcBasket());
-		gcRepoTrade.setEndDate(gcTrade.getEndDate());
-		gcRepoTrade.setIndex(gcTrade.getIndex());
-		gcRepoTrade.setIndexOffset(gcTrade.getIndexOffset());
-		gcRepoTrade.setMarginRate(gcTrade.getMarginRate());
-		gcRepoTrade.setNoticePeriod(gcTrade.getNoticePeriod());
-		gcRepoTrade.setRepoRate(gcTrade.getRepoRate());
-		gcRepoTrade.setRightOfReuse(gcTrade.isRightOfReuse());
-		gcRepoTrade.setRightOfSubstitution(gcTrade.isRightOfSubstitution());
-		gcRepoTrade.setTerminableOnDemand(gcTrade.isTerminableOnDemand());
-		gcRepoTrade.setStatus(gcTrade.getStatus());
-		Set<String> availableActions = workflowBusinessDelegate
-			.getAvailableActionsFromStatus(workflow.getName(), gcTrade.getStatus());
-		if (availableActions != null && !availableActions.isEmpty()) {
-		    allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
+	public void setId(String id) {
+		gcRepoTrade.setId(Long.parseLong(id));
+	}
+
+	public Direction[] getAllDirections() {
+		return allDirections;
+	}
+
+	public void setAllDirections(Direction[] allDirections) {
+		this.allDirections = allDirections;
+	}
+
+	public BigDecimal getAmount() {
+		return gcRepoTrade.getAmount();
+	}
+
+	public void setAmount(BigDecimal amount) {
+		gcRepoTrade.setAmount(amount);
+	}
+
+	public Status getStatus() {
+		return gcRepoTrade.getStatus();
+	}
+
+	public void setStatus(Status status) {
+		gcRepoTrade.setStatus(status);
+	}
+
+	public GCRepoTrade getGcRepoTrade() {
+		return gcRepoTrade;
+	}
+
+	public void setGcRepoTrade(GCRepoTrade gcRepoTrade) {
+		this.gcRepoTrade = gcRepoTrade;
+	}
+
+	public BigDecimal getRepoRate() {
+		return gcRepoTrade.getRepoRate();
+	}
+
+	public void setRepoRate(BigDecimal repoRate) {
+		gcRepoTrade.setRepoRate(repoRate);
+	}
+
+	public Trade.Direction getDirection() {
+		return (gcRepoTrade.isBuy() ? Direction.BUY : Direction.SELL);
+	}
+
+	public void setDirection(Trade.Direction direction) {
+		gcRepoTrade.setBuySell(Direction.BUY.equals(direction));
+	}
+
+	public LocalDate getTradeDate() {
+		return gcRepoTrade.getTradeDate();
+	}
+
+	public void setTradeDate(LocalDate tradeDate) {
+		gcRepoTrade.setTradeDate(tradeDate);
+	}
+
+	public LocalDate getStartDate() {
+		return gcRepoTrade.getSettlementDate();
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		gcRepoTrade.setSettlementDate(startDate);
+	}
+
+	public LocalDate getEndDate() {
+		return gcRepoTrade.getEndDate();
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		gcRepoTrade.setEndDate(endDate);
+	}
+
+	public Currency getCurrency() {
+		return gcRepoTrade.getCurrency();
+	}
+
+	public void setCurrency(Currency currency) {
+		gcRepoTrade.setCurrency(currency);
+	}
+
+	public LegalEntity getCounterparty() {
+		return gcRepoTrade.getCounterparty();
+	}
+
+	public void setCounterparty(LegalEntity legalEntity) {
+		gcRepoTrade.setCounterparty(legalEntity);
+	}
+
+	public Book getBook() {
+		return gcRepoTrade.getBook();
+	}
+
+	public void setBook(Book book) {
+		gcRepoTrade.setBook(book);
+	}
+
+	public Index getIndex() {
+		return gcRepoTrade.getIndex();
+	}
+
+	public void setIndex(Index index) {
+		gcRepoTrade.setIndex(index);
+	}
+
+	public Tenor getIndexTenor() {
+		return gcRepoTrade.getIndexTenor();
+	}
+
+	public void setIndexTenor(Tenor indexTenor) {
+		gcRepoTrade.setIndexTenor(indexTenor);
+	}
+
+	public BigDecimal getIndexOffset() {
+		return gcRepoTrade.getIndexOffset();
+	}
+
+	public void setIndexOffset(BigDecimal indexOffset) {
+		gcRepoTrade.setIndexOffset(indexOffset);
+	}
+
+	public boolean getRightOfSubstitution() {
+		return gcRepoTrade.isRightOfSubstitution();
+	}
+
+	public void setRightOfSubstitution(boolean rightOfSubstitution) {
+		gcRepoTrade.setRightOfSubstitution(rightOfSubstitution);
+	}
+
+	public boolean getRightOfReuse() {
+		return gcRepoTrade.isRightOfReuse();
+	}
+
+	public void setRightOfReuse(boolean rightOfReuse) {
+		gcRepoTrade.setRightOfReuse(rightOfReuse);
+	}
+
+	public boolean getCrossCurrencyCollateral() {
+		return gcRepoTrade.isCrossCurrencyCollateral();
+	}
+
+	public void setCrossCurrencyCollateral(boolean crossCurrencyCollateral) {
+		gcRepoTrade.setCrossCurrencyCollateral(crossCurrencyCollateral);
+	}
+
+	public boolean getTerminableOnDemand() {
+		return gcRepoTrade.isTerminableOnDemand();
+	}
+
+	public void setTerminableOnDemand(boolean terminableOnDemand) {
+		gcRepoTrade.setTerminableOnDemand(terminableOnDemand);
+	}
+
+	public Short getNoticePeriod() {
+		return gcRepoTrade.getNoticePeriod();
+	}
+
+	public void setNoticePeriod(Short noticePeriod) {
+		gcRepoTrade.setNoticePeriod(noticePeriod);
+	}
+
+	public BigDecimal getMarginRate() {
+		return gcRepoTrade.getMarginRate();
+	}
+
+	public void setMarginRate(BigDecimal marginRate) {
+		gcRepoTrade.setMarginRate(marginRate);
+	}
+
+	public GCBasket getBasket() {
+		return gcRepoTrade.getGcBasket();
+	}
+
+	public void setBasket(GCBasket gcBasket) {
+		gcRepoTrade.setGcBasket(gcBasket);
+	}
+
+	public Set<Currency> getAllCurrencies() {
+		return allCurrencies;
+	}
+
+	public void setAllCurrencies(Set<Currency> allCurrencies) {
+		this.allCurrencies = allCurrencies;
+	}
+
+	public Set<Index> getAllIndexes() {
+		return allIndexes;
+	}
+
+	public void setAllIndexes(Set<Index> allIndexes) {
+		this.allIndexes = allIndexes;
+	}
+
+	public Set<LegalEntity> getAllCounterparties() {
+		return allCounterparties;
+	}
+
+	public void setAllCounterparties(Set<LegalEntity> allCounterparties) {
+		this.allCounterparties = allCounterparties;
+	}
+
+	public Set<Book> getAllBooks() {
+		return allBooks;
+	}
+
+	public void setAllBooks(Set<Book> allBooks) {
+		this.allBooks = allBooks;
+	}
+
+	public String getInterestType() {
+		return interestType;
+	}
+
+	public void setInterestType(String interestType) {
+		this.interestType = interestType;
+	}
+
+	public String[] getAllInterestTypes() {
+		return allInterestTypes;
+	}
+
+	public void setAllInterestTypes(String[] allInterestTypes) {
+		this.allInterestTypes = allInterestTypes;
+	}
+
+	public Tenor[] getAllIndexTenors() {
+		return allIndexTenors;
+	}
+
+	public void setAllIndexTenors(Tenor[] allIndexTenors) {
+		this.allIndexTenors = allIndexTenors;
+	}
+
+	public Set<GCBasket> getAllBaskets() {
+		return allBaskets;
+	}
+
+	public void setAllBaskets(Set<GCBasket> allBaskets) {
+		this.allBaskets = allBaskets;
+	}
+
+	public String getIdToBeLoaded() {
+		return idToBeLoaded;
+	}
+
+	public void setIdToBeLoaded(String idToBeLoaded) {
+		this.idToBeLoaded = idToBeLoaded;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public void save() {
+		try {
+			final String actionToApply = (action != null) ? action : Action.NEW;
+			if (gcRepoTrade.getId() == 0) {
+				gcRepoTrade.setCreationDate(LocalDate.now());
+				gcRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+
+			}
+			if (interestType == null || interestType.equals("Fixed")) {
+				gcRepoTrade.setIndex(null);
+				gcRepoTrade.setIndexTenor(null);
+				gcRepoTrade.setIndexOffset(null);
+			}
+			long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, actionToApply);
+			if (gcRepoTrade.getId() == 0) {
+				gcRepoTrade.setId(tradeId);
+			}
+			gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
+			Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
+					gcRepoTrade.getStatus());
+			if (availableActions != null && !availableActions.isEmpty()) {
+				allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
+			}
+			originalCashAmount = gcRepoTrade.getAmount();
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+					"Trade " + gcRepoTrade.getId() + " successfully saved"));
+		} catch (TradistaBusinessException tbe) {
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
-		originalCashAmount = gcTrade.getAmount();
-		FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO,
-			"Info", "Trade " + gcRepoTrade.getId() + " successfully loaded."));
-	    } else {
-		FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-			"Error", "Trade " + idToBeLoaded + " was not found."));
-	    }
-	} catch (NumberFormatException nfe) {
-	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
-		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Please type a valid id."));
-	} catch (TradistaBusinessException tbe) {
-	    FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
-		    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 	}
 
-    }
-
-    public void clear() throws TradistaBusinessException {
-	gcRepoTrade = new GCRepoTrade();
-	setTradeDate(LocalDate.now());
-	setStartDate(LocalDate.now());
-	FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
-		new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Form cleared"));
-    }
-
-    public CurrencyConverter getCurrencyConverter() {
-	return new CurrencyConverter();
-    }
-
-    public BookConverter getBookConverter() {
-	return new BookConverter();
-    }
-
-    public LegalEntityConverter getLegalEntityConverter() {
-	return new LegalEntityConverter();
-    }
-
-    public DirectionConverter getDirectionConverter() {
-	return new DirectionConverter();
-    }
-
-    public IndexConverter getIndexConverter() {
-	return new IndexConverter();
-    }
-
-    public String[] getQuoteNames() {
-	return quoteNames;
-    }
-
-    public void setQuoteNames(String[] quoteNames) {
-	this.quoteNames = quoteNames;
-    }
-
-    public void updateQuoteNames() {
-	if (interestType != null && interestType.equals("Floating")) {
-	    quoteNames = new String[] {
-		    Index.INDEX + "." + gcRepoTrade.getIndex() + "." + gcRepoTrade.getIndexTenor() };
-	} else {
-	    quoteNames = null;
+	public void copy() {
+		long oldId = gcRepoTrade.getId();
+		Map<LocalDate, BigDecimal> oldPartialTerminations = gcRepoTrade.getPartialTerminations();
+		Map<Security, Map<Book, BigDecimal>> oldCollateralToAdd = gcRepoTrade.getCollateralToAdd();
+		Map<Security, Map<Book, BigDecimal>> oldCollateralToRemove = gcRepoTrade.getCollateralToRemove();
+		try {
+			gcRepoTrade.setCreationDate(LocalDate.now());
+			gcRepoTrade.setId(0);
+			gcRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+			if (interestType == null || interestType.equals("Fixed")) {
+				gcRepoTrade.setIndex(null);
+				gcRepoTrade.setIndexTenor(null);
+				gcRepoTrade.setIndexOffset(null);
+			}
+			// Copied trades will not have added/removed collaterals and partial
+			// terminations
+			gcRepoTrade.setCollateralToAdd(null);
+			gcRepoTrade.setCollateralToRemove(null);
+			gcRepoTrade.setPartialTerminations(null);
+			long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, Action.NEW);
+			gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
+			Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
+					gcRepoTrade.getStatus());
+			if (availableActions != null && !availableActions.isEmpty()) {
+				allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
+			}
+			originalCashAmount = gcRepoTrade.getAmount();
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+					"Trade " + gcRepoTrade.getId() + " successfully created"));
+		} catch (TradistaBusinessException tbe) {
+			gcRepoTrade.setId(oldId);
+			gcRepoTrade.setCollateralToAdd(oldCollateralToAdd);
+			gcRepoTrade.setCollateralToRemove(oldCollateralToRemove);
+			gcRepoTrade.setPartialTerminations(oldPartialTerminations);
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+		}
 	}
-    }
 
-    public void updateIndex() {
-	if (interestType != null && interestType.equals("Floating")) {
-	    if (gcRepoTrade.getIndex() == null) {
-		gcRepoTrade.setIndex(allIndexes.stream().findFirst().get());
-	    }
-	    if (gcRepoTrade.getIndexTenor() == null) {
-		gcRepoTrade.setIndexTenor(allIndexTenors[0]);
-	    }
+	public void load() {
+		long tradeId;
+		try {
+			tradeId = Long.parseLong(idToBeLoaded);
+			GCRepoTrade gcTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
+			if (gcTrade != null) {
+				gcRepoTrade.setId(gcTrade.getId());
+				gcRepoTrade.setBuySell(gcTrade.isBuy());
+				gcRepoTrade.setCounterparty(gcTrade.getCounterparty());
+				gcRepoTrade.setCurrency(gcTrade.getCurrency());
+				gcRepoTrade.setProduct(gcTrade.getProduct());
+				gcRepoTrade.setAmount(gcTrade.getAmount());
+				gcRepoTrade.setSettlementDate(gcTrade.getSettlementDate());
+				gcRepoTrade.setTradeDate(gcTrade.getTradeDate());
+				gcRepoTrade.setBook(gcTrade.getBook());
+				gcRepoTrade.setCreationDate(gcTrade.getCreationDate());
+				gcRepoTrade.setCrossCurrencyCollateral(gcTrade.isCrossCurrencyCollateral());
+				gcRepoTrade.setGcBasket(gcTrade.getGcBasket());
+				gcRepoTrade.setEndDate(gcTrade.getEndDate());
+				gcRepoTrade.setIndex(gcTrade.getIndex());
+				gcRepoTrade.setIndexOffset(gcTrade.getIndexOffset());
+				gcRepoTrade.setMarginRate(gcTrade.getMarginRate());
+				gcRepoTrade.setNoticePeriod(gcTrade.getNoticePeriod());
+				gcRepoTrade.setRepoRate(gcTrade.getRepoRate());
+				gcRepoTrade.setRightOfReuse(gcTrade.isRightOfReuse());
+				gcRepoTrade.setRightOfSubstitution(gcTrade.isRightOfSubstitution());
+				gcRepoTrade.setTerminableOnDemand(gcTrade.isTerminableOnDemand());
+				gcRepoTrade.setStatus(gcTrade.getStatus());
+				Set<String> availableActions = workflowBusinessDelegate
+						.getAvailableActionsFromStatus(workflow.getName(), gcTrade.getStatus());
+				if (availableActions != null && !availableActions.isEmpty()) {
+					allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
+				}
+				originalCashAmount = gcTrade.getAmount();
+				FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Info", "Trade " + gcRepoTrade.getId() + " successfully loaded."));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "Trade " + idToBeLoaded + " was not found."));
+			}
+		} catch (NumberFormatException nfe) {
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Please type a valid id."));
+		} catch (TradistaBusinessException tbe) {
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+		}
+
 	}
-    }
 
-    public String[] getAllAvailableActions() {
-	return allAvailableActions;
-    }
-
-    public void setAllAvailableActions(String[] allAvailableActions) {
-	this.allAvailableActions = allAvailableActions;
-    }
-
-    public BigDecimal getOriginalCashAmount() {
-	return originalCashAmount;
-    }
-
-    public void setOriginalCashAmount(BigDecimal originalCashAmount) {
-	this.originalCashAmount = originalCashAmount;
-    }
-
-    public void updateTrade(Map<Security, Map<Book, BigDecimal>> securitiesToAdd,
-	    Map<Security, Map<Book, BigDecimal>> securitiesToRemove) {
-	if (securitiesToAdd != null && !securitiesToAdd.isEmpty()) {
-	    gcRepoTrade.setCollateralToAdd(securitiesToAdd);
+	public void clear() throws TradistaBusinessException {
+		gcRepoTrade = new GCRepoTrade();
+		setTradeDate(LocalDate.now());
+		setStartDate(LocalDate.now());
+		originalCashAmount = null;
+		FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Form cleared"));
 	}
-	if (securitiesToRemove != null && !securitiesToRemove.isEmpty()) {
-	    gcRepoTrade.setCollateralToRemove(securitiesToRemove);
+
+	public CurrencyConverter getCurrencyConverter() {
+		return new CurrencyConverter();
 	}
-	if (action != null && action.equals(ActionConstants.PARTIALLY_TERMINATE)) {
-	    gcRepoTrade.addParTialTermination(LocalDate.now(), originalCashAmount.subtract(gcRepoTrade.getAmount()));
+
+	public BookConverter getBookConverter() {
+		return new BookConverter();
 	}
-    }
+
+	public LegalEntityConverter getLegalEntityConverter() {
+		return new LegalEntityConverter();
+	}
+
+	public DirectionConverter getDirectionConverter() {
+		return new DirectionConverter();
+	}
+
+	public IndexConverter getIndexConverter() {
+		return new IndexConverter();
+	}
+
+	public String[] getQuoteNames() {
+		return quoteNames;
+	}
+
+	public void setQuoteNames(String[] quoteNames) {
+		this.quoteNames = quoteNames;
+	}
+
+	public void updateQuoteNames() {
+		if (interestType != null && interestType.equals("Floating")) {
+			quoteNames = new String[] {
+					Index.INDEX + "." + gcRepoTrade.getIndex() + "." + gcRepoTrade.getIndexTenor() };
+		} else {
+			quoteNames = null;
+		}
+	}
+
+	public void updateIndex() {
+		if (interestType != null && interestType.equals("Floating")) {
+			if (gcRepoTrade.getIndex() == null) {
+				gcRepoTrade.setIndex(allIndexes.stream().findFirst().get());
+			}
+			if (gcRepoTrade.getIndexTenor() == null) {
+				gcRepoTrade.setIndexTenor(allIndexTenors[0]);
+			}
+		}
+	}
+
+	public String[] getAllAvailableActions() {
+		return allAvailableActions;
+	}
+
+	public void setAllAvailableActions(String[] allAvailableActions) {
+		this.allAvailableActions = allAvailableActions;
+	}
+
+	public BigDecimal getOriginalCashAmount() {
+		return originalCashAmount;
+	}
+
+	public void setOriginalCashAmount(BigDecimal originalCashAmount) {
+		this.originalCashAmount = originalCashAmount;
+	}
+
+	public void updateTrade(Map<Security, Map<Book, BigDecimal>> securitiesToAdd,
+			Map<Security, Map<Book, BigDecimal>> securitiesToRemove) {
+		if (securitiesToAdd != null && !securitiesToAdd.isEmpty()) {
+			gcRepoTrade.setCollateralToAdd(securitiesToAdd);
+		}
+		if (securitiesToRemove != null && !securitiesToRemove.isEmpty()) {
+			gcRepoTrade.setCollateralToRemove(securitiesToRemove);
+		}
+		if (action != null && action.equals(ActionConstants.PARTIALLY_TERMINATE)) {
+			gcRepoTrade.addParTialTermination(LocalDate.now(), originalCashAmount.subtract(gcRepoTrade.getAmount()));
+		}
+	}
 
 }

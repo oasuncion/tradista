@@ -25,9 +25,9 @@ under the License.    */
 
 public class FutureTradeEvent extends TradeEvent<FutureTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 216390350630481005L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 216390350630481005L;
 
 }

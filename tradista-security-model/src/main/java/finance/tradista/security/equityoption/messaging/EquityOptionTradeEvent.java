@@ -25,9 +25,9 @@ under the License.    */
 
 public class EquityOptionTradeEvent extends TradeEvent<EquityOptionTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -2855094286168054513L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2855094286168054513L;
 
 }

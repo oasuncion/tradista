@@ -24,9 +24,9 @@ under the License.    */
 
 public class CashTransferEvent extends TransferEvent<CashTransfer> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -8806725404338297390L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8806725404338297390L;
 
 }

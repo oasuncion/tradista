@@ -25,9 +25,9 @@ under the License.    */
 
 public class FXOptionTradeEvent extends TradeEvent<FXOptionTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -5977530876940890560L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5977530876940890560L;
 
 }

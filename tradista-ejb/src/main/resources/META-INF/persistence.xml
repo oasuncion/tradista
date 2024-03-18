@@ -4,7 +4,9 @@
 	<persistence-unit
 		name="tradista-flow-persistence-unit" transaction-type="JTA">
 		<description>This is the unique persistence unit of the tradista
-			flow project.</description>
+			flow
+			project.
+		</description>
 		<jta-data-source>java:/TradistaDataSource</jta-data-source>
 		<class>finance.tradista.flow.model.Workflow</class>
 		<class>finance.tradista.flow.model.Action</class>
@@ -16,10 +18,16 @@
 		<class>finance.tradista.flow.model.Status</class>
 		<class>finance.tradista.flow.model.PseudoStatus</class>
 		<class>finance.tradista.flow.model.TradistaFlowObject</class>
-		<class>finance.tradista.security.gcrepo.workflow.condition.IsAllocated</class>
-		<class>finance.tradista.security.gcrepo.workflow.guard.CollateralAdded</class>
-		<class>finance.tradista.security.gcrepo.workflow.guard.CollateralSubstituted</class>
-		<class>finance.tradista.security.gcrepo.workflow.guard.IsPartiallyTerminated</class>
+		<class>finance.tradista.security.gcrepo.workflow.condition.IsAllocated
+		</class>
+		<class>finance.tradista.security.gcrepo.workflow.guard.CollateralAdded
+		</class>
+		<class>finance.tradista.security.gcrepo.workflow.guard.CollateralSubstituted
+		</class>
+		<class>finance.tradista.security.gcrepo.workflow.guard.IsPartiallyTerminated
+		</class>
+		<class>finance.tradista.security.gcrepo.workflow.guard.TradeEndDateReached
+		</class>
 		<properties>
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.DerbyDialect" />

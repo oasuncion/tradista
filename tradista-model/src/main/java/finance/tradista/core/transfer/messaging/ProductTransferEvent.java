@@ -24,9 +24,9 @@ under the License.    */
 
 public class ProductTransferEvent extends TransferEvent<ProductTransfer> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -4979187544631866379L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4979187544631866379L;
 
 }

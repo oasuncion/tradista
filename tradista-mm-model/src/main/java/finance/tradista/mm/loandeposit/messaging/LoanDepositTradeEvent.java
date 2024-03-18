@@ -25,9 +25,9 @@ under the License.    */
 
 public class LoanDepositTradeEvent extends TradeEvent<LoanDepositTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -6630412484081519578L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6630412484081519578L;
 
 }

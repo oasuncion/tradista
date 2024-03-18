@@ -25,9 +25,9 @@ under the License.    */
 
 public class FRATradeEvent extends TradeEvent<FRATrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -7008761833404676938L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7008761833404676938L;
 
 }

@@ -25,29 +25,29 @@ under the License.    */
 
 public abstract class TransferEvent<X extends Transfer> implements Event {
 
-    /**
-    * 
-    */
-    private static final long serialVersionUID = -1640618458564189936L;
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -1640618458564189936L;
 
-    private X transfer;
+	private X transfer;
 
-    private X oldTransfer;
+	private X oldTransfer;
 
-    public X getTransfer() {
-	return transfer;
-    }
+	public X getTransfer() {
+		return transfer;
+	}
 
-    public void setTransfer(X transfer) {
-	this.transfer = transfer;
-    }
+	public void setTransfer(X transfer) {
+		this.transfer = transfer;
+	}
 
-    public X getOldTransfer() {
-	return oldTransfer;
-    }
+	public X getOldTransfer() {
+		return oldTransfer;
+	}
 
-    public void setOldTransfer(X transfer) {
-	oldTransfer = transfer;
-    }
+	public void setOldTransfer(X transfer) {
+		oldTransfer = transfer;
+	}
 
 }

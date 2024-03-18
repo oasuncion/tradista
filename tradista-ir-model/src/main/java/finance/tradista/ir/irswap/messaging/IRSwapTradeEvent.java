@@ -25,9 +25,9 @@ under the License.    */
 
 public class IRSwapTradeEvent extends TradeEvent<IRSwapTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 979531356965415114L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 979531356965415114L;
 
 }

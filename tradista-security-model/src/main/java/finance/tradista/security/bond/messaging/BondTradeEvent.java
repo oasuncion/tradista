@@ -25,9 +25,9 @@ under the License.    */
 
 public class BondTradeEvent extends TradeEvent<BondTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -8455202677180166082L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8455202677180166082L;
 
 }

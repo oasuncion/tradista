@@ -25,9 +25,9 @@ under the License.    */
 
 public class IRCapFloorCollarTradeEvent extends TradeEvent<IRCapFloorCollarTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 5369396492638098532L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5369396492638098532L;
 
 }

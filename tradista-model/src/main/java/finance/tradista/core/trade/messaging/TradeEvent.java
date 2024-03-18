@@ -25,44 +25,44 @@ under the License.    */
 
 public abstract class TradeEvent<X extends Trade<?>> implements Event {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -5889419872185649873L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5889419872185649873L;
 
-    private String appliedAction;
+	private String appliedAction;
 
-    private X trade;
+	private X trade;
 
-    private X oldTrade;
+	private X oldTrade;
 
-    public X getTrade() {
-	return trade;
-    }
+	public X getTrade() {
+		return trade;
+	}
 
-    public void setTrade(X trade) {
-	this.trade = trade;
-    }
+	public void setTrade(X trade) {
+		this.trade = trade;
+	}
 
-    public X getOldTrade() {
-	return oldTrade;
-    }
+	public X getOldTrade() {
+		return oldTrade;
+	}
 
-    public void setOldTrade(X oldTrade) {
-	this.oldTrade = oldTrade;
-    }
+	public void setOldTrade(X oldTrade) {
+		this.oldTrade = oldTrade;
+	}
 
-    /**
-     * Return the last action applied to the object.
-     * 
-     * @return the last action applied to the object.
-     */
-    public String getAppliedAction() {
-	return appliedAction;
-    }
+	/**
+	 * Return the last action applied to the object.
+	 * 
+	 * @return the last action applied to the object.
+	 */
+	public String getAppliedAction() {
+		return appliedAction;
+	}
 
-    public void setAppliedAction(String action) {
-	appliedAction = action;
-    }
+	public void setAppliedAction(String action) {
+		appliedAction = action;
+	}
 
 }

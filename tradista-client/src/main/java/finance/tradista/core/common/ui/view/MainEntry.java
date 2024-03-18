@@ -1,7 +1,9 @@
 package finance.tradista.core.common.ui.view;
 
+import java.awt.Desktop;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +14,11 @@ import java.util.Set;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.service.InformationBusinessDelegate;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
-import finance.tradista.core.common.ui.view.TradistaAlert;
+import finance.tradista.core.common.util.ClientUtil;
+import finance.tradista.core.common.util.MathProperties;
 import finance.tradista.core.common.util.TradistaProperties;
 import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;
 import finance.tradista.core.product.service.ProductBusinessDelegate;
-import finance.tradista.core.common.util.ClientUtil;
-import finance.tradista.core.common.util.MathProperties;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -337,7 +338,7 @@ public class MainEntry extends Application {
 		nodes.add(menuBar);
 		root.getChildren().addAll(nodes);
 		primaryStage.setScene(new Scene(root, 1200, 400));
-		
+
 		TradistaGUIUtil.resizeComponentHeights(primScreenBounds, primaryStage, 0);
 		TradistaGUIUtil.resizeComponentWidths(primScreenBounds, primaryStage, 0);
 
@@ -441,41 +442,54 @@ public class MainEntry extends Application {
 			double screenWidthRatio, Rectangle2D primScreenBounds) {
 		menuItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
-				Pane pane = null;
-				try {
-					pane = FXMLLoader.load(getClass().getResource("/" + templateName + ".fxml"));
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
+				// GC Repo trade winsow is web based.
+				if (!templateName.equals("GCRepoTrade")) {
+					Pane pane = null;
+					try {
+						pane = FXMLLoader.load(getClass().getResource("/" + templateName + ".fxml"));
+					} catch (IOException ioe) {
+						ioe.printStackTrace();
+					}
+					ScrollPane sPane = new ScrollPane(pane);
+					sPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+					sPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+					sPane.setPannable(true);
+
+					Stage stage = new Stage();
+					TradistaGUIUtil.setTradistaIcons(stage);
+					stage.setTitle(title);
+					Group root = new Group();
+					root.getChildren().add(sPane);
+					try {
+						root.getStylesheets().add("/" + new ConfigurationBusinessDelegate()
+								.getUIConfiguration(ClientUtil.getCurrentUser()).getStyle() + "Style.css");
+					} catch (TradistaBusinessException abe) {
+					}
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					TradistaGUIUtil.resizeComponentHeights(primScreenBounds, stage, 0);
+					TradistaGUIUtil.resizeComponentWidths(primScreenBounds, stage, 0);
+
+					stage.sizeToScene();
+
+					stage.setResizable(false);
+					stage.show();
+					stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+					stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
+
+					sPane.setPrefHeight(stage.getHeight());
+					sPane.setPrefWidth(stage.getWidth());
+				} else {
+					try {
+						Desktop.getDesktop()
+								.browse(URI.create(TradistaProperties.getTradistaAppProtocol() + "://"
+										+ TradistaProperties.getTradistaAppServer() + ":"
+										+ TradistaProperties.getTradistaAppPort() + "/web/loginRepo.xhtml"));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				ScrollPane sPane = new ScrollPane(pane);
-				sPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-				sPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-				sPane.setPannable(true);
-
-				Stage stage = new Stage();
-				TradistaGUIUtil.setTradistaIcons(stage);
-				stage.setTitle(title);
-				Group root = new Group();
-				root.getChildren().add(sPane);
-				try {
-					root.getStylesheets().add("/" + new ConfigurationBusinessDelegate()
-							.getUIConfiguration(ClientUtil.getCurrentUser()).getStyle() + "Style.css");
-				} catch (TradistaBusinessException abe) {
-				}
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
-				TradistaGUIUtil.resizeComponentHeights(primScreenBounds, stage, 0);
-				TradistaGUIUtil.resizeComponentWidths(primScreenBounds, stage, 0);
-
-				stage.sizeToScene();
-
-				stage.setResizable(false);
-				stage.show();
-				stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
-				stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
-
-				sPane.setPrefHeight(stage.getHeight());
-				sPane.setPrefWidth(stage.getWidth());
 			}
 		});
 	}
@@ -530,7 +544,7 @@ public class MainEntry extends Application {
 				Scene scene = new Scene(root);
 
 				stage.setScene(scene);
-				
+
 				TradistaGUIUtil.resizeComponentHeights(primScreenBounds, stage, 0);
 				TradistaGUIUtil.resizeComponentWidths(primScreenBounds, stage, 0);
 
@@ -579,7 +593,7 @@ public class MainEntry extends Application {
 				Scene scene = new Scene(root);
 
 				stage.setScene(scene);
-				
+
 				TradistaGUIUtil.resizeComponentHeights(primScreenBounds, stage, 0);
 				TradistaGUIUtil.resizeComponentWidths(primScreenBounds, stage, 0);
 

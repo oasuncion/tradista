@@ -31,15 +31,36 @@ public final class TradistaProperties {
 
 	private static String marketDataProvider;
 
+	private static String tradistaAppServer;
+
+	private static String tradistaAppPort;
+
+	private static String tradistaAppProtocol;
+
 	public static void load(Properties prop) throws TradistaBusinessException {
 		if (prop == null) {
 			throw new TradistaBusinessException("The properties cannot be null.");
 		}
 		marketDataProvider = prop.getProperty("marketDataProvider");
+		tradistaAppServer = prop.getProperty("tradistaAppServer");
+		tradistaAppPort = prop.getProperty("tradistaAppPort");
+		tradistaAppProtocol = prop.getProperty("tradistaAppProtocol");
 	}
 
 	public static String getMarketDataProvider() {
 		return marketDataProvider;
+	}
+
+	public static String getTradistaAppServer() {
+		return tradistaAppServer;
+	}
+
+	public static String getTradistaAppPort() {
+		return tradistaAppPort;
+	}
+
+	public static String getTradistaAppProtocol() {
+		return tradistaAppProtocol;
 	}
 
 }

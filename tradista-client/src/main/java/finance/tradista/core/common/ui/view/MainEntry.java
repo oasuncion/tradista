@@ -484,7 +484,7 @@ public class MainEntry extends Application {
 						Desktop.getDesktop()
 								.browse(URI.create(TradistaProperties.getTradistaAppProtocol() + "://"
 										+ TradistaProperties.getTradistaAppServer() + ":"
-										+ TradistaProperties.getTradistaAppPort() + "/web/loginRepo.xhtml"));
+										+ TradistaProperties.getTradistaAppPort() + "/web/login.xhtml"));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

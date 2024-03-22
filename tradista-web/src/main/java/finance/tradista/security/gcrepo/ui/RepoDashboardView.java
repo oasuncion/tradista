@@ -2,18 +2,19 @@ package finance.tradista.security.gcrepo.ui;
 
 import java.io.Serializable;
 
+import org.primefaces.event.CloseEvent;
+import org.primefaces.event.DashboardReorderEvent;
+import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.dashboard.DashboardModel;
+import org.primefaces.model.dashboard.DashboardWidget;
+import org.primefaces.model.dashboard.DefaultDashboardModel;
+import org.primefaces.model.dashboard.DefaultDashboardWidget;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
-
-import org.primefaces.event.CloseEvent;
-import org.primefaces.event.DashboardReorderEvent;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.DashboardModel;
-import org.primefaces.model.DefaultDashboardColumn;
-import org.primefaces.model.DefaultDashboardModel;
 
 /*
  * Copyright 2023 Olivier Asuncion
@@ -48,8 +49,8 @@ public class RepoDashboardView implements Serializable {
     @PostConstruct
     public void init() {
         model = new DefaultDashboardModel();
-        DefaultDashboardColumn column1 = new DefaultDashboardColumn();
-        DefaultDashboardColumn column2 = new DefaultDashboardColumn();
+        DashboardWidget column1 = new DefaultDashboardWidget();
+        DashboardWidget column2 = new DefaultDashboardWidget();
 
         column1.setStyleClass("first");
         column1.addWidget("book");
@@ -60,8 +61,8 @@ public class RepoDashboardView implements Serializable {
         column2.addWidget("tradeBooking");
         column2.addWidget("quotes");
 
-        model.addColumn(column1);
-        model.addColumn(column2);
+        model.addWidget(column1);
+        model.addWidget(column2);
     }
 
     public void handleReorder(DashboardReorderEvent event) {

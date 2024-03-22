@@ -25,6 +25,7 @@ import org.primefaces.model.charts.line.LineChartModel;
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.util.ColorUtil;
 import finance.tradista.core.inventory.model.ProductInventory;
 import finance.tradista.core.productinventory.service.ProductInventoryBusinessDelegate;
 

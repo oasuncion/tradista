@@ -13,10 +13,10 @@ import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
-import finance.tradista.core.currency.ui.CurrencyConverter;
+import finance.tradista.core.currency.ui.converter.CurrencyConverter;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.index.service.IndexBusinessDelegate;
-import finance.tradista.core.index.ui.IndexConverter;
+import finance.tradista.core.index.ui.converter.IndexConverter;
 import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.core.trade.model.Trade;
@@ -31,9 +31,6 @@ import finance.tradista.security.gcrepo.model.GCBasket;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.service.GCBasketBusinessDelegate;
 import finance.tradista.security.gcrepo.service.GCRepoTradeBusinessDelegate;
-import finance.tradista.web.demo.BookConverter;
-import finance.tradista.web.demo.DirectionConverter;
-import finance.tradista.web.demo.LegalEntityConverter;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -534,26 +531,6 @@ public class GCRepoTradeView implements Serializable {
 		originalCashAmount = null;
 		FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Form cleared"));
-	}
-
-	public CurrencyConverter getCurrencyConverter() {
-		return new CurrencyConverter();
-	}
-
-	public BookConverter getBookConverter() {
-		return new BookConverter();
-	}
-
-	public LegalEntityConverter getLegalEntityConverter() {
-		return new LegalEntityConverter();
-	}
-
-	public DirectionConverter getDirectionConverter() {
-		return new DirectionConverter();
-	}
-
-	public IndexConverter getIndexConverter() {
-		return new IndexConverter();
 	}
 
 	public String[] getQuoteNames() {

@@ -7,13 +7,16 @@ import java.util.Set;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
+import finance.tradista.core.book.ui.converter.BookConverter;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
-import finance.tradista.core.currency.ui.CurrencyConverter;
+import finance.tradista.core.currency.ui.converter.CurrencyConverter;
 import finance.tradista.core.legalentity.model.LegalEntity;
+import finance.tradista.core.legalentity.ui.converter.LegalEntityConverter;
 import finance.tradista.core.trade.model.Trade;
 import finance.tradista.core.trade.model.Trade.Direction;
+import finance.tradista.core.trade.ui.converter.DirectionConverter;
 import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.model.EquityTrade;

@@ -11,6 +11,15 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>poseidon-jungle-green-light</param-value>
 	</context-param>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>XHTML</web-resource-name>
+			<url-pattern>/pages/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>**</role-name>
+		</auth-constraint>
+	</security-constraint>
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<realm-name>other</realm-name>

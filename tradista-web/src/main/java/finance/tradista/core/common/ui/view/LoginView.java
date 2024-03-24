@@ -73,6 +73,6 @@ public class LoginView implements Serializable {
 			return "loginError.xhtml";
 		}
 
-		return "pages/repoDashboard?faces-redirect=true";
+		return "pages/gcrepotrade?faces-redirect=true";
 	}
 }

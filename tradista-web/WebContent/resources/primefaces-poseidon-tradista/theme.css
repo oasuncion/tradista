@@ -87,6 +87,14 @@ body .ui-resizable-handle {
   position: absolute;
 }
 
+.ui-resizable {
+  display: flex;
+  flex-direction: column;
+}
+.ui-resizable .ui-widget-content {
+  flex-grow: 1;
+}
+
 :root {
   --blue-50:#f4fafe;
   --blue-100:#cae6fc;
@@ -1595,7 +1603,8 @@ body .ui-columntoggler .ui-columntoggler-close {
 body .ui-columntoggler .ui-columntoggler-items {
   padding: 0.5rem 0;
 }
-body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-item {
+body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-item,
+body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-all {
   padding: 0.5rem 1rem;
   margin: 0;
   border: 0 none;
@@ -1603,15 +1612,24 @@ body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-item {
   color: #515C66;
   border-radius: 0;
 }
-body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-item .ui-chkbox {
+body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-item .ui-chkbox,
+body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-all .ui-chkbox {
   position: static;
   margin-right: 0.5rem;
   margin-top: 0;
   vertical-align: middle;
 }
-body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-item label {
+body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-item label,
+body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-all label {
   padding: 0;
   display: inline;
+}
+body .ui-columntoggler .ui-columntoggler-items .ui-columntoggler-all {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #F6F9FE;
+  color: #515C66;
+  padding: 1rem;
+  font-weight: 700;
 }
 @media (max-width: 640px) {
   body .ui-datatable-reflow .ui-datatable-data tr {
@@ -2430,7 +2448,7 @@ body .ui-tree .ui-tree-container .ui-treenode .ui-treenode-content.ui-state-high
 body .ui-tree .ui-tree-container .ui-treenode .ui-treenode-content.ui-state-highlight .ui-treenode-icon:hover {
   color: #f8fafc;
 }
-body .ui-tree .ui-tree-container .ui-treenode .ui-treenode-content.ui-treenode-selectable:not(.ui-state-highlight):hover {
+body .ui-tree .ui-tree-container .ui-treenode .ui-treenode-content.ui-tree-selectable:not(.ui-state-highlight):hover, body .ui-tree .ui-tree-container .ui-treenode .ui-treenode-content.ui-tree-selectable:not(.ui-state-highlight).ui-state-hover {
   background: rgba(232, 241, 248, 0.7);
   color: #515C66;
 }
@@ -2893,36 +2911,6 @@ body .ui-fileupload .ui-fileupload-buttonbar {
 body .ui-fileupload .ui-fileupload-buttonbar .ui-button {
   margin-right: 0.5rem;
 }
-body .ui-fileupload .ui-fileupload-buttonbar .ui-button.ui-fileupload-choose .ui-icon {
-  font-family: "primeicons" !important;
-  font-style: normal;
-  font-weight: normal;
-  display: inline-block;
-  background: none;
-}
-body .ui-fileupload .ui-fileupload-buttonbar .ui-button.ui-fileupload-choose .ui-icon:before {
-  content: "\e90d";
-}
-body .ui-fileupload .ui-fileupload-buttonbar .ui-button.ui-fileupload-upload .ui-icon {
-  font-family: "primeicons" !important;
-  font-style: normal;
-  font-weight: normal;
-  display: inline-block;
-  background: none;
-}
-body .ui-fileupload .ui-fileupload-buttonbar .ui-button.ui-fileupload-upload .ui-icon:before {
-  content: "\e934";
-}
-body .ui-fileupload .ui-fileupload-buttonbar .ui-button.ui-fileupload-cancel .ui-icon {
-  font-family: "primeicons" !important;
-  font-style: normal;
-  font-weight: normal;
-  display: inline-block;
-  background: none;
-}
-body .ui-fileupload .ui-fileupload-buttonbar .ui-button.ui-fileupload-cancel .ui-icon:before {
-  content: "\e90b";
-}
 body .ui-fileupload .ui-fileupload-buttonbar .ui-button.ui-state-disabled:not(.ui-fileupload-choose) {
   display: none;
 }
@@ -3181,17 +3169,19 @@ body .ui-input-filled .ui-cascadeselect:not(.ui-state-disabled).p-focus {
 }
 
 body .ui-chkbox {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   vertical-align: middle;
   margin: 0;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: auto;
+  height: auto;
 }
 body .ui-chkbox .ui-chkbox-box {
   border: 1px solid #D7D8D9;
   border-width: 2px;
   background: #FDFEFF;
   width: 1.5rem;
+  min-width: 1.5rem;
   height: 1.5rem;
   text-align: center;
   position: relative;
@@ -4424,6 +4414,12 @@ body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-selectcheckb
 body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items {
   padding: 0.5rem 0;
 }
+body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items.ui-selectcheckboxmenu-table > thead tr th {
+  background: #F6F9FE;
+  border: 1px solid rgba(232, 241, 248, 0.7);
+  color: #515C66;
+  font-weight: 700;
+}
 body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items .ui-selectcheckboxmenu-item {
   padding: 0.5rem 1rem;
   margin: 0;
@@ -4451,6 +4447,17 @@ body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items .ui-selectcheckbo
   display: inline;
   padding-left: 0;
   vertical-align: middle;
+}
+body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items .ui-selectcheckboxmenu-item.ui-selectcheckboxmenu-row {
+  background: #FDFEFF;
+  color: #515C66;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items .ui-selectcheckboxmenu-item.ui-selectcheckboxmenu-row > td {
+  padding: 1rem 1rem;
+}
+body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items .ui-selectcheckboxmenu-item.ui-selectcheckboxmenu-row:first-child {
+  border-top-color: transparent;
 }
 body .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items .ui-selectcheckboxmenu-item-group {
   background: #ffffff;
@@ -4559,7 +4566,6 @@ body .ui-selectonemenu {
   vertical-align: middle;
   border: 1px solid #D7D8D9;
   position: relative;
-  transform: none;
   padding: 0;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   border-radius: 3px;
@@ -5915,11 +5921,12 @@ body .ui-messages ul .ui-messages-warn-detail,
 body .ui-messages ul .ui-messages-error-detail,
 body .ui-messages ul .ui-messages-fatal-detail {
   margin: 0;
+  overflow-wrap: break-word;
 }
 body .ui-messages .ui-messages-close {
-  position: absolute;
-  right: -1rem;
-  top: -1rem;
+  position: relative;
+  right: -2rem;
+  top: -2rem;
   width: 2rem;
   height: 2rem;
   background: transparent;
@@ -6783,7 +6790,7 @@ body .ui-dialog.ui-message-dialog .ui-dialog-content > span.ui-dialog-message.ui
   background: none;
 }
 body .ui-dialog.ui-message-dialog .ui-dialog-content > span.ui-dialog-message.ui-messages-info-icon:before {
-  content: "\e922";
+  content: "\e924";
 }
 body .ui-dialog.ui-message-dialog .ui-dialog-content > span.ui-dialog-message.ui-messages-error-icon {
   font-family: "primeicons" !important;
@@ -6795,107 +6802,15 @@ body .ui-dialog.ui-message-dialog .ui-dialog-content > span.ui-dialog-message.ui
 body .ui-dialog.ui-message-dialog .ui-dialog-content > span.ui-dialog-message.ui-messages-error-icon:before {
   content: "\e90c";
 }
-
-body .ui-lightbox {
-  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
-}
-body .ui-lightbox .ui-lightbox-caption {
-  border: 1px solid #E4E5E5;
-  background: #F6F9FE;
-  color: #515C66;
-  padding: 1rem;
-  font-weight: 700;
-}
-body .ui-lightbox .ui-lightbox-caption .ui-lightbox-caption-text {
-  color: #515C66;
-  margin: 0;
-}
-body .ui-lightbox .ui-lightbox-caption .ui-lightbox-close {
-  padding: 0;
-  width: 2rem;
-  height: 2rem;
-  background: transparent;
-  color: #657380;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 50%;
-  border: 0 none;
-  text-align: center;
-  line-height: 2rem;
-  padding: 0;
-  user-select: none;
-}
-body .ui-lightbox .ui-lightbox-caption .ui-lightbox-close:hover {
-  background: rgba(232, 241, 248, 0.7);
-  color: #515C66;
-  border-color: transparent;
-}
-body .ui-lightbox .ui-lightbox-caption .ui-lightbox-close:focus {
-  outline: 0 none;
-  outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #59C5B9;
-}
-body .ui-lightbox .ui-lightbox-caption .ui-lightbox-close .ui-icon {
+body .ui-dialog.ui-message-dialog .ui-dialog-content > span.ui-dialog-message.ui-messages-fatal-icon {
   font-family: "primeicons" !important;
   font-style: normal;
   font-weight: normal;
   display: inline-block;
   background: none;
 }
-body .ui-lightbox .ui-lightbox-caption .ui-lightbox-close .ui-icon:before {
-  content: "\e90b";
-}
-body .ui-lightbox .ui-lightbox-content-wrapper {
-  overflow: hidden;
-  background: #FDFEFF;
-  color: #515C66;
-  border: 0 none;
-  padding: 0;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-left {
-  font-family: "primeicons" !important;
-  font-style: normal;
-  font-weight: normal;
-  display: inline-block;
-  background: none;
-  transition: all 0.2s;
-  font-size: 24px;
-  margin-left: 4px;
-  color: #ffffff;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-left:before {
-  content: "\e900";
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-left:hover {
-  scale: 1.2;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-left span {
-  display: none;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-right {
-  font-family: "primeicons" !important;
-  font-style: normal;
-  font-weight: normal;
-  display: inline-block;
-  background: none;
-  transition: all 0.2s;
-  font-size: 24px;
-  margin-right: 4px;
-  color: #ffffff;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-right:before {
-  content: "\e901";
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-right:hover {
-  scale: 1.2;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-right span {
-  display: none;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-content {
-  border-radius: 0;
-}
-body .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-content.ui-lightbox-loading + a {
-  display: none;
+body .ui-dialog.ui-message-dialog .ui-dialog-content > span.ui-dialog-message.ui-messages-fatal-icon:before {
+  content: "\e910";
 }
 
 body .ui-overlaypanel {

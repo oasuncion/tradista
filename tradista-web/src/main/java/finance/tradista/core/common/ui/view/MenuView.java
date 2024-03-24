@@ -2,6 +2,13 @@ package finance.tradista.core.common.ui.view;
 
 import java.io.Serializable;
 
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuModel;
+import org.primefaces.model.menu.Submenu;
+
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
@@ -34,6 +41,30 @@ public class MenuView implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 6546524155625144194L;
+
+	private MenuModel model;
+
+	@PostConstruct
+	public void init() {
+		model = new DefaultMenuModel();
+
+		Submenu tradeMenu = DefaultSubMenu.builder().label("Trades").build();
+		Submenu productMenu = DefaultSubMenu.builder().label("Products").build();
+		DefaultMenuItem item = DefaultMenuItem.builder().value("GC Repo").url("gcrepotrade.xhtml").build();
+		tradeMenu.getElements().add(item);
+		item = DefaultMenuItem.builder().value("GC Basket").url("gcbasket.xhtml").build();
+		productMenu.getElements().add(item);
+		model.getElements().add(tradeMenu);
+		model.getElements().add(productMenu);
+	}
+
+	public MenuModel getModel() {
+		return model;
+	}
+
+	public void setModel(MenuModel tradeModel) {
+		this.model = tradeModel;
+	}
 
 	public String logout() {
 		FacesContext context = FacesContext.getCurrentInstance();

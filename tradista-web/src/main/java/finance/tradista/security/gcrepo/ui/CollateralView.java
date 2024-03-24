@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -74,13 +73,13 @@ public class CollateralView implements Serializable {
 
 	private String context;
 
-	private Set<Collateral> collateralValues;
+	private List<Collateral> collateralValues;
 
-	private Set<Collateral> availableCollateralValues;
+	private List<Collateral> availableCollateralValues;
 
-	private Set<Collateral> addedCollateralValues;
+	private List<Collateral> addedCollateralValues;
 
-	private Set<Collateral> removedCollateralValues;
+	private List<Collateral> removedCollateralValues;
 
 	private DonutChartModel collateralMarketValueDonutModel;
 
@@ -230,27 +229,27 @@ public class CollateralView implements Serializable {
 
 	}
 
-	public Set<Collateral> getCollateralValues() {
+	public List<Collateral> getCollateralValues() {
 		return collateralValues;
 	}
 
-	public void setCollateralValues(Set<Collateral> collateralValues) {
+	public void setCollateralValues(List<Collateral> collateralValues) {
 		this.collateralValues = collateralValues;
 	}
 
-	public Set<Collateral> getAddedCollateralValues() {
+	public List<Collateral> getAddedCollateralValues() {
 		return addedCollateralValues;
 	}
 
-	public void setAddedCollateralValues(Set<Collateral> addedCollateralValues) {
+	public void setAddedCollateralValues(List<Collateral> addedCollateralValues) {
 		this.addedCollateralValues = addedCollateralValues;
 	}
 
-	public Set<Collateral> getAvailableCollateralValues() {
+	public List<Collateral> getAvailableCollateralValues() {
 		return availableCollateralValues;
 	}
 
-	public void setAvailableCollateralValues(Set<Collateral> availableCollateralValues) {
+	public void setAvailableCollateralValues(List<Collateral> availableCollateralValues) {
 		this.availableCollateralValues = availableCollateralValues;
 	}
 
@@ -288,7 +287,7 @@ public class CollateralView implements Serializable {
 				collateralValues.add(collToAdd);
 			}
 		} else {
-			collateralValues = new HashSet<>();
+			collateralValues = new ArrayList<>();
 			Collateral coll = new Collateral();
 			coll.setQuantity(quantity);
 			coll.setSecurity(securityToAdd);
@@ -332,7 +331,7 @@ public class CollateralView implements Serializable {
 				addedCollateralValues.add(collToAdd);
 			}
 		} else {
-			addedCollateralValues = new HashSet<>();
+			addedCollateralValues = new ArrayList<>();
 			Collateral coll = new Collateral();
 			coll.setQuantity(quantity);
 			coll.setSecurity(securityToAdd);
@@ -371,7 +370,7 @@ public class CollateralView implements Serializable {
 				availableCollateralValues.add(collToRemove);
 			}
 		} else {
-			availableCollateralValues = new HashSet<>();
+			availableCollateralValues = new ArrayList<>();
 			Collateral coll = new Collateral();
 			coll.setQuantity(quantity);
 			coll.setSecurity(securityToRemove);
@@ -415,7 +414,7 @@ public class CollateralView implements Serializable {
 				removedCollateralValues.add(collToRemove);
 			}
 		} else {
-			removedCollateralValues = new HashSet<>();
+			removedCollateralValues = new ArrayList<>();
 			Collateral coll = new Collateral();
 			coll.setQuantity(quantity);
 			coll.setSecurity(securityToRemove);
@@ -448,7 +447,7 @@ public class CollateralView implements Serializable {
 		if (addedCollateralValues != null) {
 			addedCollateralValues = addedCollateralValues.stream().filter(
 					c -> !c.security.equals(security) || !c.book.equals(fromBook) || !c.exchange.equals(exchange))
-					.collect(Collectors.toSet());
+					.collect(Collectors.toList());
 		}
 
 		if (availableCollateralValues != null) {
@@ -469,7 +468,7 @@ public class CollateralView implements Serializable {
 				availableCollateralValues.add(removedColl);
 			}
 		} else {
-			availableCollateralValues = new HashSet<>();
+			availableCollateralValues = new ArrayList<>();
 			Collateral coll = new Collateral();
 			coll.setQuantity(quantity);
 			coll.setBook(fromBook);
@@ -502,7 +501,7 @@ public class CollateralView implements Serializable {
 		if (removedCollateralValues != null) {
 			removedCollateralValues = removedCollateralValues.stream()
 					.filter(c -> !c.security.equals(security) || !c.exchange.equals(exchange))
-					.collect(Collectors.toSet());
+					.collect(Collectors.toList());
 		}
 
 		if (collateralValues != null) {
@@ -523,7 +522,7 @@ public class CollateralView implements Serializable {
 				collateralValues.add(readdedColl);
 			}
 		} else {
-			collateralValues = new HashSet<>();
+			collateralValues = new ArrayList<>();
 			Collateral coll = new Collateral();
 			coll.setQuantity(quantity);
 			coll.setSecurity(security);
@@ -573,10 +572,10 @@ public class CollateralView implements Serializable {
 			GCRepoTrade trade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
 			if (trade != null) {
 				if (collateralValues == null) {
-					collateralValues = new HashSet<>();
+					collateralValues = new ArrayList<>();
 				}
 				if (availableCollateralValues == null) {
-					availableCollateralValues = new HashSet<>();
+					availableCollateralValues = new ArrayList<>();
 				}
 				collateralValues.clear();
 				availableCollateralValues.clear();
@@ -720,11 +719,11 @@ public class CollateralView implements Serializable {
 		this.trade = trade;
 	}
 
-	public Set<Collateral> getRemovedCollateralValues() {
+	public List<Collateral> getRemovedCollateralValues() {
 		return removedCollateralValues;
 	}
 
-	public void setRemovedCollateralValues(Set<Collateral> removedCollateralValues) {
+	public void setRemovedCollateralValues(List<Collateral> removedCollateralValues) {
 		this.removedCollateralValues = removedCollateralValues;
 	}
 
@@ -793,7 +792,7 @@ public class CollateralView implements Serializable {
 		return collateralSetToSecuritiesMap(removedCollateralValues);
 	}
 
-	private Map<Security, Map<Book, BigDecimal>> collateralSetToSecuritiesMap(Set<Collateral> collateralSet) {
+	private Map<Security, Map<Book, BigDecimal>> collateralSetToSecuritiesMap(List<Collateral> collateralSet) {
 		if (collateralSet == null || collateralSet.isEmpty()) {
 			return null;
 		}

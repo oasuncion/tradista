@@ -18,45 +18,30 @@
 	<h:outputScript name="js/prism.js" library="poseidon-layout" />
 	<ui:insert name="head" />
 	<h:outputStylesheet name="tradista.css" />
-	  <style>
-            body {
-                background-color: #197B84;         
-            }
-        </style>
 </h:head>
 
 <h:body>
-
 	<div
 		class="layout-wrapper layout-horizontal layout-topbar-#{guestPreferences.topbarTheme}  layout-menu-horizontal  #{guestPreferences.menuMode} #{guestPreferences.orientationRTL ? 'layout-rtl' : null}">
 		<ui:include src="./menu.xhtml" />
-		<div class="layout-main">			
-			<div class="layout-content">		
+		<div class="layout-main">
+			<div class="layout-content">
 				<ui:insert name="content" />
 			</div>
 		</div>
 		<div class="layout-mask modal-in"></div>
 	</div>
-
-
 	<p:ajaxStatus styleClass="layout-ajax-loader">
 		<f:facet name="start">
 			<i class="pi pi-spin pi-spinner layout-ajax-loader-icon"
 				aria-hidden="true" />
 		</f:facet>
-
 		<f:facet name="complete">
 			<h:outputText value="" />
 		</f:facet>
 	</p:ajaxStatus>
-
 	<h:outputStylesheet name="css/primeflex.min.css"
 		library="poseidon-layout" />
 	<h:outputStylesheet name="css/primeicons.css" library="poseidon-layout" />
-	<h:outputStylesheet name="css/demo-#{guestPreferences.darkMode}.css"
-		library="demo" />
-	<h:outputStylesheet name="css/layout-#{guestPreferences.darkMode}.css"
-		library="poseidon-layout" />
 </h:body>
-
 </html>

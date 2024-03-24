@@ -1,93 +1,71 @@
-@charset "ISO-8859-1";
+@charset "UTF-8";
 
-
-.ui-panel { 
- 	margin: 20px; 
-} 
-
-
-.ui-column-filter{
-
-    /*overrides default value*/
-    width : 80px !important;
+/* Global customizations */
+.ui-panel {
+	margin: 20px;
 }
 
-.ui-sortable-column{
-
-    /*overrides default value*/
-    width : 80px !important;
+body {
+	background-color: #197B84;
 }
 
-.ui-panelgrid td {
-   padding: 10px !important;
- }
-
-/* .TradistaOneMenu.ui-selectonemenu .ui-selectonemenu-label { */
-/* font-size: 12px; */
-/* height: 10px !important; */
-/* } */
-
-/* .TradistaOneMenu.ui-selectonemenu { */
-/* font-size: 12px; */
-/* height: 30px !important; */
-/* } */
-
-/* .TradistaOneMenu.ui-selectonemenu .ui-selectonemenu-trigger { */
-/* height: 30px !important; */
-/* } */
-
-/* .TradistaInput input */
-/* { */
-/*     font-size: 12px; */
-/* height: 30px !important; */
-/* width: 100px */
-/* } */
-
-/* .ui-inputfield */
-/* { */
-/*     font-size: 12px; */
-/* height: 30px !important; */
-/* width: 100px */
-/* } */
-
-.foo td {
-    vertical-align: top;
+body .ui-button {
+	background-color: #197B84;
+	border: 0px solid #197B84;
+	margin-left: 10px;
 }
 
-
-.foo.ui-panelgrid>*>tr,
-.foo.ui-panelgrid  .ui-panelgrid-cell {
-    border: none;
-    background-color: #197B84;
+body .ui-button:hover {
+	background-color: white;
+	border: 0px solid white;
+	color: #197B84;
 }
 
-body .ui-panel{
-    border: none;
-    background: #197B84;
+/* Specific customizations */
+.tradista.ui-panelgrid>*>tr, .tradista.ui-panelgrid .ui-panelgrid-cell {
+	border: none;
+	background-color: #197B84;
 }
 
-.nested.ui-panelgrid>*>tr,
-.nested.ui-panelgrid  .ui-panelgrid-cell {
-    border: none;
-    background-color: white;
+.tradista-nested.ui-panelgrid>*>tr, .tradista-nested.ui-panelgrid .ui-panelgrid-cell
+	{
+	border: none;
+	background-color: white;
 }
 
-.ui-widget-content .ui-panelgrid-even  {
-    height: 10px !important;
+.tradista-warning-label {
+	font-weight: bold;
+	font-style: italic;
+	margin-left: 10px;
+	color: orange;
 }
 
- .tradista { 
-
- font-weight: bold; 
- font-size: 25px; 
- } 
- 
-.labelWarning th {
-   -font-weight: bold;
-   -font-style: italic; 
-   -left: 10px;
+/* Login page customizations */
+.login-body {
+	background: #00455E;
 }
 
-.foo body {
-    background-color: #00455E;
+body .login-button {
+	background-color: #197B84;
+	border: 0px solid #197B84;
+	margin-left: 0px;
+	font-family: Garamond;
+}
+
+body  .login-button:hover {
+	color: #197B84;
+}
+
+.login-body .login-wrapper .login-panel .login-form>button {
+	width: 20%;
+}
+
+.login-body .login-wrapper .login-panel {
+	height: 70%
+}
+
+.login-label {
+	color: white;
+	font-weight: bold;
+	font-family: Garamond;
 }

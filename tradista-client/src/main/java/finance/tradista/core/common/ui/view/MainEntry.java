@@ -407,8 +407,12 @@ public class MainEntry extends Application {
 					&& !product.equals("FXNDF") && !product.equals("IRSwap") && !product.equals("CcySwap")
 					&& !product.equals("IRSwapOption") && !product.equals("LoanDeposit")
 					&& !product.equals("IRCapFloorCollar") && !product.equals("FRA") && !product.equals("Future")) {
-
-				MenuItem productMenuItem = new MenuItem(product);
+				MenuItem productMenuItem;
+				if (product.equals("GCRepo")) {
+					productMenuItem = new MenuItem("GCBasket");
+				} else {
+					productMenuItem = new MenuItem(product);
+				}
 				menuProduct.getItems().add(productMenuItem);
 				setupMenuItem(productMenuItem, product, product + "Product", 0.5, 0.5, primScreenBounds);
 
@@ -438,12 +442,28 @@ public class MainEntry extends Application {
 		}
 	}
 
+	private void browseUrl(String page) {
+		try {
+			Desktop.getDesktop()
+					.browse(URI.create(TradistaProperties.getTradistaAppProtocol() + "://"
+							+ TradistaProperties.getTradistaAppServer() + ":" + TradistaProperties.getTradistaAppPort()
+							+ "/web/pages/" + page + ".xhtml"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private void setupMenuItem(MenuItem menuItem, String title, String templateName, double screenHeightRatio,
 			double screenWidthRatio, Rectangle2D primScreenBounds) {
 		menuItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
-				// GC Repo trade winsow is web based.
-				if (!templateName.equals("GCRepoTrade")) {
+				// GC Repo trade window is web based.
+				if (templateName.equals("GCRepoTrade")) {
+					browseUrl(templateName.toLowerCase());
+				} else if (templateName.equals("GCRepoProduct")) {
+					browseUrl("gcbasket");
+				} else {
 					Pane pane = null;
 					try {
 						pane = FXMLLoader.load(getClass().getResource("/" + templateName + ".fxml"));
@@ -479,16 +499,6 @@ public class MainEntry extends Application {
 
 					sPane.setPrefHeight(stage.getHeight());
 					sPane.setPrefWidth(stage.getWidth());
-				} else {
-					try {
-						Desktop.getDesktop()
-								.browse(URI.create(TradistaProperties.getTradistaAppProtocol() + "://"
-										+ TradistaProperties.getTradistaAppServer() + ":"
-										+ TradistaProperties.getTradistaAppPort() + "/web/login.xhtml"));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 				}
 			}
 		});

@@ -9,8 +9,7 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.ConverterException;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
+import jakarta.faces.convert.FacesConverter;
 
 /*
  * Copyright 2023 Olivier Asuncion
@@ -32,14 +31,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Named
-@ViewScoped
+@FacesConverter("indexConverter")
 public class IndexConverter implements Serializable, Converter<Index> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1302621501579077205L;
 	private IndexBusinessDelegate indexBusinessDelegate;
 
 	public IndexConverter() {

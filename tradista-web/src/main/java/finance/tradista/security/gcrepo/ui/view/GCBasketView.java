@@ -1,4 +1,4 @@
-package finance.tradista.security.gcrepo.ui;
+package finance.tradista.security.gcrepo.ui.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,17 +46,14 @@ under the License.    */
 @ViewScoped
 public class GCBasketView implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6056004849327796923L;
 
 	private GCBasket gcBasket;
 
 	private String loadingCriterion;
-	
+
 	private String idOrName;
-	
+
 	private String copyGCBasketName;
 
 	private String[] allLoadingCriteria = { "Id", "Name" };
@@ -72,7 +69,7 @@ public class GCBasketView implements Serializable {
 	private List<Security> availableSecurities;
 
 	@PostConstruct
-	public void init() throws TradistaBusinessException {
+	public void init() {
 		gcBasketBusinessDelegate = new GCBasketBusinessDelegate();
 		bondBusinessDelegate = new BondBusinessDelegate();
 		equityBusinessDelegate = new EquityBusinessDelegate();
@@ -124,7 +121,7 @@ public class GCBasketView implements Serializable {
 	public void setSecurities(DualListModel<Security> securities) {
 		this.securities = securities;
 	}
-	
+
 	public String getIdOrName() {
 		return idOrName;
 	}
@@ -132,7 +129,7 @@ public class GCBasketView implements Serializable {
 	public void setIdOrName(String idOrName) {
 		this.idOrName = idOrName;
 	}
-	
+
 	public String getCopyGCBasketName() {
 		return copyGCBasketName;
 	}
@@ -162,8 +159,9 @@ public class GCBasketView implements Serializable {
 
 	public void copy() {
 		if (copyGCBasketName.equals(gcBasket.getName())) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "The name of the copied GC Basket must be different than the original one."));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					"The name of the copied GC Basket must be different than the original one."));
+			return;
 		}
 		try {
 			GCBasket copyGCBasket = new GCBasket();
@@ -175,13 +173,16 @@ public class GCBasketView implements Serializable {
 			copyGCBasket.setSecurities(secSet);
 			long gcBasketId = gcBasketBusinessDelegate.saveGCBasket(copyGCBasket);
 			copyGCBasket.setId(gcBasketId);
-			gcBasket = copyGCBasket;
+			gcBasket.setId(copyGCBasket.getId());
+			gcBasket.setName(copyGCBasket.getName());
+			gcBasket.setSecurities(copyGCBasket.getSecurities());
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 					"GC Basket " + gcBasket.getId() + " successfully created"));
-			copyGCBasketName = "";
 		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+		} finally {
+			copyGCBasketName = null;
 		}
 	}
 
@@ -200,6 +201,11 @@ public class GCBasketView implements Serializable {
 				List<Security> basketSecurities = new ArrayList<>();
 				if (gcBasket.getSecurities() != null) {
 					basketSecurities = new ArrayList<>(gcBasket.getSecurities());
+					final List<Security> tmpBasketSecurities = basketSecurities;
+					securities.setSource(
+							securities.getSource().stream().filter(s -> !tmpBasketSecurities.contains(s)).toList());
+				} else {
+					securities.setSource(availableSecurities);
 				}
 				securities.setTarget(basketSecurities);
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",

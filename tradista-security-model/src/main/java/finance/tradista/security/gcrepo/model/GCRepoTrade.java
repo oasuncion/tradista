@@ -81,6 +81,7 @@ public class GCRepoTrade extends Trade<Product> {
 		return GC_REPO;
 	}
 
+	@Override
 	public String getProductType() {
 		return GC_REPO;
 	}

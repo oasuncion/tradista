@@ -80,8 +80,6 @@ public class GCRepoTradeSQL {
 					gcRepoTrade.setRightOfSubstitution(results.getBoolean("right_of_substitution"));
 					gcRepoTrade.setTerminableOnDemand(results.getBoolean("terminable_on_demand"));
 				}
-			} catch (TradistaBusinessException tbe) {
-				throw tbe;
 			}
 		} catch (SQLException | TradistaBusinessException e) {
 			e.printStackTrace();

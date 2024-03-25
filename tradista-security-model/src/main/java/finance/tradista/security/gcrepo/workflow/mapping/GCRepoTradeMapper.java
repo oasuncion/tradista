@@ -24,14 +24,19 @@ specific language governing permissions and limitations
 under the License.    */
 
 public class GCRepoTradeMapper {
-    
-    public static finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade map(GCRepoTrade gcRepoTrade, Workflow wkf) {
 
-	finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade gcRepoTradeResult = new finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade(wkf);
-	gcRepoTradeResult.setGcRepoTrade(gcRepoTrade);
-	
-	return gcRepoTradeResult;
-	
-    }
+	private GCRepoTradeMapper() {
+	}
+
+	public static finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade map(GCRepoTrade gcRepoTrade,
+			Workflow wkf) {
+
+		finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade gcRepoTradeResult = new finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade(
+				wkf);
+		gcRepoTradeResult.setGcRepoTrade(gcRepoTrade);
+
+		return gcRepoTradeResult;
+
+	}
 
 }

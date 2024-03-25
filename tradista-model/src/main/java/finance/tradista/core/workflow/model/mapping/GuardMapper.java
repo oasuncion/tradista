@@ -25,24 +25,30 @@ under the License.    */
 
 public final class GuardMapper {
 
-    public static Guard map(finance.tradista.flow.model.Guard guard) {
-	Guard guardResult = null;
-	if (guard != null) {
-	    guardResult = new Guard();
-	    guardResult.setId(guard.getId());
-	    guardResult.setName(guard.getName());
-	    guardResult.setLongName(guard.getClass().getName());
+	private GuardMapper() {
 	}
-	return guardResult;
-    }
 
-    public static finance.tradista.flow.model.Guard map(Guard guard) {
-	finance.tradista.flow.model.Guard guardResult = null;
-	if (guard != null) {
-	    guardResult = TradistaModelUtil.getInstance(finance.tradista.flow.model.Guard.class, guard.getLongName());
-	    guardResult.setId(guard.getId());
+	public static <X extends finance.tradista.flow.model.WorkflowObject> Guard map(
+			finance.tradista.flow.model.Guard<X> guard) {
+		Guard guardResult = null;
+		if (guard != null) {
+			guardResult = new Guard();
+			guardResult.setId(guard.getId());
+			guardResult.setName(guard.getName());
+			guardResult.setLongName(guard.getClass().getName());
+		}
+		return guardResult;
 	}
-	return guardResult;
-    }
+
+	@SuppressWarnings("unchecked")
+	public static <X extends finance.tradista.flow.model.WorkflowObject> finance.tradista.flow.model.Guard<X> map(
+			Guard guard) {
+		finance.tradista.flow.model.Guard<X> guardResult = null;
+		if (guard != null) {
+			guardResult = TradistaModelUtil.getInstance(finance.tradista.flow.model.Guard.class, guard.getLongName());
+			guardResult.setId(guard.getId());
+		}
+		return guardResult;
+	}
 
 }

@@ -1,4 +1,4 @@
-package finance.tradista.security.gcrepo.ui;
+package finance.tradista.security.gcrepo.ui.view;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -59,7 +59,7 @@ under the License.    */
 @ViewScoped
 public class CollateralView implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3483809203529526285L;
 
 	private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
 
@@ -151,7 +151,7 @@ public class CollateralView implements Serializable {
 
 	public class Collateral implements Serializable {
 
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 9150813234739675724L;
 
 		private BigDecimal quantity;
 

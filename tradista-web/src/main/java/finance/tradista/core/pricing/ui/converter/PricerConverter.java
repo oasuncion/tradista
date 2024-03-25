@@ -11,8 +11,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.ConverterException;
 import jakarta.faces.convert.FacesConverter;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
 
 /*
  * Copyright 2023 Olivier Asuncion
@@ -34,15 +32,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Named
-@ViewScoped
 @FacesConverter("pricerConverter")
 public class PricerConverter implements Serializable, Converter<Pricer> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1163062733540145757L;
 
 	public PricerConverter() {
 	}

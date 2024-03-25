@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -54,7 +53,7 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	public List<CashFlow> generateCashFlows(PricingParameter params, GCRepoTrade trade, LocalDate pricingDate)
 			throws TradistaBusinessException {
 
-		List<CashFlow> cfs = new ArrayList<CashFlow>();
+		List<CashFlow> cfs = new ArrayList<>();
 
 		if (trade.getEndDate() == null) {
 			throw new TradistaBusinessException("It is not possible to forecast cashflows of an open repo.");
@@ -107,22 +106,22 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 					.daysToYear(new DayCountConvention("ACT/360"), trade.getSettlementDate(), trade.getEndDate()));
 			amount = trade.getAmount().add(interestAmount);
 		} else {
-			List<LocalDate> dates = trade.getSettlementDate().datesUntil(trade.getEndDate())
-					.collect(Collectors.toList());
+			List<LocalDate> dates = trade.getSettlementDate().datesUntil(trade.getEndDate()).toList();
 			BigDecimal repoRate = BigDecimal.ZERO;
 			StringBuilder errorMsg = new StringBuilder();
 
 			for (LocalDate date : dates) {
 				try {
-					repoRate.add(PricerUtil.getInterestRateAsOfDate(trade.getIndex() + "." + trade.getIndexTenor(),
-							params.getQuoteSet().getId(), indexCurve.getId(), trade.getIndexTenor(), null, date));
+					repoRate = repoRate.add(PricerUtil.getInterestRateAsOfDate(
+							trade.getIndex() + "." + trade.getIndexTenor(), params.getQuoteSet().getId(),
+							indexCurve.getId(), trade.getIndexTenor(), null, date));
 				} catch (PricerException pe) {
 					errorMsg.append(String.format("%tD ", date));
 				}
 			}
 			if (errorMsg.length() > 0) {
-				errorMsg = new StringBuilder(String.format(
-						"Repo closing leg cashfow cannot be calculated. Impossible to calculate the rate for dates : "))
+				errorMsg = new StringBuilder(
+						"Repo closing leg cashfow cannot be calculated. Impossible to calculate the rate for dates : ")
 						.append(errorMsg);
 				throw new TradistaBusinessException(errorMsg.toString());
 			}

@@ -79,7 +79,7 @@ public class TradeSQL {
 						trade.setStatus(StatusSQL.getStatusById(statusId));
 					}
 					if (trades == null) {
-						trades = new ArrayList<Trade<? extends Product>>();
+						trades = new ArrayList<>();
 					}
 					trades.add(trade);
 				}
@@ -293,7 +293,7 @@ public class TradeSQL {
 			try (ResultSet results = stmtGetTradesByPosition.executeQuery()) {
 				while (results.next()) {
 					if (trades == null) {
-						trades = new HashSet<Trade<? extends Product>>();
+						trades = new HashSet<>();
 					}
 					Trade<? extends Product> trade = null;
 					Class<Trade<? extends Product>> klass = null;
@@ -385,9 +385,6 @@ public class TradeSQL {
 		}
 		if (posDef.getProduct() != null) {
 			filters += " AND TRADE.PRODUCT_ID=" + posDef.getProduct().getId();
-		}
-		if (posDef.getProductType() == null || posDef.getProductType().equals("EquityOption")) {
-
 		}
 
 		// Control added to be sure to not retrieve options underlying

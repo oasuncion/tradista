@@ -35,157 +35,157 @@ under the License.    */
 
 public class GCRepoTrade implements WorkflowObject {
 
-    private finance.tradista.security.gcrepo.model.GCRepoTrade gcRepoTrade;
+	private finance.tradista.security.gcrepo.model.GCRepoTrade gcRepoTrade;
 
-    private Workflow wkf;
+	private Workflow wkf;
 
-    public GCRepoTrade(Workflow wkf) {
-	this.wkf = wkf;
-    }
-
-    @Override
-    public Status getStatus() {
-	Status status = null;
-	if (gcRepoTrade != null) {
-	    status = StatusMapper.map(gcRepoTrade.getStatus(), wkf);
+	public GCRepoTrade(Workflow wkf) {
+		this.wkf = wkf;
 	}
-	return status;
-    }
 
-    @Override
-    public String getWorkflow() {
-	String wkf = null;
-	if (gcRepoTrade != null) {
-	    wkf = gcRepoTrade.getWorkflow();
+	@Override
+	public Status getStatus() {
+		Status status = null;
+		if (gcRepoTrade != null) {
+			status = StatusMapper.map(gcRepoTrade.getStatus(), wkf);
+		}
+		return status;
 	}
-	return wkf;
-    }
 
-    @Override
-    public void setStatus(Status status) {
-	if (gcRepoTrade != null) {
-	    gcRepoTrade.setStatus(StatusMapper.map(status));
+	@Override
+	public String getWorkflow() {
+		String wkf = null;
+		if (gcRepoTrade != null) {
+			wkf = gcRepoTrade.getWorkflow();
+		}
+		return wkf;
 	}
-    }
 
-    public long getId() {
-	long id = 0;
-	if (gcRepoTrade != null) {
-	    id = gcRepoTrade.getId();
+	@Override
+	public void setStatus(Status status) {
+		if (gcRepoTrade != null) {
+			gcRepoTrade.setStatus(StatusMapper.map(status));
+		}
 	}
-	return id;
-    }
 
-    public Book getBook() {
-	Book book = null;
-	if (gcRepoTrade != null) {
-	    book = gcRepoTrade.getBook();
+	public long getId() {
+		long id = 0;
+		if (gcRepoTrade != null) {
+			id = gcRepoTrade.getId();
+		}
+		return id;
 	}
-	return book;
-    }
 
-    public boolean isFixedRepoRate() {
-	boolean isFixedRepoRate = false;
-	if (gcRepoTrade != null) {
-	    isFixedRepoRate = gcRepoTrade.isFixedRepoRate();
+	public Book getBook() {
+		Book book = null;
+		if (gcRepoTrade != null) {
+			book = gcRepoTrade.getBook();
+		}
+		return book;
 	}
-	return isFixedRepoRate;
-    }
 
-    public BigDecimal getRepoRate() {
-	BigDecimal repoRate = null;
-	if (gcRepoTrade != null) {
-	    repoRate = gcRepoTrade.getRepoRate();
+	public boolean isFixedRepoRate() {
+		boolean isFixedRepoRate = false;
+		if (gcRepoTrade != null) {
+			isFixedRepoRate = gcRepoTrade.isFixedRepoRate();
+		}
+		return isFixedRepoRate;
 	}
-	return repoRate;
-    }
 
-    public Index getIndex() {
-	Index index = null;
-	if (gcRepoTrade != null) {
-	    index = gcRepoTrade.getIndex();
+	public BigDecimal getRepoRate() {
+		BigDecimal repoRate = null;
+		if (gcRepoTrade != null) {
+			repoRate = gcRepoTrade.getRepoRate();
+		}
+		return repoRate;
 	}
-	return index;
-    }
 
-    public Tenor getIndexTenor() {
-	Tenor tenor = null;
-	if (gcRepoTrade != null) {
-	    tenor = gcRepoTrade.getIndexTenor();
+	public Index getIndex() {
+		Index index = null;
+		if (gcRepoTrade != null) {
+			index = gcRepoTrade.getIndex();
+		}
+		return index;
 	}
-	return tenor;
-    }
 
-    public BigDecimal getIndexOffset() {
-	BigDecimal indexOffset = null;
-	if (gcRepoTrade != null) {
-	    indexOffset = gcRepoTrade.getIndexOffset();
+	public Tenor getIndexTenor() {
+		Tenor tenor = null;
+		if (gcRepoTrade != null) {
+			tenor = gcRepoTrade.getIndexTenor();
+		}
+		return tenor;
 	}
-	return indexOffset;
-    }
 
-    public BigDecimal getCashAmount() {
-	BigDecimal cashAmount = null;
-	if (gcRepoTrade != null) {
-	    cashAmount = gcRepoTrade.getAmount();
+	public BigDecimal getIndexOffset() {
+		BigDecimal indexOffset = null;
+		if (gcRepoTrade != null) {
+			indexOffset = gcRepoTrade.getIndexOffset();
+		}
+		return indexOffset;
 	}
-	return cashAmount;
-    }
 
-    public LocalDate getEndDate() {
-	LocalDate endDate = null;
-	if (gcRepoTrade != null) {
-	    endDate = gcRepoTrade.getEndDate();
+	public BigDecimal getCashAmount() {
+		BigDecimal cashAmount = null;
+		if (gcRepoTrade != null) {
+			cashAmount = gcRepoTrade.getAmount();
+		}
+		return cashAmount;
 	}
-	return endDate;
-    }
 
-    public BigDecimal getMarginRate() {
-	BigDecimal marginRate = null;
-	if (gcRepoTrade != null) {
-	    marginRate = gcRepoTrade.getMarginRate();
+	public LocalDate getEndDate() {
+		LocalDate endDate = null;
+		if (gcRepoTrade != null) {
+			endDate = gcRepoTrade.getEndDate();
+		}
+		return endDate;
 	}
-	return marginRate;
-    }
 
-    public Map<LocalDate, BigDecimal> getPartialTerminations() {
-	Map<LocalDate, BigDecimal> partialTerminations = null;
-	if (gcRepoTrade != null) {
-	    partialTerminations = gcRepoTrade.getPartialTerminations();
+	public BigDecimal getMarginRate() {
+		BigDecimal marginRate = null;
+		if (gcRepoTrade != null) {
+			marginRate = gcRepoTrade.getMarginRate();
+		}
+		return marginRate;
 	}
-	return partialTerminations;
-    }
 
-    public void setGcRepoTrade(finance.tradista.security.gcrepo.model.GCRepoTrade gcRepoTrade) {
-	this.gcRepoTrade = gcRepoTrade;
-    }
+	public Map<LocalDate, BigDecimal> getPartialTerminations() {
+		Map<LocalDate, BigDecimal> partialTerminations = null;
+		if (gcRepoTrade != null) {
+			partialTerminations = gcRepoTrade.getPartialTerminations();
+		}
+		return partialTerminations;
+	}
 
-    public Map<Security, Map<Book, BigDecimal>> getCollateralToAdd() {
-	Map<Security, Map<Book, BigDecimal>> collateralToAdd = null;
-	if (gcRepoTrade != null) {
-	    collateralToAdd = gcRepoTrade.getCollateralToAdd();
+	public void setGcRepoTrade(finance.tradista.security.gcrepo.model.GCRepoTrade gcRepoTrade) {
+		this.gcRepoTrade = gcRepoTrade;
 	}
-	return collateralToAdd;
-    }
 
-    public Map<Security, Map<Book, BigDecimal>> getCollateralToRemove() {
-	Map<Security, Map<Book, BigDecimal>> collateralToRemove = null;
-	if (gcRepoTrade != null) {
-	    collateralToRemove = gcRepoTrade.getCollateralToRemove();
+	public Map<Security, Map<Book, BigDecimal>> getCollateralToAdd() {
+		Map<Security, Map<Book, BigDecimal>> collateralToAdd = null;
+		if (gcRepoTrade != null) {
+			collateralToAdd = gcRepoTrade.getCollateralToAdd();
+		}
+		return collateralToAdd;
 	}
-	return collateralToRemove;
-    }
 
-    @Override
-    public finance.tradista.flow.model.WorkflowObject clone() throws java.lang.CloneNotSupportedException {
-	GCRepoTrade gcRepoTrade = (GCRepoTrade) super.clone();
-	if (this.gcRepoTrade != null) {
-	    gcRepoTrade.gcRepoTrade = (finance.tradista.security.gcrepo.model.GCRepoTrade) this.gcRepoTrade.clone();
+	public Map<Security, Map<Book, BigDecimal>> getCollateralToRemove() {
+		Map<Security, Map<Book, BigDecimal>> collateralToRemove = null;
+		if (gcRepoTrade != null) {
+			collateralToRemove = gcRepoTrade.getCollateralToRemove();
+		}
+		return collateralToRemove;
 	}
-	if (this.wkf != null) {
-	    gcRepoTrade.wkf = this.wkf.clone();
+
+	@Override
+	public finance.tradista.flow.model.WorkflowObject clone() throws java.lang.CloneNotSupportedException {
+		GCRepoTrade gcRepoTrade = (GCRepoTrade) super.clone();
+		if (this.gcRepoTrade != null) {
+			gcRepoTrade.gcRepoTrade = (finance.tradista.security.gcrepo.model.GCRepoTrade) this.gcRepoTrade.clone();
+		}
+		if (this.wkf != null) {
+			gcRepoTrade.wkf = this.wkf.clone();
+		}
+		return gcRepoTrade;
 	}
-	return gcRepoTrade;
-    }
 
 }

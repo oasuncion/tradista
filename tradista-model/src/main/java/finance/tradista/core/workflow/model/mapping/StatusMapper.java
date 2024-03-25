@@ -26,37 +26,37 @@ under the License.    */
 
 public final class StatusMapper {
 
-    private StatusMapper() {
-    }
-
-    public static Status map(finance.tradista.flow.model.Status status) {
-	Status statusResult = null;
-	if (status != null) {
-	    if (status instanceof finance.tradista.flow.model.PseudoStatus) {
-		statusResult = new PseudoStatus();
-	    } else {
-		statusResult = new Status();
-	    }
-	    statusResult.setId(status.getId());
-	    statusResult.setName(status.getName());
-	    statusResult.setWorkflowName(status.getWorkflow().getName());
+	private StatusMapper() {
 	}
-	return statusResult;
-    }
 
-    public static finance.tradista.flow.model.Status map(Status status, Workflow workflow) {
-	finance.tradista.flow.model.Status statusResult = null;
-	if (status != null) {
-	    if (status instanceof PseudoStatus) {
-		statusResult = new finance.tradista.flow.model.PseudoStatus();
-	    } else {
-		statusResult = new finance.tradista.flow.model.Status();
-	    }
-	    statusResult.setId(status.getId());
-	    statusResult.setName(status.getName());
-	    statusResult.setWorkflow(workflow);
+	public static Status map(finance.tradista.flow.model.Status status) {
+		Status statusResult = null;
+		if (status != null) {
+			if (status instanceof finance.tradista.flow.model.PseudoStatus) {
+				statusResult = new PseudoStatus();
+			} else {
+				statusResult = new Status();
+			}
+			statusResult.setId(status.getId());
+			statusResult.setName(status.getName());
+			statusResult.setWorkflowName(status.getWorkflow().getName());
+		}
+		return statusResult;
 	}
-	return statusResult;
-    }
+
+	public static finance.tradista.flow.model.Status map(Status status, Workflow workflow) {
+		finance.tradista.flow.model.Status statusResult = null;
+		if (status != null) {
+			if (status instanceof PseudoStatus) {
+				statusResult = new finance.tradista.flow.model.PseudoStatus();
+			} else {
+				statusResult = new finance.tradista.flow.model.Status();
+			}
+			statusResult.setId(status.getId());
+			statusResult.setName(status.getName());
+			statusResult.setWorkflow(workflow);
+		}
+		return statusResult;
+	}
 
 }

@@ -1,15 +1,12 @@
 package finance.tradista.core.workflow.service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.workflow.model.Action;
 import finance.tradista.core.workflow.model.Status;
 import finance.tradista.core.workflow.model.Workflow;
-import finance.tradista.core.workflow.model.mapping.ActionMapper;
 import finance.tradista.core.workflow.model.mapping.StatusMapper;
 import finance.tradista.core.workflow.model.mapping.WorkflowMapper;
 import finance.tradista.flow.exception.TradistaFlowBusinessException;
@@ -42,52 +39,52 @@ under the License.    */
 @Stateless
 public class WorkflowServiceBean implements WorkflowService {
 
-    @Override
-    public Workflow getWorkflowByName(String name) throws TradistaBusinessException {
-	finance.tradista.flow.model.Workflow workflow;
-	Workflow workflowResult = null;
-	try {
-	    workflow = WorkflowManager.getWorkflowByName(name);
-	} catch (TradistaFlowBusinessException tfbe) {
-	    throw new TradistaBusinessException(tfbe);
+	@Override
+	public Workflow getWorkflowByName(String name) throws TradistaBusinessException {
+		finance.tradista.flow.model.Workflow workflow;
+		Workflow workflowResult = null;
+		try {
+			workflow = WorkflowManager.getWorkflowByName(name);
+		} catch (TradistaFlowBusinessException tfbe) {
+			throw new TradistaBusinessException(tfbe);
+		}
+		if (workflow != null) {
+			workflowResult = WorkflowMapper.map(workflow);
+		}
+		return workflowResult;
 	}
-	if (workflow != null) {
-	    workflowResult = WorkflowMapper.map(workflow);
-	}
-	return workflowResult;
-    }
 
-    @Override
-    public Set<String> getAvailableActionsFromStatus(String workflowName, Status status)
-	    throws TradistaBusinessException {
-	finance.tradista.flow.model.Workflow workflow;
-	Set<String> actionNames = null;
-	try {
-	    workflow = WorkflowManager.getWorkflowByName(workflowName);
-	} catch (TradistaFlowBusinessException tfbe) {
-	    throw new TradistaBusinessException(tfbe);
+	@Override
+	public Set<String> getAvailableActionsFromStatus(String workflowName, Status status)
+			throws TradistaBusinessException {
+		finance.tradista.flow.model.Workflow workflow;
+		Set<String> actionNames = null;
+		try {
+			workflow = WorkflowManager.getWorkflowByName(workflowName);
+		} catch (TradistaFlowBusinessException tfbe) {
+			throw new TradistaBusinessException(tfbe);
+		}
+		if (workflow != null) {
+			actionNames = workflow.getAvailableActionsFromStatus(StatusMapper.map(status, workflow));
+		} else {
+			throw new TradistaBusinessException(String.format("The workflow %s cannot be found", workflowName));
+		}
+		return actionNames;
 	}
-	if (workflow != null) {
-	    actionNames = workflow.getAvailableActionsFromStatus(StatusMapper.map(status, workflow));
-	} else {
-	    throw new TradistaBusinessException(String.format("The workflow %s cannot be found", workflowName));
-	}
-	return actionNames;
-    }
 
-    @Override
-    public Status getInitialStatus(String workflowName) throws TradistaBusinessException {
-	finance.tradista.flow.model.Workflow workflow;
-	try {
-	    workflow = WorkflowManager.getWorkflowByName(workflowName);
-	} catch (TradistaFlowBusinessException tfbe) {
-	    throw new TradistaBusinessException(tfbe);
+	@Override
+	public Status getInitialStatus(String workflowName) throws TradistaBusinessException {
+		finance.tradista.flow.model.Workflow workflow;
+		try {
+			workflow = WorkflowManager.getWorkflowByName(workflowName);
+		} catch (TradistaFlowBusinessException tfbe) {
+			throw new TradistaBusinessException(tfbe);
+		}
+		if (workflow != null) {
+			return StatusMapper.map(workflow.getInitialStatus());
+		} else {
+			throw new TradistaBusinessException(String.format("The workflow %s cannot be found", workflowName));
+		}
 	}
-	if (workflow != null) {
-	    return StatusMapper.map(workflow.getInitialStatus());
-	} else {
-	    throw new TradistaBusinessException(String.format("The workflow %s cannot be found", workflowName));
-	}
-    }
 
 }

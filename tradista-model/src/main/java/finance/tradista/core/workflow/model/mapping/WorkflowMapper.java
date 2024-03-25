@@ -29,31 +29,34 @@ under the License.    */
 
 public final class WorkflowMapper {
 
-    public static Workflow map(finance.tradista.flow.model.Workflow wkf) {
-	Workflow workflow = null;
-	if (wkf != null) {
-	    workflow = new Workflow();
-	    workflow.setId(wkf.getId());
-	    workflow.setName(wkf.getName());
-	    workflow.setDescription(wkf.getDescription());
-	    Set<Status> statusSet = new HashSet<>();
-	    Set<Action> actionsSet = new HashSet<>();
-	    for (finance.tradista.flow.model.Status status : wkf.getStatus()) {
-		Status currentStatus = StatusMapper.map(status);
-		currentStatus.setWorkflowName(workflow.getName());
-		statusSet.add(currentStatus);
-	    }
-	    for (finance.tradista.flow.model.Action action : wkf.getActions()) {
-		Action currentAction = ActionMapper.map(action);
-		if (currentAction != null) {
-		    actionsSet.add(currentAction);
-		    currentAction.setWorkflowName(workflow.getName());
-		}
-	    }
-	    workflow.setActions(actionsSet);
-	    workflow.setStatus(statusSet);
+	private WorkflowMapper() {
 	}
-	return workflow;
-    }
+
+	public static Workflow map(finance.tradista.flow.model.Workflow wkf) {
+		Workflow workflow = null;
+		if (wkf != null) {
+			workflow = new Workflow();
+			workflow.setId(wkf.getId());
+			workflow.setName(wkf.getName());
+			workflow.setDescription(wkf.getDescription());
+			Set<Status> statusSet = new HashSet<>();
+			Set<Action> actionsSet = new HashSet<>();
+			for (finance.tradista.flow.model.Status status : wkf.getStatus()) {
+				Status currentStatus = StatusMapper.map(status);
+				currentStatus.setWorkflowName(workflow.getName());
+				statusSet.add(currentStatus);
+			}
+			for (finance.tradista.flow.model.Action action : wkf.getActions()) {
+				Action currentAction = ActionMapper.map(action);
+				if (currentAction != null) {
+					actionsSet.add(currentAction);
+					currentAction.setWorkflowName(workflow.getName());
+				}
+			}
+			workflow.setActions(actionsSet);
+			workflow.setStatus(statusSet);
+		}
+		return workflow;
+	}
 
 }

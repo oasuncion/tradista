@@ -2,7 +2,7 @@ package finance.tradista.core.pricing.ui.converter;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import finance.tradista.core.pricing.pricer.Pricer;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
@@ -10,8 +10,6 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.FacesConverter;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
 
 /*
  * Copyright 2023 Olivier Asuncion
@@ -33,16 +31,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Named
-@ViewScoped
 @FacesConverter("pricerMeasureConverter")
 public class PricerMeasureConverter implements Serializable, Converter<PricerMeasure> {
 
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2321182145005313366L;
 
 	public PricerMeasureConverter() {
 	}
@@ -58,8 +50,11 @@ public class PricerMeasureConverter implements Serializable, Converter<PricerMea
 		Map<String, Object> attributes = component.getAttributes();
 		Pricer pricer = (Pricer) attributes.get("pricer");
 		if (pricer != null) {
-			pricerMeasure = pricer.getPricerMeasures().stream().filter(pm -> pm.toString().equals(value))
-					.collect(Collectors.toList()).get(0);
+			Optional<PricerMeasure> optPricerMeasure = pricer.getPricerMeasures().stream()
+					.filter(pm -> pm.toString().equals(value)).findFirst();
+			if (optPricerMeasure.isPresent()) {
+				pricerMeasure = optPricerMeasure.get();
+			}
 		}
 		return pricerMeasure;
 	}

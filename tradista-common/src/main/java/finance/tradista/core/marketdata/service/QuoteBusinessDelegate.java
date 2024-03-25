@@ -131,8 +131,8 @@ public class QuoteBusinessDelegate {
 		List<Class<QuoteValidator>> validators = TradistaUtil.getAllClassesByType(QuoteValidator.class,
 				"finance.tradista");
 		if (validators == null || validators.isEmpty()) {
-			throw new TradistaTechnicalException(String.format(
-					"No QuoteValidator instances were found in the finance.tradista packages (and sub-packages)."));
+			throw new TradistaTechnicalException(
+					"No QuoteValidator instances were found in the finance.tradista packages (and sub-packages).");
 		}
 		QuoteValidator validator = null;
 		for (Class<QuoteValidator> valClass : validators) {

@@ -2,16 +2,14 @@ package finance.tradista.core.book.ui.converter;
 
 import java.io.Serializable;
 
+import finance.tradista.core.book.model.Book;
+import finance.tradista.core.book.service.BookBusinessDelegate;
+import finance.tradista.core.common.exception.TradistaBusinessException;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.ConverterException;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
-
-import finance.tradista.core.book.model.Book;
-import finance.tradista.core.book.service.BookBusinessDelegate;
-import finance.tradista.core.common.exception.TradistaBusinessException;
+import jakarta.faces.convert.FacesConverter;
 
 /*
  * Copyright 2022 Olivier Asuncion
@@ -33,13 +31,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Named
-@ViewScoped
+@FacesConverter("bookConverter")
 public class BookConverter implements Serializable, Converter<Book> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3802860683043711768L;
 	private BookBusinessDelegate bookBusinessDelegate;
 

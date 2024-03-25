@@ -27,28 +27,31 @@ under the License.    */
 
 public final class ActionMapper {
 
-    public static Action map(finance.tradista.flow.model.Action action) {
-	Action actionResult = null;
-	if (action != null) {
-	    if (action instanceof finance.tradista.flow.model.SimpleAction) {
-		actionResult = SimpleActionMapper.map((finance.tradista.flow.model.SimpleAction) action);
-	    } else {
-		actionResult = ConditionalActionMapper.map((finance.tradista.flow.model.ConditionalAction) action);
-	    }
+	private ActionMapper() {
 	}
-	return actionResult;
-    }
 
-    public static finance.tradista.flow.model.Action map(Action action, Workflow workflow) {
-	finance.tradista.flow.model.Action actionResult = null;
-	if (action != null) {
-	    if (action instanceof SimpleAction) {
-		actionResult = SimpleActionMapper.map((SimpleAction) action, workflow);
-	    } else {
-		actionResult = ConditionalActionMapper.map((ConditionalAction) action, workflow);
-	    }
+	public static Action map(finance.tradista.flow.model.Action action) {
+		Action actionResult = null;
+		if (action != null) {
+			if (action instanceof finance.tradista.flow.model.SimpleAction simpleAction) {
+				actionResult = SimpleActionMapper.map(simpleAction);
+			} else {
+				actionResult = ConditionalActionMapper.map((finance.tradista.flow.model.ConditionalAction) action);
+			}
+		}
+		return actionResult;
 	}
-	return actionResult;
-    }
+
+	public static finance.tradista.flow.model.Action map(Action action, Workflow workflow) {
+		finance.tradista.flow.model.Action actionResult = null;
+		if (action != null) {
+			if (action instanceof SimpleAction simpleAction) {
+				actionResult = SimpleActionMapper.map(simpleAction, workflow);
+			} else {
+				actionResult = ConditionalActionMapper.map((ConditionalAction) action, workflow);
+			}
+		}
+		return actionResult;
+	}
 
 }

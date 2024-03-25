@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import finance.tradista.core.common.util.ClientUtil;
 import finance.tradista.core.user.service.UserBusinessDelegate;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +33,7 @@ specific language governing permissions and limitations
 under the License.    */
 
 @Named
-@ViewScoped
+@RequestScoped
 public class LoginView implements Serializable {
 
 	private static final long serialVersionUID = -7912603586721092288L;
@@ -67,10 +67,9 @@ public class LoginView implements Serializable {
 			request.login(getLogin(), getPassword());
 			ClientUtil.setCurrentUser(
 					new UserBusinessDelegate().getUserByLogin(externalContext.getUserPrincipal().getName()));
-		} catch (ServletException e) {
-			e.printStackTrace();
-			context.addMessage(null, new FacesMessage("Login failed " + e));
-			return "loginError.xhtml";
+		} catch (ServletException se) {
+			context.addMessage("errMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed.", null));
+			return null;
 		}
 
 		return "pages/gcrepotrade?faces-redirect=true";

@@ -22,11 +22,11 @@ under the License.    */
 
 public final class StatusConstants {
 
-    private StatusConstants() {
-    }
+	private StatusConstants() {
+	}
 
-    public static final String CREATED = "CREATED";
+	public static final String CREATED = "CREATED";
 
-    public static final String ALLOCATED = "ALLOCATED";
+	public static final String ALLOCATED = "ALLOCATED";
 
 }

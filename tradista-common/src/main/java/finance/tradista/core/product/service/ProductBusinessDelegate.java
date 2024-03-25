@@ -43,7 +43,7 @@ public class ProductBusinessDelegate {
 	private static Set<String> allProductTypes;
 
 	static {
-		canBeOTC = new HashSet<String>();
+		canBeOTC = new HashSet<>();
 		canBeOTC.add("FX");
 		canBeOTC.add("FXSwap");
 		canBeOTC.add("FXOption");
@@ -57,13 +57,13 @@ public class ProductBusinessDelegate {
 		canBeOTC.add("EquityOption");
 		canBeOTC.add("GCRepo");
 
-		canBeListed = new HashSet<String>();
+		canBeListed = new HashSet<>();
 		canBeListed.add("EquityOption");
 		canBeListed.add("Bond");
 		canBeListed.add("Equity");
 		canBeListed.add("Future");
 
-		allProductTypes = new HashSet<String>();
+		allProductTypes = new HashSet<>();
 		allProductTypes.addAll(canBeOTC);
 		allProductTypes.addAll(canBeListed);
 	}
@@ -87,7 +87,7 @@ public class ProductBusinessDelegate {
 				Set<? extends Product> prods = SecurityUtil.runEx(() -> productService.getAllProductsByType(type));
 				if (prods != null && !prods.isEmpty()) {
 					if (products == null) {
-						products = new HashSet<Product>();
+						products = new HashSet<>();
 					}
 					products.addAll(prods);
 				}
@@ -173,7 +173,7 @@ public class ProductBusinessDelegate {
 			throw new TradistaBusinessException("The position definition is mandatory.");
 		}
 		if (posDef.getProduct() != null) {
-			Set<Product> product = new HashSet<Product>();
+			Set<Product> product = new HashSet<>();
 			product.add(posDef.getProduct());
 			return product;
 		} else {
@@ -189,7 +189,7 @@ public class ProductBusinessDelegate {
 				try {
 					if (canBeListed(p)) {
 						if (listableProductTypes == null) {
-							listableProductTypes = new HashSet<String>();
+							listableProductTypes = new HashSet<>();
 						}
 						listableProductTypes.add(p);
 					}

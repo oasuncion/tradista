@@ -40,9 +40,10 @@ public abstract class Trade<P extends Product> extends TradistaObject implements
 	 */
 	private static final long serialVersionUID = 3681323495299195621L;
 
-	public static enum Direction {
+	public enum Direction {
 		BUY, SELL;
 
+		@Override
 		public String toString() {
 			switch (this) {
 			case BUY:

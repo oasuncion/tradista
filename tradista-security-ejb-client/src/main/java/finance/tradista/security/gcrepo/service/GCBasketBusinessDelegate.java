@@ -54,7 +54,7 @@ public class GCBasketBusinessDelegate {
 		}
 		return SecurityUtil.run(() -> gcBasketService.getGCBasketById(id));
 	}
-	
+
 	public Set<GCBasket> getAllGCBaskets() {
 		return SecurityUtil.run(() -> gcBasketService.getAllGCBaskets());
 	}

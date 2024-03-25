@@ -25,25 +25,31 @@ under the License.    */
 
 public final class ProcessMapper {
 
-    public static Process map(finance.tradista.flow.model.Process process) {
-	Process processResult = null;
-	if (process != null) {
-	    processResult = new Process();
-	    processResult.setId(process.getId());
-	    processResult.setName(process.getName());
-	    processResult.setLongName(process.getClass().getName());
+	private ProcessMapper() {
 	}
-	return processResult;
-    }
 
-    public static finance.tradista.flow.model.Process map(Process process) {
-	finance.tradista.flow.model.Process processResult = null;
-	if (process != null) {
-	    processResult = TradistaModelUtil.getInstance(finance.tradista.flow.model.Process.class,
-		    process.getLongName());
-	    processResult.setId(process.getId());
+	public static <X extends finance.tradista.flow.model.WorkflowObject> Process map(
+			finance.tradista.flow.model.Process<X> process) {
+		Process processResult = null;
+		if (process != null) {
+			processResult = new Process();
+			processResult.setId(process.getId());
+			processResult.setName(process.getName());
+			processResult.setLongName(process.getClass().getName());
+		}
+		return processResult;
 	}
-	return processResult;
-    }
+
+	@SuppressWarnings("unchecked")
+	public static <X extends finance.tradista.flow.model.WorkflowObject> finance.tradista.flow.model.Process<X> map(
+			Process process) {
+		finance.tradista.flow.model.Process<X> processResult = null;
+		if (process != null) {
+			processResult = TradistaModelUtil.getInstance(finance.tradista.flow.model.Process.class,
+					process.getLongName());
+			processResult.setId(process.getId());
+		}
+		return processResult;
+	}
 
 }

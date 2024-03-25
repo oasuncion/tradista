@@ -1,4 +1,4 @@
-package finance.tradista.security.gcrepo.ui;
+package finance.tradista.security.gcrepo.ui.view;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -39,7 +39,7 @@ under the License.    */
 @ViewScoped
 public class PartialTerminationView implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6423693808393420014L;
 
 	private Set<PartialTermination> partialTerminations;
 

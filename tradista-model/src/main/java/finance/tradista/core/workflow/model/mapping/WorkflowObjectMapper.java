@@ -26,55 +26,58 @@ under the License.    */
 
 public final class WorkflowObjectMapper {
 
-    public static finance.tradista.flow.model.WorkflowObject map(WorkflowObject wo, Workflow wkf) {
-	return new finance.tradista.flow.model.WorkflowObject() {
+	private WorkflowObjectMapper() {
+	}
 
-	    private finance.tradista.flow.model.Status status = StatusMapper.map(wo.getStatus(), wkf);
+	public static finance.tradista.flow.model.WorkflowObject map(WorkflowObject wo, Workflow wkf) {
+		return new finance.tradista.flow.model.WorkflowObject() {
 
-	    @Override
-	    public finance.tradista.flow.model.Status getStatus() {
-		return status;
-	    }
+			private finance.tradista.flow.model.Status status = StatusMapper.map(wo.getStatus(), wkf);
 
-	    @Override
-	    public String getWorkflow() {
-		return wo.getWorkflow();
-	    }
+			@Override
+			public finance.tradista.flow.model.Status getStatus() {
+				return status;
+			}
 
-	    @Override
-	    public void setStatus(finance.tradista.flow.model.Status status) {
-		this.status = status;
-	    }
+			@Override
+			public String getWorkflow() {
+				return wo.getWorkflow();
+			}
 
-	    @Override
-	    public finance.tradista.flow.model.WorkflowObject clone() throws java.lang.CloneNotSupportedException {
-		return (finance.tradista.flow.model.WorkflowObject) super.clone();
-	    }
+			@Override
+			public void setStatus(finance.tradista.flow.model.Status status) {
+				this.status = status;
+			}
 
-	};
-    }
+			@Override
+			public finance.tradista.flow.model.WorkflowObject clone() throws java.lang.CloneNotSupportedException {
+				return (finance.tradista.flow.model.WorkflowObject) super.clone();
+			}
 
-    public static WorkflowObject map(finance.tradista.flow.model.WorkflowObject wo) {
-	return new WorkflowObject() {
+		};
+	}
 
-	    private Status status = StatusMapper.map(wo.getStatus());
+	public static WorkflowObject map(finance.tradista.flow.model.WorkflowObject wo) {
+		return new WorkflowObject() {
 
-	    @Override
-	    public Status getStatus() {
-		return status;
-	    }
+			private Status status = StatusMapper.map(wo.getStatus());
 
-	    @Override
-	    public String getWorkflow() {
-		return wo.getWorkflow();
-	    }
+			@Override
+			public Status getStatus() {
+				return status;
+			}
 
-	    @Override
-	    public void setStatus(Status status) {
-		this.status = status;
-	    }
+			@Override
+			public String getWorkflow() {
+				return wo.getWorkflow();
+			}
 
-	};
-    }
+			@Override
+			public void setStatus(Status status) {
+				this.status = status;
+			}
+
+		};
+	}
 
 }

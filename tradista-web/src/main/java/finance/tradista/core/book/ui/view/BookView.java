@@ -79,7 +79,7 @@ public class BookView implements Serializable {
 
 	public void loadBook() {
 		try {
-			refresh(new BookBusinessDelegate().getBookByName("Demo Book"));
+			refresh(bookBusinessDelegate.getBookByName("Demo Book"));
 		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
@@ -114,7 +114,7 @@ public class BookView implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
 
-		if (bookContent != null & !bookContent.isEmpty()) {
+		if (bookContent != null && !bookContent.isEmpty()) {
 			Map<String, BigDecimal> products = bookContent.get("Product");
 			if (products != null && !products.isEmpty()) {
 				for (Map.Entry<String, BigDecimal> entry : products.entrySet()) {

@@ -47,8 +47,7 @@ public class PricerMeasureMOCK extends PricerMeasure {
 	}
 
 	@Pricing
-	public BigDecimal mockMethod(PricingParameter params, GCRepoTrade trade, Currency currency, LocalDate pricingDate)
-			throws PricerException, TradistaBusinessException {
+	public BigDecimal mockMethod(PricingParameter params, GCRepoTrade trade, Currency currency, LocalDate pricingDate) {
 		return BigDecimal.TEN;
 	}
 }

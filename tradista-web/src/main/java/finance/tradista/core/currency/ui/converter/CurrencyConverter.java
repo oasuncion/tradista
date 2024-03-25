@@ -2,17 +2,14 @@ package finance.tradista.core.currency.ui.converter;
 
 import java.io.Serializable;
 
+import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.currency.model.Currency;
+import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.ConverterException;
 import jakarta.faces.convert.FacesConverter;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
-
-import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.currency.model.Currency;
-import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
 
 /*
  * Copyright 2022 Olivier Asuncion
@@ -34,14 +31,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Named
-@ViewScoped
 @FacesConverter("currencyConverter")
 public class CurrencyConverter implements Serializable, Converter<Currency> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3802860683043711768L;
 	private CurrencyBusinessDelegate currencyBusinessDelegate;
 

@@ -41,10 +41,7 @@ under the License.    */
 @ViewScoped
 public class QuotesView implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1925132958947152812L;
 
 	private Set<QuoteValue> quoteValues;
 

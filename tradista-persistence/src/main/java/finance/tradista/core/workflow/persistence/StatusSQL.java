@@ -31,26 +31,26 @@ under the License.    */
 
 public class StatusSQL {
 
-    public static Status getStatusById(long id) {
-	Status status = null;
-	try (Connection con = TradistaDB.getConnection();
-		PreparedStatement stmtGetStatusById = con.prepareStatement(
-			"SELECT S.ID ID, S.WORKFLOW_ID, S.NAME NAME, W.NAME WORKFLOW_NAME, W.ID FROM STATUS S, WORKFLOW W WHERE S.WORKFLOW_ID = W.ID AND S.ID = ? ")) {
-	    stmtGetStatusById.setLong(1, id);
-	    try (ResultSet results = stmtGetStatusById.executeQuery()) {
-		while (results.next()) {
-		    status = new Status();
-		    status.setId(results.getLong("id"));
-		    status.setWorkflowName(results.getString("workflow_name"));
-		    status.setName(results.getString("name"));
+	public static Status getStatusById(long id) {
+		Status status = null;
+		try (Connection con = TradistaDB.getConnection();
+				PreparedStatement stmtGetStatusById = con.prepareStatement(
+						"SELECT S.ID ID, S.WORKFLOW_ID, S.NAME NAME, W.NAME WORKFLOW_NAME, W.ID FROM STATUS S, WORKFLOW W WHERE S.WORKFLOW_ID = W.ID AND S.ID = ? ")) {
+			stmtGetStatusById.setLong(1, id);
+			try (ResultSet results = stmtGetStatusById.executeQuery()) {
+				while (results.next()) {
+					status = new Status();
+					status.setId(results.getLong("id"));
+					status.setWorkflowName(results.getString("workflow_name"));
+					status.setName(results.getString("name"));
+				}
+			}
+		} catch (SQLException sqle) {
+			// TODO Manage logs
+			sqle.printStackTrace();
+			throw new TradistaTechnicalException(sqle);
 		}
-	    }
-	} catch (SQLException sqle) {
-	    // TODO Manage logs
-	    sqle.printStackTrace();
-	    throw new TradistaTechnicalException(sqle);
+		return status;
 	}
-	return status;
-    }
 
 }

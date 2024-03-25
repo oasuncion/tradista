@@ -68,7 +68,7 @@
 											</p:column>
 											<p:column>
 												<p:selectOneMenu value="#{gCRepoTradeView.counterparty}"
-													converter="#{legalEntityConverter}">
+													converter="legalEntityConverter">
 													<f:selectItems value="#{gCRepoTradeView.allCounterparties}" />
 												</p:selectOneMenu>
 											</p:column>
@@ -103,7 +103,7 @@
 											</p:column>
 											<p:column>
 												<p:selectOneMenu value="#{gCRepoTradeView.direction}"
-													converter="#{directionConverter}">
+													converter="directionConverter">
 													<f:selectItems value="#{gCRepoTradeView.allDirections}" />
 												</p:selectOneMenu>
 											</p:column>
@@ -129,7 +129,7 @@
 											</p:column>
 											<p:column>
 												<p:selectOneMenu value="#{gCRepoTradeView.book}"
-													converter="#{bookConverter}">
+													converter="bookConverter">
 													<p:ajax event="change"
 														listener="#{bookView.refresh(gCRepoTradeView.book)}"
 														update=":dashboardForm:book" />
@@ -141,8 +141,7 @@
 											</p:column>
 											<p:column>
 												<p:selectOneMenu id="indexName"
-													value="#{gCRepoTradeView.index}"
-													converter="#{indexConverter}"
+													value="#{gCRepoTradeView.index}" converter="indexConverter"
 													disabled="#{gCRepoTradeView.interestType eq 'Fixed' or empty gCRepoTradeView.interestType}">
 													<f:selectItems value="#{gCRepoTradeView.allIndexes}" />
 													<p:ajax event="change"
@@ -191,7 +190,8 @@
 											</p:column>
 											<p:column>
 												<p:inputNumber value="#{gCRepoTradeView.noticePeriod}"
-													id="noticePeriod" decimalPlaces="0"
+													styleClass="tradista-input" id="noticePeriod"
+													decimalPlaces="0"
 													disabled="#{gCRepoTradeView.terminableOnDemand eq false or empty gCRepoTradeView.terminableOnDemand}" />
 											</p:column>
 										</p:row>
@@ -201,7 +201,7 @@
 											</p:column>
 											<p:column>
 												<p:selectOneMenu value="#{gCRepoTradeView.currency}"
-													converter="#{currencyConverter}">
+													converter="currencyConverter">
 													<f:selectItems value="#{gCRepoTradeView.allCurrencies}" />
 													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
@@ -229,9 +229,9 @@
 												<p:outputLabel value="GC Basket" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.basket}">
+												<p:selectOneMenu value="#{gCRepoTradeView.basket}"
+													converter="gcBasketConverter">
 													<f:selectItems value="#{gCRepoTradeView.allBaskets}" />
-													<f:converter converterId="gcBasketConverter" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -257,8 +257,8 @@
 														<f:selectItems
 															value="#{gCRepoTradeView.allAvailableActions}" />
 													</p:selectOneMenu>
-													<p:commandButton value="Save"
-														styleClass="rounded-button" update="@form">
+													<p:commandButton value="Save" styleClass="rounded-button"
+														update="@form">
 														<f:actionListener
 															binding="#{gCRepoTradeView.updateTrade(collateralView.getAddedSecurities(), collateralView.getRemovedSecurities())}" />
 														<f:actionListener binding="#{gCRepoTradeView.save()}" />
@@ -268,8 +268,8 @@
 														<f:actionListener
 															binding="#{partialTerminationView.refresh(gCRepoTradeView.id)}" />
 													</p:commandButton>
-													<p:commandButton value="Copy"
-														styleClass="rounded-button" update="@form">
+													<p:commandButton value="Copy" styleClass="rounded-button"
+														update="@form">
 														<f:actionListener binding="#{gCRepoTradeView.copy()}" />
 														<f:actionListener binding="#{bookView.loadBook()}" />
 														<f:actionListener
@@ -277,18 +277,16 @@
 														<f:actionListener
 															binding="#{partialTerminationView.refresh(gCRepoTradeView.id)}" />
 													</p:commandButton>
-													<p:commandButton value="New"
-														styleClass="rounded-button"
+													<p:commandButton value="New" styleClass="rounded-button"
 														action="#{gCRepoTradeView.clear}" update="@form">
 														<f:actionListener binding="#{collateralView.clear()}" />
 														<f:actionListener
 															binding="#{partialTerminationView.clear()}" />
 													</p:commandButton>
-													<p:outputLabel value="Load by Id" style="margin-left:10px"  />
+													<p:outputLabel value="Load by Id" style="margin-left:10px" />
 													<p:inputText value="#{gCRepoTradeView.idToBeLoaded}"
 														style="margin-left:10px" />
-													<p:commandButton value="Load"
-														styleClass="rounded-button"
+													<p:commandButton value="Load" styleClass="rounded-button"
 														action="#{gCRepoTradeView.load}" update="@form">
 														<f:actionListener
 															binding="#{collateralView.refresh(gCRepoTradeView.idToBeLoaded)}" />
@@ -327,9 +325,8 @@
 														</p:column>
 														<p:column
 															rendered="#{collateralView.context eq 'SUBSTITUTION'}">
-															<p:commandButton
-																styleClass="rounded-button" icon="pi pi-minus"
-																oncomplete="PF('removeCol').show();"
+															<p:commandButton styleClass="rounded-button"
+																icon="pi pi-minus" oncomplete="PF('removeCol').show();"
 																update=":dashboardForm:removeCol"
 																action="#{collateralView.setCollateralToRemove(coll.security, coll.exchange, coll.book, coll.quantity)}">
 															</p:commandButton>
@@ -356,9 +353,8 @@
 															<p:outputLabel value="#{coll.book}" />
 														</p:column>
 														<p:column>
-															<p:commandButton
-																styleClass="rounded-button" icon="pi pi-plus"
-																oncomplete="PF('addCol').show();"
+															<p:commandButton styleClass="rounded-button"
+																icon="pi pi-plus" oncomplete="PF('addCol').show();"
 																update=":dashboardForm:addCol"
 																action="#{collateralView.setCollateralToAdd(coll.security, coll.exchange, coll.book, coll.quantity)}" />
 														</p:column>
@@ -384,8 +380,8 @@
 															<p:outputLabel value="#{coll.book}" />
 														</p:column>
 														<p:column>
-															<p:commandButton
-																styleClass="rounded-button" icon="pi pi-minus"
+															<p:commandButton styleClass="rounded-button"
+																icon="pi pi-minus"
 																action="#{collateralView.removeCollateral(coll.security, coll.exchange, coll.book, coll.quantity)}"
 																update="@form">
 															</p:commandButton>
@@ -409,8 +405,8 @@
 															</p:outputLabel>
 														</p:column>
 														<p:column>
-															<p:commandButton 
-																styleClass="rounded-button" icon="pi pi-minus"
+															<p:commandButton styleClass="rounded-button"
+																icon="pi pi-minus"
 																action="#{collateralView.readdCollateral(coll.security, coll.exchange, coll.book, coll.quantity)}"
 																update="@form">
 															</p:commandButton>
@@ -467,9 +463,8 @@
 										<p:outputLabel value="Pricer" />
 									</p:column>
 									<p:column>
-										<p:outputLabel id="pricer" value="#{pricingView.pricer}">
-											<f:converter converterId="pricerConverter" />
-										</p:outputLabel>
+										<p:outputLabel id="pricer" value="#{pricingView.pricer}"
+											converter="pricerConverter" />
 									</p:column>
 								</p:row>
 								<p:row>
@@ -477,9 +472,9 @@
 										<p:outputLabel value="Pricer QuoteSet" />
 									</p:column>
 									<p:column>
-										<p:selectOneMenu value="#{pricingView.quoteSet}">
+										<p:selectOneMenu value="#{pricingView.quoteSet}"
+											converter="quoteSetConverter">
 											<f:selectItems value="#{pricingView.allQuoteSets}" />
-											<f:converter converterId="quoteSetConverter" />
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
@@ -489,7 +484,7 @@
 									</p:column>
 									<p:column>
 										<p:selectOneMenu value="#{pricingView.pricingParameter}"
-											converter="#{pricingView.pricingParameterConverter}">
+											converter="pricingParameterConverter">
 											<f:selectItems value="#{pricingView.allPricingParameters}" />
 											<p:ajax update="pricer"
 												listener="#{pricingView.updatePricer}" />
@@ -507,9 +502,9 @@
 									</p:column>
 									<p:column>
 										<p:selectOneMenu id="pricingMeasure"
-											value="#{pricingView.pricerMeasure}">
+											value="#{pricingView.pricerMeasure}"
+											converter="pricerMeasureConverter">
 											<f:selectItems value="#{pricingView.allPricerMeasures}" />
-											<f:converter converterId="pricerMeasureConverter" />
 											<f:attribute name="pricer" value="#{pricingView.pricer}" />
 											<p:ajax update="pricingMethod"
 												listener="#{pricingView.updatePricingMethods}" />
@@ -522,8 +517,7 @@
 									</p:column>
 									<p:column>
 										<p:selectOneMenu id="pricingMethod"
-											value="#{pricingView.pricingMethod}"
-											styleClass="TradistaOneMenu">
+											value="#{pricingView.pricingMethod}">
 											<f:selectItems value="#{pricingView.allPricingMethods}" />
 										</p:selectOneMenu>
 									</p:column>
@@ -533,9 +527,9 @@
 										<p:outputLabel value="Pricing Currency" />
 									</p:column>
 									<p:column>
-										<p:selectOneMenu value="#{pricingView.pricingCurrency}">
+										<p:selectOneMenu value="#{pricingView.pricingCurrency}"
+											converter="currencyConverter">
 											<f:selectItems value="#{pricingView.allCurrencies}" />
-											<f:converter converterId="currencyConverter" />
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
@@ -583,7 +577,7 @@
 												</p:column>
 												<p:column>
 													<p:datePicker value="#{quotesView.quoteDate}"
-														pattern="dd/MM/yyyy" style="margin-left:10px">
+														pattern="dd/MM/yyyy">
 														<p:ajax event="dateSelect"
 															listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}"
 															update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
@@ -595,9 +589,9 @@
 												</p:column>
 												<p:column>
 													<p:selectOneMenu value="#{quotesView.quoteSet}"
+														converter="quoteSetConverter"
 														style="margin-left:10px;margin-right: 10px">
 														<f:selectItems value="#{quotesView.allQuoteSets}" />
-														<f:converter converterId="quoteSetConverter" />
 														<p:ajax event="change"
 															listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}"
 															update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
@@ -759,8 +753,7 @@ to add (up to
 					</p:row>
 					<p:row>
 						<p:column>
-							<p:inputText value="#{collateralView.quantityToAdd}"
-								styleClass="TradistaInput" />
+							<p:inputText value="#{collateralView.quantityToAdd}" />
 						</p:column>
 					</p:row>
 					<p:row>
@@ -794,8 +787,7 @@ to remove (up to
 					</p:row>
 					<p:row>
 						<p:column>
-							<p:inputText value="#{collateralView.quantityToRemove}"
-								styleClass="TradistaInput" />
+							<p:inputText value="#{collateralView.quantityToRemove}" />
 						</p:column>
 					</p:row>
 					<p:row>

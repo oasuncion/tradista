@@ -1,6 +1,5 @@
 package finance.tradista.core.workflow.model;
 
-
 /*
  * Copyright 2023 Olivier Asuncion
  * 
@@ -22,7 +21,7 @@ specific language governing permissions and limitations
 under the License.    */
 
 public interface WorkflowObject {
-	
+
 	Status getStatus();
 
 	String getWorkflow();

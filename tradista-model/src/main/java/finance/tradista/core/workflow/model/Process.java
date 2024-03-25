@@ -27,11 +27,11 @@ under the License.    */
 public class Process extends TradistaObject {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String name;
-	
+
 	private String longName;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -39,13 +39,13 @@ public class Process extends TradistaObject {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getLongName() {
-	    return longName;
+		return longName;
 	}
 
 	public void setLongName(String longName) {
-	    this.longName = longName;
+		this.longName = longName;
 	}
 
 	@Override

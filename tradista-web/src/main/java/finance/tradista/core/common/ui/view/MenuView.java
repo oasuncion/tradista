@@ -37,9 +37,6 @@ under the License.    */
 @SessionScoped
 public class MenuView implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6546524155625144194L;
 
 	private MenuModel model;

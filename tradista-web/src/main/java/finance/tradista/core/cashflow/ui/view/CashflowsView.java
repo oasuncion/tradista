@@ -45,10 +45,7 @@ under the License.    */
 @ViewScoped
 public class CashflowsView implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3525922991038977184L;
 
 	private List<CashFlow> cashflows;
 

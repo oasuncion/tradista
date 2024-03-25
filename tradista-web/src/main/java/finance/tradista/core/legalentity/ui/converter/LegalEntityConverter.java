@@ -2,14 +2,12 @@ package finance.tradista.core.legalentity.ui.converter;
 
 import java.io.Serializable;
 
+import finance.tradista.core.legalentity.model.LegalEntity;
+import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
-
-import finance.tradista.core.legalentity.model.LegalEntity;
-import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
+import jakarta.faces.convert.FacesConverter;
 
 /*
  * Copyright 2022 Olivier Asuncion
@@ -31,14 +29,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Named
-@ViewScoped
+@FacesConverter("legalEntityConverter")
 public class LegalEntityConverter implements Serializable, Converter<LegalEntity> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3802860683043711768L;
+
 	private LegalEntityBusinessDelegate legalEntityBusinessDelegate;
 
 	public LegalEntityConverter() {

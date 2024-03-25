@@ -1,4 +1,4 @@
-package finance.tradista.security.gcrepo.ui;
+package finance.tradista.security.gcrepo.ui.view;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,10 +13,8 @@ import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
-import finance.tradista.core.currency.ui.converter.CurrencyConverter;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.index.service.IndexBusinessDelegate;
-import finance.tradista.core.index.ui.converter.IndexConverter;
 import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.core.trade.model.Trade;
@@ -61,10 +59,7 @@ under the License.    */
 @ViewScoped
 public class GCRepoTradeView implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8633490083412044246L;
 
 	private GCRepoTrade gcRepoTrade;
 
@@ -524,7 +519,7 @@ public class GCRepoTradeView implements Serializable {
 
 	}
 
-	public void clear() throws TradistaBusinessException {
+	public void clear() {
 		gcRepoTrade = new GCRepoTrade();
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
@@ -552,7 +547,7 @@ public class GCRepoTradeView implements Serializable {
 
 	public void updateIndex() {
 		if (interestType != null && interestType.equals("Floating")) {
-			if (gcRepoTrade.getIndex() == null) {
+			if (gcRepoTrade.getIndex() == null && allIndexes != null && !allIndexes.isEmpty()) {
 				gcRepoTrade.setIndex(allIndexes.stream().findFirst().get());
 			}
 			if (gcRepoTrade.getIndexTenor() == null) {

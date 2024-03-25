@@ -25,33 +25,36 @@ under the License.    */
 
 public final class SimpleActionMapper {
 
-    public static SimpleAction map(finance.tradista.flow.model.SimpleAction action) {
-	SimpleAction actionResult = null;
-	if (action != null) {
-	    actionResult = new SimpleAction();
-	    actionResult.setId(action.getId());
-	    actionResult.setName(action.getName());
-	    actionResult.setArrivalStatus(StatusMapper.map(action.getArrivalStatus()));
-	    actionResult.setDepartureStatus(StatusMapper.map(action.getDepartureStatus()));
-	    actionResult.setGuard(GuardMapper.map(action.getGuard()));
-	    actionResult.setProcess(ProcessMapper.map(action.getProcess()));
+	private SimpleActionMapper() {
 	}
-	return actionResult;
-    }
 
-    public static finance.tradista.flow.model.SimpleAction map(SimpleAction action, Workflow workflow) {
-	finance.tradista.flow.model.SimpleAction actionResult = null;
-	if (action != null) {
-	    actionResult = new finance.tradista.flow.model.SimpleAction();
-	    actionResult.setId(action.getId());
-	    actionResult.setName(action.getName());
-	    actionResult.setArrivalStatus(StatusMapper.map(action.getArrivalStatus(), workflow));
-	    actionResult.setDepartureStatus(StatusMapper.map(action.getDepartureStatus(), workflow));
-	    actionResult.setGuard(GuardMapper.map(action.getGuard()));
-	    actionResult.setProcess(ProcessMapper.map(action.getProcess()));
-	    actionResult.setWorkflow(workflow);
+	public static SimpleAction map(finance.tradista.flow.model.SimpleAction action) {
+		SimpleAction actionResult = null;
+		if (action != null) {
+			actionResult = new SimpleAction();
+			actionResult.setId(action.getId());
+			actionResult.setName(action.getName());
+			actionResult.setArrivalStatus(StatusMapper.map(action.getArrivalStatus()));
+			actionResult.setDepartureStatus(StatusMapper.map(action.getDepartureStatus()));
+			actionResult.setGuard(GuardMapper.map(action.getGuard()));
+			actionResult.setProcess(ProcessMapper.map(action.getProcess()));
+		}
+		return actionResult;
 	}
-	return actionResult;
-    }
+
+	public static finance.tradista.flow.model.SimpleAction map(SimpleAction action, Workflow workflow) {
+		finance.tradista.flow.model.SimpleAction actionResult = null;
+		if (action != null) {
+			actionResult = new finance.tradista.flow.model.SimpleAction();
+			actionResult.setId(action.getId());
+			actionResult.setName(action.getName());
+			actionResult.setArrivalStatus(StatusMapper.map(action.getArrivalStatus(), workflow));
+			actionResult.setDepartureStatus(StatusMapper.map(action.getDepartureStatus(), workflow));
+			actionResult.setGuard(GuardMapper.map(action.getGuard()));
+			actionResult.setProcess(ProcessMapper.map(action.getProcess()));
+			actionResult.setWorkflow(workflow);
+		}
+		return actionResult;
+	}
 
 }

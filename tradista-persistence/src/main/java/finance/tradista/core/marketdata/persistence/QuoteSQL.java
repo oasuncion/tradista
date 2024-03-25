@@ -129,7 +129,7 @@ public class QuoteSQL {
 				QuoteType quoteType = QuoteType.valueOf(results.getString("type"));
 				Quote quote = new Quote(quoteId, quoteName, quoteType);
 				if (quotes == null) {
-					quotes = new ArrayList<Quote>();
+					quotes = new ArrayList<>();
 				}
 				quotes.add(quote);
 			}
@@ -366,7 +366,7 @@ public class QuoteSQL {
 					String name = results.getString("name");
 					QuoteType type = QuoteType.valueOf(results.getString("type"));
 					if (quotes == null) {
-						quotes = new ArrayList<Quote>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(new Quote(id, name, type));
 				}
@@ -392,7 +392,7 @@ public class QuoteSQL {
 					String name = results.getString("name");
 					QuoteType type = QuoteType.valueOf(results.getString("type"));
 					if (quotes == null) {
-						quotes = new ArrayList<Quote>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(new Quote(id, name, type));
 				}
@@ -421,7 +421,7 @@ public class QuoteSQL {
 					String name = results.getString("name");
 					QuoteType type = QuoteType.valueOf(results.getString("type"));
 					if (quotes == null) {
-						quotes = new ArrayList<Quote>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(new Quote(id, name, type));
 				}
@@ -441,7 +441,7 @@ public class QuoteSQL {
 				ResultSet results = stmtGetAllQuoteNames.executeQuery()) {
 			while (results.next()) {
 				if (quoteNames == null) {
-					quoteNames = new ArrayList<String>();
+					quoteNames = new ArrayList<>();
 				}
 				quoteNames.add(results.getString("name"));
 			}
@@ -485,7 +485,7 @@ public class QuoteSQL {
 					QuoteValue qv = new QuoteValue(date, bid, ask, open, close, high, low, last, sourceName, quote,
 							enteredDate, quoteSet);
 					if (quotes == null) {
-						quotes = new ArrayList<QuoteValue>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(qv);
 				}
@@ -558,7 +558,7 @@ public class QuoteSQL {
 			try (ResultSet results = stmtGetQuoteTypesByQuoteName.executeQuery()) {
 				while (results.next()) {
 					if (quoteTypes == null) {
-						quoteTypes = new ArrayList<QuoteType>();
+						quoteTypes = new ArrayList<>();
 					}
 					quoteTypes.add(QuoteType.valueOf(results.getString("type")));
 				}
@@ -716,7 +716,7 @@ public class QuoteSQL {
 			try (ResultSet results = stmtGetQuoteValuesByQuoteSetTypeDateAndQuoteNames.executeQuery()) {
 				while (results.next()) {
 					if (quoteValues == null) {
-						quoteValues = new HashSet<QuoteValue>();
+						quoteValues = new HashSet<>();
 					}
 					LocalDate quoteDate = results.getDate("date").toLocalDate();
 					BigDecimal bid = results.getBigDecimal("bid");

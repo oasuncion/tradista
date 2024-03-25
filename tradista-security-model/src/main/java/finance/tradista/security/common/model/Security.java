@@ -100,6 +100,7 @@ public abstract class Security extends Product {
 		this.issuePrice = issuePrice;
 	}
 
+	@Override
 	public String toString() {
 		return getIsin() + " - " + getExchange();
 	}

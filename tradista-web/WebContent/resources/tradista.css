@@ -21,6 +21,10 @@ body .ui-button:hover {
 	color: #197B84;
 }
 
+body .ui-inputfield {
+	max-width: 80%;
+}
+
 /* Specific customizations */
 .tradista.ui-panelgrid>*>tr, .tradista.ui-panelgrid .ui-panelgrid-cell {
 	border: none;
@@ -42,7 +46,7 @@ body .ui-button:hover {
 
 /* Login page customizations */
 .login-body {
-	background: #00455E;
+	background: linear-gradient(to top right, #00455E, #197B84);
 }
 
 body .login-button {

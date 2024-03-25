@@ -23,7 +23,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Parameterizable(name="Default GCRepo Pricer")
+@Parameterizable(name = "Default GCRepo Pricer")
 public class PricerGCRepo extends Pricer {
 
 	/**

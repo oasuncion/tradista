@@ -53,9 +53,6 @@ under the License.    */
 @ViewScoped
 public class InventoryView implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 279320826504459625L;
 
 	private LineChartModel lineModel;

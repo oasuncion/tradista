@@ -10,24 +10,24 @@ import jakarta.persistence.Transient;
 @Entity
 public class IsPartiallyTerminated extends Guard<GCRepoTrade> {
 
-    @Transient
-    private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
+	@Transient
+	private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public IsPartiallyTerminated() {
-	gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
-	setPredicate(trade -> {
-	    // Get the previous state of the trade
-	    finance.tradista.security.gcrepo.model.GCRepoTrade oldTrade = gcRepoTradeBusinessDelegate
-		    .getGCRepoTradeById(trade.getId());
-	    // The guard returns true only if the notional has been reduced.
-	    boolean isPartiallyTerminated = (trade.getCashAmount().compareTo(oldTrade.getAmount()) == -1);
-	    if (!isPartiallyTerminated) {
-		throw new TradistaBusinessException("The cash amount has not been reduced.");
-	    }
-	    return isPartiallyTerminated;
-	});
-    }
+	public IsPartiallyTerminated() {
+		gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
+		setPredicate(trade -> {
+			// Get the previous state of the trade
+			finance.tradista.security.gcrepo.model.GCRepoTrade oldTrade = gcRepoTradeBusinessDelegate
+					.getGCRepoTradeById(trade.getId());
+			// The guard returns true only if the notional has been reduced.
+			boolean isPartiallyTerminated = (trade.getCashAmount().compareTo(oldTrade.getAmount()) == -1);
+			if (!isPartiallyTerminated) {
+				throw new TradistaBusinessException("The cash amount has not been reduced.");
+			}
+			return isPartiallyTerminated;
+		});
+	}
 
 }

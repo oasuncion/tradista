@@ -24,26 +24,26 @@ under the License.    */
 
 public class Condition extends TradistaObject {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String name;
+	private String name;
 
-    private String longName;
+	private String longName;
 
-    public String getName() {
-	return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-	this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getLongName() {
-	return longName;
-    }
+	public String getLongName() {
+		return longName;
+	}
 
-    public void setLongName(String longName) {
-	this.longName = longName;
-    }
+	public void setLongName(String longName) {
+		this.longName = longName;
+	}
 
 }

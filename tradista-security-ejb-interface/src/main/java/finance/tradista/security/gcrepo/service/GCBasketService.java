@@ -32,9 +32,9 @@ public interface GCBasketService {
 	long saveGCBasket(GCBasket gcBasket) throws TradistaBusinessException;
 
 	GCBasket getGCBasketByName(String name);
-	
+
 	GCBasket getGCBasketById(long id);
-	
+
 	Set<GCBasket> getAllGCBaskets();
-	
+
 }

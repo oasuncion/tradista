@@ -25,9 +25,9 @@ under the License.    */
 
 public class GCRepoTradeEvent extends TradeEvent<GCRepoTrade> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -7483119942010467086L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7483119942010467086L;
 
 }

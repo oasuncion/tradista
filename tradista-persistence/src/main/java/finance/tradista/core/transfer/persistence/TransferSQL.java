@@ -73,7 +73,7 @@ public class TransferSQL {
 				ResultSet results = stmtGetAllTransfers.executeQuery()) {
 			while (results.next()) {
 				if (transfers == null) {
-					transfers = new HashSet<Transfer>();
+					transfers = new HashSet<>();
 				}
 				Transfer transfer;
 				Transfer.Type type = Transfer.Type.valueOf(results.getString("type"));
@@ -399,7 +399,7 @@ public class TransferSQL {
 			try (ResultSet results = stmtGetTransferByTradeIdAndPurpose.executeQuery()) {
 				while (results.next()) {
 					if (transfers == null) {
-						transfers = new ArrayList<Transfer>();
+						transfers = new ArrayList<>();
 					}
 					Transfer transfer = null;
 					Transfer.Type type = Transfer.Type.valueOf(results.getString("type"));
@@ -465,7 +465,7 @@ public class TransferSQL {
 			try (ResultSet results = stmtGetTransfersByTradeId.executeQuery()) {
 				while (results.next()) {
 					if (transfers == null) {
-						transfers = new ArrayList<Transfer>();
+						transfers = new ArrayList<>();
 					}
 					Transfer transfer = null;
 					Transfer.Type type = Transfer.Type.valueOf(results.getString("type"));
@@ -532,7 +532,7 @@ public class TransferSQL {
 			try (ResultSet results = stmtGetCashTransfersByProductIdAndStartDate.executeQuery()) {
 				while (results.next()) {
 					if (transfers == null) {
-						transfers = new ArrayList<CashTransfer>();
+						transfers = new ArrayList<>();
 					}
 					Product product = null;
 					if (productId > 0) {
@@ -716,7 +716,7 @@ public class TransferSQL {
 				ResultSet results = stmt.executeQuery(query)) {
 			while (results.next()) {
 				if (transfers == null) {
-					transfers = new ArrayList<Transfer>();
+					transfers = new ArrayList<>();
 				}
 				Transfer transfer = null;
 				Transfer.Type transferType = Transfer.Type.valueOf(results.getString("type"));

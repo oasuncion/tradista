@@ -81,7 +81,7 @@ public class ConditionalAction extends Action {
 	public void setConditionalActions(Set<SimpleAction> conditionalActions) {
 		this.conditionalActions = conditionalActions;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public ConditionalAction clone() {

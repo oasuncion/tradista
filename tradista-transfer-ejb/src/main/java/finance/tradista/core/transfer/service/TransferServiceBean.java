@@ -95,7 +95,7 @@ public class TransferServiceBean implements TransferService {
 	@Override
 	public void saveTransfers(List<Transfer> transfers) {
 		if (transfers != null && !transfers.isEmpty()) {
-			Queue<TransferEvent<?>> events = new LinkedList<TransferEvent<?>>();
+			Queue<TransferEvent<?>> events = new LinkedList<>();
 			for (Transfer transfer : transfers) {
 				if (transfer.getType().equals(Transfer.Type.CASH)) {
 					CashTransferEvent event = new CashTransferEvent();

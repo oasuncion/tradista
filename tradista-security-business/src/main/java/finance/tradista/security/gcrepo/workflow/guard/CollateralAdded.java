@@ -8,16 +8,16 @@ import jakarta.persistence.Entity;
 @Entity
 public class CollateralAdded extends Guard<GCRepoTrade> {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public CollateralAdded() {
-	setPredicate(trade -> {
-	    boolean collateralAdded = trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty();
-	    if (!collateralAdded) {
-		throw new TradistaBusinessException("No collateral has been added.%n");
-	    }
-	    return collateralAdded;
-	});
-    }
+	public CollateralAdded() {
+		setPredicate(trade -> {
+			boolean collateralAdded = trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty();
+			if (!collateralAdded) {
+				throw new TradistaBusinessException("No collateral has been added.%n");
+			}
+			return collateralAdded;
+		});
+	}
 
 }

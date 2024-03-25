@@ -9,14 +9,12 @@ import java.util.Set;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
-import finance.tradista.core.currency.ui.converter.CurrencyConverter;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
 import finance.tradista.core.pricing.pricer.Pricer;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.core.pricing.service.PricerBusinessDelegate;
-import finance.tradista.core.pricing.ui.converter.PricingParameterConverter;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -48,10 +46,7 @@ under the License.    */
 @ViewScoped
 public class PricingView implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1681707647567789611L;
 
 	private Pricer pricer;
 
@@ -86,7 +81,7 @@ public class PricingView implements Serializable {
 	private BigDecimal pricerResult;
 
 	@PostConstruct
-	public void init() throws TradistaBusinessException {
+	public void init() {
 		pricerBusinessDelegate = new PricerBusinessDelegate();
 		quoteBusinessDelegate = new QuoteBusinessDelegate();
 		currencyBusinessDelegate = new CurrencyBusinessDelegate();
@@ -94,16 +89,16 @@ public class PricingView implements Serializable {
 		allQuoteSets = quoteBusinessDelegate.getAllQuoteSets();
 		allCurrencies = currencyBusinessDelegate.getAllCurrencies();
 		pricingDate = LocalDate.now();
-		if (allPricingParameters != null) {
+		if (allPricingParameters != null && !allPricingParameters.isEmpty()) {
 			pricingParameter = allPricingParameters.stream().findFirst().get();
 		}
 		updatePricer();
 		updatePricerMeasures();
-		if (allPricerMeasures != null) {
+		if (allPricerMeasures != null && !allPricerMeasures.isEmpty()) {
 			pricerMeasure = allPricerMeasures.stream().findFirst().get();
 		}
 		updatePricingMethods();
-		if (allPricingMethods != null) {
+		if (allPricingMethods != null && !allPricingMethods.isEmpty()) {
 			pricingMethod = allPricingMethods.stream().findFirst().get();
 		}
 	}
@@ -220,14 +215,6 @@ public class PricingView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
-	}
-
-	public CurrencyConverter getCurrencyConverter() {
-		return new CurrencyConverter();
-	}
-
-	public PricingParameterConverter getPricingParameterConverter() {
-		return new PricingParameterConverter();
 	}
 
 	public void updatePricerMeasures() {

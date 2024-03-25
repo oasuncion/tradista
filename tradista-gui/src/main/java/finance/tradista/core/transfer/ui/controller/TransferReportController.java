@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -162,17 +161,17 @@ public class TransferReportController extends TradistaControllerAdapter {
 
 		transferBusinessDelegate = new TransferBusinessDelegate();
 
-		id.setCellValueFactory(new PropertyValueFactory<Transfer, String>("id"));
+		id.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-		creationDate.setCellValueFactory(new PropertyValueFactory<Transfer, String>("creationDateTime"));
+		creationDate.setCellValueFactory(new PropertyValueFactory<>("creationDateTime"));
 
-		settlementDate.setCellValueFactory(new PropertyValueFactory<Transfer, String>("settlementDate"));
+		settlementDate.setCellValueFactory(new PropertyValueFactory<>("settlementDate"));
 
-		fixingDate.setCellValueFactory(new PropertyValueFactory<Transfer, String>("fixingDateTime"));
+		fixingDate.setCellValueFactory(new PropertyValueFactory<>("fixingDateTime"));
 
-		type.setCellValueFactory(new PropertyValueFactory<Transfer, String>("type"));
+		type.setCellValueFactory(new PropertyValueFactory<>("type"));
 
-		status.setCellValueFactory(new PropertyValueFactory<Transfer, Status>("status"));
+		status.setCellValueFactory(new PropertyValueFactory<>("status"));
 
 		status.setCellFactory(column -> {
 			return new TableCell<Transfer, Status>() {
@@ -209,11 +208,11 @@ public class TransferReportController extends TradistaControllerAdapter {
 			};
 		});
 
-		direction.setCellValueFactory(new PropertyValueFactory<Transfer, String>("direction"));
+		direction.setCellValueFactory(new PropertyValueFactory<>("direction"));
 
-		purpose.setCellValueFactory(new PropertyValueFactory<Transfer, String>("purpose"));
+		purpose.setCellValueFactory(new PropertyValueFactory<>("purpose"));
 
-		book.setCellValueFactory(new PropertyValueFactory<Transfer, String>("book"));
+		book.setCellValueFactory(new PropertyValueFactory<>("book"));
 
 		currency.setCellValueFactory(new Callback<CellDataFeatures<Transfer, String>, ObservableValue<String>>() {
 			public ObservableValue<String> call(CellDataFeatures<Transfer, String> t) {
@@ -263,8 +262,7 @@ public class TransferReportController extends TradistaControllerAdapter {
 			}
 		});
 
-		TradistaGUIUtil.fillComboBox(
-				Arrays.asList(Transfer.Type.values()).stream().map(t -> t.toString()).collect(Collectors.toList()),
+		TradistaGUIUtil.fillComboBox(Arrays.asList(Transfer.Type.values()).stream().map(Object::toString).toList(),
 				typeComboBox);
 		typeComboBox.getItems().add(0, StringUtils.EMPTY);
 		typeComboBox.getSelectionModel().selectFirst();
@@ -281,20 +279,17 @@ public class TransferReportController extends TradistaControllerAdapter {
 			}
 		});
 
-		TradistaGUIUtil.fillComboBox(
-				Arrays.asList(Transfer.Status.values()).stream().map(t -> t.toString()).collect(Collectors.toList()),
+		TradistaGUIUtil.fillComboBox(Arrays.asList(Transfer.Status.values()).stream().map(Object::toString).toList(),
 				statusComboBox);
 		statusComboBox.getItems().add(0, StringUtils.EMPTY);
 		statusComboBox.getSelectionModel().selectFirst();
 
-		TradistaGUIUtil.fillComboBox(
-				Arrays.asList(Transfer.Direction.values()).stream().map(t -> t.toString()).collect(Collectors.toList()),
+		TradistaGUIUtil.fillComboBox(Arrays.asList(Transfer.Direction.values()).stream().map(Object::toString).toList(),
 				directionComboBox);
 		directionComboBox.getItems().add(0, StringUtils.EMPTY);
 		directionComboBox.getSelectionModel().selectFirst();
 
-		TradistaGUIUtil.fillComboBox(
-				Arrays.asList(TransferPurpose.values()).stream().map(t -> t.toString()).collect(Collectors.toList()),
+		TradistaGUIUtil.fillComboBox(Arrays.asList(TransferPurpose.values()).stream().map(Object::toString).toList(),
 				purposeComboBox);
 		purposeComboBox.getItems().add(0, StringUtils.EMPTY);
 		purposeComboBox.getSelectionModel().selectFirst();
@@ -375,7 +370,8 @@ public class TransferReportController extends TradistaControllerAdapter {
 				try {
 					productId = Long.parseLong(productIdString);
 				} catch (NumberFormatException nfe) {
-					throw new TradistaBusinessException(String.format("The product id: %s is incorrect.", productIdString));
+					throw new TradistaBusinessException(
+							String.format("The product id: %s is incorrect.", productIdString));
 				}
 			}
 			if (!StringUtils.isEmpty(tradeIdString)) {

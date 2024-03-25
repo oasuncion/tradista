@@ -25,24 +25,31 @@ under the License.    */
 
 public final class ConditionMapper {
 
-    public static Condition map(finance.tradista.flow.model.Condition condition) {
-	Condition conditionResult = null;
-	if (condition != null) {
-	    conditionResult = new Condition();
-	    conditionResult.setId(condition.getId());
-	    conditionResult.setName(condition.getName());
-	    conditionResult.setLongName(condition.getClass().getName());
+	private ConditionMapper() {
 	}
-	return conditionResult;
-    }
 
-    public static finance.tradista.flow.model.Condition map(Condition condition) {
-	finance.tradista.flow.model.Condition conditionResult = null;
-	if (condition != null) {
-	    conditionResult = TradistaModelUtil.getInstance(finance.tradista.flow.model.Condition.class, condition.getLongName());
-	    conditionResult.setId(condition.getId());
+	public static <X extends finance.tradista.flow.model.WorkflowObject> Condition map(
+			finance.tradista.flow.model.Condition<X> condition) {
+		Condition conditionResult = null;
+		if (condition != null) {
+			conditionResult = new Condition();
+			conditionResult.setId(condition.getId());
+			conditionResult.setName(condition.getName());
+			conditionResult.setLongName(condition.getClass().getName());
+		}
+		return conditionResult;
 	}
-	return conditionResult;
-    }
+
+	@SuppressWarnings("unchecked")
+	public static <X extends finance.tradista.flow.model.WorkflowObject> finance.tradista.flow.model.Condition<X> map(
+			Condition condition) {
+		finance.tradista.flow.model.Condition<X> conditionResult = null;
+		if (condition != null) {
+			conditionResult = TradistaModelUtil.getInstance(finance.tradista.flow.model.Condition.class,
+					condition.getLongName());
+			conditionResult.setId(condition.getId());
+		}
+		return conditionResult;
+	}
 
 }

@@ -61,13 +61,13 @@ public class PricingParameterFilteringInterceptor extends TradistaAuthorizationF
 		return proceed(ic);
 	}
 
+	@Override
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
 		Object[] parameters = ic.getParameters();
 		if (parameters.length > 0) {
 			Method method = ic.getMethod();
 			StringBuilder errMsg = new StringBuilder();
-			if (parameters[0] instanceof PricingParameter) {
-				PricingParameter pricingParameter = (PricingParameter) parameters[0];
+			if (parameters[0] instanceof PricingParameter pricingParameter) {
 				if (pricingParameter.getId() != 0) {
 					PricingParameter pp = pricerBusinessDelegate.getPricingParameterById(pricingParameter.getId());
 					if (pp == null) {
@@ -121,9 +121,8 @@ public class PricingParameterFilteringInterceptor extends TradistaAuthorizationF
 					}
 				}
 			}
-			if (parameters[0] instanceof Long) {
+			if (parameters[0] instanceof Long pricingParameterId) {
 				if (method.getName().equals("deletePricingParameter")) {
-					long pricingParameterId = (Long) parameters[0];
 					if (pricingParameterId != 0) {
 						PricingParameter pp = pricerBusinessDelegate.getPricingParameterById(pricingParameterId);
 						if (pp == null) {
@@ -137,8 +136,7 @@ public class PricingParameterFilteringInterceptor extends TradistaAuthorizationF
 					}
 				}
 			}
-			if (parameters[0] instanceof String && parameters[1] instanceof Long) {
-				long poId = (Long) parameters[1];
+			if (parameters[0] instanceof String && parameters[1] instanceof Long poId) {
 				if (getCurrentUser().getProcessingOrg().getId() != 0) {
 					if (poId != getCurrentUser().getProcessingOrg().getId()) {
 						errMsg.append(String
@@ -152,6 +150,7 @@ public class PricingParameterFilteringInterceptor extends TradistaAuthorizationF
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	protected Object postFilter(Object value) {
 		if (value != null) {
@@ -165,8 +164,7 @@ public class PricingParameterFilteringInterceptor extends TradistaAuthorizationF
 							.collect(Collectors.toSet());
 				}
 			}
-			if (value instanceof PricingParameter) {
-				PricingParameter pp = (PricingParameter) value;
+			if (value instanceof PricingParameter pp) {
 				if (pp.getProcessingOrg() != null
 						&& !pp.getProcessingOrg().equals(getCurrentUser().getProcessingOrg())) {
 					value = null;

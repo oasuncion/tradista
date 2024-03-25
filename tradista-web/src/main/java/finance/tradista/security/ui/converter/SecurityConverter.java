@@ -9,8 +9,6 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.FacesConverter;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
 
 /*
  * Copyright 2023 Olivier Asuncion
@@ -32,15 +30,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@Named
-@ViewScoped
 @FacesConverter("securityConverter")
 public class SecurityConverter implements Serializable, Converter<Security> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3469069244088871255L;
 	private BondBusinessDelegate bondBusinessDelegate;
 	private EquityBusinessDelegate equityBusinessDelegate;
 

@@ -56,9 +56,10 @@ public class BondTrade extends Trade<Bond> {
 		super();
 	}
 
+	@Override
 	public Currency getCurrency() {
 		if (getProduct() != null) {
-			return ((Bond) getProduct()).getCurrency();
+			return getProduct().getCurrency();
 		}
 		return null;
 	}

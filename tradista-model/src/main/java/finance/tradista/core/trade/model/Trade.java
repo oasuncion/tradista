@@ -10,6 +10,8 @@ import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.exchange.model.Exchange;
 import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.product.model.Product;
+import finance.tradista.core.workflow.model.Status;
+import finance.tradista.core.workflow.model.WorkflowObject;
 
 /*
  * Copyright 2014 Olivier Asuncion
@@ -31,16 +33,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public abstract class Trade<P extends Product> extends TradistaObject {
+public abstract class Trade<P extends Product> extends TradistaObject implements WorkflowObject {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3681323495299195621L;
 
-	public static enum Direction {
+	public enum Direction {
 		BUY, SELL;
 
+		@Override
 		public String toString() {
 			switch (this) {
 			case BUY:
@@ -66,6 +69,10 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 
 	private Book book;
 
+	private Status status;
+
+	private String workflow;
+
 	// true : BUY, false : SELL
 	private boolean buySell;
 
@@ -74,6 +81,25 @@ public abstract class Trade<P extends Product> extends TradistaObject {
 	}
 
 	public Trade() {
+	}
+
+	@Override
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	@Override
+	public String getWorkflow() {
+		return workflow;
+	}
+
+	public void setWorkflow(String name) {
+		this.workflow = name;
+	}
+
+	@Override
+	public Status getStatus() {
+		return status;
 	}
 
 	public Book getBook() {

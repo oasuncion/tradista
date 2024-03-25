@@ -103,6 +103,20 @@ public class PricerBusinessDelegate {
 		return SecurityUtil.run(() -> pricerService.getPricingParameterById(id));
 	}
 
+	public PricingParameter getPricingParameterByNameAndPoId(String name, long poId) throws TradistaBusinessException {
+		StringBuilder errMsg = new StringBuilder();
+		if (StringUtils.isEmpty(name)) {
+			errMsg.append("The name is mandatory.");
+		}
+		if (poId < 0) {
+			errMsg.append(String.format("The po id (%s) cannot be negative.", poId));
+		}
+		if (!errMsg.isEmpty()) {
+			throw new TradistaBusinessException("The name is mandatory.");
+		}
+		return SecurityUtil.run(() -> pricerService.getPricingParameterByNameAndPoId(name, poId));
+	}
+
 	public Set<PricingParameter> getAllPricingParameters() {
 		return SecurityUtil.run(() -> pricerService.getAllPricingParameters());
 	}
@@ -412,16 +426,19 @@ public class PricerBusinessDelegate {
 					if (pr.defaultPNL()) {
 						return m;
 					}
+					break;
 				}
 				case "REALIZED_PNL": {
 					if (pr.defaultREALIZED_PNL()) {
 						return m;
 					}
+					break;
 				}
 				case "UNREALIZED_PNL": {
 					if (pr.defaultUNREALIZED_PNL()) {
 						return m;
 					}
+					break;
 				}
 				}
 			}
@@ -462,16 +479,19 @@ public class PricerBusinessDelegate {
 					if (pr.defaultPNL()) {
 						return m;
 					}
+					break;
 				}
 				case "REALIZED_PNL": {
 					if (pr.defaultREALIZED_PNL()) {
 						return m;
 					}
+					break;
 				}
 				case "UNREALIZED_PNL": {
 					if (pr.defaultUNREALIZED_PNL()) {
 						return m;
 					}
+					break;
 				}
 				}
 			}
@@ -489,7 +509,7 @@ public class PricerBusinessDelegate {
 	public List<CashFlow> generateCashFlows(long tradeId, PricingParameter pp, LocalDate valueDate)
 			throws TradistaBusinessException {
 
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 
 		if (tradeId <= 0) {
 			errMsg.append(String.format("Trade id must be positive but it is %s.", tradeId));
@@ -499,7 +519,7 @@ public class PricerBusinessDelegate {
 		}
 
 		if (valueDate == null) {
-			errMsg.append(String.format("The value Date is mandatory."));
+			errMsg.append("The value date is mandatory.");
 		}
 
 		if (errMsg.length() > 0) {
@@ -511,7 +531,7 @@ public class PricerBusinessDelegate {
 	public List<CashFlow> generateCashFlows(PricingParameter pp, LocalDate valueDate, long positionDefinitionId)
 			throws TradistaBusinessException {
 
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 
 		if (positionDefinitionId <= 0) {
 			errMsg.append(String.format("The Position Definition id must be positive.%n"));
@@ -522,7 +542,7 @@ public class PricerBusinessDelegate {
 		}
 
 		if (valueDate == null) {
-			errMsg.append(String.format("The value Date is mandatory."));
+			errMsg.append("The value date is mandatory.");
 		}
 
 		if (errMsg.length() > 0) {
@@ -534,14 +554,14 @@ public class PricerBusinessDelegate {
 
 	public List<CashFlow> generateAllCashFlows(PricingParameter pp, LocalDate valueDate)
 			throws TradistaBusinessException {
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 
 		if (pp == null) {
 			errMsg.append(String.format("The Pricing Parameters Set is mandatory.%n"));
 		}
 
 		if (valueDate == null) {
-			errMsg.append(String.format("The value Date is mandatory."));
+			errMsg.append("The value date is mandatory.");
 		}
 
 		if (errMsg.length() > 0) {

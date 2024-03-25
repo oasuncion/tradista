@@ -101,6 +101,11 @@ public abstract class Security extends Product {
 	}
 
 	@Override
+	public String toString() {
+		return getIsin() + " - " + getExchange();
+	}
+
+	@Override
 	public Security clone() {
 		Security security = (Security) super.clone();
 		security.issuer = TradistaModelUtil.clone(issuer);

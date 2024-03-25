@@ -29,7 +29,7 @@ public class DayCountConvention extends TradistaObject implements Comparable<Day
 	 * 
 	 */
 	private static final long serialVersionUID = -3809902839449814333L;
-	
+
 	@Id
 	private String name;
 
@@ -41,6 +41,7 @@ public class DayCountConvention extends TradistaObject implements Comparable<Day
 		return name;
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}

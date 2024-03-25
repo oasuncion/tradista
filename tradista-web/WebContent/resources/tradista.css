@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+/* Global customizations */
+.ui-panel {
+	margin: 20px;
+}
+
+body {
+	background-color: #197B84;
+}
+
+body .ui-button {
+	background-color: #197B84;
+	border: 0px solid #197B84;
+	margin-left: 10px;
+}
+
+body .ui-button:hover {
+	background-color: white;
+	border: 0px solid white;
+	color: #197B84;
+}
+
+body .ui-inputfield {
+	max-width: 80%;
+}
+
+/* Specific customizations */
+.tradista.ui-panelgrid>*>tr, .tradista.ui-panelgrid .ui-panelgrid-cell {
+	border: none;
+	background-color: #197B84;
+}
+
+.tradista-nested.ui-panelgrid>*>tr, .tradista-nested.ui-panelgrid .ui-panelgrid-cell
+	{
+	border: none;
+	background-color: white;
+}
+
+.tradista-warning-label {
+	font-weight: bold;
+	font-style: italic;
+	margin-left: 10px;
+	color: orange;
+}
+
+/* Login page customizations */
+.login-body {
+	background: linear-gradient(to top right, #00455E, #197B84);
+}
+
+body .login-button {
+	background-color: #197B84;
+	border: 0px solid #197B84;
+	margin-left: 0px;
+	font-family: Garamond;
+}
+
+body  .login-button:hover {
+	color: #197B84;
+}
+
+.login-body .login-wrapper .login-panel .login-form>button {
+	width: 20%;
+}
+
+.login-body .login-wrapper .login-panel {
+	height: 70%
+}
+
+.login-label {
+	color: white;
+	font-weight: bold;
+	font-family: Garamond;
+}

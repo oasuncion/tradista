@@ -80,7 +80,7 @@ public class QuoteServiceBean implements QuoteService {
 		// 1. Check if the quote is used by a FeedConfig
 		Set<String> feedConfigs = new FeedBusinessDelegate().getFeedConfigsUsingQuote(quoteName, quoteType);
 		if (feedConfigs != null && !feedConfigs.isEmpty()) {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			for (String conf : feedConfigs) {
 				buf.append(conf);
 				buf.append(" ");
@@ -142,6 +142,13 @@ public class QuoteServiceBean implements QuoteService {
 	}
 
 	@Override
+	public Set<QuoteValue> getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(long quoteSetId, String quoteName,
+			QuoteType quoteType, LocalDate startDate, LocalDate endDate) {
+		return QuoteSQL.getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(quoteSetId, quoteName, quoteType, startDate,
+				endDate);
+	}
+
+	@Override
 	public Set<QuoteValue> getQuoteValuesByQuoteSetIdTypeDateAndQuoteNames(long quoteSetId, QuoteType quoteType,
 			LocalDate date, String... quoteNames) {
 		return QuoteSQL.getQuoteValuesByQuoteSetIdTypeDateAndQuoteNames(quoteSetId, quoteType, date, quoteNames);
@@ -161,7 +168,7 @@ public class QuoteServiceBean implements QuoteService {
 
 	@Override
 	public List<Long> getQuoteIdsByNames(List<String> name) {
-		List<Long> quoteIds = new ArrayList<Long>();
+		List<Long> quoteIds = new ArrayList<>();
 		for (String quoteName : name) {
 			List<Quote> quotes = getQuotesByName(quoteName);
 			for (Quote quote : quotes) {

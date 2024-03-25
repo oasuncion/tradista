@@ -25,6 +25,7 @@ import org.primefaces.model.charts.line.LineChartModel;
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.util.ColorUtil;
 import finance.tradista.core.inventory.model.ProductInventory;
 import finance.tradista.core.productinventory.service.ProductInventoryBusinessDelegate;
 
@@ -52,9 +53,6 @@ under the License.    */
 @ViewScoped
 public class InventoryView implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 279320826504459625L;
 
 	private LineChartModel lineModel;
@@ -81,9 +79,7 @@ public class InventoryView implements Serializable {
 		Set<ProductInventory> inventory = null;
 
 		List<String> bgColors = new ArrayList<>();
-		bgColors.add(ColorUtil.getColorsList().get(0));
-		bgColors.add(ColorUtil.getColorsList().get(1));
-		bgColors.add(ColorUtil.getColorsList().get(2));
+		bgColors.addAll(ColorUtil.getBlueColorsList());
 
 		List<String> labels = new ArrayList<>();
 
@@ -127,7 +123,7 @@ public class InventoryView implements Serializable {
 					dataSet.setLabel(entry.getKey());
 					dataSet.setFill(false);
 					dataSet.setTension(0.1);
-					dataSet.setBorderColor(ColorUtil.getColorsList().get(i));
+					dataSet.setBorderColor(ColorUtil.getBlueColorsList().get(i));
 					List<Object> values = new ArrayList<>();
 					for (LocalDate d : daysOfTheWeek) {
 						for (ProductInventory inv : entry.getValue()) {

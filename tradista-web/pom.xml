@@ -16,8 +16,13 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>12.0.0</version>
+			<version>13.0.7</version>
 			<classifier>jakarta</classifier>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.security</groupId>
+			<artifactId>security-business</artifactId>
+			<version>${security-business.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>finance.tradista.security</groupId>
@@ -30,9 +35,39 @@
 			<version>${security-ejb-client.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>finance.tradista.mm</groupId>
+			<artifactId>mm-model</artifactId>
+			<version>${mm-model.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.mm</groupId>
+			<artifactId>mm-ejb-client</artifactId>
+			<version>${mm-ejb-client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.ir</groupId>
+			<artifactId>ir-model</artifactId>
+			<version>${ir-model.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.ir</groupId>
+			<artifactId>ir-ejb-client</artifactId>
+			<version>${ir-ejb-client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.fx</groupId>
+			<artifactId>fx-model</artifactId>
+			<version>${fx-model.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>finance.tradista.fx</groupId>
+			<artifactId>fx-ejb-client</artifactId>
+			<version>${fx-ejb-client.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>poseidon-theme</artifactId>
-			<version>5.0.0</version>
+			<version>6.0.0</version>
 			<classifier>jakarta</classifier>
 		</dependency>
 	</dependencies>
@@ -44,18 +79,18 @@
 				<configuration>
 					<groupId>org.primefaces.themes</groupId>
 					<artifactId>poseidon-theme</artifactId>
-					<version>5.0.0</version>
+					<version>6.0.0</version>
 					<classifier>jakarta</classifier>
 					<packaging>jar</packaging>
-					<file>${basedir}/lib/poseidon-theme-5.0.0-jakarta.jar</file>
+					<file>${basedir}/lib/poseidon-theme-6.0.0-jakarta.jar</file>
 				</configuration>
 				<executions>
 					<execution>
-					<id>install-jar-lib</id>
+						<id>install-jar-lib</id>
 						<goals>
 							<goal>install-file</goal>
 						</goals>
-					<phase>validate</phase>
+						<phase>validate</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -84,4 +119,3 @@
 		</repository>
 	</repositories>
 </project>
-

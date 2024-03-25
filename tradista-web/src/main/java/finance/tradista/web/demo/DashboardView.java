@@ -2,18 +2,19 @@ package finance.tradista.web.demo;
 
 import java.io.Serializable;
 
+import org.primefaces.event.CloseEvent;
+import org.primefaces.event.DashboardReorderEvent;
+import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.dashboard.DashboardModel;
+import org.primefaces.model.dashboard.DashboardWidget;
+import org.primefaces.model.dashboard.DefaultDashboardModel;
+import org.primefaces.model.dashboard.DefaultDashboardWidget;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
-
-import org.primefaces.event.CloseEvent;
-import org.primefaces.event.DashboardReorderEvent;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.DashboardModel;
-import org.primefaces.model.DefaultDashboardColumn;
-import org.primefaces.model.DefaultDashboardModel;
 
 /*
  * Copyright 2022 Olivier Asuncion
@@ -39,60 +40,59 @@ under the License.    */
 @ViewScoped
 public class DashboardView implements Serializable {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2526660705463413881L;
 	private DashboardModel model;
 
-    @PostConstruct
-    public void init() {
-        model = new DefaultDashboardModel();
-        DefaultDashboardColumn column1 = new DefaultDashboardColumn();
-        DefaultDashboardColumn column2 = new DefaultDashboardColumn();
+	@PostConstruct
+	public void init() {
+		model = new DefaultDashboardModel();
+		DashboardWidget column1 = new DefaultDashboardWidget();
+		DashboardWidget column2 = new DefaultDashboardWidget();
 
-        column1.setStyleClass("first");
-        column1.addWidget("tradeBooking");
-        column1.addWidget("book");
+		column1.setStyleClass("first");
+		column1.addWidget("tradeBooking");
+		column1.addWidget("book");
 
-        column2.setStyleClass("second");
-        column2.addWidget("tradesList");
-        column2.addWidget("inventory");
+		column2.setStyleClass("second");
+		column2.addWidget("tradesList");
+		column2.addWidget("inventory");
 
+		model.addWidget(column1);
+		model.addWidget(column2);
+	}
 
-        model.addColumn(column1);
-        model.addColumn(column2);
-    }
+	public void handleReorder(DashboardReorderEvent event) {
+		FacesMessage message = new FacesMessage();
+		message.setSeverity(FacesMessage.SEVERITY_INFO);
+		message.setSummary("Reordered: " + event.getWidgetId());
+		message.setDetail("Item index: " + event.getItemIndex() + ", Column index: " + event.getColumnIndex()
+				+ ", Sender index: " + event.getSenderColumnIndex());
 
-    public void handleReorder(DashboardReorderEvent event) {
-        FacesMessage message = new FacesMessage();
-        message.setSeverity(FacesMessage.SEVERITY_INFO);
-        message.setSummary("Reordered: " + event.getWidgetId());
-        message.setDetail("Item index: " + event.getItemIndex() + ", Column index: " + event.getColumnIndex()
-                + ", Sender index: " + event.getSenderColumnIndex());
+		addMessage(message);
+	}
 
-        addMessage(message);
-    }
+	public void handleClose(CloseEvent event) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Panel Closed",
+				"Closed panel id:'" + event.getComponent().getId() + "'");
 
-    public void handleClose(CloseEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Panel Closed",
-                "Closed panel id:'" + event.getComponent().getId() + "'");
+		addMessage(message);
+	}
 
-        addMessage(message);
-    }
+	public void handleToggle(ToggleEvent event) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, event.getComponent().getId() + " toggled",
+				"Status:" + event.getVisibility().name());
 
-    public void handleToggle(ToggleEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, event.getComponent().getId() + " toggled",
-                "Status:" + event.getVisibility().name());
+		addMessage(message);
+	}
 
-        addMessage(message);
-    }
+	private void addMessage(FacesMessage message) {
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
 
-    private void addMessage(FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
-    public DashboardModel getModel() {
-        return model;
-    }
+	public DashboardModel getModel() {
+		return model;
+	}
 }

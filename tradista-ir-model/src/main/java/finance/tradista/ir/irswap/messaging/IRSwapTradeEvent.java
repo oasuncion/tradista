@@ -23,35 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class IRSwapTradeEvent implements TradeEvent<IRSwapTrade> {
+public class IRSwapTradeEvent extends TradeEvent<IRSwapTrade> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 979531356965415114L;
-
-	private IRSwapTrade trade;
-
-	private IRSwapTrade oldTrade;
-
-	@Override
-	public IRSwapTrade getTrade() {
-		return trade;
-	}
-
-	@Override
-	public void setTrade(IRSwapTrade trade) {
-		this.trade = trade;
-	}
-
-	@Override
-	public IRSwapTrade getOldTrade() {
-		return oldTrade;
-	}
-
-	@Override
-	public void setOldTrade(IRSwapTrade oldTrade) {
-		this.oldTrade = oldTrade;
-	}
 
 }

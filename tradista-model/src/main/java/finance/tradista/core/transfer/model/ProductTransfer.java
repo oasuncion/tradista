@@ -29,9 +29,13 @@ under the License.    */
 
 public class ProductTransfer extends Transfer {
 
-	public ProductTransfer(Book book, TransferPurpose purpose, LocalDate settlementDate,
-			Trade<?> trade) {
+	public ProductTransfer(Book book, TransferPurpose purpose, LocalDate settlementDate, Trade<?> trade) {
 		super(book, null, purpose, settlementDate, trade);
+	}
+
+	public ProductTransfer(Book book, Product product, TransferPurpose purpose, LocalDate settlementDate,
+			Trade<?> trade) {
+		super(book, product, purpose, settlementDate, trade);
 	}
 
 	/**

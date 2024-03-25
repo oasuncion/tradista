@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
@@ -128,7 +129,7 @@ public class QuoteSQL {
 				QuoteType quoteType = QuoteType.valueOf(results.getString("type"));
 				Quote quote = new Quote(quoteId, quoteName, quoteType);
 				if (quotes == null) {
-					quotes = new ArrayList<Quote>();
+					quotes = new ArrayList<>();
 				}
 				quotes.add(quote);
 			}
@@ -229,6 +230,52 @@ public class QuoteSQL {
 		return quoteValue;
 	}
 
+	public static Set<QuoteValue> getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(long quoteSetId, String name,
+			QuoteType quoteType, LocalDate startDate, LocalDate endDate) {
+		Set<QuoteValue> quoteValues = null;
+		QuoteSet quoteSet = QuoteSetSQL.getQuoteSetById(quoteSetId);
+		try (Connection con = TradistaDB.getConnection();
+				PreparedStatement stmtGetQuoteValueByQuoteSetQuoteNameTypeAndDate = con
+						.prepareStatement("SELECT QUOTE.ID ID, QUOTE_VALUE.DATE DATE, QUOTE_VALUE.BID BID, "
+								+ "QUOTE_VALUE.ASK ASK, " + "QUOTE_VALUE.OPEN_ OPEN_, " + "QUOTE_VALUE.CLOSE_ CLOSE_, "
+								+ "QUOTE_VALUE.HIGH HIGH, " + "QUOTE_VALUE.LOW LOW, " + "QUOTE_VALUE.LAST_ LAST_, "
+								+ "QUOTE_VALUE.ENTERED_DATE ENTERED_DATE, " + "QUOTE_VALUE.SOURCE_NAME SOURCE_NAME, "
+								+ "QUOTE.TYPE TYPE, " + "QUOTE.NAME NAME, " + "QUOTE_SET.ID QUOTE_SET_ID "
+								+ "FROM QUOTE, QUOTE_VALUE, QUOTE_SET WHERE QUOTE.ID = QUOTE_VALUE.QUOTE_ID"
+								+ " AND QUOTE_VALUE.QUOTE_SET_ID = QUOTE_SET.ID" + " AND QUOTE_SET.ID = ?"
+								+ " AND QUOTE.NAME = ? AND TYPE=? AND DATE BETWEEN ? AND ?")) {
+			stmtGetQuoteValueByQuoteSetQuoteNameTypeAndDate.setLong(1, quoteSetId);
+			stmtGetQuoteValueByQuoteSetQuoteNameTypeAndDate.setString(2, name);
+			stmtGetQuoteValueByQuoteSetQuoteNameTypeAndDate.setString(3, quoteType.name());
+			stmtGetQuoteValueByQuoteSetQuoteNameTypeAndDate.setDate(4, java.sql.Date.valueOf(startDate));
+			stmtGetQuoteValueByQuoteSetQuoteNameTypeAndDate.setDate(5, java.sql.Date.valueOf(endDate));
+			try (ResultSet results = stmtGetQuoteValueByQuoteSetQuoteNameTypeAndDate.executeQuery()) {
+				while (results.next()) {
+					if (quoteValues == null) {
+						quoteValues = new TreeSet<>();
+					}
+					LocalDate quoteDate = results.getDate("date").toLocalDate();
+					BigDecimal bid = results.getBigDecimal("bid");
+					BigDecimal ask = results.getBigDecimal("ask");
+					BigDecimal open = results.getBigDecimal("open_");
+					BigDecimal close = results.getBigDecimal("close_");
+					BigDecimal high = results.getBigDecimal("high");
+					BigDecimal low = results.getBigDecimal("low");
+					BigDecimal last = results.getBigDecimal("last_");
+					LocalDate enteredDate = results.getDate("entered_date").toLocalDate();
+					String sourceName = results.getString("source_name");
+					Quote quote = QuoteSQL.getQuoteById(results.getLong("id"));
+					quoteValues.add(new QuoteValue(quoteDate, bid, ask, open, close, high, low, last, sourceName, quote,
+							enteredDate, quoteSet));
+				}
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			throw new TradistaTechnicalException(sqle);
+		}
+		return quoteValues;
+	}
+
 	private static boolean isEmpty(QuoteValue quoteValue) {
 		if (quoteValue == null) {
 			return true;
@@ -319,7 +366,7 @@ public class QuoteSQL {
 					String name = results.getString("name");
 					QuoteType type = QuoteType.valueOf(results.getString("type"));
 					if (quotes == null) {
-						quotes = new ArrayList<Quote>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(new Quote(id, name, type));
 				}
@@ -345,7 +392,7 @@ public class QuoteSQL {
 					String name = results.getString("name");
 					QuoteType type = QuoteType.valueOf(results.getString("type"));
 					if (quotes == null) {
-						quotes = new ArrayList<Quote>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(new Quote(id, name, type));
 				}
@@ -374,7 +421,7 @@ public class QuoteSQL {
 					String name = results.getString("name");
 					QuoteType type = QuoteType.valueOf(results.getString("type"));
 					if (quotes == null) {
-						quotes = new ArrayList<Quote>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(new Quote(id, name, type));
 				}
@@ -394,7 +441,7 @@ public class QuoteSQL {
 				ResultSet results = stmtGetAllQuoteNames.executeQuery()) {
 			while (results.next()) {
 				if (quoteNames == null) {
-					quoteNames = new ArrayList<String>();
+					quoteNames = new ArrayList<>();
 				}
 				quoteNames.add(results.getString("name"));
 			}
@@ -438,7 +485,7 @@ public class QuoteSQL {
 					QuoteValue qv = new QuoteValue(date, bid, ask, open, close, high, low, last, sourceName, quote,
 							enteredDate, quoteSet);
 					if (quotes == null) {
-						quotes = new ArrayList<QuoteValue>();
+						quotes = new ArrayList<>();
 					}
 					quotes.add(qv);
 				}
@@ -490,9 +537,9 @@ public class QuoteSQL {
 					stmtSaveQuoteValues.setLong(12, quoteSetId);
 					stmtSaveQuoteValues.addBatch();
 				}
-				stmtSaveQuoteValues.executeBatch();
-				bSaved = true;
 			}
+			stmtSaveQuoteValues.executeBatch();
+			bSaved = true;
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			throw new TradistaTechnicalException(sqle);
@@ -511,7 +558,7 @@ public class QuoteSQL {
 			try (ResultSet results = stmtGetQuoteTypesByQuoteName.executeQuery()) {
 				while (results.next()) {
 					if (quoteTypes == null) {
-						quoteTypes = new ArrayList<QuoteType>();
+						quoteTypes = new ArrayList<>();
 					}
 					quoteTypes.add(QuoteType.valueOf(results.getString("type")));
 				}
@@ -669,7 +716,7 @@ public class QuoteSQL {
 			try (ResultSet results = stmtGetQuoteValuesByQuoteSetTypeDateAndQuoteNames.executeQuery()) {
 				while (results.next()) {
 					if (quoteValues == null) {
-						quoteValues = new HashSet<QuoteValue>();
+						quoteValues = new HashSet<>();
 					}
 					LocalDate quoteDate = results.getDate("date").toLocalDate();
 					BigDecimal bid = results.getBigDecimal("bid");

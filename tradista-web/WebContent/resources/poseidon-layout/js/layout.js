@@ -417,7 +417,7 @@ PrimeFaces.widget.Poseidon = PrimeFaces.widget.BaseWidget.extend({
     },
 
     restoreMenuState: function () {
-        var link = $('a[href^="' + this.cfg.pathname + '"]');
+        var link = $('.layout-menu a[href^="' + this.cfg.pathname + '"]');
         var $this = this;
         if (link.length) {
             var menuitem = link.closest('li');

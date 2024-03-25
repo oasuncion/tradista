@@ -23,6 +23,7 @@ import finance.tradista.core.position.model.PositionDefinition;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.product.service.ProductBusinessDelegate;
 import finance.tradista.core.trade.model.Trade;
+import finance.tradista.core.workflow.persistence.StatusSQL;
 
 /*
  * Copyright 2015 Olivier Asuncion
@@ -73,8 +74,12 @@ public class TradeSQL {
 					trade.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
 					trade.setCreationDate(results.getDate("creation_Date").toLocalDate());
 					trade.setBook(BookSQL.getBookById(results.getLong("book_id")));
+					long statusId = results.getLong("status_id");
+					if (statusId != 0) {
+						trade.setStatus(StatusSQL.getStatusById(statusId));
+					}
 					if (trades == null) {
-						trades = new ArrayList<Trade<? extends Product>>();
+						trades = new ArrayList<>();
 					}
 					trades.add(trade);
 				}
@@ -111,6 +116,10 @@ public class TradeSQL {
 					java.sql.Date settlementDate = results.getDate("settlement_date");
 					if (settlementDate != null) {
 						trade.setSettlementDate(settlementDate.toLocalDate());
+					}
+					long statusId = results.getLong("status_id");
+					if (statusId != 0) {
+						trade.setStatus(StatusSQL.getStatusById(statusId));
 					}
 					trade.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
 					trade.setAmount(results.getBigDecimal("amount"));
@@ -154,6 +163,10 @@ public class TradeSQL {
 			trade.setCounterparty(LegalEntitySQL.getLegalEntityById(rs.getLong("counterparty_id")));
 			trade.setCurrency(CurrencySQL.getCurrencyById(rs.getLong("currency_id")));
 			trade.setBook(BookSQL.getBookById(rs.getLong("book_id")));
+			long statusId = rs.getLong("status_id");
+			if (statusId != 0) {
+				trade.setStatus(StatusSQL.getStatusById(statusId));
+			}
 
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
@@ -258,6 +271,10 @@ public class TradeSQL {
 					trade.setCreationDate(results.getDate("creation_Date").toLocalDate());
 					trade.setCurrency(CurrencySQL.getCurrencyById(results.getLong("currency_id")));
 					trade.setBook(BookSQL.getBookById(results.getLong("book_id")));
+					long statusId = results.getLong("status_id");
+					if (statusId != 0) {
+						trade.setStatus(StatusSQL.getStatusById(statusId));
+					}
 					trades.add(trade);
 				}
 			}
@@ -276,7 +293,7 @@ public class TradeSQL {
 			try (ResultSet results = stmtGetTradesByPosition.executeQuery()) {
 				while (results.next()) {
 					if (trades == null) {
-						trades = new HashSet<Trade<? extends Product>>();
+						trades = new HashSet<>();
 					}
 					Trade<? extends Product> trade = null;
 					Class<Trade<? extends Product>> klass = null;
@@ -335,6 +352,7 @@ public class TradeSQL {
 			join += " LEFT OUTER JOIN EQUITY_TRADE UNDERLYING_EQUITY ON VANILLA_OPTION_TRADE.UNDERLYING_TRADE_ID = UNDERLYING_EQUITY.EQUITY_TRADE_ID";
 			// TODO Check if outer join on und_trade is needed in the case of options, I
 			// think so.
+			join += " LEFT OUTER JOIN GCREPO_TRADE ON GCREPO_TRADE.GCREPO_TRADE_ID=TRADE.TRADE_ID";
 			join += " LEFT OUTER JOIN TRADE UND_EQUITY_TRADE ON UNDERLYING_EQUITY.EQUITY_TRADE_ID=UND_EQUITY_TRADE.ID";
 			join += " LEFT OUTER JOIN TRADE UND_FXSPOT_TRADE ON UNDERLYING_FXSPOT.FXSPOT_TRADE_ID=UND_FXSPOT_TRADE.ID";
 			join += " LEFT OUTER JOIN TRADE UND_IRSWAP_TRADE ON UNDERLYING_IRSWAP.IRSWAP_TRADE_ID=UND_IRSWAP_TRADE.ID";
@@ -367,9 +385,6 @@ public class TradeSQL {
 		}
 		if (posDef.getProduct() != null) {
 			filters += " AND TRADE.PRODUCT_ID=" + posDef.getProduct().getId();
-		}
-		if (posDef.getProductType() == null || posDef.getProductType().equals("EquityOption")) {
-
 		}
 
 		// Control added to be sure to not retrieve options underlying
@@ -573,6 +588,8 @@ public class TradeSQL {
 			aliases.append("EQUITY_TRADE.EQUITY_TRADE_ID EQUITY_TRADE_ID,");
 			aliases.append("EQUITY_TRADE.QUANTITY EQUITY_QUANTITY");
 
+			aliases.append("GCREPO_TRADE.END_DATE GCREPO_END_DATE");
+
 			return aliases.toString();
 		}
 
@@ -707,6 +724,10 @@ public class TradeSQL {
 			aliases.append("EQUITY_TRADE.QUANTITY EQUITY_QUANTITY");
 			break;
 		}
+		case "GCRepo": {
+			aliases.append("GCREPO_TRADE.END_DATE GCREPO_END_DATE");
+			break;
+		}
 		case "FXOption": {
 			aliases.append("VANILLA_OPTION_TRADE.VANILLA_OPTION_TRADE_ID VANILLA_OPTION_TRADE_ID,");
 			aliases.append("VANILLA_OPTION_TRADE.STYLE STYLE,");
@@ -839,6 +860,10 @@ public class TradeSQL {
 	private static String buildJoin(String productType) {
 		String where = " WHERE ";
 		switch (productType) {
+		case "GCRepo": {
+			where += "TRADE.ID = GCREPO_TRADE.GCREPO_TRADE_ID";
+			break;
+		}
 		case "CcySwap": {
 			where += "TRADE.ID = IRSWAP_TRADE.IRSWAP_TRADE_ID AND IRSWAP_TRADE.IRSWAP_TRADE_ID=CCYSWAP_TRADE.CCYSWAP_TRADE_ID";
 			break;
@@ -908,6 +933,8 @@ public class TradeSQL {
 			return "CCYSWAP_TRADE, IRSWAP_TRADE";
 		case "EquityOption":
 			return "VANILLA_OPTION_TRADE, EQUITY_TRADE UNDERLYING_EQUITY, TRADE UND_EQUITY_TRADE";
+		case "GCRepo":
+			return "GCREPO_TRADE";
 		case "FXNDF":
 			return "FXNDF_TRADE";
 		case "IRSwap":

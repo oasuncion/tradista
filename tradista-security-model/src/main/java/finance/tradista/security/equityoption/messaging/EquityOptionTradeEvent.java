@@ -23,36 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class EquityOptionTradeEvent implements TradeEvent<EquityOptionTrade> {
-
+public class EquityOptionTradeEvent extends TradeEvent<EquityOptionTrade> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2855094286168054513L;
-
-	private EquityOptionTrade trade;
-
-	private EquityOptionTrade oldTrade;
-
-	@Override
-	public EquityOptionTrade getTrade() {
-		return trade;
-	}
-
-	@Override
-	public void setTrade(EquityOptionTrade trade) {
-		this.trade = trade;
-	}
-
-	@Override
-	public EquityOptionTrade getOldTrade() {
-		return oldTrade;
-	}
-
-	@Override
-	public void setOldTrade(EquityOptionTrade oldTrade) {
-		this.oldTrade = oldTrade;
-	}
 
 }

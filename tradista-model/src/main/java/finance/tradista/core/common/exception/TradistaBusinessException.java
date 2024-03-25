@@ -29,9 +29,13 @@ public class TradistaBusinessException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = 3972649531632900754L;
-	
+
 	public TradistaBusinessException(String msg) {
 		super(msg);
+	}
+
+	public TradistaBusinessException(Exception exception) {
+		super(exception);
 	}
 
 }

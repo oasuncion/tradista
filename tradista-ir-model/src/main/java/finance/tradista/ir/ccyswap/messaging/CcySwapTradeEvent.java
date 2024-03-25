@@ -23,35 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class CcySwapTradeEvent implements TradeEvent<CcySwapTrade> {
+public class CcySwapTradeEvent extends TradeEvent<CcySwapTrade> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5835414921138470671L;
-
-	private CcySwapTrade trade;
-
-	private CcySwapTrade oldTrade;
-
-	@Override
-	public CcySwapTrade getTrade() {
-		return trade;
-	}
-
-	@Override
-	public void setTrade(CcySwapTrade trade) {
-		this.trade = trade;
-	}
-
-	@Override
-	public CcySwapTrade getOldTrade() {
-		return oldTrade;
-	}
-
-	@Override
-	public void setOldTrade(CcySwapTrade oldTrade) {
-		this.oldTrade = oldTrade;
-	}
 
 }

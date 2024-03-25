@@ -23,35 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class FXNDFTradeEvent implements TradeEvent<FXNDFTrade> {
+public class FXNDFTradeEvent extends TradeEvent<FXNDFTrade> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7370526213479032270L;
-
-	private FXNDFTrade trade;
-
-	private FXNDFTrade oldTrade;
-
-	@Override
-	public FXNDFTrade getTrade() {
-		return trade;
-	}
-
-	@Override
-	public void setTrade(FXNDFTrade trade) {
-		this.trade = trade;
-	}
-
-	@Override
-	public FXNDFTrade getOldTrade() {
-		return oldTrade;
-	}
-
-	@Override
-	public void setOldTrade(FXNDFTrade oldTrade) {
-		this.oldTrade = oldTrade;
-	}
 
 }

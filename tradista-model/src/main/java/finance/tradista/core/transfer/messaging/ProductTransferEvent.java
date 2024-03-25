@@ -22,36 +22,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class ProductTransferEvent implements TransferEvent<ProductTransfer> {
-
+public class ProductTransferEvent extends TransferEvent<ProductTransfer> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4979187544631866379L;
-
-	private ProductTransfer transfer;
-
-	private ProductTransfer oldTransfer;
-
-	@Override
-	public ProductTransfer getTransfer() {
-		return transfer;
-	}
-
-	@Override
-	public void setTransfer(ProductTransfer transfer) {
-		this.transfer = transfer;
-	}
-
-	@Override
-	public ProductTransfer getOldTransfer() {
-		return oldTransfer;
-	}
-
-	@Override
-	public void setOldTransfer(ProductTransfer oldTransfer) {
-		this.oldTransfer = oldTransfer;
-	}
 
 }

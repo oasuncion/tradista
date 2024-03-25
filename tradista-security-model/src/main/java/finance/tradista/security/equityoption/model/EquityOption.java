@@ -162,6 +162,16 @@ public class EquityOption extends Product {
 		return null;
 	}
 
+	public String toString() {
+		String label = getCode() + " - " + TradistaModelUtil.formatNumber(getStrike()) + " - " + getMaturityDate()
+				+ " - " + getType();
+		if (getEquityOptionContractSpecification() != null) {
+			label += " - " + TradistaModelUtil.formatObject(getEquityOptionContractSpecification());
+		}
+		label += " - " + TradistaModelUtil.formatObject(getExchange());
+		return label;
+	}
+
 	@Override
 	public EquityOption clone() {
 		EquityOption equityOption = (EquityOption) super.clone();

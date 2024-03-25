@@ -8,6 +8,7 @@ import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.validator.EquityValidator;
+import jakarta.enterprise.inject.Default;
 
 /*
  * Copyright 2018 Olivier Asuncion
@@ -29,6 +30,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
+@Default
 public class EquityBusinessDelegate {
 
 	private EquityService equityService;

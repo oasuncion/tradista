@@ -22,35 +22,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class CashTransferEvent implements TransferEvent<CashTransfer> {
+public class CashTransferEvent extends TransferEvent<CashTransfer> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8806725404338297390L;
-
-	private CashTransfer transfer;
-
-	private CashTransfer oldTransfer;
-
-	@Override
-	public CashTransfer getTransfer() {
-		return transfer;
-	}
-
-	@Override
-	public void setTransfer(CashTransfer transfer) {
-		this.transfer = transfer;
-	}
-
-	@Override
-	public CashTransfer getOldTransfer() {
-		return oldTransfer;
-	}
-
-	@Override
-	public void setOldTransfer(CashTransfer oldTransfer) {
-		this.oldTransfer = oldTransfer;
-	}
 
 }

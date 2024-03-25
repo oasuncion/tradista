@@ -23,14 +23,31 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public interface TransferEvent<X extends Transfer> extends Event {
+public abstract class TransferEvent<X extends Transfer> implements Event {
 
-	X getTransfer();
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = -1640618458564189936L;
 
-	void setTransfer(X transfer);
+	private X transfer;
 
-	X getOldTransfer();
+	private X oldTransfer;
 
-	void setOldTransfer(X oldTransfer);
+	public X getTransfer() {
+		return transfer;
+	}
+
+	public void setTransfer(X transfer) {
+		this.transfer = transfer;
+	}
+
+	public X getOldTransfer() {
+		return oldTransfer;
+	}
+
+	public void setOldTransfer(X transfer) {
+		oldTransfer = transfer;
+	}
 
 }

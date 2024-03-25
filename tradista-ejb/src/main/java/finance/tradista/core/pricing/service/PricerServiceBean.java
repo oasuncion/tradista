@@ -75,6 +75,12 @@ public class PricerServiceBean implements PricerService {
 	public PricingParameter getPricingParameterById(long id) {
 		return PricingParameterSQL.getPricingParameterById(id);
 	}
+	
+	@Interceptors(PricingParameterFilteringInterceptor.class)
+	@Override
+	public PricingParameter getPricingParameterByNameAndPoId(String name, long poId) {
+		return PricingParameterSQL.getPricingParameterByNameAndPoId(name, poId);
+	}
 
 	@Interceptors(PricingParameterFilteringInterceptor.class)
 	@Override
@@ -221,7 +227,7 @@ public class PricerServiceBean implements PricerService {
 			throw new TradistaBusinessException(String.format(
 					"The position definition wit id %s could not be found in the system.", positionDefinitionId));
 		}
-		List<CashFlow> cfs = new ArrayList<CashFlow>();
+		List<CashFlow> cfs = new ArrayList<>();
 		Set<Trade<?>> trades = TradeSQL.getTrades(posDef);
 		if (trades != null && !trades.isEmpty()) {
 			for (Trade<?> trade : trades) {
@@ -248,7 +254,7 @@ public class PricerServiceBean implements PricerService {
 	public List<CashFlow> generateAllCashFlows(PricingParameter pp, LocalDate valueDate)
 			throws TradistaBusinessException {
 		List<Trade<?>> trades = TradeSQL.getAllTrades();
-		List<CashFlow> cfs = new ArrayList<CashFlow>();
+		List<CashFlow> cfs = new ArrayList<>();
 		if (trades != null && !trades.isEmpty()) {
 			for (Trade<?> trade : trades) {
 				try {

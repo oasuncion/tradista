@@ -5,15 +5,15 @@ import java.util.Set;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
 
-import jakarta.annotation.security.PermitAll;
-import jakarta.ejb.Stateless;
-import jakarta.interceptor.Interceptors;
-
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.security.bond.model.Bond;
 import finance.tradista.security.bond.persistence.BondSQL;
 import finance.tradista.security.equity.model.Equity;
-import finance.tradista.security.equity.service.EquityServiceBean;
+import finance.tradista.security.equity.service.EquityService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.interceptor.Interceptors;
 
 /*
  * Copyright 2015 Olivier Asuncion
@@ -40,6 +40,9 @@ under the License.    */
 @Stateless
 public class BondServiceBean implements BondService {
 
+	@EJB
+	private EquityService equityService;
+
 	@Override
 	@Interceptors(BondProductScopeFilteringInterceptor.class)
 	public long saveBond(Bond bond) throws TradistaBusinessException {
@@ -56,11 +59,11 @@ public class BondServiceBean implements BondService {
 	}
 
 	private void checkIsinExistence(Bond bond) throws TradistaBusinessException {
-		if (new BondServiceBean().getBondByIsinAndExchangeCode(bond.getIsin(), bond.getExchange().getCode()) != null) {
+		if (getBondByIsinAndExchangeCode(bond.getIsin(), bond.getExchange().getCode()) != null) {
 			throw new TradistaBusinessException(String.format("This bond '%s' already exists in the exchange %s.",
 					bond.getIsin(), bond.getExchange().getCode()));
 		} else {
-			Set<Equity> equities = new EquityServiceBean().getEquitiesByIsin(bond.getIsin());
+			Set<Equity> equities = equityService.getEquitiesByIsin(bond.getIsin());
 			if (equities != null && !equities.isEmpty()) {
 				throw new TradistaBusinessException(
 						String.format("There is already an equity with the same ISIN %s.", bond.getIsin()));

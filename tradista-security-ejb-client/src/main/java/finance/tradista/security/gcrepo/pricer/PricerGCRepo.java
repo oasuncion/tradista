@@ -26,10 +26,7 @@ under the License.    */
 @Parameterizable(name = "Default GCRepo Pricer")
 public class PricerGCRepo extends Pricer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2117530334698161662L;
 
 	public PricerGCRepo() {
 		super();

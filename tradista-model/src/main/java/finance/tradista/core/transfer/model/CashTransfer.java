@@ -44,6 +44,12 @@ public class CashTransfer extends Transfer {
 		this.currency = currency;
 	}
 
+	public CashTransfer(Book book, Product product, TransferPurpose purpose, LocalDate settlementDate, Trade<?> trade,
+			Currency currency) {
+		super(book, product, purpose, settlementDate, trade);
+		this.currency = currency;
+	}
+
 	/**
 	 * 
 	 */

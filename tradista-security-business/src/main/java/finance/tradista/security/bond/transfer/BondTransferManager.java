@@ -59,7 +59,7 @@ public class BondTransferManager implements TransferManager<BondTradeEvent> {
 	@Override
 	public void createTransfers(BondTradeEvent event) throws TradistaBusinessException {
 		BondTrade trade = event.getTrade();
-		List<Transfer> transfersToBeSaved = new ArrayList<Transfer>();
+		List<Transfer> transfersToBeSaved = new ArrayList<>();
 		// Get the cash transfers currently planned to be received for this bond
 		List<CashTransfer> existingTransfers = transferBusinessDelegate
 				.getCashTransfersByProductIdAndStartDate(trade.getProduct().getId(), trade.getSettlementDate());
@@ -162,7 +162,7 @@ public class BondTransferManager implements TransferManager<BondTradeEvent> {
 		}
 	}
 
-	private ProductTransfer createNewBondSettlement(BondTrade trade) throws TradistaBusinessException {
+	private ProductTransfer createNewBondSettlement(BondTrade trade) {
 		ProductTransfer productTransfer = new ProductTransfer(trade.getBook(), TransferPurpose.BOND_SETTLEMENT,
 				trade.getSettlementDate(), trade);
 		productTransfer.setCreationDateTime(LocalDateTime.now());
@@ -186,7 +186,7 @@ public class BondTransferManager implements TransferManager<BondTradeEvent> {
 			cashTransfers = BondTransferUtil.generateCashSettlements(trade);
 		}
 
-		List<CashTransfer> coupons = new ArrayList<CashTransfer>();
+		List<CashTransfer> coupons = new ArrayList<>();
 
 		// oldTradeExistingTransfers is not null, trade product has been changed
 		// and we
@@ -265,7 +265,7 @@ public class BondTransferManager implements TransferManager<BondTradeEvent> {
 			cashTransfers = BondTransferUtil.generateCashSettlements(trade);
 		}
 
-		List<CashTransfer> notionalRepayments = new ArrayList<CashTransfer>();
+		List<CashTransfer> notionalRepayments = new ArrayList<>();
 
 		// oldTradeExistingTransfers is not null, trade product has been changed
 		// and we
@@ -333,9 +333,9 @@ public class BondTransferManager implements TransferManager<BondTradeEvent> {
 			cashTransfers = BondTransferUtil.generateCashSettlements(trade);
 		}
 
-		for (Transfer transfer : cashTransfers) {
+		for (CashTransfer transfer : cashTransfers) {
 			if (transfer.getPurpose().equals(TransferPurpose.BOND_PAYMENT)) {
-				return (CashTransfer) transfer;
+				return transfer;
 			}
 		}
 
@@ -357,11 +357,11 @@ public class BondTransferManager implements TransferManager<BondTradeEvent> {
 			fixingError.setCashTransfer(transfer);
 			fixingError.setErrorDate(LocalDateTime.now());
 			String errorMsg = String.format(
-					"Transfer %n cannot be fixed. Impossible to get the %s index closing value as of %tD in QuoteSet %s.",
+					"Transfer %s cannot be fixed. Impossible to get the %s index closing value as of %tD in QuoteSet %s.",
 					transfer.getId(), quoteName, transfer.getFixingDateTime(), quoteSetId);
 			fixingError.setMessage(errorMsg);
 			fixingError.setStatus(finance.tradista.core.error.model.Error.Status.UNSOLVED);
-			List<FixingError> errors = new ArrayList<FixingError>(1);
+			List<FixingError> errors = new ArrayList<>(1);
 			errors.add(fixingError);
 			fixingErrorBusinessDelegate.saveFixingErrors(errors);
 			throw new TradistaBusinessException(errorMsg);

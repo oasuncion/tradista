@@ -90,14 +90,8 @@ public class TransferSQL {
 				}
 				if (type.equals(Transfer.Type.CASH)) {
 					Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
-					if (trade != null) {
-						transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
-								results.getDate("settlement_date").toLocalDate(), trade, currency);
-					} else {
-						transfer = new CashTransfer(book, product,
-								TransferPurpose.valueOf(results.getString("purpose")),
-								results.getDate("settlement_date").toLocalDate(), currency);
-					}
+					transfer = new CashTransfer(book, product, TransferPurpose.valueOf(results.getString("purpose")),
+							results.getDate("settlement_date").toLocalDate(), trade, currency);
 					((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
 				} else {
 					transfer = new ProductTransfer(book, product, TransferPurpose.valueOf(results.getString("purpose")),
@@ -344,14 +338,9 @@ public class TransferSQL {
 					}
 					if (type.equals(Transfer.Type.CASH)) {
 						Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
-						if (trade != null) {
-							transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
-									results.getDate("settlement_date").toLocalDate(), trade, currency);
-						} else {
-							transfer = new CashTransfer(book, product,
-									TransferPurpose.valueOf(results.getString("purpose")),
-									results.getDate("settlement_date").toLocalDate(), currency);
-						}
+						transfer = new CashTransfer(book, product,
+								TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade, currency);
 						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
 
 					} else {
@@ -415,14 +404,9 @@ public class TransferSQL {
 					}
 					if (type.equals(Transfer.Type.CASH)) {
 						Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
-						if (trade != null) {
-							transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
-									results.getDate("settlement_date").toLocalDate(), trade, currency);
-						} else {
-							transfer = new CashTransfer(book, product,
-									TransferPurpose.valueOf(results.getString("purpose")),
-									results.getDate("settlement_date").toLocalDate(), currency);
-						}
+						transfer = new CashTransfer(book, product,
+								TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade, currency);
 						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
 					} else {
 						transfer = new ProductTransfer(book, product,
@@ -481,14 +465,9 @@ public class TransferSQL {
 					}
 					if (type.equals(Transfer.Type.CASH)) {
 						Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
-						if (trade != null) {
-							transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
-									results.getDate("settlement_date").toLocalDate(), trade, currency);
-						} else {
-							transfer = new CashTransfer(book, product,
-									TransferPurpose.valueOf(results.getString("purpose")),
-									results.getDate("settlement_date").toLocalDate(), currency);
-						}
+						transfer = new CashTransfer(book, product,
+								TransferPurpose.valueOf(results.getString("purpose")),
+								results.getDate("settlement_date").toLocalDate(), trade, currency);
 						((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
 					} else {
 						transfer = new ProductTransfer(book, product,
@@ -546,14 +525,8 @@ public class TransferSQL {
 					}
 					Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
 					CashTransfer transfer = null;
-					if (trade != null) {
-						transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
-								results.getDate("settlement_date").toLocalDate(), trade, currency);
-					} else {
-						transfer = new CashTransfer(book, product,
-								TransferPurpose.valueOf(results.getString("purpose")),
-								results.getDate("settlement_date").toLocalDate(), currency);
-					}
+					transfer = new CashTransfer(book, product, TransferPurpose.valueOf(results.getString("purpose")),
+							results.getDate("settlement_date").toLocalDate(), trade, currency);
 					transfer.setAmount(results.getBigDecimal("quantity"));
 					transfer.setId(results.getLong("id"));
 					transfer.setStatus(Transfer.Status.valueOf(results.getString("status")));
@@ -733,14 +706,8 @@ public class TransferSQL {
 				}
 				if (transferType.equals(Transfer.Type.CASH)) {
 					Currency currency = currencyBusinessDelegate.getCurrencyById(results.getLong("currency_id"));
-					if (trade != null) {
-						transfer = new CashTransfer(book, TransferPurpose.valueOf(results.getString("purpose")),
-								results.getDate("settlement_date").toLocalDate(), trade, currency);
-					} else {
-						transfer = new CashTransfer(book, product,
-								TransferPurpose.valueOf(results.getString("purpose")),
-								results.getDate("settlement_date").toLocalDate(), currency);
-					}
+					transfer = new CashTransfer(book, product, TransferPurpose.valueOf(results.getString("purpose")),
+							results.getDate("settlement_date").toLocalDate(), trade, currency);
 					((CashTransfer) transfer).setAmount(results.getBigDecimal("quantity"));
 				} else {
 					if (product != null) {

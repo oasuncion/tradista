@@ -37,6 +37,9 @@ under the License.    */
 
 public final class BondTransferUtil {
 
+	private BondTransferUtil() {
+	}
+
 	/**
 	 * @param trade the bond trade for which we want to generate the payments.
 	 * @throws TradistaBusinessException
@@ -49,7 +52,7 @@ public final class BondTransferUtil {
 		Bond bond = trade.getProduct();
 
 		Tenor frequency = bond.getCouponFrequency();
-		List<CashTransfer> cts = new ArrayList<CashTransfer>();
+		List<CashTransfer> cts = new ArrayList<>();
 		LocalDate datedDate = bond.getDatedDate();
 		LocalDate couponDate = trade.getSettlementDate();
 

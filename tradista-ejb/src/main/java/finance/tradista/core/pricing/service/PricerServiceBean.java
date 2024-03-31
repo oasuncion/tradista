@@ -180,12 +180,12 @@ public class PricerServiceBean implements PricerService {
 	}
 
 	public List<String> getAllPricingMethods(PricerMeasure pm) {
-		final List<String> methods = new ArrayList<String>();
+		final List<String> methods = new ArrayList<>();
 		Class<?> klass = pm.getClass();
 		// iterate through the list of methods declared in the class represented
 		// by klass variable, and add those annotated with the specified
 		// annotation
-		final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(klass.getDeclaredMethods()));
+		final List<Method> allMethods = new ArrayList<>(Arrays.asList(klass.getDeclaredMethods()));
 		for (final Method method : allMethods) {
 			if (method.isAnnotationPresent(Pricing.class)) {
 				methods.add(method.getName());

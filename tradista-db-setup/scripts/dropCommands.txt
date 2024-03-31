@@ -77,6 +77,7 @@ drop table pricing_parameter_equity_option_volatility_surface;
 drop table pricing_parameter_swaption_volatility_surface;
 drop table pricing_parameter;
 drop table volatility_surface;
+drop table processing_org_defaults_collateral_management;
 drop table quote_set;
 drop table equity;
 drop table gcbasket_security;

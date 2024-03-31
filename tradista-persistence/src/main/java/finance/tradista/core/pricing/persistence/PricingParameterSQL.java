@@ -649,7 +649,7 @@ public class PricingParameterSQL {
 			try (ResultSet results = stmtGetPricingParametersSetsByQuoteSetName.executeQuery()) {
 				while (results.next()) {
 					if (pricingParametersSetNames == null) {
-						pricingParametersSetNames = new HashSet<String>();
+						pricingParametersSetNames = new HashSet<>();
 					}
 					pricingParametersSetNames.add(results.getString("name"));
 				}

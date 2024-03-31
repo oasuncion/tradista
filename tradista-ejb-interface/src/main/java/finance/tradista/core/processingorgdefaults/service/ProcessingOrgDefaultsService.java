@@ -1,9 +1,10 @@
-package finance.tradista.core.pricing.pricer;
+package finance.tradista.core.processingorgdefaults.service;
 
-import finance.tradista.core.common.model.TradistaObject;
+import finance.tradista.core.processingorgdefaults.model.ProcessingOrgDefaults;
+import jakarta.ejb.Remote;
 
 /*
- * Copyright 2019 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,12 +23,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public abstract class PricingParameterModule extends TradistaObject {
+@Remote
+public interface ProcessingOrgDefaultsService {
 
-	private static final long serialVersionUID = -8296665064951370136L;
+	ProcessingOrgDefaults getProcessingOrgDefaultsByPoId(long poId);
 
-	public abstract String getProductFamily();
-
-	public abstract String getProductType();
+	long saveProcessingOrgDefaults(ProcessingOrgDefaults poDefaults);
 
 }

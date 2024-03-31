@@ -29,7 +29,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class QuoteSet extends TradistaObject {
+public class QuoteSet extends TradistaObject implements Comparable<QuoteSet> {
 
 	/**
 	 * 
@@ -89,6 +89,11 @@ public class QuoteSet extends TradistaObject {
 
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public int compareTo(QuoteSet qs) {
+		return name.compareTo(qs.getName());
 	}
 
 	@SuppressWarnings("unchecked")

@@ -57,7 +57,7 @@ public class PricerBusinessDelegate {
 
 	public PricerBusinessDelegate() {
 		pricerService = TradistaServiceLocator.getInstance().getPricerService();
-		validators = new HashMap<String, PricingParameterModuleValidator>();
+		validators = new HashMap<>();
 		PricingParameterModuleValidator validator = null;
 		try {
 			validator = TradistaUtil.getInstance(PricingParameterModuleValidator.class,

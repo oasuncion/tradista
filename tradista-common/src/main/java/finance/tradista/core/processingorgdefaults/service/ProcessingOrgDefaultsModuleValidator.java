@@ -1,9 +1,11 @@
-package finance.tradista.core.pricing.pricer;
+package finance.tradista.core.processingorgdefaults.service;
 
-import finance.tradista.core.common.model.TradistaObject;
+import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.legalentity.model.LegalEntity;
+import finance.tradista.core.processingorgdefaults.model.ProcessingOrgDefaultsModule;
 
 /*
- * Copyright 2019 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,12 +24,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public abstract class PricingParameterModule extends TradistaObject {
+public interface ProcessingOrgDefaultsModuleValidator {
 
-	private static final long serialVersionUID = -8296665064951370136L;
+	void validateModule(ProcessingOrgDefaultsModule module, LegalEntity po) throws TradistaBusinessException;
 
-	public abstract String getProductFamily();
-
-	public abstract String getProductType();
-
+	void checkAccess(ProcessingOrgDefaultsModule module, StringBuilder errMsg) throws TradistaBusinessException;
 }

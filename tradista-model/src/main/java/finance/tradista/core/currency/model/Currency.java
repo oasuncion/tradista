@@ -44,7 +44,6 @@ public class Currency extends TradistaObject {
 	private Calendar calendar;
 
 	public Currency(String isoCode) {
-		super();
 		this.isoCode = isoCode;
 	}
 
@@ -84,6 +83,7 @@ public class Currency extends TradistaObject {
 		this.name = name;
 	}
 
+	@Override
 	public String toString() {
 		return isoCode;
 	}

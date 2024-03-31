@@ -39,6 +39,7 @@ run '../sql/QRTZ_LOCKS.sql';
 run '../sql/JOB_EXECUTION.sql';
 run '../sql/FEED_CONFIG.sql';
 run '../sql/QUOTE_SET.sql';
+run '../sql/PROCESSING_ORG_DEFAULTS_COLLATERAL_MANAGEMENT.sql';
 run '../sql/QUOTE.sql';
 run '../sql/FEED_MAPPING_VALUE.sql';
 run '../sql/QUOTE_VALUE.sql';

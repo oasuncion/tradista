@@ -1,9 +1,16 @@
-package finance.tradista.core.pricing.pricer;
+package finance.tradista.core.user.ui.manager;
 
-import finance.tradista.core.common.model.TradistaObject;
+import java.io.Serializable;
+
+import org.apache.commons.lang3.StringUtils;
+
+import finance.tradista.core.common.util.ClientUtil;
+import finance.tradista.core.legalentity.model.LegalEntity;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
 
 /*
- * Copyright 2019 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,12 +29,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public abstract class PricingParameterModule extends TradistaObject {
+@Named
+@SessionScoped
+public class UserManager implements Serializable {
 
-	private static final long serialVersionUID = -8296665064951370136L;
+	private static final long serialVersionUID = -3434595366265551240L;
 
-	public abstract String getProductFamily();
-
-	public abstract String getProductType();
+	public String getCurrentUserProcessingOrg() {
+		LegalEntity userPo = ClientUtil.getCurrentUser().getProcessingOrg();
+		if (userPo != null) {
+			return userPo.getShortName();
+		}
+		return StringUtils.EMPTY;
+	}
 
 }

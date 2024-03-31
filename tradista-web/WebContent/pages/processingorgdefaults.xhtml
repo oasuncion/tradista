@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="title">Tradista Processing Org Defaults</ui:define>
+	<ui:define name="viewname">Tradista Processing Org Defaults</ui:define>
+	<ui:define name="content">
+		<h:form id="poDefaultsForm">
+			<p:panel header="Processing Org Defaults"
+				style="width:30%;margin-left:auto;margin-right:auto;">
+				<p:messages showDetail="true" closable="true" id="msg">
+					<p:autoUpdate />
+				</p:messages>
+				<br />
+				<p:outputLabel
+					value="#{'Processing Org '+=processingOrgDefaultsView.processingOrg}"
+					style="font-weight:bold;"
+					rendered="#{processingOrgDefaultsView.poDefaults ne null}" />
+				<br />
+				<br />
+				<p:tabView
+					rendered="#{processingOrgDefaultsView.poDefaults ne null}">
+					<c:forEach var="mc"
+						items="${processingOrgDefaultsView.moduleControllers}">
+						<p:tab title="#{mc.key}">
+							<ui:include src="#{'/pages/'+=mc.value+='.xhtml'}" />
+						</p:tab>
+					</c:forEach>
+				</p:tabView>
+				<f:facet name="footer">
+					<p:row>
+						<p:column>
+							<p:outputLabel value="Load by Processing Org"
+								rendered="#{empty userManager.currentUserProcessingOrg}" />
+							<p:selectOneMenu value="#{processingOrgDefaultsView.selectedPo}"
+								style="margin-left:10px"
+								rendered="#{empty userManager.currentUserProcessingOrg}"
+								converter="legalEntityConverter">
+								<f:selectItems value="#{processingOrgDefaultsView.allPos}" />
+							</p:selectOneMenu>
+							<p:commandButton value="Load" styleClass="rounded-button"
+								rendered="#{empty userManager.currentUserProcessingOrg}"
+								update="@form">
+								<f:actionListener binding="#{processingOrgDefaultsView.load()}" />
+							</p:commandButton>
+							<p:commandButton value="Save" styleClass="rounded-button">
+								<f:actionListener binding="#{processingOrgDefaultsView.save()}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

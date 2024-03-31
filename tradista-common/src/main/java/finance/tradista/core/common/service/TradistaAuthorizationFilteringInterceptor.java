@@ -39,7 +39,7 @@ public abstract class TradistaAuthorizationFilteringInterceptor {
 		userBusinessDelegate = new UserBusinessDelegate();
 	}
 
-	protected Object proceed(InvocationContext ic) throws TradistaBusinessException, Exception {
+	protected Object proceed(InvocationContext ic) throws Exception {
 		User user = getCurrentUser();
 		// When the client is the scheduler (for example, the
 		// JobExecutionHistoryTriggerListener class), the user is null.

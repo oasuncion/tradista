@@ -27,9 +27,6 @@ under the License.    */
 
 public class Currency extends TradistaObject {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5174185101451156191L;
 
 	@Id

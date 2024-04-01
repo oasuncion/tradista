@@ -250,6 +250,7 @@ public class PricerBusinessDelegate {
 			LocalDate date, String measure) throws TradistaBusinessException {
 
 		StringBuilder sBuilder = new StringBuilder();
+		Method measureMethod;
 		if (trade == null) {
 			sBuilder.append("The trade is mandatory.\n");
 		}
@@ -280,19 +281,23 @@ public class PricerBusinessDelegate {
 				break;
 			}
 		}
-		try {
-			return (BigDecimal) getMeasureMethod(pm.getClass(), pp, measure, trade).invoke(pm, pp, trade, currency,
-					date);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			throw new TradistaBusinessException(e.getCause().getMessage());
+		if (pm == null) {
+			throw new TradistaBusinessException(
+					String.format("The measure %s was not found for pricer %s", measure, pricer.getClass().getName()));
 		}
-		return null;
+		measureMethod = getMeasureMethod(pm.getClass(), pp, measure, trade);
+		if (measureMethod == null) {
+			throw new TradistaBusinessException(String.format(
+					"The measure method was not found for measure class %s, measure %s, pricing parameters set %s and trade %s ",
+					pm.getClass().getName(), measure, pp.getName(), trade.getId()));
+		}
+		try {
+			return (BigDecimal) measureMethod.invoke(pm, pp, trade, currency, date);
+		} catch (IllegalAccessException | IllegalArgumentException e) {
+			throw new TradistaTechnicalException(e);
+		} catch (InvocationTargetException ite) {
+			throw new TradistaBusinessException(ite.getCause().getMessage());
+		}
 	}
 
 	public BigDecimal calculate(Trade<? extends Product> trade, PricingParameter pp, Currency currency, LocalDate date,
@@ -326,28 +331,20 @@ public class PricerBusinessDelegate {
 			return (BigDecimal) measure.getClass()
 					.getMethod(methodName, PricingParameter.class, trade.getClass(), Currency.class, LocalDate.class)
 					.invoke(measure, pp, trade, currency, date);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			throw new TradistaBusinessException(e.getCause().getMessage());
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
+			throw new TradistaTechnicalException(e);
+		} catch (InvocationTargetException ite) {
+			throw new TradistaBusinessException(ite.getCause().getMessage());
+		} catch (NoSuchMethodException nse) {
+			throw new TradistaBusinessException(nse);
 		}
-		return null;
 	}
 
 	public BigDecimal calculate(Product product, Book book, Pricer pricer, PricingParameter pp, Currency currency,
 			LocalDate date, String measure) throws TradistaBusinessException {
 
 		StringBuilder sBuilder = new StringBuilder();
+		Method productMeasureMethod;
 		if (product == null) {
 			sBuilder.append("The trade is mandatory.\n");
 		}
@@ -378,23 +375,27 @@ public class PricerBusinessDelegate {
 				break;
 			}
 		}
-		try {
-			return (BigDecimal) getProductMeasureMethod(pm.getClass(), pp, book, measure, product).invoke(pm, pp,
-					product, book, currency, date);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			throw new TradistaBusinessException(e.getCause().getMessage());
+		if (pm == null) {
+			throw new TradistaBusinessException(
+					String.format("The measure %s was not found for pricer %s", measure, pricer.getClass().getName()));
 		}
-		return null;
+		productMeasureMethod = getProductMeasureMethod(pm.getClass(), pp, book, measure, product);
+		if (productMeasureMethod == null) {
+			throw new TradistaBusinessException(String.format(
+					"The product measure method was not found for measure class %s, measure %s, pricing parameters set %s, book %s and product %s ",
+					pm.getClass().getName(), measure, pp.getName(), book, product.getId()));
+		}
+		try {
+			return (BigDecimal) productMeasureMethod.invoke(pm, pp, product, book, currency, date);
+		} catch (IllegalAccessException | IllegalArgumentException e) {
+			throw new TradistaTechnicalException(e);
+		} catch (InvocationTargetException ite) {
+			throw new TradistaBusinessException(ite.getCause().getMessage());
+		}
 	}
 
 	private Method getMeasureMethod(Class<? extends PricerMeasure> pmClass, PricingParameter pp, String measure,
-			Trade<? extends Product> trade) {
+			Trade<? extends Product> trade) throws TradistaBusinessException {
 
 		String bookName = trade.getBook() != null ? trade.getBook().getName() : "";
 		// First, we look in the PP if the method of the measure is specified
@@ -409,12 +410,10 @@ public class PricerBusinessDelegate {
 			try {
 				return pmClass.getMethod(value, PricingParameter.class, trade.getClass(), Currency.class,
 						LocalDate.class);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (NoSuchMethodException nsme) {
+				throw new TradistaBusinessException(nsme);
+			} catch (SecurityException se) {
+				throw new TradistaTechnicalException(se);
 			}
 		}
 		// If the NPV method is not specified, we use the default one
@@ -447,7 +446,7 @@ public class PricerBusinessDelegate {
 	}
 
 	private Method getProductMeasureMethod(Class<? extends PricerMeasure> pmClass, PricingParameter pp, Book book,
-			String measure, Product product) {
+			String measure, Product product) throws TradistaBusinessException {
 
 		String bookName = book != null ? book.getName() : "";
 		// First, we look in the PP if the method of the measure is specified
@@ -462,12 +461,10 @@ public class PricerBusinessDelegate {
 			try {
 				return pmClass.getMethod(value, PricingParameter.class, Product.class, Book.class, Currency.class,
 						LocalDate.class);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (NoSuchMethodException nsme) {
+				throw new TradistaBusinessException(nsme);
+			} catch (SecurityException se) {
+				throw new TradistaTechnicalException(se);
 			}
 		}
 		// If the method is not specified, we use the default one

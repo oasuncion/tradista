@@ -2,7 +2,6 @@ package finance.tradista.core.legalentity.model;
 
 import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
-import finance.tradista.core.marketdata.model.QuoteSet;
 
 /*
  * Copyright 2014 Olivier Asuncion

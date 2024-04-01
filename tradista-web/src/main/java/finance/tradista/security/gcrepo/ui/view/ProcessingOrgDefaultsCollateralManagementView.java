@@ -38,13 +38,11 @@ public class ProcessingOrgDefaultsCollateralManagementView implements Serializab
 
 	private static final long serialVersionUID = -2740894244286229939L;
 
-	private QuoteBusinessDelegate quoteBusinessDelegate;
-
 	private SortedSet<QuoteSet> allQuoteSets;
 
 	@PostConstruct
 	public void init() {
-		quoteBusinessDelegate = new QuoteBusinessDelegate();
+		QuoteBusinessDelegate quoteBusinessDelegate = new QuoteBusinessDelegate();
 		Set<QuoteSet> allQs = quoteBusinessDelegate.getAllQuoteSets();
 		allQuoteSets = new TreeSet<>();
 		allQuoteSets.add(BlankQuoteSet.getInstance());

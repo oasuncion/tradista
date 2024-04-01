@@ -190,8 +190,7 @@
 											</p:column>
 											<p:column>
 												<p:inputNumber value="#{gCRepoTradeView.noticePeriod}"
-													styleClass="tradista-input" id="noticePeriod"
-													decimalPlaces="0"
+													id="noticePeriod" decimalPlaces="0"
 													disabled="#{gCRepoTradeView.terminableOnDemand eq false or empty gCRepoTradeView.terminableOnDemand}" />
 											</p:column>
 										</p:row>
@@ -253,7 +252,7 @@
 												<p:column colspan="8">
 													<p:outputLabel value="Apply action" />
 													<p:selectOneMenu value="#{gCRepoTradeView.action}"
-														style="margin-left:10px">
+														styleClass="tradista-menu-item">
 														<f:selectItems
 															value="#{gCRepoTradeView.allAvailableActions}" />
 													</p:selectOneMenu>
@@ -283,9 +282,10 @@
 														<f:actionListener
 															binding="#{partialTerminationView.clear()}" />
 													</p:commandButton>
-													<p:outputLabel value="Load by Id" style="margin-left:10px" />
+													<p:outputLabel value="Load by Id"
+														styleClass="tradista-menu-item" />
 													<p:inputText value="#{gCRepoTradeView.idToBeLoaded}"
-														style="margin-left:10px" />
+														styleClass="tradista-menu-item" />
 													<p:commandButton value="Load" styleClass="rounded-button"
 														action="#{gCRepoTradeView.load}" update="@form">
 														<f:actionListener
@@ -307,14 +307,14 @@
 											<p:row>
 												<p:column>
 													<p:outputLabel value="#{collateralView.context}"
-														style="font-weight:bold;" />
+														styleClass="tradista-small-title" />
 													<br />
 													<br />
 													<p:outputLabel value="Collateral" class="label" />
 													<p:dataTable id="collateralDataTable" var="coll"
 														value="#{collateralView.collateralValues}"
 														allowUnsorting="true" sortMode="single"
-														tableStyle="table-layout: auto;" size="small">
+														tableStyleClass="tradista-datatable" size="small">
 														<p:column headerText="ISIN" sortBy="#{coll.security}">
 															<p:outputLabel value="#{coll.security}" />
 														</p:column>
@@ -340,7 +340,8 @@
 													<p:dataTable id="availableCollateralDataTable" var="coll"
 														value="#{collateralView.availableCollateralValues}"
 														allowUnsorting="true" sortMode="single"
-														tableStyle="table-layout: auto;" size="small" lazy="true">
+														tableStyleClass="tradista-datatable" size="small"
+														lazy="true">
 														<p:column headerText="ISIN" sortBy="#{coll.security}">
 															<p:outputLabel value="#{coll.security}" />
 														</p:column>
@@ -367,7 +368,7 @@
 													<p:dataTable id="addedCollateralDataTable" var="coll"
 														value="#{collateralView.addedCollateralValues}"
 														allowUnsorting="true" sortMode="single"
-														tableStyle="table-layout: auto;" size="small">
+														tableStyleClass="tradista-datatable" size="small">
 														<p:column headerText="ISIN" sortBy="#{coll.security}">
 															<p:outputLabel value="#{coll.security}" />
 														</p:column>
@@ -395,7 +396,8 @@
 													<p:dataTable id="removedCollateralDataTable" var="coll"
 														value="#{collateralView.removedCollateralValues}"
 														allowUnsorting="true" sortMode="single"
-														tableStyle="table-layout: auto;" size="small" lazy="true">
+														tableStyleClass="tradista-datatable" size="small"
+														lazy="true">
 														<p:column headerText="ISIN" sortBy="#{coll.security}">
 															<p:outputLabel value="#{coll.security}" />
 														</p:column>
@@ -434,7 +436,7 @@
 													<br />
 													<p:dataTable id="partialTerminationsTable" var="pt"
 														value="#{partialTerminationView.partialTerminations}"
-														tableStyle="table-layout: auto;" size="small">
+														tableStyleClass="tradista-datatable" size="small">
 														<p:column headerText="Date">
 															<p:outputLabel value="#{pt.date}" />
 														</p:column>
@@ -568,7 +570,7 @@
 								<p:tab title="Quotes">
 									<p:dataTable id="quotesListDataTable" var="quote"
 										value="#{quotesView.quoteValues}" allowUnsorting="true"
-										sortMode="single" tableStyle="table-layout: auto;"
+										sortMode="single" tableStyleClass="tradista-datatable"
 										size="small">
 										<f:facet name="header">
 											<p:row>
@@ -585,12 +587,12 @@
 												</p:column>
 												<p:column>
 													<p:outputLabel value="Quote Set : "
-														style="margin-left:10px" />
+														styleClass="tradista-menu-item" />
 												</p:column>
 												<p:column>
 													<p:selectOneMenu value="#{quotesView.quoteSet}"
 														converter="quoteSetConverter"
-														style="margin-left:10px;margin-right: 10px">
+														styleClass="tradista-menu-item">
 														<f:selectItems value="#{quotesView.allQuoteSets}" />
 														<p:ajax event="change"
 															listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}"
@@ -599,9 +601,11 @@
 												</p:column>
 												<p:column>
 													<p:selectBooleanCheckbox value="#{quotesView.realTime}"
-														style="margin-left:10px">Real Time
-												<p:ajax event="change" update=":dashboardForm:poll" />
+														styleClass="tradista-menu-item">
+														<p:outputLabel styleClass="tradista-menu-item">Real Time</p:outputLabel>
+														<p:ajax event="change" update=":dashboardForm:poll" />
 													</p:selectBooleanCheckbox>
+
 												</p:column>
 											</p:row>
 										</f:facet>
@@ -662,7 +666,7 @@
 								<p:tab title="Cashflows forecast">
 									<p:dataTable id="cashflowsListDataTable" var="cf"
 										value="#{cashflowsView.cashflows}" allowUnsorting="true"
-										sortMode="single" tableStyle="table-layout: auto;"
+										sortMode="single" tableStyleClass="tradista-datatable"
 										size="small">
 										<f:facet name="header">
 											<p:row>
@@ -676,21 +680,21 @@
 												</p:column>
 												<p:column>
 													<p:outputLabel value="Pricing Date"
-														style="margin-left:10px" />
+														styleClass="tradista-menu-item" />
 												</p:column>
 												<p:column>
 													<p:outputLabel value="#{pricingView.pricingDate}"
-														style="margin-left:10px">
+														styleClass="tradista-menu-item">
 														<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
 													</p:outputLabel>
 												</p:column>
 												<p:column>
 													<p:outputLabel value="Discount curve"
-														style="margin-left:10px" />
+														styleClass="tradista-menu-item" />
 												</p:column>
 												<p:column>
 													<p:outputLabel value="#{cashflowsView.discountCurve}"
-														style="margin-left:10px"
+														styleClass="tradista-menu-item"
 														rendered="#{not (cashflowsView.discountCurve eq null)}" />
 													<p:outputLabel
 														value="#{cashflowsView.discountCurveWarning(pricingView.pricingParameter, gCRepoTradeView.currency)}"

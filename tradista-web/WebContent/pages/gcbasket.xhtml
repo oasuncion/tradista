@@ -8,15 +8,14 @@
 	<ui:define name="content">
 		<h:form id="dashboardForm">
 			<p:panel id="gcBasket" header="GC Basket"
-				style="width:50%;margin-left:auto;margin-right:auto;">
+				styleClass="tradista-central-component">
 				<p:messages showDetail="true" closable="true" id="msg">
 					<p:autoUpdate />
 				</p:messages>
-				<p:outputLabel value="GC Basket name :" />
-
+				<p:outputLabel styleClass="tradista-menu-item"
+					value="GC Basket name :" />
 				<p:inputText value="#{gCBasketView.gcBasket.name}"
-					style="font-weight: bold;margin-left:10px;margin-bottom:10px" />
-
+					styleClass="tradista-menu-item" />
 				<p:pickList id="gcBasketPickList" value="#{gCBasketView.securities}"
 					var="security" itemValue="#{security}" itemLabel="#{security.isin}"
 					showSourceControls="true" showTargetControls="true"
@@ -25,7 +24,7 @@
 					converter="securityConverter">
 					<f:facet name="sourceCaption">Available securities</f:facet>
 					<f:facet name="targetCaption">Constituents of GC Basket</f:facet>
-					<p:column style="width:94%">
+					<p:column styleClass="tradista-picklist-item">
 						<div class="flex align-items-center">
 							<h:outputText value="#{security.isin} - #{security.exchange}" />
 						</div>
@@ -43,13 +42,14 @@
 								onclick="PF('copy').show()" />
 							<p:commandButton value="New" styleClass="rounded-button"
 								action="#{gCBasketView.clear()}" update="@form" />
-							<p:outputLabel value="Load by basket" style="margin-left:10px" />
+							<p:outputLabel value="Load by basket"
+								styleClass="tradista-menu-item" />
 							<p:selectOneMenu value="#{gCBasketView.loadingCriterion}"
-								style="margin-left:10px">
+								styleClass="tradista-menu-item">
 								<f:selectItems value="#{gCBasketView.allLoadingCriteria}" />
 							</p:selectOneMenu>
 							<p:inputText value="#{gCBasketView.idOrName}"
-								style="margin-left:10px" />
+								styleClass="tradista-menu-item" />
 							<p:commandButton value="Load" styleClass="rounded-button"
 								action="#{gCBasketView.load()}" update="@form" />
 						</p:column>
@@ -58,16 +58,14 @@
 			</p:panel>
 		</h:form>
 		<h:form>
-			<p:dialog header="Header" widgetVar="copy" minHeight="40" width="350"
+			<p:dialog header="Copy a GC Basket" widgetVar="copy"
 				showEffect="fade" modal="true">
-				<p:outputLabel value="Please choose a GC Basket name :"
-					style="margin-bottom:30px" />
-
-				<p:inputText value="#{gCBasketView.copyGCBasketName}"
-					style="font-weight: bold;margin-left:10px;margin-bottom:10px" />
+				<p:outputLabel value="Please choose a GC Basket name :" />
+				<p />
+				<p:inputText value="#{gCBasketView.copyGCBasketName}" />
 				<f:facet name="footer">
 					<p:commandButton value="Ok" styleClass="rounded-button"
-						style="width: 6rem" onclick="PF('copy').hide()" update=":dashboardForm:gcBasket">
+						onclick="PF('copy').hide()" update=":dashboardForm:gcBasket">
 						<f:actionListener binding="#{gCBasketView.copy()}" />
 					</p:commandButton>
 					<p:commandButton value="Cancel" styleClass="rounded-button"

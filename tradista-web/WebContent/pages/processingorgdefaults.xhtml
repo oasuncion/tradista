@@ -9,7 +9,7 @@
 	<ui:define name="content">
 		<h:form id="poDefaultsForm">
 			<p:panel header="Processing Org Defaults"
-				style="width:30%;margin-left:auto;margin-right:auto;">
+				styleClass="tradista-central-component">
 				<p:messages showDetail="true" closable="true" id="msg">
 					<p:autoUpdate />
 				</p:messages>
@@ -35,7 +35,7 @@
 							<p:outputLabel value="Load by Processing Org"
 								rendered="#{empty userManager.currentUserProcessingOrg}" />
 							<p:selectOneMenu value="#{processingOrgDefaultsView.selectedPo}"
-								style="margin-left:10px"
+								styleClass="tradista-menu-item"
 								rendered="#{empty userManager.currentUserProcessingOrg}"
 								converter="legalEntityConverter">
 								<f:selectItems value="#{processingOrgDefaultsView.allPos}" />

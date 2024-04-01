@@ -14,7 +14,6 @@ import org.jboss.ejb3.annotation.SecurityDomain;
 
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.util.TradistaUtil;
 import finance.tradista.core.configuration.service.LocalConfigurationService;
 import finance.tradista.core.position.model.PositionDefinition;
@@ -75,7 +74,7 @@ public class PricerServiceBean implements PricerService {
 	public PricingParameter getPricingParameterById(long id) {
 		return PricingParameterSQL.getPricingParameterById(id);
 	}
-	
+
 	@Interceptors(PricingParameterFilteringInterceptor.class)
 	@Override
 	public PricingParameter getPricingParameterByNameAndPoId(String name, long poId) {
@@ -166,12 +165,7 @@ public class PricerServiceBean implements PricerService {
 		for (Class<?> klass : classes) {
 			annotation = klass.getAnnotation(Parameterizable.class);
 			if (name.equals(annotation.name())) {
-				try {
-					return (Pricer) TradistaUtil.getInstance(klass);
-				} catch (TradistaTechnicalException tte) {
-					// TODO Auto-generated catch block
-					tte.printStackTrace();
-				}
+				return (Pricer) TradistaUtil.getInstance(klass);
 			}
 		}
 
@@ -180,12 +174,12 @@ public class PricerServiceBean implements PricerService {
 	}
 
 	public List<String> getAllPricingMethods(PricerMeasure pm) {
-		final List<String> methods = new ArrayList<String>();
+		final List<String> methods = new ArrayList<>();
 		Class<?> klass = pm.getClass();
 		// iterate through the list of methods declared in the class represented
 		// by klass variable, and add those annotated with the specified
 		// annotation
-		final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(klass.getDeclaredMethods()));
+		final List<Method> allMethods = new ArrayList<>(Arrays.asList(klass.getDeclaredMethods()));
 		for (final Method method : allMethods) {
 			if (method.isAnnotationPresent(Pricing.class)) {
 				methods.add(method.getName());

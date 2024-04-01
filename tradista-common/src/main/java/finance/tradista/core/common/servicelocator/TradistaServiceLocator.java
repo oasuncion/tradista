@@ -41,6 +41,7 @@ import finance.tradista.core.position.service.PositionCalculationErrorService;
 import finance.tradista.core.position.service.PositionDefinitionService;
 import finance.tradista.core.position.service.PositionService;
 import finance.tradista.core.pricing.service.PricerService;
+import finance.tradista.core.processingorgdefaults.service.ProcessingOrgDefaultsService;
 import finance.tradista.core.product.service.ProductService;
 import finance.tradista.core.productinventory.service.ProductInventoryService;
 import finance.tradista.core.trade.service.TradeService;
@@ -182,6 +183,8 @@ public class TradistaServiceLocator {
 	private static final String TRANSFER_SERVICE_PACKAGE = "finance.tradista.core.transfer.service";
 	
 	private static final String WORKFLOW_SERVICE_PACKAGE = "finance.tradista.core.workflow.service";
+	
+	private static final String PROCESSING_ORG_DEFAULTS_SERVICE_PACKAGE = "finance.tradista.core.processingorgdefaults.service";
 
 	private static final String CONFIGURATION_SERVICE_PACKAGE = "finance.tradista.core.configuration.service";
 
@@ -643,6 +646,10 @@ public class TradistaServiceLocator {
 
 	public WorkflowService getWorkflowService() {
 		return (WorkflowService) getService(APP, CORE_EJB, WORKFLOW_SERVICE_PACKAGE, "WorkflowService");
+	}
+	
+	public ProcessingOrgDefaultsService getProcessingOrgDefaultsService() {
+		return (ProcessingOrgDefaultsService) getService(APP, CORE_EJB, PROCESSING_ORG_DEFAULTS_SERVICE_PACKAGE, "ProcessingOrgDefaultsService");
 	}
 
 }

@@ -53,7 +53,7 @@ under the License.    */
 
 public class PricingParameterSQL {
 
-	private static Map<String, Class<?>> daoClasses = new HashMap<String, Class<?>>();
+	private static Map<String, Class<?>> daoClasses = new HashMap<>();
 
 	static {
 		Class<?> daoClass = null;
@@ -175,11 +175,11 @@ public class PricingParameterSQL {
 					processingOrg = LegalEntitySQL.getLegalEntityById(poId);
 				}
 				PricingParameter pricingParameter = new PricingParameter(results.getString("name"), processingOrg);
-				Map<String, String> params = new HashMap<String, String>();
-				Map<Index, InterestRateCurve> indexCurves = new HashMap<Index, InterestRateCurve>();
-				Map<Currency, InterestRateCurve> discountCurves = new HashMap<Currency, InterestRateCurve>();
-				Map<CurrencyPair, FXCurve> fxCurves = new HashMap<CurrencyPair, FXCurve>();
-				Map<String, String> customPricers = new HashMap<String, String>();
+				Map<String, String> params = new HashMap<>();
+				Map<Index, InterestRateCurve> indexCurves = new HashMap<>();
+				Map<Currency, InterestRateCurve> discountCurves = new HashMap<>();
+				Map<CurrencyPair, FXCurve> fxCurves = new HashMap<>();
+				Map<String, String> customPricers = new HashMap<>();
 				pricingParameter.setId(results.getInt("id"));
 				pricingParameter.setQuoteSet(QuoteSetSQL.getQuoteSetById(results.getLong("quote_set_id")));
 				stmtGetPricingParameterValueByPricingParameterId.setLong(1, results.getLong("id"));
@@ -265,7 +265,7 @@ public class PricingParameterSQL {
 
 	public static PricingParameter getPricingParameterById(long id) {
 		PricingParameter pricingParameter = null;
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String> params = new HashMap<>();
 
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetPricingParameterValuesByPricingParameterId = con.prepareStatement(
@@ -301,10 +301,10 @@ public class PricingParameterSQL {
 						}
 						pricingParameter = new PricingParameter(results.getString("name"), processingOrg);
 					}
-					Map<Index, InterestRateCurve> indexCurves = new HashMap<Index, InterestRateCurve>();
-					Map<Currency, InterestRateCurve> discountCurves = new HashMap<Currency, InterestRateCurve>();
-					Map<CurrencyPair, FXCurve> fxCurves = new HashMap<CurrencyPair, FXCurve>();
-					Map<String, String> customPricers = new HashMap<String, String>();
+					Map<Index, InterestRateCurve> indexCurves = new HashMap<>();
+					Map<Currency, InterestRateCurve> discountCurves = new HashMap<>();
+					Map<CurrencyPair, FXCurve> fxCurves = new HashMap<>();
+					Map<String, String> customPricers = new HashMap<>();
 					pricingParameter.setId(results.getInt("id"));
 					pricingParameter.setQuoteSet(QuoteSetSQL.getQuoteSetById(results.getLong("quote_set_id")));
 					stmtGetPricingParameterIndexCurveById.setLong(1, results.getLong("id"));
@@ -379,7 +379,7 @@ public class PricingParameterSQL {
 
 	public static PricingParameter getPricingParameterByNameAndPoId(String name, long poId) {
 		PricingParameter pricingParameter = null;
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String> params = new HashMap<>();
 
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetPricingParameterByNameAndPoId = con
@@ -401,10 +401,10 @@ public class PricingParameterSQL {
 						processingOrg = LegalEntitySQL.getLegalEntityById(poId);
 					}
 					pricingParameter = new PricingParameter(results.getString("name"), processingOrg);
-					Map<Index, InterestRateCurve> indexCurves = new HashMap<Index, InterestRateCurve>();
-					Map<Currency, InterestRateCurve> discountCurves = new HashMap<Currency, InterestRateCurve>();
-					Map<CurrencyPair, FXCurve> fxCurves = new HashMap<CurrencyPair, FXCurve>();
-					Map<String, String> customPricers = new HashMap<String, String>();
+					Map<Index, InterestRateCurve> indexCurves = new HashMap<>();
+					Map<Currency, InterestRateCurve> discountCurves = new HashMap<>();
+					Map<CurrencyPair, FXCurve> fxCurves = new HashMap<>();
+					Map<String, String> customPricers = new HashMap<>();
 					pricingParameter.setId(results.getInt("id"));
 					pricingParameter.setQuoteSet(QuoteSetSQL.getQuoteSetById(results.getLong("quote_set_id")));
 					stmtGetPricingParameterIndexCurveById.setLong(1, results.getLong("id"));
@@ -649,7 +649,7 @@ public class PricingParameterSQL {
 			try (ResultSet results = stmtGetPricingParametersSetsByQuoteSetName.executeQuery()) {
 				while (results.next()) {
 					if (pricingParametersSetNames == null) {
-						pricingParametersSetNames = new HashSet<String>();
+						pricingParametersSetNames = new HashSet<>();
 					}
 					pricingParametersSetNames.add(results.getString("name"));
 				}

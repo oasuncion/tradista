@@ -1,9 +1,11 @@
-package finance.tradista.core.pricing.pricer;
+package finance.tradista.core.marketdata.model;
 
-import finance.tradista.core.common.model.TradistaObject;
+import org.apache.commons.lang3.StringUtils;
+
+import finance.tradista.core.legalentity.model.BlankLegalEntity;
 
 /*
- * Copyright 2019 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,12 +24,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public abstract class PricingParameterModule extends TradistaObject {
+public final class BlankQuoteSet extends QuoteSet {
 
-	private static final long serialVersionUID = -8296665064951370136L;
+	private static final long serialVersionUID = -2783448783739367552L;
+	private static final BlankQuoteSet instance = new BlankQuoteSet();
 
-	public abstract String getProductFamily();
+	private BlankQuoteSet() {
+		super(StringUtils.EMPTY, BlankLegalEntity.getInstance());
+	}
 
-	public abstract String getProductType();
+	public static BlankQuoteSet getInstance() {
+		return instance;
+	}
 
 }

@@ -1,9 +1,9 @@
-package finance.tradista.core.pricing.pricer;
+package finance.tradista.core.processingorgdefaults.model;
 
 import finance.tradista.core.common.model.TradistaObject;
 
 /*
- * Copyright 2019 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,12 +22,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public abstract class PricingParameterModule extends TradistaObject {
+public abstract class ProcessingOrgDefaultsModule extends TradistaObject {
 
-	private static final long serialVersionUID = -8296665064951370136L;
+	private static final long serialVersionUID = -7848273930910969978L;
 
-	public abstract String getProductFamily();
+	protected String name;
 
-	public abstract String getProductType();
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }

@@ -47,12 +47,16 @@ public class MenuView implements Serializable {
 
 		Submenu tradeMenu = DefaultSubMenu.builder().label("Trades").build();
 		Submenu productMenu = DefaultSubMenu.builder().label("Products").build();
+		Submenu configurationMenu = DefaultSubMenu.builder().label("Configuration").build();
 		DefaultMenuItem item = DefaultMenuItem.builder().value("GC Repo").url("gcrepotrade.xhtml").build();
 		tradeMenu.getElements().add(item);
 		item = DefaultMenuItem.builder().value("GC Basket").url("gcbasket.xhtml").build();
 		productMenu.getElements().add(item);
+		item = DefaultMenuItem.builder().value("Processing Org Defaults").url("processingorgdefaults.xhtml").build();
+		configurationMenu.getElements().add(item);
 		model.getElements().add(tradeMenu);
 		model.getElements().add(productMenu);
+		model.getElements().add(configurationMenu);
 	}
 
 	public MenuModel getModel() {

@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import finance.tradista.core.common.util.ClientUtil;
 import finance.tradista.core.user.service.UserBusinessDelegate;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ specific language governing permissions and limitations
 under the License.    */
 
 @Named
-@RequestScoped
+@ViewScoped
 public class LoginView implements Serializable {
 
 	private static final long serialVersionUID = -7912603586721092288L;
@@ -41,6 +42,14 @@ public class LoginView implements Serializable {
 	private String login;
 
 	private String password;
+
+	private String originalUrl;
+
+	@PostConstruct
+	public void init() {
+		originalUrl = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+				.get("jakarta.servlet.forward.servlet_path");
+	}
 
 	public String getLogin() {
 		return login;
@@ -59,7 +68,8 @@ public class LoginView implements Serializable {
 	}
 
 	public String login() {
-
+		final String FACES_REDIRECT_EQUALS_TRUE = "?faces-redirect=true";
+		String url = "/pages/gcrepotrade" + FACES_REDIRECT_EQUALS_TRUE;
 		FacesContext context = FacesContext.getCurrentInstance();
 		ExternalContext externalContext = context.getExternalContext();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -71,7 +81,10 @@ public class LoginView implements Serializable {
 			context.addMessage("errMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed.", null));
 			return null;
 		}
+		if (originalUrl != null) {
+			url = originalUrl + FACES_REDIRECT_EQUALS_TRUE;
+		}
 
-		return "pages/gcrepotrade?faces-redirect=true";
+		return url;
 	}
 }

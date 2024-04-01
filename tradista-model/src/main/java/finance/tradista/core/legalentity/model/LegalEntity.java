@@ -2,6 +2,7 @@ package finance.tradista.core.legalentity.model;
 
 import finance.tradista.core.common.model.Id;
 import finance.tradista.core.common.model.TradistaObject;
+import finance.tradista.core.marketdata.model.QuoteSet;
 
 /*
  * Copyright 2014 Olivier Asuncion
@@ -23,16 +24,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class LegalEntity extends TradistaObject {
+public class LegalEntity extends TradistaObject implements Comparable<LegalEntity> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2952827349654099841L;
 
-	public static enum Role {
+	public enum Role {
 		PROCESSING_ORG, COUNTERPARTY;
 
+		@Override
 		public String toString() {
 			switch (this) {
 			case PROCESSING_ORG:
@@ -102,8 +104,14 @@ public class LegalEntity extends TradistaObject {
 		this.role = role;
 	}
 
+	@Override
 	public String toString() {
 		return shortName;
+	}
+
+	@Override
+	public int compareTo(LegalEntity le) {
+		return shortName.compareTo(le.getShortName());
 	}
 
 }

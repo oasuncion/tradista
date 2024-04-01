@@ -31,9 +31,6 @@ under the License.    */
 
 public class QuoteSet extends TradistaObject implements Comparable<QuoteSet> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8675483478779089653L;
 
 	private Map<Quote, Map<LocalDate, QuoteValue>> quoteValues;
@@ -61,7 +58,7 @@ public class QuoteSet extends TradistaObject implements Comparable<QuoteSet> {
 		if (quoteValues == null) {
 			return null;
 		}
-		Map<Quote, Map<LocalDate, QuoteValue>> quoteValues = new HashMap<Quote, Map<LocalDate, QuoteValue>>();
+		Map<Quote, Map<LocalDate, QuoteValue>> quoteValues = new HashMap<>();
 		for (Map.Entry<Quote, Map<LocalDate, QuoteValue>> entry : this.quoteValues.entrySet()) {
 			if (entry.getValue() != null) {
 				quoteValues.put(TradistaModelUtil.clone(entry.getKey()),
@@ -87,6 +84,7 @@ public class QuoteSet extends TradistaObject implements Comparable<QuoteSet> {
 		return quoteValues.get(quote).get(date);
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}
@@ -101,7 +99,7 @@ public class QuoteSet extends TradistaObject implements Comparable<QuoteSet> {
 	public QuoteSet clone() {
 		QuoteSet quoteSet = (QuoteSet) super.clone();
 		if (this.quoteValues != null) {
-			Map<Quote, Map<LocalDate, QuoteValue>> quoteValues = new HashMap<Quote, Map<LocalDate, QuoteValue>>();
+			Map<Quote, Map<LocalDate, QuoteValue>> quoteValues = new HashMap<>();
 			for (Map.Entry<Quote, Map<LocalDate, QuoteValue>> entry : this.quoteValues.entrySet()) {
 				if (entry.getValue() != null) {
 					quoteValues.put(TradistaModelUtil.clone(entry.getKey()),

@@ -3,7 +3,8 @@ package finance.tradista.core.processingorgdefaults.ui.view;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,11 +51,11 @@ public class ProcessingOrgDefaultsView implements Serializable {
 	private ProcessingOrgDefaults poDefaults;
 
 	private ProcessingOrgDefaultsBusinessDelegate poDefaultsBusinessDelegate;
-	
+
 	private LegalEntityBusinessDelegate legalEntityBusinessDelegate;
-	
-	private Set<LegalEntity> allPos;
-	
+
+	private SortedSet<LegalEntity> allPos;
+
 	private LegalEntity selectedPo;
 
 	private Map<String, String> moduleControllers;
@@ -73,7 +74,7 @@ public class ProcessingOrgDefaultsView implements Serializable {
 			}
 		} else {
 			legalEntityBusinessDelegate = new LegalEntityBusinessDelegate();
-			allPos = legalEntityBusinessDelegate.getAllProcessingOrgs();
+			allPos = new TreeSet<>(legalEntityBusinessDelegate.getAllProcessingOrgs());
 		}
 		moduleControllers = new HashMap<>();
 		Class<?> controllerClass = null;
@@ -101,15 +102,15 @@ public class ProcessingOrgDefaultsView implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
 	}
-	
+
 	public void load() {
 		try {
 			poDefaults = poDefaultsBusinessDelegate.getProcessingOrgDefaultsByPoId(selectedPo.getId());
 			if (poDefaults != null) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Info", "Processing Org  Defaults " + selectedPo.getShortName() + " successfully loaded."));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
+						"Processing Org  Defaults " + selectedPo.getShortName() + " successfully loaded."));
 			}
-		}  catch (TradistaBusinessException tbe) {
+		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
@@ -138,11 +139,11 @@ public class ProcessingOrgDefaultsView implements Serializable {
 		return StringUtils.EMPTY;
 	}
 
-	public Set<LegalEntity> getAllPos() {
+	public SortedSet<LegalEntity> getAllPos() {
 		return allPos;
 	}
 
-	public void setAllPos(Set<LegalEntity> allPos) {
+	public void setAllPos(SortedSet<LegalEntity> allPos) {
 		this.allPos = allPos;
 	}
 

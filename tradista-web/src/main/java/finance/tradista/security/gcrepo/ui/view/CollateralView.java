@@ -739,14 +739,14 @@ public class CollateralView implements Serializable {
 			Map<Security, Map<Book, BigDecimal>> addedSecurities = getAddedSecurities();
 			if (addedSecurities != null && !addedSecurities.isEmpty()) {
 				collateralMarketValue = collateralMarketValue.add(gcRepoTradeBusinessDelegate
-						.getCollateralMarketToMarket(addedSecurities, trade.getBook().getProcessingOrg().getId()));
+						.getCollateralMarketToMarket(addedSecurities, trade.getBook().getProcessingOrg()));
 			}
 
 			// Remove collateral removed from the GUI
 			Map<Security, Map<Book, BigDecimal>> removedSecurities = getRemovedSecurities();
 			if (removedSecurities != null && !removedSecurities.isEmpty()) {
 				collateralMarketValue = collateralMarketValue.subtract(gcRepoTradeBusinessDelegate
-						.getCollateralMarketToMarket(removedSecurities, trade.getBook().getProcessingOrg().getId()));
+						.getCollateralMarketToMarket(removedSecurities, trade.getBook().getProcessingOrg()));
 			}
 
 			List<Number> values = new ArrayList<>();

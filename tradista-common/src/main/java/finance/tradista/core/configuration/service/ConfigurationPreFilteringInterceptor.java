@@ -29,28 +29,28 @@ under the License.    */
 
 public class ConfigurationPreFilteringInterceptor extends TradistaAuthorizationFilteringInterceptor {
 
+	private static final String UI_CONFIGURATION_IS_NOT_YOURS = "This UI configuration is not yours, you are not allowed to update it.";
+
 	@AroundInvoke
 	public Object filter(InvocationContext ic) throws Exception {
 		return proceed(ic);
 	}
 
+	@Override
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
 		Object[] parameters = ic.getParameters();
 		if (parameters.length > 0) {
-			if (parameters[0] instanceof UIConfiguration) {
-				UIConfiguration uiConfiguration = (UIConfiguration) parameters[0];
+			if (parameters[0] instanceof UIConfiguration uiConfiguration) {
 				StringBuilder errMsg = new StringBuilder();
 				User user = getCurrentUser();
 				if (!user.equals(uiConfiguration.getUser())) {
-					errMsg.append(
-							String.format("This UI configuration is not yours, you are not allowed to update it."));
+					errMsg.append(UI_CONFIGURATION_IS_NOT_YOURS);
 				}
 				if (errMsg.length() > 0) {
 					throw new TradistaBusinessException(errMsg.toString());
 				}
 			}
-			if (parameters[0] instanceof User) {
-				User user = (User) parameters[0];
+			if (parameters[0] instanceof User user) {
 				StringBuilder errMsg = new StringBuilder();
 				User currentUser = getCurrentUser();
 				if (user.getId() != 0) {
@@ -58,13 +58,11 @@ public class ConfigurationPreFilteringInterceptor extends TradistaAuthorizationF
 					if (u == null) {
 						errMsg.append(String.format("The User %s was not found.%n", user.getSurname()));
 					} else if (!u.equals(currentUser)) {
-						errMsg.append(
-								String.format("This UI configuration is not yours, you are not allowed to update it."));
+						errMsg.append(UI_CONFIGURATION_IS_NOT_YOURS);
 					}
 				}
 				if (!currentUser.equals(user)) {
-					errMsg.append(
-							String.format("This UI configuration is not yours, you are not allowed to update it."));
+					errMsg.append(UI_CONFIGURATION_IS_NOT_YOURS);
 				}
 				if (errMsg.length() > 0) {
 					throw new TradistaBusinessException(errMsg.toString());

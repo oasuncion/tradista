@@ -1,7 +1,6 @@
 package finance.tradista.core.trade.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
@@ -50,27 +49,42 @@ public class TradeAuthorizationFilteringInterceptor extends TradistaAuthorizatio
 		return proceed(ic);
 	}
 
+	@Override
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
 		Object[] parameters = ic.getParameters();
-		if (parameters[0] instanceof Trade<?>) {
-			Trade<?> trade = (Trade<?>) parameters[0];
-			StringBuilder errMsg = new StringBuilder();
-			if (trade.getId() != 0) {
-				Trade<?> t = tradeBusinessDelegate.getTradeById(trade.getId(), true);
-				if (t == null) {
-					errMsg.append(String.format("The trade %d was not found.%n", trade.getId()));
+		if (parameters.length > 0) {
+			if (parameters[0] instanceof Trade<?> trade) {
+				StringBuilder errMsg = new StringBuilder();
+				if (trade.getId() != 0) {
+					Trade<?> t = tradeBusinessDelegate.getTradeById(trade.getId(), true);
+					if (t == null) {
+						errMsg.append(String.format("The trade %d was not found.%n", trade.getId()));
+					}
+				}
+				Book book = bookBusinessDelegate.getBookById(trade.getBook().getId());
+				if (book == null) {
+					errMsg.append(String.format("The book %s was not found.", trade.getBook().getName()));
+				}
+				if (errMsg.length() > 0) {
+					throw new TradistaBusinessException(errMsg.toString());
 				}
 			}
-			Book book = bookBusinessDelegate.getBookById(trade.getBook().getId());
-			if (book == null) {
-				errMsg.append(String.format("The book %s was not found.", trade.getBook().getName()));
-			}
-			if (errMsg.length() > 0) {
-				throw new TradistaBusinessException(errMsg.toString());
+			// Check on method name to avoid recursion on this control
+			if (!ic.getMethod().getName().equals("getTradeById")) {
+				if (parameters[0] instanceof Long tradeId) {
+					if (tradeId != 0) {
+						Trade<?> t = tradeBusinessDelegate.getTradeById(tradeId, true);
+						if (t == null) {
+							throw new TradistaBusinessException(
+									(String.format("The trade %d was not found.%n", tradeId)));
+						}
+					}
+				}
 			}
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	protected Object postFilter(Object value) {
 		if (value != null) {
@@ -84,7 +98,7 @@ public class TradeAuthorizationFilteringInterceptor extends TradistaAuthorizatio
 			if (value instanceof List) {
 				List<Trade<? extends Product>> trades = (List<Trade<? extends Product>>) value;
 				value = trades.stream().filter(t -> t.getBook().getProcessingOrg().equals(user.getProcessingOrg()))
-						.collect(Collectors.toList());
+						.toList();
 			}
 		}
 		return value;

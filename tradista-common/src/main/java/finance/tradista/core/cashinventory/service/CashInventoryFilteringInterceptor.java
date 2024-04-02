@@ -47,6 +47,7 @@ public class CashInventoryFilteringInterceptor extends TradistaAuthorizationFilt
 		return proceed(ic);
 	}
 
+	@Override
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
 		Object[] parameters = ic.getParameters();
 		long bookId = (long) parameters[3];
@@ -58,6 +59,7 @@ public class CashInventoryFilteringInterceptor extends TradistaAuthorizationFilt
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	protected Object postFilter(Object value) {
 		if (value != null) {

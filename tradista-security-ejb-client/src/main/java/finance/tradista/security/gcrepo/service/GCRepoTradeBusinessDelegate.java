@@ -7,6 +7,7 @@ import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 import finance.tradista.core.common.util.SecurityUtil;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.validator.GCRepoTradeValidator;
@@ -70,11 +71,11 @@ public class GCRepoTradeBusinessDelegate {
 		return SecurityUtil.runEx(() -> gcRepoTradeService.getCollateralMarketToMarket(tradeId));
 	}
 
-	public BigDecimal getCollateralMarketToMarket(Map<Security, Map<Book, BigDecimal>> securities, long poId)
+	public BigDecimal getCollateralMarketToMarket(Map<Security, Map<Book, BigDecimal>> securities, LegalEntity po)
 			throws TradistaBusinessException {
 		StringBuilder errMsg = new StringBuilder();
-		if (poId < 0) {
-			errMsg.append("The Processing Org id cannot be negative.\n");
+		if (po == null) {
+			errMsg.append(String.format("The Processing Org is mandatory.%n"));
 		}
 		if (securities == null || securities.isEmpty()) {
 			errMsg.append("Securities are mandatory.");
@@ -82,7 +83,7 @@ public class GCRepoTradeBusinessDelegate {
 		if (!errMsg.isEmpty()) {
 			throw new TradistaBusinessException(errMsg.toString());
 		}
-		return SecurityUtil.runEx(() -> gcRepoTradeService.getCollateralMarketToMarket(securities, poId));
+		return SecurityUtil.runEx(() -> gcRepoTradeService.getCollateralMarketToMarket(securities, po));
 	}
 
 	public BigDecimal getExposure(long tradeId) throws TradistaBusinessException {

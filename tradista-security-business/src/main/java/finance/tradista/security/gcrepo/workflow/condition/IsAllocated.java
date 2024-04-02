@@ -11,30 +11,29 @@ import jakarta.persistence.Transient;
 @Entity
 public class IsAllocated extends Condition<GCRepoTrade> {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1790346124051863865L;
+	@Transient
+	private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
 
-    @Transient
-    private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
+	public IsAllocated() {
+		gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
+		setFunction(trade -> {
+			// Calculate the total MTM value of the collateral
+			BigDecimal mtm = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getId());
 
-    public IsAllocated() {
-	gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
-	setFunction(trade -> {
-	    // Calculate the total MTM value of the collateral
-	    BigDecimal mtm = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getId());
+			if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
+				mtm = mtm.add(gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getCollateralToAdd(),
+						trade.getBook().getProcessingOrg()));
+			}
 
-	    if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
-		mtm = mtm.add(gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getCollateralToAdd(),
-			trade.getBook().getProcessingOrg().getId()));
-	    }
+			// Calculate the exposure (required collateral)
+			BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(trade.getId());
 
-	    // Calculate the exposure (required collateral)
-	    BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(trade.getId());
+			// Compare the collateral value and the required collateral
 
-	    // Compare the collateral value and the required collateral
+			return exposure.compareTo(mtm) != -1 ? 1 : 2;
 
-	    return exposure.compareTo(mtm) != -1 ? 1 : 2;
-
-	});
-    }
+		});
+	}
 
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import jakarta.ejb.Remote;
@@ -42,7 +43,7 @@ public interface GCRepoTradeService {
 
 	BigDecimal getExposure(long tradeId) throws TradistaBusinessException;
 
-	BigDecimal getCollateralMarketToMarket(Map<Security, Map<Book, BigDecimal>> securities, long poId)
+	BigDecimal getCollateralMarketToMarket(Map<Security, Map<Book, BigDecimal>> securities, LegalEntity po)
 			throws TradistaBusinessException;
 
 }

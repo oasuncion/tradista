@@ -49,9 +49,8 @@ public abstract class ProductScopeFilteringInterceptor {
 	}
 
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
-		if (ic.getParameters()[0] instanceof TradistaObject) {
-			// Interceptor applied on Trade, Product, Contract Specifications services.
-			TradistaObject tradistaObject = (TradistaObject) ic.getParameters()[0];
+		// Interceptor applied on Trade, Product, Contract Specifications services.
+		if (ic.getParameters()[0] instanceof TradistaObject tradistaObject) {
 			// Only object creations are controlled.
 			if (tradistaObject.getId() == 0) {
 				if (!found) {

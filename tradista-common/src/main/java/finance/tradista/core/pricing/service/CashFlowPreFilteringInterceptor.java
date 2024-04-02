@@ -58,28 +58,22 @@ public class CashFlowPreFilteringInterceptor extends TradistaAuthorizationFilter
 				}
 			}
 		}
-		if (parameters[0] instanceof PricingParameter) {
-			PricingParameter pp = (PricingParameter) parameters[0];
-			if (pp != null) {
-				if (!pp.getProcessingOrg().equals(getCurrentUser().getProcessingOrg())) {
-					throw new TradistaBusinessException(String.format("The Pricing Parameters Set %s was not found.", pp));
-				}
+		if (parameters[0] instanceof PricingParameter pp) {
+			if (!pp.getProcessingOrg().equals(getCurrentUser().getProcessingOrg())) {
+				throw new TradistaBusinessException(String.format("The Pricing Parameters Set %s was not found.", pp));
 			}
 		}
-		if (parameters[1] instanceof PricingParameter) {
-			PricingParameter pp = (PricingParameter) parameters[1];
-			if (pp != null) {
-				if (!pp.getProcessingOrg().equals(getCurrentUser().getProcessingOrg())) {
-					throw new TradistaBusinessException(String.format("The Pricing Parameters Set %s was not found.", pp));
-				}
+		if (parameters[1] instanceof PricingParameter pp) {
+			if (!pp.getProcessingOrg().equals(getCurrentUser().getProcessingOrg())) {
+				throw new TradistaBusinessException(String.format("The Pricing Parameters Set %s was not found.", pp));
 			}
 		}
-		if (parameters.length >= 3 && parameters[2] instanceof PositionDefinition) {
-			long posDefId = (long) parameters[2];
+		if (parameters.length >= 3 && parameters[2] instanceof Long posDefId) {
 			if (posDefId != 0) {
 				PositionDefinition posDef = positionDefinitionBusinessDelegate.getPositionDefinitionById(posDefId);
 				if (posDef == null) {
-					throw new TradistaBusinessException(String.format("The Position Definition %s was not found.", posDef));
+					throw new TradistaBusinessException(
+							String.format("The Position Definition %s was not found.", posDef));
 				}
 			}
 		}

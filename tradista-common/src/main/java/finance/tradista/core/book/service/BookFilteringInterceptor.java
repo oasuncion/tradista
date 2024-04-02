@@ -44,10 +44,10 @@ public class BookFilteringInterceptor extends TradistaAuthorizationFilteringInte
 		return proceed(ic);
 	}
 
+	@Override
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
 		Object[] parameters = ic.getParameters();
-		if (parameters.length > 0 && parameters[0] instanceof Book) {
-			Book book = (Book) parameters[0];
+		if (parameters.length > 0 && parameters[0] instanceof Book book) {
 			StringBuilder errMsg = new StringBuilder();
 			User user = getCurrentUser();
 			if (book.getId() != 0) {
@@ -68,6 +68,7 @@ public class BookFilteringInterceptor extends TradistaAuthorizationFilteringInte
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Object postFilter(Object value) throws TradistaBusinessException {
 		if (value != null) {
@@ -79,8 +80,7 @@ public class BookFilteringInterceptor extends TradistaAuthorizationFilteringInte
 							.collect(Collectors.toSet());
 				}
 			}
-			if (value instanceof Book) {
-				Book book = (Book) value;
+			if (value instanceof Book book) {
 				if (!book.getProcessingOrg().equals(user.getProcessingOrg())) {
 					value = null;
 				}

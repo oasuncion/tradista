@@ -84,6 +84,8 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 
 	private Destination destination;
 
+	private static final String TRADE_DOES_NOT_EXIST = "The trade %d doesn't exist.";
+
 	@EJB
 	private WorkflowService workflowService;
 
@@ -222,12 +224,13 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	}
 
 	@Override
+	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
 	public Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(long tradeId) throws TradistaBusinessException {
 
 		GCRepoTrade trade = getGCRepoTradeById(tradeId);
 
 		if (trade == null) {
-			throw new TradistaBusinessException(String.format("The trade %d doesn't exist.", tradeId));
+			throw new TradistaBusinessException(String.format(TRADE_DOES_NOT_EXIST, tradeId));
 		}
 
 		Map<Security, Map<Book, BigDecimal>> securities = null;
@@ -292,6 +295,7 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	}
 
 	@Override
+	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
 	public BigDecimal getCollateralMarketToMarket(long tradeId) throws TradistaBusinessException {
 		// 1. Get the current collateral
 
@@ -299,9 +303,9 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 		GCRepoTrade trade = getGCRepoTradeById(tradeId);
 
 		if (trade == null) {
-			throw new TradistaBusinessException(String.format("The trade %d doesn't exist.", tradeId));
+			throw new TradistaBusinessException(String.format(TRADE_DOES_NOT_EXIST, tradeId));
 		}
-
+		// 2. Get the MTM of the current collateral
 		return getCollateralMarketToMarket(securities, trade.getBook().getProcessingOrg());
 
 	}
@@ -354,6 +358,7 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 	}
 
 	@Override
+	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
 	public BigDecimal getExposure(long tradeId) throws TradistaBusinessException {
 		BigDecimal exposure;
 		BigDecimal rate;
@@ -361,7 +366,7 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 		GCRepoTrade trade = getGCRepoTradeById(tradeId);
 
 		if (trade == null) {
-			throw new TradistaBusinessException(String.format("The trade %d doesn't exist.", tradeId));
+			throw new TradistaBusinessException(String.format(TRADE_DOES_NOT_EXIST, tradeId));
 		}
 
 		// Calculate the required exposure

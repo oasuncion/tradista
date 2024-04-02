@@ -45,10 +45,10 @@ public class CurveFilteringInterceptor extends TradistaAuthorizationFilteringInt
 		return proceed(ic);
 	}
 
+	@Override
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
 		Object[] parameters = ic.getParameters();
-		if (parameters.length > 0 && parameters[0] instanceof Curve) {
-			Curve<?, ?> curve = (Curve<?, ?>) parameters[0];
+		if (parameters.length > 0 && parameters[0] instanceof Curve<?, ?> curve) {
 			StringBuilder errMsg = new StringBuilder();
 			Method method = ic.getMethod();
 			if (curve.getId() != 0) {
@@ -62,8 +62,7 @@ public class CurveFilteringInterceptor extends TradistaAuthorizationFilteringInt
 								"This curve %s (id %d) is a global one and you are not allowed to update it.",
 								curve.getName(), curve.getId()));
 					}
-				}
-				if (method.getName().contains("delete")) {
+				} else if (method.getName().contains("delete")) {
 					if (c.getProcessingOrg() == null) {
 						errMsg.append(String.format(
 								"This curve %s (id %d) is a global one and you are not allowed to delete it.",
@@ -79,10 +78,9 @@ public class CurveFilteringInterceptor extends TradistaAuthorizationFilteringInt
 				throw new TradistaBusinessException(errMsg.toString());
 			}
 		}
-		if (parameters.length > 0 && parameters[0] instanceof Long) {
+		if (parameters.length > 0 && parameters[0] instanceof Long curveId) {
 			Method method = ic.getMethod();
 			if (!method.getName().contains("CurveById")) {
-				Long curveId = (Long) parameters[0];
 				StringBuilder errMsg = new StringBuilder();
 				if (curveId != 0) {
 					Curve<?, ?> c = curveBusinessDelegate.getCurveById(curveId);
@@ -109,6 +107,7 @@ public class CurveFilteringInterceptor extends TradistaAuthorizationFilteringInt
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	protected Object postFilter(Object value) {
 		if (value != null) {
@@ -122,8 +121,7 @@ public class CurveFilteringInterceptor extends TradistaAuthorizationFilteringInt
 							.collect(Collectors.toSet());
 				}
 			}
-			if (value instanceof Curve) {
-				Curve<?, ?> curve = (Curve<?, ?>) value;
+			if (value instanceof Curve<?, ?> curve) {
 				if (curve.getProcessingOrg() != null
 						&& !curve.getProcessingOrg().equals(getCurrentUser().getProcessingOrg())) {
 					value = null;

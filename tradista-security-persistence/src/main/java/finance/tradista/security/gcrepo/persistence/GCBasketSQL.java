@@ -62,7 +62,7 @@ public class GCBasketSQL {
 					if (generatedKeys.next()) {
 						gcBasketId = generatedKeys.getLong(1);
 					} else {
-						throw new SQLException("Creating product failed, no generated key obtained.");
+						throw new SQLException("Creating gc basket failed, no generated key obtained.");
 					}
 				}
 			} else {
@@ -100,7 +100,7 @@ public class GCBasketSQL {
 				ResultSet results = stmtGetAllGCBaskets.executeQuery()) {
 			while (results.next()) {
 				if (gcBasketsMap == null) {
-					gcBasketsMap = new HashMap<Long, GCBasket>();
+					gcBasketsMap = new HashMap<>();
 				}
 				long basketId = results.getLong(2);
 
@@ -116,7 +116,7 @@ public class GCBasketSQL {
 				if (securityId != 0) {
 					Set<Security> securities;
 					if (gcBasket.getSecurities() == null) {
-						securities = new HashSet<Security>();
+						securities = new HashSet<>();
 					} else {
 						securities = gcBasket.getSecurities();
 					}
@@ -158,7 +158,7 @@ public class GCBasketSQL {
 				if (securityId != 0) {
 					Set<Security> securities;
 					if (gcBasket.getSecurities() == null) {
-						securities = new HashSet<Security>();
+						securities = new HashSet<>();
 					} else {
 						securities = gcBasket.getSecurities();
 					}
@@ -195,7 +195,7 @@ public class GCBasketSQL {
 				if (securityId != 0) {
 					Set<Security> securities;
 					if (gcBasket.getSecurities() == null) {
-						securities = new HashSet<Security>();
+						securities = new HashSet<>();
 					} else {
 						securities = gcBasket.getSecurities();
 					}

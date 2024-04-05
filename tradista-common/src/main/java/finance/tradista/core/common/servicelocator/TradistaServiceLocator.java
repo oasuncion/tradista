@@ -90,6 +90,7 @@ import finance.tradista.security.equityoption.service.EquityOptionPricerService;
 import finance.tradista.security.equityoption.service.EquityOptionService;
 import finance.tradista.security.equityoption.service.EquityOptionTradeService;
 import finance.tradista.security.equityoption.service.EquityOptionVolatilitySurfaceService;
+import finance.tradista.security.gcrepo.service.AllocationConfigurationService;
 import finance.tradista.security.gcrepo.service.GCBasketService;
 import finance.tradista.security.gcrepo.service.GCRepoPricerService;
 import finance.tradista.security.gcrepo.service.GCRepoTradeService;
@@ -181,9 +182,9 @@ public class TradistaServiceLocator {
 	private static final String POSITION_SERVICE_PACKAGE = "finance.tradista.core.position.service";
 
 	private static final String TRANSFER_SERVICE_PACKAGE = "finance.tradista.core.transfer.service";
-	
+
 	private static final String WORKFLOW_SERVICE_PACKAGE = "finance.tradista.core.workflow.service";
-	
+
 	private static final String PROCESSING_ORG_DEFAULTS_SERVICE_PACKAGE = "finance.tradista.core.processingorgdefaults.service";
 
 	private static final String CONFIGURATION_SERVICE_PACKAGE = "finance.tradista.core.configuration.service";
@@ -448,6 +449,11 @@ public class TradistaServiceLocator {
 		return (GCRepoPricerService) getService(APP, SECURITY_EJB, GC_REPO_SERVICE_PACKAGE, "GCRepoPricerService");
 	}
 
+	public AllocationConfigurationService getAllocationConfigurationService() {
+		return (AllocationConfigurationService) getService(APP, SECURITY_EJB, GC_REPO_SERVICE_PACKAGE,
+				"AllocationConfigurationService");
+	}
+
 	public CcySwapTradeService getCcySwapTradeService() {
 		return (CcySwapTradeService) getService(APP, IR_EJB, CCY_SWAP_SERVICE_PACKAGE, "CcySwapTradeService");
 	}
@@ -647,9 +653,10 @@ public class TradistaServiceLocator {
 	public WorkflowService getWorkflowService() {
 		return (WorkflowService) getService(APP, CORE_EJB, WORKFLOW_SERVICE_PACKAGE, "WorkflowService");
 	}
-	
+
 	public ProcessingOrgDefaultsService getProcessingOrgDefaultsService() {
-		return (ProcessingOrgDefaultsService) getService(APP, CORE_EJB, PROCESSING_ORG_DEFAULTS_SERVICE_PACKAGE, "ProcessingOrgDefaultsService");
+		return (ProcessingOrgDefaultsService) getService(APP, CORE_EJB, PROCESSING_ORG_DEFAULTS_SERVICE_PACKAGE,
+				"ProcessingOrgDefaultsService");
 	}
 
 }

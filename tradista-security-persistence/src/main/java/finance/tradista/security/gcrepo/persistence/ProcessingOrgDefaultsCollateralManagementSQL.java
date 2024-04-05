@@ -9,6 +9,7 @@ import java.sql.Types;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.persistence.QuoteSetSQL;
+import finance.tradista.security.gcrepo.model.AllocationConfiguration;
 import finance.tradista.security.gcrepo.model.ProcessingOrgDefaultsCollateralManagementModule;
 
 /*
@@ -36,10 +37,11 @@ public class ProcessingOrgDefaultsCollateralManagementSQL {
 	public static void saveProcessingOrgDefaultsModule(Connection con,
 			ProcessingOrgDefaultsCollateralManagementModule module, long poId) {
 		try (PreparedStatement stmtSaveProcessingOrgDefaultsCollateralManagement = con.prepareStatement(
-				"INSERT INTO PROCESSING_ORG_DEFAULTS_COLLATERAL_MANAGEMENT(PROCESSING_ORG_ID, QUOTE_SET_ID) VALUES(?, ?)");
+				"INSERT INTO PROCESSING_ORG_DEFAULTS_COLLATERAL_MANAGEMENT(PROCESSING_ORG_ID, QUOTE_SET_ID, ALLOCATION_CONFIGURATION_ID) VALUES(?, ?, ?)");
 				PreparedStatement stmtDeleteProcessingOrgDefaultsCollateralManagement = con.prepareStatement(
 						"DELETE FROM PROCESSING_ORG_DEFAULTS_COLLATERAL_MANAGEMENT WHERE PROCESSING_ORG_ID = ?")) {
 			QuoteSet qs = module.getQuoteSet();
+			AllocationConfiguration allocConfig = module.getAllocationConfiguration();
 			stmtDeleteProcessingOrgDefaultsCollateralManagement.setLong(1, poId);
 			stmtDeleteProcessingOrgDefaultsCollateralManagement.executeUpdate();
 			stmtSaveProcessingOrgDefaultsCollateralManagement.setLong(1, poId);
@@ -47,6 +49,11 @@ public class ProcessingOrgDefaultsCollateralManagementSQL {
 				stmtSaveProcessingOrgDefaultsCollateralManagement.setLong(2, qs.getId());
 			} else {
 				stmtSaveProcessingOrgDefaultsCollateralManagement.setNull(2, Types.BIGINT);
+			}
+			if (allocConfig != null) {
+				stmtSaveProcessingOrgDefaultsCollateralManagement.setLong(3, allocConfig.getId());
+			} else {
+				stmtSaveProcessingOrgDefaultsCollateralManagement.setNull(3, Types.BIGINT);
 			}
 			stmtSaveProcessingOrgDefaultsCollateralManagement.executeUpdate();
 		} catch (SQLException sqle) {
@@ -70,6 +77,9 @@ public class ProcessingOrgDefaultsCollateralManagementSQL {
 				while (results.next()) {
 					QuoteSet qs = QuoteSetSQL.getQuoteSetById(results.getLong("quote_set_id"));
 					module.setQuoteSet(qs);
+					AllocationConfiguration allocConfig = AllocationConfigurationSQL
+							.getAllocationConfigurationById(results.getLong("allocation_configuration_id"));
+					module.setAllocationConfiguration(allocConfig);
 				}
 			}
 		} catch (SQLException sqle) {

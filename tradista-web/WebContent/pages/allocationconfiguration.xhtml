@@ -3,30 +3,33 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
-	<ui:define name="title">Tradista GC Basket</ui:define>
-	<ui:define name="viewname">Tradista GC Basket</ui:define>
+	<ui:define name="title">Tradista Allocation Configuration</ui:define>
+	<ui:define name="viewname">Tradista Allocation Configuration</ui:define>
 	<ui:define name="content">
-		<h:form id="gcBasketForm">
-			<p:panel id="gcBasket" header="GC Basket"
+		<h:form id="allocationConfigurationForm">
+			<p:panel id="allocationConfiguration"
+				header="Allocation Configuration"
 				styleClass="tradista-central-component">
 				<p:messages showDetail="true" closable="true" id="msg">
 					<p:autoUpdate />
 				</p:messages>
 				<p:outputLabel styleClass="tradista-menu-item"
-					value="GC Basket name :" />
-				<p:inputText value="#{gCBasketView.gcBasket.name}"
+					value="Allocation Configuration Name :" />
+				<p:inputText
+					value="#{allocationConfigurationController.allocationConfiguration.name}"
 					styleClass="tradista-menu-item" />
-				<p:pickList id="gcBasketPickList" value="#{gCBasketView.securities}"
-					var="security" itemValue="#{security}" itemLabel="#{security.isin}"
+				<p:pickList id="allocationConfigurationPickList"
+					value="#{allocationConfigurationController.books}" var="book"
+					itemValue="#{book}" itemLabel="#{book.name}"
 					showSourceControls="true" showTargetControls="true"
 					showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
 					filterMatchMode="contains" responsive="true"
-					converter="securityConverter">
-					<f:facet name="sourceCaption">Available securities</f:facet>
-					<f:facet name="targetCaption">Constituents of GC Basket</f:facet>
+					converter="bookConverter">
+					<f:facet name="sourceCaption">Available books</f:facet>
+					<f:facet name="targetCaption">Configured books</f:facet>
 					<p:column styleClass="tradista-picklist-item">
 						<div class="flex align-items-center">
-							<h:outputText value="#{security.isin} - #{security.exchange}" />
+							<h:outputText value="#{book.name}" />
 						</div>
 					</p:column>
 				</p:pickList>
@@ -35,38 +38,48 @@
 						<p:column>
 							<p:commandButton value="Save" styleClass="rounded-button"
 								update="@form">
-								<f:actionListener binding="#{gCBasketView.save()}" />
+								<f:actionListener
+									binding="#{allocationConfigurationController.save()}" />
 							</p:commandButton>
 							<p:commandButton value="Copy" type="button"
 								styleClass="rounded-button" update="@form"
 								onclick="PF('copy').show()" />
 							<p:commandButton value="New" styleClass="rounded-button"
-								action="#{gCBasketView.clear()}" update="@form" />
-							<p:outputLabel value="Load by basket"
+								action="#{allocationConfigurationController.clear()}"
+								update="@form" />
+							<p:outputLabel value="Load by Allocation Configuration"
 								styleClass="tradista-menu-item" />
-							<p:selectOneMenu value="#{gCBasketView.loadingCriterion}"
+							<p:selectOneMenu
+								value="#{allocationConfigurationController.loadingCriterion}"
 								styleClass="tradista-menu-item">
-								<f:selectItems value="#{gCBasketView.allLoadingCriteria}" />
+								<f:selectItems
+									value="#{allocationConfigurationController.allLoadingCriteria}" />
 							</p:selectOneMenu>
-							<p:inputText value="#{gCBasketView.idOrName}"
+							<p:inputText
+								value="#{allocationConfigurationController.idOrName}"
 								styleClass="tradista-menu-item" />
 							<p:commandButton value="Load" styleClass="rounded-button"
-								action="#{gCBasketView.load()}" update="@form" />
+								action="#{allocationConfigurationController.load()}"
+								update="@form" />
 						</p:column>
 					</p:row>
 				</f:facet>
 			</p:panel>
 		</h:form>
 		<h:form>
-			<p:dialog header="Copy a GC Basket" widgetVar="copy"
+			<p:dialog header="Copy an Allocation Configuration" widgetVar="copy"
 				showEffect="fade" modal="true">
-				<p:outputLabel value="Please choose a GC Basket name :" />
+				<p:outputLabel
+					value="Please choose an Allocation Configuration name :" />
 				<p />
-				<p:inputText value="#{gCBasketView.copyGCBasketName}" />
+				<p:inputText
+					value="#{allocationConfigurationController.copyAllocationConfigurationName}" />
 				<f:facet name="footer">
 					<p:commandButton value="Ok" styleClass="rounded-button"
-						onclick="PF('copy').hide()" update=":gcBasketForm:gcBasket">
-						<f:actionListener binding="#{gCBasketView.copy()}" />
+						onclick="PF('copy').hide()"
+						update=":allocationConfigurationForm:allocationConfiguration">
+						<f:actionListener
+							binding="#{allocationConfigurationController.copy()}" />
 					</p:commandButton>
 					<p:commandButton value="Cancel" styleClass="rounded-button"
 						onclick="PF('copy').hide()" />

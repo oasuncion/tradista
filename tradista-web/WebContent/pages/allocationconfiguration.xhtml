@@ -7,7 +7,8 @@
 	<ui:define name="viewname">Tradista Allocation Configuration</ui:define>
 	<ui:define name="content">
 		<h:form id="allocationConfigurationForm">
-			<p:panel styleClass="tradista-central-component" header="Allocation Configuration">
+			<p:panel styleClass="tradista-central-component"
+				header="Allocation Configuration">
 				<p:panelGrid id="allocationConfiguration"
 					header="Allocation Configuration" styleClass="tradista-nested"
 					columnClasses="ui-g-12 ui-md-12 ui-lg-12, ui-g-12 ui-md-12 ui-lg-12">
@@ -38,7 +39,7 @@
 								styleClass="tradista-menu-item"
 								rendered="#{empty userManager.currentUserProcessingOrg}"
 								converter="legalEntityConverter"
-								readonly="#{allocationConfigurationController.allocationConfiguration ne null}">
+								disabled="#{allocationConfigurationController.allocationConfiguration ne null}">
 								<f:selectItems
 									value="#{allocationConfigurationController.allProcessingOrgs}" />
 							</p:selectOneMenu>
@@ -73,7 +74,8 @@
 								</p:commandButton>
 								<p:commandButton value="Copy" type="button"
 									styleClass="rounded-button" update="@form"
-									onclick="PF('copy').show()" />
+									onclick="PF('copy').show()"
+									rendered="#{allocationConfigurationController.allocationConfiguration ne null}" />
 								<p:commandButton value="New" styleClass="rounded-button"
 									action="#{allocationConfigurationController.clear()}"
 									update="@form" />
@@ -100,22 +102,36 @@
 		<h:form>
 			<p:dialog header="Copy an Allocation Configuration" widgetVar="copy"
 				showEffect="fade" modal="true">
-				<p:outputLabel
-					value="Please choose an Allocation Configuration name :" />
-				<p />
-				<p:inputText
-					value="#{allocationConfigurationController.copyAllocationConfigurationName}" />
-				<p:outputLabel styleClass="tradista-menu-item"
-					value="Please choose a Processing Org :"
-					rendered="#{empty userManager.currentUserProcessingOrg}" />
-				<p:selectOneMenu
-					value="#{allocationConfigurationController.copyProcessingOrg}"
-					styleClass="tradista-menu-item"
-					rendered="#{empty userManager.currentUserProcessingOrg}"
-					converter="legalEntityConverter">
-					<f:selectItems
-						value="#{allocationConfigurationController.allProcessingOrgs}" />
-				</p:selectOneMenu>
+				<p:panelGrid id="allocationConfiguration"
+					columnClasses="ui-g-12 ui-md-12 ui-lg-12, ui-g-12 ui-md-12 ui-lg-12">
+					<p:row>
+						<p:column>
+							<p:outputLabel
+								value="Please choose an Allocation Configuration name :" />
+						</p:column>
+						<p:column>
+							<p:inputText
+								value="#{allocationConfigurationController.copyAllocationConfigurationName}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel styleClass="tradista-menu-item"
+								value="Please choose a Processing Org :"
+								rendered="#{empty userManager.currentUserProcessingOrg}" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu
+								value="#{allocationConfigurationController.copyProcessingOrg}"
+								styleClass="tradista-menu-item"
+								rendered="#{empty userManager.currentUserProcessingOrg}"
+								converter="legalEntityConverter">
+								<f:selectItems
+									value="#{allocationConfigurationController.allProcessingOrgs}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
 				<f:facet name="footer">
 					<p:commandButton value="Ok" styleClass="rounded-button"
 						onclick="PF('copy').hide()"

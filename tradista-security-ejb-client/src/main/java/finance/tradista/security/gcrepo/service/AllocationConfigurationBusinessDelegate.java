@@ -58,7 +58,7 @@ public class AllocationConfigurationBusinessDelegate {
 				List<Book> wrongBooks = books.stream()
 						.filter(b -> b.getProcessingOrg() != null && !b.getProcessingOrg().equals(po)).toList();
 				if (!wrongBooks.isEmpty()) {
-					errMsg.append(String.format("the following books are not from the %s Processing Org: %s.%n", po,
+					errMsg.append(String.format("the following books are not from the Processing Org '%s': %s.%n", po,
 							wrongBooks));
 				}
 			}

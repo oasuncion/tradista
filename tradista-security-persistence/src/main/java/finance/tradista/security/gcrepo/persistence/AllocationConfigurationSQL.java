@@ -211,4 +211,37 @@ public class AllocationConfigurationSQL {
 		return allocationConfiguration;
 	}
 
+	public static Object getAllocationConfigurationByNameAndPoId(String name, long id) {
+		AllocationConfiguration allocationConfiguration = null;
+		try (Connection con = TradistaDB.getConnection();
+				PreparedStatement stmtGetAllocationConfigurationByName = con.prepareStatement(
+						"SELECT ALLOCATION_CONFIGURATION.NAME, ALLOCATION_CONFIGURATION.ID, ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID, ALLOCATION_CONFIGURATION_BOOK.BOOK_ID FROM ALLOCATION_CONFIGURATION LEFT OUTER JOIN ALLOCATION_CONFIGURATION_BOOK ON ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID WHERE ALLOCATION_CONFIGURATION.NAME = ? AND ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID = ?");) {
+			stmtGetAllocationConfigurationByName.setString(1, name);
+			stmtGetAllocationConfigurationByName.setLong(2, id);
+			ResultSet results = stmtGetAllocationConfigurationByName.executeQuery();
+			while (results.next()) {
+				if (allocationConfiguration == null) {
+					allocationConfiguration = new AllocationConfiguration(results.getString(NAME),
+							LegalEntitySQL.getLegalEntityById(results.getLong(PROCESSING_ORG_ID)));
+					allocationConfiguration.setId(results.getLong(ID));
+				}
+				Long bookId = results.getLong(BOOK_ID);
+				if (bookId != 0) {
+					Set<Book> books;
+					if (allocationConfiguration.getBooks() == null) {
+						books = new HashSet<>();
+					} else {
+						books = allocationConfiguration.getBooks();
+					}
+					books.add(BookSQL.getBookById(bookId));
+					allocationConfiguration.setBooks(books);
+				}
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			throw new TradistaTechnicalException(sqle);
+		}
+		return allocationConfiguration;
+	}
+
 }

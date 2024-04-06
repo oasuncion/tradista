@@ -46,7 +46,9 @@ public class AllocationConfigurationServiceBean implements AllocationConfigurati
 		} else {
 			AllocationConfiguration oldAllocationConfiguration = AllocationConfigurationSQL
 					.getAllocationConfigurationById(allocationConfiguration.getId());
-			if (!allocationConfiguration.getName().equals(oldAllocationConfiguration.getName())) {
+			if (!allocationConfiguration.getName().equals(oldAllocationConfiguration.getName())
+					|| !allocationConfiguration.getProcessingOrg()
+							.equals(oldAllocationConfiguration.getProcessingOrg())) {
 				checkNameExistence(allocationConfiguration);
 			}
 			return AllocationConfigurationSQL.saveAllocationConfiguration(allocationConfiguration);
@@ -54,10 +56,11 @@ public class AllocationConfigurationServiceBean implements AllocationConfigurati
 	}
 
 	private void checkNameExistence(AllocationConfiguration allocationConfiguration) throws TradistaBusinessException {
-		if (getAllocationConfigurationByName(allocationConfiguration.getName()) != null) {
+		if (AllocationConfigurationSQL.getAllocationConfigurationByNameAndPoId(allocationConfiguration.getName(),
+				allocationConfiguration.getProcessingOrg().getId()) != null) {
 			throw new TradistaBusinessException(
-					String.format("This Allocation Configuration '%s' already exists in the system.",
-							allocationConfiguration.getName()));
+					String.format("This Allocation Configuration '%s' already exists in the system for the PO %s.",
+							allocationConfiguration.getName(), allocationConfiguration.getProcessingOrg().getId()));
 		}
 	}
 

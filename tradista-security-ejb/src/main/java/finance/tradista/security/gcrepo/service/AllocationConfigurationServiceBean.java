@@ -37,7 +37,7 @@ under the License.    */
 public class AllocationConfigurationServiceBean implements AllocationConfigurationService {
 
 	@Override
-	@Interceptors(GCRepoProductScopeFilteringInterceptor.class)
+	@Interceptors({ GCRepoProductScopeFilteringInterceptor.class, AllocationConfigurationFilteringInterceptor.class })
 	public long saveAllocationConfiguration(AllocationConfiguration allocationConfiguration)
 			throws TradistaBusinessException {
 		if (allocationConfiguration.getId() == 0) {
@@ -62,16 +62,19 @@ public class AllocationConfigurationServiceBean implements AllocationConfigurati
 	}
 
 	@Override
+	@Interceptors(AllocationConfigurationFilteringInterceptor.class)
 	public AllocationConfiguration getAllocationConfigurationByName(String name) {
 		return AllocationConfigurationSQL.getAllocationConfigurationByName(name);
 	}
 
 	@Override
+	@Interceptors(AllocationConfigurationFilteringInterceptor.class)
 	public AllocationConfiguration getAllocationConfigurationById(long id) {
 		return AllocationConfigurationSQL.getAllocationConfigurationById(id);
 	}
 
 	@Override
+	@Interceptors(AllocationConfigurationFilteringInterceptor.class)
 	public Set<AllocationConfiguration> getAllAllocationConfigurations() {
 		return AllocationConfigurationSQL.getAllAllocationConfigurations();
 	}

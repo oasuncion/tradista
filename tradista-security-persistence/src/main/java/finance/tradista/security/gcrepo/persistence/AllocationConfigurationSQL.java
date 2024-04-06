@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,7 +14,6 @@ import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.persistence.BookSQL;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
-import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
 import finance.tradista.security.gcrepo.model.AllocationConfiguration;
 
@@ -41,6 +39,11 @@ under the License.    */
 
 public class AllocationConfigurationSQL {
 
+	private static final String NAME = "NAME";
+	private static final String ID = "ID";
+	private static final String PROCESSING_ORG_ID = "PROCESSING_ORG_ID";
+	private static final String BOOK_ID = "BOOK_ID";
+
 	public static long saveAllocationConfiguration(AllocationConfiguration allocationConfiguration) {
 		long allocationConfigurationId = 0;
 
@@ -55,16 +58,11 @@ public class AllocationConfigurationSQL {
 						"DELETE FROM ALLOCATION_CONFIGURATION_BOOK WHERE ALLOCATION_CONFIGURATION_ID = ? ");
 				PreparedStatement stmtSaveAllocationConfigurationBook = con
 						.prepareStatement("INSERT INTO ALLOCATION_CONFIGURATION_BOOK VALUES (?, ?) ");) {
-			LegalEntity po = allocationConfiguration.getProcessingOrg();
 			if (allocationConfiguration.getId() != 0) {
 				stmtSaveAllocationConfiguration.setLong(3, allocationConfiguration.getId());
 			}
 			stmtSaveAllocationConfiguration.setString(1, allocationConfiguration.getName());
-			if (po != null) {
-				stmtSaveAllocationConfiguration.setLong(2, allocationConfiguration.getProcessingOrg().getId());
-			} else {
-				stmtSaveAllocationConfiguration.setNull(2, Types.BIGINT);
-			}
+			stmtSaveAllocationConfiguration.setLong(2, allocationConfiguration.getProcessingOrg().getId());
 			stmtSaveAllocationConfiguration.executeUpdate();
 
 			if (allocationConfiguration.getId() == 0) {
@@ -106,27 +104,23 @@ public class AllocationConfigurationSQL {
 		Map<Long, AllocationConfiguration> allocationConfigurationsMap = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetAllAllocationConfigurations = con.prepareStatement(
-						"SELECT ALLOCATION_CONFIGURATION.NAME, ALLOCATION_CONFIGURATION.ID, ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID, ALLOCATION_CONFIGURATION_BOOK.BOOK_ID FROM ALLOCATION_CONFIGURATION LEFT OUTER JOIN ALLOCATION_CONFIGURATION_BOOK ON ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID WHERE ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID");
+						"SELECT ALLOCATION_CONFIGURATION.NAME, ALLOCATION_CONFIGURATION.ID, ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID, ALLOCATION_CONFIGURATION_BOOK.BOOK_ID FROM ALLOCATION_CONFIGURATION LEFT OUTER JOIN ALLOCATION_CONFIGURATION_BOOK ON ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID");
 				ResultSet results = stmtGetAllAllocationConfigurations.executeQuery()) {
 			while (results.next()) {
 				if (allocationConfigurationsMap == null) {
 					allocationConfigurationsMap = new HashMap<>();
 				}
-				long allocationConfigurationId = results.getLong(2);
+				long allocationConfigurationId = results.getLong(ID);
 
 				AllocationConfiguration allocationConfiguration;
 				if (allocationConfigurationsMap.containsKey(allocationConfigurationId)) {
 					allocationConfiguration = allocationConfigurationsMap.get(allocationConfigurationId);
 				} else {
-					LegalEntity po = null;
-					long poId = results.getLong("processing_org_id");
-					if (poId != 0) {
-						LegalEntitySQL.getLegalEntityById(poId);
-					}
-					allocationConfiguration = new AllocationConfiguration(results.getString(1), po);
-					allocationConfiguration.setId(results.getLong(2));
+					allocationConfiguration = new AllocationConfiguration(results.getString(NAME),
+							LegalEntitySQL.getLegalEntityById(results.getLong(PROCESSING_ORG_ID)));
+					allocationConfiguration.setId(allocationConfigurationId);
 				}
-				Long bookId = results.getLong(3);
+				Long bookId = results.getLong(BOOK_ID);
 				if (bookId != 0) {
 					Set<Book> books;
 					if (allocationConfiguration.getBooks() == null) {
@@ -161,15 +155,11 @@ public class AllocationConfigurationSQL {
 			ResultSet results = stmtGetAllocationConfigurationById.executeQuery();
 			while (results.next()) {
 				if (allocationConfiguration == null) {
-					LegalEntity po = null;
-					long poId = results.getLong("processing_org_id");
-					if (poId != 0) {
-						LegalEntitySQL.getLegalEntityById(poId);
-					}
-					allocationConfiguration = new AllocationConfiguration(results.getString(1), po);
-					allocationConfiguration.setId(results.getLong(2));
+					allocationConfiguration = new AllocationConfiguration(results.getString(NAME),
+							LegalEntitySQL.getLegalEntityById(results.getLong(PROCESSING_ORG_ID)));
+					allocationConfiguration.setId(results.getLong(ID));
 				}
-				Long bookId = results.getLong(3);
+				Long bookId = results.getLong(BOOK_ID);
 				if (bookId != 0) {
 					Set<Book> books;
 					if (allocationConfiguration.getBooks() == null) {
@@ -193,20 +183,16 @@ public class AllocationConfigurationSQL {
 		AllocationConfiguration allocationConfiguration = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetAllocationConfigurationByName = con.prepareStatement(
-						"SELECT ALLOCATION_CONFIGURATION.NAME, ALLOCATION_CONFIGURATION.ID, ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID, ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID FROM ALLOCATION_CONFIGURATION LEFT OUTER JOIN ALLOCATION_CONFIGURATION_BOOK ON ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID WHERE ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID AND ALLOCATION_CONFIGURATION.NAME = ?");) {
+						"SELECT ALLOCATION_CONFIGURATION.NAME, ALLOCATION_CONFIGURATION.ID, ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID, ALLOCATION_CONFIGURATION_BOOK.BOOK_ID FROM ALLOCATION_CONFIGURATION LEFT OUTER JOIN ALLOCATION_CONFIGURATION_BOOK ON ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID WHERE ALLOCATION_CONFIGURATION.NAME = ?");) {
 			stmtGetAllocationConfigurationByName.setString(1, name);
 			ResultSet results = stmtGetAllocationConfigurationByName.executeQuery();
 			while (results.next()) {
 				if (allocationConfiguration == null) {
-					LegalEntity po = null;
-					long poId = results.getLong("processing_org_id");
-					if (poId != 0) {
-						LegalEntitySQL.getLegalEntityById(poId);
-					}
-					allocationConfiguration = new AllocationConfiguration(results.getString(1), po);
-					allocationConfiguration.setId(results.getLong(2));
+					allocationConfiguration = new AllocationConfiguration(results.getString(NAME),
+							LegalEntitySQL.getLegalEntityById(results.getLong(PROCESSING_ORG_ID)));
+					allocationConfiguration.setId(results.getLong(ID));
 				}
-				Long bookId = results.getLong(3);
+				Long bookId = results.getLong(BOOK_ID);
 				if (bookId != 0) {
 					Set<Book> books;
 					if (allocationConfiguration.getBooks() == null) {

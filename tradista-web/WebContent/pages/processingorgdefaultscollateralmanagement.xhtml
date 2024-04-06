@@ -18,6 +18,19 @@
 				</p:selectOneMenu>
 			</p:column>
 		</p:row>
+		<p:row>
+			<p:column>
+				<p:outputLabel value="Allocation Configuration" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu
+					value="#{processingOrgDefaultsView.poDefaults.getModuleByName('Collateral Management').allocationConfiguration}"
+					converter="allocationConfigurationConverter">
+					<f:selectItems
+						value="#{processingOrgDefaultsCollateralManagementView.allAllocationConfigurations}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
 	</p:panelGrid>
 </ui:composition>
 

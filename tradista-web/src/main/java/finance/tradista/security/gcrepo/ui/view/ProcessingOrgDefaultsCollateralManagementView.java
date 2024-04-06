@@ -8,6 +8,9 @@ import java.util.TreeSet;
 import finance.tradista.core.marketdata.model.BlankQuoteSet;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
+import finance.tradista.security.gcrepo.model.AllocationConfiguration;
+import finance.tradista.security.gcrepo.model.BlankAllocationConfiguration;
+import finance.tradista.security.gcrepo.service.AllocationConfigurationBusinessDelegate;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
@@ -40,14 +43,24 @@ public class ProcessingOrgDefaultsCollateralManagementView implements Serializab
 
 	private SortedSet<QuoteSet> allQuoteSets;
 
+	private SortedSet<AllocationConfiguration> allAllocationConfigurations;
+
 	@PostConstruct
 	public void init() {
 		QuoteBusinessDelegate quoteBusinessDelegate = new QuoteBusinessDelegate();
+		AllocationConfigurationBusinessDelegate allocationConfigurationBusinessDelegate = new AllocationConfigurationBusinessDelegate();
 		Set<QuoteSet> allQs = quoteBusinessDelegate.getAllQuoteSets();
 		allQuoteSets = new TreeSet<>();
 		allQuoteSets.add(BlankQuoteSet.getInstance());
 		if (allQs != null && !allQs.isEmpty()) {
 			allQuoteSets.addAll(allQs);
+		}
+		Set<AllocationConfiguration> allAc = allocationConfigurationBusinessDelegate.getAllAllocationConfigurations();
+		allAllocationConfigurations = new TreeSet<>();
+		allAllocationConfigurations.add(BlankAllocationConfiguration.getInstance());
+		
+		if (allAc != null && !allAc.isEmpty()) {
+			allAllocationConfigurations.addAll(allAc);
 		}
 	}
 
@@ -57,6 +70,14 @@ public class ProcessingOrgDefaultsCollateralManagementView implements Serializab
 
 	public void setAllQuoteSets(SortedSet<QuoteSet> quoteSets) {
 		this.allQuoteSets = quoteSets;
+	}
+
+	public SortedSet<AllocationConfiguration> getAllAllocationConfigurations() {
+		return allAllocationConfigurations;
+	}
+
+	public void setAllAllocationConfigurations(SortedSet<AllocationConfiguration> allAllocationConfigurations) {
+		this.allAllocationConfigurations = allAllocationConfigurations;
 	}
 
 }

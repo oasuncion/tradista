@@ -40,7 +40,7 @@ public class User extends TradistaObject {
 
 	@Id
 	private LegalEntity processingOrg;
-	
+
 	public User(String firstName, String surname, LegalEntity processingOrg) {
 		this.firstName = firstName;
 		this.surname = surname;
@@ -78,12 +78,16 @@ public class User extends TradistaObject {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public boolean isAdmin() {
+		return processingOrg == null;
+	}
+
 	@Override
 	public User clone() {
 		User user = (User) super.clone();
 		user.processingOrg = TradistaModelUtil.clone(processingOrg);
 		return user;
 	}
-	
+
 }

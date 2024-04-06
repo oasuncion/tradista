@@ -28,7 +28,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class AllocationConfiguration extends TradistaObject {
+public class AllocationConfiguration extends TradistaObject implements Comparable<AllocationConfiguration> {
 
 	private static final long serialVersionUID = -1407477512383084643L;
 
@@ -60,6 +60,11 @@ public class AllocationConfiguration extends TradistaObject {
 
 	public void setBooks(Set<Book> books) {
 		this.books = books;
+	}
+
+	@Override
+	public int compareTo(AllocationConfiguration ac) {
+		return name.compareTo(ac.getName());
 	}
 
 	@SuppressWarnings("unchecked")

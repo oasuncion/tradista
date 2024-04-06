@@ -1,10 +1,10 @@
-package finance.tradista.core.marketdata.ui.converter;
+package finance.tradista.security.gcrepo.ui.converter;
 
 import java.io.Serializable;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.marketdata.model.QuoteSet;
-import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
+import finance.tradista.security.gcrepo.model.AllocationConfiguration;
+import finance.tradista.security.gcrepo.service.AllocationConfigurationBusinessDelegate;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;
@@ -12,7 +12,7 @@ import jakarta.faces.convert.ConverterException;
 import jakarta.faces.convert.FacesConverter;
 
 /*
- * Copyright 2023 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -31,28 +31,28 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-@FacesConverter("quoteSetConverter")
-public class QuoteSetConverter implements Serializable, Converter<QuoteSet> {
+@FacesConverter("allocationConfigurationConverter")
+public class AllocationConfigurationConverter implements Serializable, Converter<AllocationConfiguration> {
 
-	private static final long serialVersionUID = -2974706453367560177L;
+	private static final long serialVersionUID = -902705474150240949L;
 
-	private QuoteBusinessDelegate quoteBusinessDelegate;
+	private AllocationConfigurationBusinessDelegate allocationConfigurationBusinessDelegate;
 
-	public QuoteSetConverter() {
-		quoteBusinessDelegate = new QuoteBusinessDelegate();
+	public AllocationConfigurationConverter() {
+		allocationConfigurationBusinessDelegate = new AllocationConfigurationBusinessDelegate();
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component, QuoteSet quoteSet) {
-		return quoteSet.getName();
+	public String getAsString(FacesContext context, UIComponent component, AllocationConfiguration allocConfig) {
+		return allocConfig.getName();
 	}
 
 	@Override
-	public QuoteSet getAsObject(FacesContext context, UIComponent component, String value) {
+	public AllocationConfiguration getAsObject(FacesContext context, UIComponent component, String value) {
 		try {
-			return quoteBusinessDelegate.getQuoteSetByName(value);
+			return allocationConfigurationBusinessDelegate.getAllocationConfigurationByName(value);
 		} catch (TradistaBusinessException tbe) {
-			throw new ConverterException(String.format("Could not convert quote set %s", value), tbe);
+			throw new ConverterException(String.format("Could not convert allocation configuration %s", value), tbe);
 		}
 	}
 

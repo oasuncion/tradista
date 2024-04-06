@@ -56,7 +56,10 @@ public class QuoteBusinessDelegate {
 		return SecurityUtil.run(() -> quoteService.getAllQuoteNames());
 	}
 
-	public QuoteSet getQuoteSetByName(String name) {
+	public QuoteSet getQuoteSetByName(String name) throws TradistaBusinessException {
+		if (StringUtils.isEmpty(name)) {
+			throw new TradistaBusinessException("The quote set name is mandatory.");
+		}
 		return SecurityUtil.run(() -> quoteService.getQuoteSetByName(name));
 	}
 

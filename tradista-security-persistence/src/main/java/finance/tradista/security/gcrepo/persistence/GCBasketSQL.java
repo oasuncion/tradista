@@ -96,7 +96,7 @@ public class GCBasketSQL {
 		Map<Long, GCBasket> gcBasketsMap = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetAllGCBaskets = con.prepareStatement(
-						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID WHERE GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID");
+						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID");
 				ResultSet results = stmtGetAllGCBaskets.executeQuery()) {
 			while (results.next()) {
 				if (gcBasketsMap == null) {
@@ -182,7 +182,7 @@ public class GCBasketSQL {
 		GCBasket gcBasket = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetGCBasketByName = con.prepareStatement(
-						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID WHERE GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID AND GCBASKET.NAME = ?");) {
+						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID WHERE GCBASKET.NAME = ?");) {
 			stmtGetGCBasketByName.setString(1, name);
 			ResultSet results = stmtGetGCBasketByName.executeQuery();
 			while (results.next()) {

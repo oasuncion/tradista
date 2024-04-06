@@ -20,6 +20,7 @@ import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.util.ColorUtil;
 import finance.tradista.core.inventory.model.ProductInventory;
+import finance.tradista.core.processingorgdefaults.service.ProcessingOrgDefaultsBusinessDelegate;
 import finance.tradista.core.productinventory.service.ProductInventoryBusinessDelegate;
 import finance.tradista.core.status.constants.StatusConstants;
 import finance.tradista.security.bond.model.Bond;
@@ -27,7 +28,9 @@ import finance.tradista.security.bond.service.BondBusinessDelegate;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.equity.model.Equity;
 import finance.tradista.security.equity.service.EquityBusinessDelegate;
+import finance.tradista.security.gcrepo.model.AllocationConfiguration;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
+import finance.tradista.security.gcrepo.model.ProcessingOrgDefaultsCollateralManagementModule;
 import finance.tradista.security.gcrepo.service.GCRepoTradeBusinessDelegate;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -70,6 +73,8 @@ public class CollateralView implements Serializable {
 	private EquityBusinessDelegate equityBusinessDelegate;
 
 	private BookBusinessDelegate bookBusinessDelegate;
+
+	private ProcessingOrgDefaultsBusinessDelegate poDefaultsBusinessDelegate;
 
 	private String context;
 
@@ -147,6 +152,7 @@ public class CollateralView implements Serializable {
 		bondBusinessDelegate = new BondBusinessDelegate();
 		equityBusinessDelegate = new EquityBusinessDelegate();
 		bookBusinessDelegate = new BookBusinessDelegate();
+		poDefaultsBusinessDelegate = new ProcessingOrgDefaultsBusinessDelegate();
 	}
 
 	public class Collateral implements Serializable {
@@ -571,6 +577,18 @@ public class CollateralView implements Serializable {
 		try {
 			GCRepoTrade trade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
 			if (trade != null) {
+				AllocationConfiguration ac = ((ProcessingOrgDefaultsCollateralManagementModule) poDefaultsBusinessDelegate
+						.getProcessingOrgDefaultsByPoId(trade.getBook().getProcessingOrg().getId())
+						.getModuleByName("Collateral Management")).getAllocationConfiguration();
+				if (ac == null) {
+					throw new TradistaBusinessException(
+							"An Allocation Configuration must be set in the Processing Org Defaults.");
+				}
+				Set<Book> configuredBooks = ac.getBooks();
+				if (configuredBooks == null || configuredBooks.isEmpty()) {
+					throw new TradistaBusinessException(String
+							.format("Books should be configured in the Allocation Configuration %s.", ac.getName()));
+				}
 				if (collateralValues == null) {
 					collateralValues = new ArrayList<>();
 				}
@@ -585,8 +603,9 @@ public class CollateralView implements Serializable {
 				if (removedCollateralValues != null) {
 					removedCollateralValues.clear();
 				}
-				Map<Security, Map<Book, BigDecimal>> sec = null;
+				Map<Security, Map<Book, BigDecimal>> allocatedSecurities = null;
 				Set<ProductInventory> inventory = null;
+
 				// TODO Think about a configurable mechanism for context determination
 				if (trade.getStatus().getName().equals("UNDER_ALLOCATED")) {
 					context = "ALLOCATION";
@@ -594,10 +613,10 @@ public class CollateralView implements Serializable {
 				if (trade.getStatus().getName().equals(StatusConstants.ALLOCATED)) {
 					context = "SUBSTITUTION";
 				}
-				sec = gcRepoTradeBusinessDelegate.getAllocatedCollateral(tradeId);
+				allocatedSecurities = gcRepoTradeBusinessDelegate.getAllocatedCollateral(tradeId);
 
-				if (sec != null) {
-					for (Map.Entry<Security, Map<Book, BigDecimal>> entry : sec.entrySet()) {
+				if (allocatedSecurities != null) {
+					for (Map.Entry<Security, Map<Book, BigDecimal>> entry : allocatedSecurities.entrySet()) {
 						if (entry.getValue() != null) {
 							for (Map.Entry<Book, BigDecimal> bookEntry : entry.getValue().entrySet()) {
 								Collateral col = new Collateral();
@@ -611,34 +630,36 @@ public class CollateralView implements Serializable {
 					}
 				}
 
-				inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(), LocalDate.now(),
-						Bond.BOND, 0, 0, false);
+				for (Book b : configuredBooks) {
+					inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(), LocalDate.now(),
+							Bond.BOND, 0, b.getId(), false);
 
-				if (inventory != null) {
-					for (ProductInventory inv : inventory) {
-						if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
-							Collateral col = new Collateral();
-							col.setQuantity(inv.getQuantity());
-							col.setSecurity(((Bond) inv.getProduct()).getIsin());
-							col.setExchange(((Bond) inv.getProduct()).getExchange().getCode());
-							col.setBook(inv.getBook().getName());
-							availableCollateralValues.add(col);
+					if (inventory != null) {
+						for (ProductInventory inv : inventory) {
+							if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
+								Collateral col = new Collateral();
+								col.setQuantity(inv.getQuantity());
+								col.setSecurity(((Bond) inv.getProduct()).getIsin());
+								col.setExchange(((Bond) inv.getProduct()).getExchange().getCode());
+								col.setBook(inv.getBook().getName());
+								availableCollateralValues.add(col);
+							}
 						}
 					}
-				}
 
-				inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(), LocalDate.now(),
-						Equity.EQUITY, 0, 0, false);
+					inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(), LocalDate.now(),
+							Equity.EQUITY, 0, b.getId(), false);
 
-				if (inventory != null) {
-					for (ProductInventory inv : inventory) {
-						if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
-							Collateral col = new Collateral();
-							col.setQuantity(inv.getQuantity());
-							col.setSecurity(((Equity) inv.getProduct()).getIsin());
-							col.setExchange(((Equity) inv.getProduct()).getExchange().getCode());
-							col.setBook(inv.getBook().getName());
-							availableCollateralValues.add(col);
+					if (inventory != null) {
+						for (ProductInventory inv : inventory) {
+							if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
+								Collateral col = new Collateral();
+								col.setQuantity(inv.getQuantity());
+								col.setSecurity(((Equity) inv.getProduct()).getIsin());
+								col.setExchange(((Equity) inv.getProduct()).getExchange().getCode());
+								col.setBook(inv.getBook().getName());
+								availableCollateralValues.add(col);
+							}
 						}
 					}
 				}

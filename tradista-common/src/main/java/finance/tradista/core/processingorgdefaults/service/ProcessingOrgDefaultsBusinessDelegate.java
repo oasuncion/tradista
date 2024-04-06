@@ -62,8 +62,11 @@ public class ProcessingOrgDefaultsBusinessDelegate {
 		if (poDefaults == null) {
 			throw new TradistaBusinessException("The Processing Org Defaults cannot be null.");
 		}
+		if (poDefaults.getProcessingOrg() == null) {
+			throw new TradistaBusinessException("The Processing Org Defaults's PO cannot be null.");
+		}
 		StringBuilder errMsg = new StringBuilder();
-		if (poDefaults.getModules() != null && poDefaults.getModules().isEmpty()) {
+		if (poDefaults.getModules() != null && !poDefaults.getModules().isEmpty()) {
 			for (ProcessingOrgDefaultsModule module : poDefaults.getModules()) {
 				ProcessingOrgDefaultsModuleValidator validator = getValidator(module);
 				try {

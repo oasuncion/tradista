@@ -7,63 +7,94 @@
 	<ui:define name="viewname">Tradista Allocation Configuration</ui:define>
 	<ui:define name="content">
 		<h:form id="allocationConfigurationForm">
-			<p:panel id="allocationConfiguration"
-				header="Allocation Configuration"
-				styleClass="tradista-central-component">
-				<p:messages showDetail="true" closable="true" id="msg">
-					<p:autoUpdate />
-				</p:messages>
-				<p:outputLabel styleClass="tradista-menu-item"
-					value="Allocation Configuration Name :" />
-				<p:inputText
-					value="#{allocationConfigurationController.allocationConfiguration.name}"
-					styleClass="tradista-menu-item" />
-				<p:pickList id="allocationConfigurationPickList"
-					value="#{allocationConfigurationController.books}" var="book"
-					itemValue="#{book}" itemLabel="#{book.name}"
-					showSourceControls="true" showTargetControls="true"
-					showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
-					filterMatchMode="contains" responsive="true"
-					converter="bookConverter">
-					<f:facet name="sourceCaption">Available books</f:facet>
-					<f:facet name="targetCaption">Configured books</f:facet>
-					<p:column styleClass="tradista-picklist-item">
-						<div class="flex align-items-center">
-							<h:outputText value="#{book.name}" />
-						</div>
-					</p:column>
-				</p:pickList>
-				<f:facet name="footer">
+			<p:panel styleClass="tradista-central-component" header="Allocation Configuration">
+				<p:panelGrid id="allocationConfiguration"
+					header="Allocation Configuration" styleClass="tradista-nested"
+					columnClasses="ui-g-12 ui-md-12 ui-lg-12, ui-g-12 ui-md-12 ui-lg-12">
+					<p:messages showDetail="true" closable="true" id="msg">
+						<p:autoUpdate />
+					</p:messages>
 					<p:row>
 						<p:column>
-							<p:commandButton value="Save" styleClass="rounded-button"
-								update="@form">
-								<f:actionListener
-									binding="#{allocationConfigurationController.save()}" />
-							</p:commandButton>
-							<p:commandButton value="Copy" type="button"
-								styleClass="rounded-button" update="@form"
-								onclick="PF('copy').show()" />
-							<p:commandButton value="New" styleClass="rounded-button"
-								action="#{allocationConfigurationController.clear()}"
-								update="@form" />
-							<p:outputLabel value="Load by Allocation Configuration"
-								styleClass="tradista-menu-item" />
-							<p:selectOneMenu
-								value="#{allocationConfigurationController.loadingCriterion}"
-								styleClass="tradista-menu-item">
-								<f:selectItems
-									value="#{allocationConfigurationController.allLoadingCriteria}" />
-							</p:selectOneMenu>
+							<p:outputLabel styleClass="tradista-menu-item"
+								value="Allocation Configuration Name :" />
+						</p:column>
+						<p:column>
 							<p:inputText
-								value="#{allocationConfigurationController.idOrName}"
-								styleClass="tradista-menu-item" />
-							<p:commandButton value="Load" styleClass="rounded-button"
-								action="#{allocationConfigurationController.load()}"
-								update="@form" />
+								value="#{allocationConfigurationController.allocationConfigurationName}"
+								styleClass="tradista-menu-item"
+								readonly="#{allocationConfigurationController.allocationConfiguration ne null}" />
 						</p:column>
 					</p:row>
-				</f:facet>
+					<p:row>
+						<p:column>
+							<p:outputLabel styleClass="tradista-menu-item"
+								value="Processing Org :"
+								rendered="#{empty userManager.currentUserProcessingOrg}" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu
+								value="#{allocationConfigurationController.processingOrg}"
+								styleClass="tradista-menu-item"
+								rendered="#{empty userManager.currentUserProcessingOrg}"
+								converter="legalEntityConverter"
+								readonly="#{allocationConfigurationController.allocationConfiguration ne null}">
+								<f:selectItems
+									value="#{allocationConfigurationController.allProcessingOrgs}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<p:pickList id="allocationConfigurationPickList"
+								value="#{allocationConfigurationController.books}" var="book"
+								itemValue="#{book}" itemLabel="#{book.name}"
+								showSourceControls="true" showTargetControls="true"
+								showCheckbox="true" showSourceFilter="true"
+								showTargetFilter="true" filterMatchMode="contains"
+								responsive="true" converter="bookConverter">
+								<f:facet name="sourceCaption">Available books</f:facet>
+								<f:facet name="targetCaption">Configured books</f:facet>
+								<p:column styleClass="tradista-picklist-item">
+									<div class="flex align-items-center">
+										<h:outputText value="#{book.name}" />
+									</div>
+								</p:column>
+							</p:pickList>
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column>
+								<p:commandButton value="Save" styleClass="rounded-button"
+									update="@form">
+									<f:actionListener
+										binding="#{allocationConfigurationController.save()}" />
+								</p:commandButton>
+								<p:commandButton value="Copy" type="button"
+									styleClass="rounded-button" update="@form"
+									onclick="PF('copy').show()" />
+								<p:commandButton value="New" styleClass="rounded-button"
+									action="#{allocationConfigurationController.clear()}"
+									update="@form" />
+								<p:outputLabel value="Load by Allocation Configuration"
+									styleClass="tradista-menu-item" />
+								<p:selectOneMenu
+									value="#{allocationConfigurationController.loadingCriterion}"
+									styleClass="tradista-menu-item">
+									<f:selectItems
+										value="#{allocationConfigurationController.allLoadingCriteria}" />
+								</p:selectOneMenu>
+								<p:inputText
+									value="#{allocationConfigurationController.idOrName}"
+									styleClass="tradista-menu-item" />
+								<p:commandButton value="Load" styleClass="rounded-button"
+									action="#{allocationConfigurationController.load()}"
+									update="@form" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
 			</p:panel>
 		</h:form>
 		<h:form>
@@ -74,6 +105,17 @@
 				<p />
 				<p:inputText
 					value="#{allocationConfigurationController.copyAllocationConfigurationName}" />
+				<p:outputLabel styleClass="tradista-menu-item"
+					value="Please choose a Processing Org :"
+					rendered="#{empty userManager.currentUserProcessingOrg}" />
+				<p:selectOneMenu
+					value="#{allocationConfigurationController.copyProcessingOrg}"
+					styleClass="tradista-menu-item"
+					rendered="#{empty userManager.currentUserProcessingOrg}"
+					converter="legalEntityConverter">
+					<f:selectItems
+						value="#{allocationConfigurationController.allProcessingOrgs}" />
+				</p:selectOneMenu>
 				<f:facet name="footer">
 					<p:commandButton value="Ok" styleClass="rounded-button"
 						onclick="PF('copy').hide()"

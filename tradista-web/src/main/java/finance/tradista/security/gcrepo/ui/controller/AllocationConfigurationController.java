@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.primefaces.model.DualListModel;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.util.ClientUtil;
+import finance.tradista.core.legalentity.model.LegalEntity;
+import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
 import finance.tradista.security.gcrepo.model.AllocationConfiguration;
 import finance.tradista.security.gcrepo.service.AllocationConfigurationBusinessDelegate;
 import jakarta.annotation.PostConstruct;
@@ -61,17 +66,34 @@ public class AllocationConfigurationController implements Serializable {
 
 	private BookBusinessDelegate bookBusinessDelegate;
 
+	private LegalEntityBusinessDelegate legalEntityBusinessDelegate;
+
 	private List<Book> availableBooks;
+
+	private String allocationConfigurationName;
+
+	private LegalEntity processingOrg;
+
+	private LegalEntity copyProcessingOrg;
+
+	private SortedSet<LegalEntity> allProcessingOrgs;
 
 	@PostConstruct
 	public void init() {
 		allocationConfigurationBusinessDelegate = new AllocationConfigurationBusinessDelegate();
 		bookBusinessDelegate = new BookBusinessDelegate();
-		allocationConfiguration = new AllocationConfiguration();
 		availableBooks = new ArrayList<>();
 		Set<Book> books = bookBusinessDelegate.getAllBooks();
 		if (books != null) {
 			availableBooks.addAll(books);
+		}
+		if (ClientUtil.currentUserIsAdmin()) {
+			legalEntityBusinessDelegate = new LegalEntityBusinessDelegate();
+			Set<LegalEntity> processingOrgs = legalEntityBusinessDelegate.getAllProcessingOrgs();
+			allProcessingOrgs = new TreeSet<>();
+			if (processingOrgs != null) {
+				allProcessingOrgs.addAll(processingOrgs);
+			}
 		}
 		initModel();
 	}
@@ -128,18 +150,56 @@ public class AllocationConfigurationController implements Serializable {
 		this.copyAllocationConfigurationName = copyAllocationConfigurationName;
 	}
 
+	public String getAllocationConfigurationName() {
+		return allocationConfigurationName;
+	}
+
+	public void setAllocationConfigurationName(String allocationConfigurationName) {
+		this.allocationConfigurationName = allocationConfigurationName;
+	}
+
+	public LegalEntity getProcessingOrg() {
+		return processingOrg;
+	}
+
+	public void setProcessingOrg(LegalEntity processingOrg) {
+		this.processingOrg = processingOrg;
+	}
+
+	public LegalEntity getCopyProcessingOrg() {
+		return copyProcessingOrg;
+	}
+
+	public void setCopyProcessingOrg(LegalEntity copyProcessingOrg) {
+		this.copyProcessingOrg = copyProcessingOrg;
+	}
+
+	public SortedSet<LegalEntity> getAllProcessingOrgs() {
+		return allProcessingOrgs;
+	}
+
+	public void setAllProcessingOrgs(SortedSet<LegalEntity> allProcessingOrgs) {
+		this.allProcessingOrgs = allProcessingOrgs;
+	}
+
 	public void save() {
 		try {
 			Set<Book> bookSet = null;
 			if (books.getTarget() != null && !books.getTarget().isEmpty()) {
 				bookSet = new HashSet<>(books.getTarget());
 			}
-			allocationConfiguration.setBooks(bookSet);
-			long allocConfigId = allocationConfigurationBusinessDelegate
-					.saveAllocationConfiguration(allocationConfiguration);
-			if (allocationConfiguration.getId() == 0) {
-				allocationConfiguration.setId(allocConfigId);
+			if (allocationConfiguration == null) {
+				LegalEntity po;
+				if (ClientUtil.currentUserIsAdmin()) {
+					po = processingOrg;
+				} else {
+					po = ClientUtil.getCurrentUser().getProcessingOrg();
+				}
+				allocationConfiguration = new AllocationConfiguration(allocationConfigurationName, po);
 			}
+			allocationConfiguration.setBooks(bookSet);
+			allocationConfiguration.setId(
+					allocationConfigurationBusinessDelegate.saveAllocationConfiguration(allocationConfiguration));
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 					"Allocation Configuration " + allocationConfiguration.getId() + " successfully saved"));
 		} catch (TradistaBusinessException tbe) {
@@ -155,19 +215,24 @@ public class AllocationConfigurationController implements Serializable {
 			return;
 		}
 		try {
-			AllocationConfiguration copyAllocationConfiguration = new AllocationConfiguration();
-			copyAllocationConfiguration.setName(copyAllocationConfigurationName);
+			LegalEntity po;
+			if (ClientUtil.currentUserIsAdmin()) {
+				po = copyProcessingOrg;
+			} else {
+				po = ClientUtil.getCurrentUser().getProcessingOrg();
+			}
+			AllocationConfiguration copyAllocationConfiguration = new AllocationConfiguration(
+					copyAllocationConfigurationName, po);
 			Set<Book> bookSet = null;
 			if (books.getTarget() != null && !books.getTarget().isEmpty()) {
 				bookSet = new HashSet<>(books.getTarget());
 			}
 			copyAllocationConfiguration.setBooks(bookSet);
-			long allocConfigId = allocationConfigurationBusinessDelegate
-					.saveAllocationConfiguration(copyAllocationConfiguration);
-			copyAllocationConfiguration.setId(allocConfigId);
-			allocationConfiguration.setId(copyAllocationConfiguration.getId());
-			allocationConfiguration.setName(copyAllocationConfiguration.getName());
-			allocationConfiguration.setBooks(copyAllocationConfiguration.getBooks());
+			copyAllocationConfiguration.setId(
+					allocationConfigurationBusinessDelegate.saveAllocationConfiguration(copyAllocationConfiguration));
+			allocationConfiguration = copyAllocationConfiguration;
+			allocationConfigurationName = copyAllocationConfigurationName;
+			processingOrg = copyProcessingOrg;
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 					"Allocation Configuration " + allocationConfiguration.getId() + " successfully created"));
 		} catch (TradistaBusinessException tbe) {
@@ -175,6 +240,7 @@ public class AllocationConfigurationController implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		} finally {
 			copyAllocationConfigurationName = null;
+			copyProcessingOrg = null;
 		}
 	}
 
@@ -189,9 +255,8 @@ public class AllocationConfigurationController implements Serializable {
 						.getAllocationConfigurationByName(idOrName);
 			}
 			if (allocationConfiguration != null) {
-				this.allocationConfiguration.setId(allocationConfiguration.getId());
-				this.allocationConfiguration.setName(allocationConfiguration.getName());
-				this.allocationConfiguration.setBooks(allocationConfiguration.getBooks());
+				this.allocationConfiguration = allocationConfiguration;
+				allocationConfigurationName = allocationConfiguration.getName();
 				List<Book> allocConfigBooks = new ArrayList<>();
 				if (allocationConfiguration.getBooks() != null) {
 					allocConfigBooks = new ArrayList<>(allocationConfiguration.getBooks());
@@ -201,13 +266,13 @@ public class AllocationConfigurationController implements Serializable {
 					books.setSource(availableBooks);
 				}
 				books.setTarget(allocConfigBooks);
+				processingOrg = allocationConfiguration.getProcessingOrg();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 						"Allocation Configuration " + allocationConfiguration.getId() + " successfully loaded."));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Error", "Allocation Configuration " + idOrName + " was not found."));
 			}
-
 		} catch (NumberFormatException nfe) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Please type a valid id."));
@@ -219,7 +284,9 @@ public class AllocationConfigurationController implements Serializable {
 	}
 
 	public void clear() {
-		allocationConfiguration = new AllocationConfiguration();
+		allocationConfiguration = null;
+		allocationConfigurationName = null;
+		processingOrg = null;
 		initModel();
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Form cleared"));

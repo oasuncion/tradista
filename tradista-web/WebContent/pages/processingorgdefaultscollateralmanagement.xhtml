@@ -11,10 +11,10 @@
 			</p:column>
 			<p:column>
 				<p:selectOneMenu
-					value="#{processingOrgDefaultsView.poDefaults.getModuleByName('Collateral Management').quoteSet}"
+					value="#{processingOrgDefaultsController.poDefaults.getModuleByName('Collateral Management').quoteSet}"
 					converter="quoteSetConverter">
 					<f:selectItems
-						value="#{processingOrgDefaultsCollateralManagementView.allQuoteSets}" />
+						value="#{processingOrgDefaultsCollateralManagementController.allQuoteSets}" />
 				</p:selectOneMenu>
 			</p:column>
 		</p:row>
@@ -24,10 +24,10 @@
 			</p:column>
 			<p:column>
 				<p:selectOneMenu
-					value="#{processingOrgDefaultsView.poDefaults.getModuleByName('Collateral Management').allocationConfiguration}"
+					value="#{processingOrgDefaultsController.poDefaults.getModuleByName('Collateral Management').allocationConfiguration}"
 					converter="allocationConfigurationConverter">
 					<f:selectItems
-						value="#{processingOrgDefaultsCollateralManagementView.allAllocationConfigurations}" />
+						value="#{processingOrgDefaultsCollateralManagementController.allAllocationConfigurations}" />
 				</p:selectOneMenu>
 			</p:column>
 		</p:row>

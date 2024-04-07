@@ -1,4 +1,4 @@
-package finance.tradista.core.book.ui.view;
+package finance.tradista.core.book.ui.controller;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,7 +43,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class BookView implements Serializable {
+public class BookController implements Serializable {
 
 	private static final long serialVersionUID = -7107650532883558795L;
 

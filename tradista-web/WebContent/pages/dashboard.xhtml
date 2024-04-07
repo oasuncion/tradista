@@ -11,117 +11,124 @@
 	<ui:define name="content">
 
 		<div class="card">
-		
+
 			<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
-	
-			
-			<p:dashboard id="dashboard" model="#{dashboardView.model}"
+
+
+			<p:dashboard id="dashboard" model="#{dashboardController.model}"
 				class="p-grid" reordering="false">
 
-				<p:ajax event="reorder" listener="#{dashboardView.handleReorder}"
-					update="msgs" />
+				<p:ajax event="reorder"
+					listener="#{dashboardController.handleReorder}" update="msgs" />
 
-				<p:panel id="tradeBooking" header="Trade Booking" style="height:650px">
+				<p:panel id="tradeBooking" header="Trade Booking"
+					style="height:650px">
 
 					<h:form>
-						
-							<p:messages id="messages" showDetail="true" closable="true">
-								<p:autoUpdate />
-							</p:messages>
-							<p:panelGrid columns="2">
-								
-										<p:outputLabel value="Id" class="label" />
-									
-										<p:outputLabel value="#{equityTradeView.id}" />
-									
-										<p:outputLabel value="Equity" class="label" />
-									
-										<p:selectOneMenu id="a" value="#{equityTradeView.equity}"
-											converter="#{equityTradeView.equityConverter}"
-											appendTo="@this" styleClass="TradistaOneMenu">
-											<f:selectItems value="#{equityTradeView.allEquities}" />
-										</p:selectOneMenu>
-									
-										<p:outputLabel value="Direction" class="label" />
-									
-										<p:selectOneMenu id="b" value="#{equityTradeView.direction}"
-											converter="#{equityTradeView.directionConverter}"
-											styleClass="TradistaOneMenu">
-											<f:selectItems value="#{equityTradeView.allDirections}" />
-										</p:selectOneMenu>
-									
-									
-										<p:outputLabel value="Price" class="label" />
-									
-										<p:inputNumber value="#{equityTradeView.price}" id="cc" styleClass="TradistaInput"/>
-									
-										<p:outputLabel value="Quantity" class="label" />
-									
-										<p:inputNumber value="#{equityTradeView.quantity}"
-											decimalPlaces="0" id="c" styleClass="TradistaInput" />
-									
-										<p:outputLabel value="Trade Date" class="label" />
-									
-										<p:datePicker value="#{equityTradeView.tradeDate}" id="d"
-											pattern="dd/MM/yyyy" styleClass="TradistaInput"/>
-									
-										<p:outputLabel value="Settlement Date" class="label" />
-									
-										<p:datePicker value="#{equityTradeView.settlementDate}" id="e"
-											pattern="dd/MM/yyyy" styleClass="TradistaInput"/>
-									
-										<p:outputLabel value="Currency" class="label" />
-									
-										<p:selectOneMenu id="f" value="#{equityTradeView.currency}"
-											converter="#{equityTradeView.currencyConverter}"
-											styleClass="TradistaOneMenu">
-											<f:selectItems value="#{equityTradeView.allCurrencies}" />
-										</p:selectOneMenu>
-									
-										<p:outputLabel value="Counterparty" class="label" />
-									
-										<p:selectOneMenu
-											value="#{equityTradeView.counterparty}"
-											converter="#{equityTradeView.legalEntityConverter}"
-											styleClass="TradistaOneMenu">
-											<f:selectItems value="#{equityTradeView.allCounterparties}" />
-										</p:selectOneMenu>
-									
-										<p:outputLabel value="Book" class="label" />
-									
-										<p:outputLabel value="#{equityTradeView.book}" 
-											converter="#{equityTradeView.bookConverter}" />
-									
-								<f:facet name="footer">
-									
-										<p:commandButton value="Save" styleClass="rounded-button"
-											update="@form :tradesListForm:tradesListDataTable :bookDonutChart :inventoryLineChart">
-											<f:actionListener binding="#{equityTradeView.save()}" />
-											<f:actionListener binding="#{tradesListView.loadTrades()}" />
-											<f:actionListener binding="#{bookView.loadBook()}" />
-											<f:actionListener binding="#{inventoryView.loadInventory()}" />
-										</p:commandButton>
-										<p:commandButton value="Copy" style="margin-left:10px"
-											styleClass="rounded-button"
-											update="@form :tradesListForm:tradesListDataTable :bookDonutChart :inventoryLineChart">
-											<f:actionListener binding="#{equityTradeView.copy()}" />
-											<f:actionListener binding="#{tradesListView.loadTrades()}" />
-											<f:actionListener binding="#{bookView.loadBook()}" />
-											<f:actionListener binding="#{inventoryView.loadInventory()}" />
-										</p:commandButton>
-										<p:commandButton value="New" style="margin-left:10px"
-											styleClass="rounded-button" action="#{equityTradeView.clear}"
-											update="@form" />
-										<p:outputLabel value="Load by Id" style="margin-left:10px" />
-										<p:inputText value="#{equityTradeView.idToBeLoaded}"
-											style="margin-left:10px" styleClass="TradistaInput"/>
-										<p:commandButton value="Load" style="margin-left:10px"
-											styleClass="rounded-button" action="#{equityTradeView.load}"
-											update="@form" />
-									
-								</f:facet>
-							</p:panelGrid>
-						
+
+						<p:messages id="messages" showDetail="true" closable="true">
+							<p:autoUpdate />
+						</p:messages>
+						<p:panelGrid columns="2">
+
+							<p:outputLabel value="Id" class="label" />
+
+							<p:outputLabel value="#{equityTradeController.id}" />
+
+							<p:outputLabel value="Equity" class="label" />
+
+							<p:selectOneMenu id="a" value="#{equityTradeController.equity}"
+								converter="#{equityTradeController.equityConverter}"
+								appendTo="@this" styleClass="TradistaOneMenu">
+								<f:selectItems value="#{equityTradeController.allEquities}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Direction" class="label" />
+
+							<p:selectOneMenu id="b"
+								value="#{equityTradeController.direction}"
+								converter="#{equityTradeController.directionConverter}"
+								styleClass="TradistaOneMenu">
+								<f:selectItems value="#{equityTradeController.allDirections}" />
+							</p:selectOneMenu>
+
+
+							<p:outputLabel value="Price" class="label" />
+
+							<p:inputNumber value="#{equityTradeController.price}" id="cc"
+								styleClass="TradistaInput" />
+
+							<p:outputLabel value="Quantity" class="label" />
+
+							<p:inputNumber value="#{equityTradeController.quantity}"
+								decimalPlaces="0" id="c" styleClass="TradistaInput" />
+
+							<p:outputLabel value="Trade Date" class="label" />
+
+							<p:datePicker value="#{equityTradeController.tradeDate}" id="d"
+								pattern="dd/MM/yyyy" styleClass="TradistaInput" />
+
+							<p:outputLabel value="Settlement Date" class="label" />
+
+							<p:datePicker value="#{equityTradeController.settlementDate}"
+								id="e" pattern="dd/MM/yyyy" styleClass="TradistaInput" />
+
+							<p:outputLabel value="Currency" class="label" />
+
+							<p:selectOneMenu id="f" value="#{equityTradeController.currency}"
+								converter="#{equityTradeController.currencyConverter}"
+								styleClass="TradistaOneMenu">
+								<f:selectItems value="#{equityTradeController.allCurrencies}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Counterparty" class="label" />
+
+							<p:selectOneMenu value="#{equityTradeController.counterparty}"
+								converter="#{equityTradeController.legalEntityConverter}"
+								styleClass="TradistaOneMenu">
+								<f:selectItems
+									value="#{equityTradeController.allCounterparties}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Book" class="label" />
+
+							<p:outputLabel value="#{equityTradeController.book}"
+								converter="#{equityTradeController.bookConverter}" />
+
+							<f:facet name="footer">
+
+								<p:commandButton value="Save" styleClass="rounded-button"
+									update="@form :tradesListForm:tradesListDataTable :bookDonutChart :inventoryLineChart">
+									<f:actionListener binding="#{equityTradeController.save()}" />
+									<f:actionListener
+										binding="#{tradesListController.loadTrades()}" />
+									<f:actionListener binding="#{bookController.loadBook()}" />
+									<f:actionListener
+										binding="#{inventoryController.loadInventory()}" />
+								</p:commandButton>
+								<p:commandButton value="Copy" style="margin-left:10px"
+									styleClass="rounded-button"
+									update="@form :tradesListForm:tradesListDataTable :bookDonutChart :inventoryLineChart">
+									<f:actionListener binding="#{equityTradeController.copy()}" />
+									<f:actionListener
+										binding="#{tradesListController.loadTrades()}" />
+									<f:actionListener binding="#{bookController.loadBook()}" />
+									<f:actionListener
+										binding="#{inventoryController.loadInventory()}" />
+								</p:commandButton>
+								<p:commandButton value="New" style="margin-left:10px"
+									styleClass="rounded-button"
+									action="#{equityTradeController.clear}" update="@form" />
+								<p:outputLabel value="Load by Id" style="margin-left:10px" />
+								<p:inputText value="#{equityTradeController.idToBeLoaded}"
+									style="margin-left:10px" styleClass="TradistaInput" />
+								<p:commandButton value="Load" style="margin-left:10px"
+									styleClass="rounded-button"
+									action="#{equityTradeController.load}" update="@form" />
+
+							</f:facet>
+						</p:panelGrid>
+
 					</h:form>
 				</p:panel>
 
@@ -129,13 +136,13 @@
 					<h:form id="tradesListForm">
 
 						<p:dataTable id="tradesListDataTable" var="trade"
-							value="#{tradesListView.trades}" rows="10" allowUnsorting="true"
-							sortMode="single" paginator="true"
+							value="#{tradesListController.trades}" rows="10"
+							allowUnsorting="true" sortMode="single" paginator="true"
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
 							rowsPerPageTemplate="5,10,{ShowAll|'All'}"
 							paginatorPosition="bottom"
-							filteredValue="#{tradesListView.filteredTrades}"
+							filteredValue="#{tradesListController.filteredTrades}"
 							tableStyle="table-layout: auto;" size="small">
 							<p:column headerText="Id" sortBy="#{trade.id}" sortOrder="desc"
 								filterBy="#{trade.id}">
@@ -183,22 +190,23 @@
 
 					</h:form>
 				</p:panel>
-				
+
 				<p:panel id="book" header="Book" class="p-col">
 
 
-					<p:donutChart id="bookDonutChart" model="#{bookView.donutModel}" />
+					<p:donutChart id="bookDonutChart"
+						model="#{bookController.donutModel}" />
 
 
 				</p:panel>
 				<p:panel id="inventory" header="Inventory" class="p-col">
 
 					<p:lineChart id="inventoryLineChart"
-						model="#{inventoryView.lineModel}" />
+						model="#{inventoryController.lineModel}" />
 
 				</p:panel>
- 			</p:dashboard> 
-	
+			</p:dashboard>
+
 		</div>
 
 

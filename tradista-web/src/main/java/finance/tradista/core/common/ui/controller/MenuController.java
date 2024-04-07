@@ -1,4 +1,4 @@
-package finance.tradista.core.common.ui.view;
+package finance.tradista.core.common.ui.controller;
 
 import java.io.Serializable;
 
@@ -35,7 +35,7 @@ under the License.    */
 
 @Named
 @SessionScoped
-public class MenuView implements Serializable {
+public class MenuController implements Serializable {
 
 	private static final long serialVersionUID = 6546524155625144194L;
 

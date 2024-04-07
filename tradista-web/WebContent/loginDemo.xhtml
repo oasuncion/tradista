@@ -27,10 +27,10 @@
 			<h:form class="login-form">
 				<h2>Login To Tradista</h2>
 				<p:inputText id="email" placeholder="Email"
-					value="#{loginDemoView.login}" />
+					value="#{loginDemoController.login}" />
 				<p:password id="password" placeholder="Password"
-					value="#{loginDemoView.password}" />
-				<p:commandButton value="LOGIN" action="#{loginDemoView.login}" />
+					value="#{loginDemoController.password}" />
+				<p:commandButton value="LOGIN" action="#{loginDemoController.login}" />
 			</h:form>
 			<p/>
 		</div>

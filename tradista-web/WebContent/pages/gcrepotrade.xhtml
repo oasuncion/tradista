@@ -16,10 +16,10 @@
 							<p:tabView>
 								<p:tab title="Product">
 									<p:donutChart styleClass="tradista"
-										model="#{bookView.productDonutModel}" />
+										model="#{bookController.productDonutModel}" />
 								</p:tab>
 								<p:tab title="Cash">
-									<p:donutChart model="#{bookView.cashDonutModel}" />
+									<p:donutChart model="#{bookController.cashDonutModel}" />
 								</p:tab>
 							</p:tabView>
 						</p:panel>
@@ -37,7 +37,7 @@
 												<p:outputLabel value="Trade Id" />
 											</p:column>
 											<p:column>
-												<p:outputLabel value="#{gCRepoTradeView.id}" />
+												<p:outputLabel value="#{gCRepoTradeController.id}" />
 											</p:column>
 										</p:row>
 										<p:row>
@@ -45,13 +45,13 @@
 												<p:outputLabel value="Status" />
 											</p:column>
 											<p:column>
-												<p:outputLabel value="#{gCRepoTradeView.status}" />
+												<p:outputLabel value="#{gCRepoTradeController.status}" />
 											</p:column>
 											<p:column>
 												<p:outputLabel value="Trade Date" />
 											</p:column>
 											<p:column>
-												<p:datePicker value="#{gCRepoTradeView.tradeDate}"
+												<p:datePicker value="#{gCRepoTradeController.tradeDate}"
 													pattern="dd/MM/yyyy" />
 											</p:column>
 											<p:column>
@@ -59,7 +59,7 @@
 											</p:column>
 											<p:column>
 												<p:selectBooleanCheckbox
-													value="#{gCRepoTradeView.rightOfSubstitution}" />
+													value="#{gCRepoTradeController.rightOfSubstitution}" />
 											</p:column>
 										</p:row>
 										<p:row>
@@ -67,26 +67,30 @@
 												<p:outputLabel value="Counterparty" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.counterparty}"
+												<p:selectOneMenu
+													value="#{gCRepoTradeController.counterparty}"
 													converter="legalEntityConverter">
-													<f:selectItems value="#{gCRepoTradeView.allCounterparties}" />
+													<f:selectItems
+														value="#{gCRepoTradeController.allCounterparties}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
 												<p:outputLabel value="Fixed/Floating Rate" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.interestType}">
-													<f:selectItems value="#{gCRepoTradeView.allInterestTypes}" />
+												<p:selectOneMenu
+													value="#{gCRepoTradeController.interestType}">
+													<f:selectItems
+														value="#{gCRepoTradeController.allInterestTypes}" />
 													<p:ajax event="change"
 														update="repoRate indexName indexTenor indexOffset" />
 													<p:ajax event="change"
-														listener="#{gCRepoTradeView.updateIndex()}" />
+														listener="#{gCRepoTradeController.updateIndex()}" />
 													<p:ajax event="change"
-														listener="#{gCRepoTradeView.updateQuoteNames()}" />
+														listener="#{gCRepoTradeController.updateQuoteNames()}" />
 													<p:ajax event="change"
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
-														listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}" />
+														listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -94,7 +98,7 @@
 											</p:column>
 											<p:column>
 												<p:selectBooleanCheckbox
-													value="#{gCRepoTradeView.rightOfReuse}" />
+													value="#{gCRepoTradeController.rightOfReuse}" />
 											</p:column>
 										</p:row>
 										<p:row>
@@ -102,9 +106,10 @@
 												<p:outputLabel value="Direction" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.direction}"
+												<p:selectOneMenu value="#{gCRepoTradeController.direction}"
 													converter="directionConverter">
-													<f:selectItems value="#{gCRepoTradeView.allDirections}" />
+													<f:selectItems
+														value="#{gCRepoTradeController.allDirections}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -112,15 +117,15 @@
 											</p:column>
 											<p:column>
 												<p:inputNumber id="repoRate"
-													value="#{gCRepoTradeView.repoRate}"
-													disabled="#{gCRepoTradeView.interestType eq 'Floating'}" />
+													value="#{gCRepoTradeController.repoRate}"
+													disabled="#{gCRepoTradeController.interestType eq 'Floating'}" />
 											</p:column>
 											<p:column>
 												<p:outputLabel value="Cross currency collateral" />
 											</p:column>
 											<p:column>
 												<p:selectBooleanCheckbox
-													value="#{gCRepoTradeView.crossCurrencyCollateral}"></p:selectBooleanCheckbox>
+													value="#{gCRepoTradeController.crossCurrencyCollateral}"></p:selectBooleanCheckbox>
 											</p:column>
 										</p:row>
 										<p:row>
@@ -128,12 +133,12 @@
 												<p:outputLabel value="Book" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.book}"
+												<p:selectOneMenu value="#{gCRepoTradeController.book}"
 													converter="bookConverter">
 													<p:ajax event="change"
-														listener="#{bookView.refresh(gCRepoTradeView.book)}"
+														listener="#{bookController.refresh(gCRepoTradeController.book)}"
 														update=":dashboardForm:book" />
-													<f:selectItems value="#{gCRepoTradeView.allBooks}" />
+													<f:selectItems value="#{gCRepoTradeController.allBooks}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -141,14 +146,15 @@
 											</p:column>
 											<p:column>
 												<p:selectOneMenu id="indexName"
-													value="#{gCRepoTradeView.index}" converter="indexConverter"
-													disabled="#{gCRepoTradeView.interestType eq 'Fixed' or empty gCRepoTradeView.interestType}">
-													<f:selectItems value="#{gCRepoTradeView.allIndexes}" />
+													value="#{gCRepoTradeController.index}"
+													converter="indexConverter"
+													disabled="#{gCRepoTradeController.interestType eq 'Fixed' or empty gCRepoTradeController.interestType}">
+													<f:selectItems value="#{gCRepoTradeController.allIndexes}" />
 													<p:ajax event="change"
-														listener="#{gCRepoTradeView.updateQuoteNames()}" />
+														listener="#{gCRepoTradeController.updateQuoteNames()}" />
 													<p:ajax event="change"
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
-														listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}" />
+														listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -156,7 +162,7 @@
 											</p:column>
 											<p:column>
 												<p:selectBooleanCheckbox
-													value="#{gCRepoTradeView.terminableOnDemand}">
+													value="#{gCRepoTradeController.terminableOnDemand}">
 													<p:ajax update="noticePeriod" />
 												</p:selectBooleanCheckbox>
 											</p:column>
@@ -166,22 +172,23 @@
 												<p:outputLabel value="Cash amount" />
 											</p:column>
 											<p:column>
-												<p:inputNumber value="#{gCRepoTradeView.amount}"
+												<p:inputNumber value="#{gCRepoTradeController.amount}"
 													decimalPlaces="0" />
 											</p:column>
 											<p:column>
 												<p:outputLabel value="Index Tenor" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.indexTenor}"
+												<p:selectOneMenu value="#{gCRepoTradeController.indexTenor}"
 													id="indexTenor"
-													disabled="#{gCRepoTradeView.interestType eq 'Fixed' or empty gCRepoTradeView.interestType}">
-													<f:selectItems value="#{gCRepoTradeView.allIndexTenors}" />
+													disabled="#{gCRepoTradeController.interestType eq 'Fixed' or empty gCRepoTradeController.interestType}">
+													<f:selectItems
+														value="#{gCRepoTradeController.allIndexTenors}" />
 													<p:ajax event="change"
-														listener="#{gCRepoTradeView.updateQuoteNames()}" />
+														listener="#{gCRepoTradeController.updateQuoteNames()}" />
 													<p:ajax event="change"
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
-														listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}" />
+														listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -189,9 +196,9 @@
 													value="Notice Period (expressed in business days)" />
 											</p:column>
 											<p:column>
-												<p:inputNumber value="#{gCRepoTradeView.noticePeriod}"
+												<p:inputNumber value="#{gCRepoTradeController.noticePeriod}"
 													id="noticePeriod" decimalPlaces="0"
-													disabled="#{gCRepoTradeView.terminableOnDemand eq false or empty gCRepoTradeView.terminableOnDemand}" />
+													disabled="#{gCRepoTradeController.terminableOnDemand eq false or empty gCRepoTradeController.terminableOnDemand}" />
 											</p:column>
 										</p:row>
 										<p:row>
@@ -199,27 +206,28 @@
 												<p:outputLabel value="Currency" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.currency}"
+												<p:selectOneMenu value="#{gCRepoTradeController.currency}"
 													converter="currencyConverter">
-													<f:selectItems value="#{gCRepoTradeView.allCurrencies}" />
+													<f:selectItems
+														value="#{gCRepoTradeController.allCurrencies}" />
 													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
-														listener="#{cashflowsView.updateDiscountCurve(pricingView.pricingParameter, gCRepoTradeView.currency)}" />
+														listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
 												<p:outputLabel value="Index Offset" />
 											</p:column>
 											<p:column>
-												<p:inputNumber value="#{gCRepoTradeView.indexOffset}"
+												<p:inputNumber value="#{gCRepoTradeController.indexOffset}"
 													id="indexOffset"
-													disabled="#{gCRepoTradeView.interestType eq 'Fixed' or empty gCRepoTradeView.interestType}" />
+													disabled="#{gCRepoTradeController.interestType eq 'Fixed' or empty gCRepoTradeController.interestType}" />
 											</p:column>
 											<p:column>
 												<p:outputLabel value="Start Date" />
 											</p:column>
 											<p:column>
-												<p:datePicker value="#{gCRepoTradeView.startDate}"
+												<p:datePicker value="#{gCRepoTradeController.startDate}"
 													pattern="dd/MM/yyyy" />
 											</p:column>
 										</p:row>
@@ -228,22 +236,22 @@
 												<p:outputLabel value="GC Basket" />
 											</p:column>
 											<p:column>
-												<p:selectOneMenu value="#{gCRepoTradeView.basket}"
+												<p:selectOneMenu value="#{gCRepoTradeController.basket}"
 													converter="gcBasketConverter">
-													<f:selectItems value="#{gCRepoTradeView.allBaskets}" />
+													<f:selectItems value="#{gCRepoTradeController.allBaskets}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
 												<p:outputLabel value="Margin Rate" />
 											</p:column>
 											<p:column>
-												<p:inputNumber value="#{gCRepoTradeView.marginRate}" />
+												<p:inputNumber value="#{gCRepoTradeController.marginRate}" />
 											</p:column>
 											<p:column>
 												<p:outputLabel value="End Date" />
 											</p:column>
 											<p:column>
-												<p:datePicker value="#{gCRepoTradeView.endDate}"
+												<p:datePicker value="#{gCRepoTradeController.endDate}"
 													pattern="dd/MM/yyyy" />
 											</p:column>
 										</p:row>
@@ -251,47 +259,50 @@
 											<p:row>
 												<p:column colspan="8">
 													<p:outputLabel value="Apply action" />
-													<p:selectOneMenu value="#{gCRepoTradeView.action}"
+													<p:selectOneMenu value="#{gCRepoTradeController.action}"
 														styleClass="tradista-menu-item">
 														<f:selectItems
-															value="#{gCRepoTradeView.allAvailableActions}" />
+															value="#{gCRepoTradeController.allAvailableActions}" />
 													</p:selectOneMenu>
 													<p:commandButton value="Save" styleClass="rounded-button"
 														update="@form">
 														<f:actionListener
-															binding="#{gCRepoTradeView.updateTrade(collateralView.getAddedSecurities(), collateralView.getRemovedSecurities())}" />
-														<f:actionListener binding="#{gCRepoTradeView.save()}" />
-														<f:actionListener binding="#{bookView.loadBook()}" />
+															binding="#{gCRepoTradeController.updateTrade(collateralController.getAddedSecurities(), collateralController.getRemovedSecurities())}" />
 														<f:actionListener
-															binding="#{collateralView.refresh(gCRepoTradeView.id)}" />
+															binding="#{gCRepoTradeController.save()}" />
+														<f:actionListener binding="#{bookController.loadBook()}" />
 														<f:actionListener
-															binding="#{partialTerminationView.refresh(gCRepoTradeView.id)}" />
+															binding="#{collateralController.refresh(gCRepoTradeController.id)}" />
+														<f:actionListener
+															binding="#{partialTerminationController.refresh(gCRepoTradeController.id)}" />
 													</p:commandButton>
 													<p:commandButton value="Copy" styleClass="rounded-button"
 														update="@form">
-														<f:actionListener binding="#{gCRepoTradeView.copy()}" />
-														<f:actionListener binding="#{bookView.loadBook()}" />
 														<f:actionListener
-															binding="#{collateralView.refresh(gCRepoTradeView.id)}" />
+															binding="#{gCRepoTradeController.copy()}" />
+														<f:actionListener binding="#{bookController.loadBook()}" />
 														<f:actionListener
-															binding="#{partialTerminationView.refresh(gCRepoTradeView.id)}" />
+															binding="#{collateralController.refresh(gCRepoTradeController.id)}" />
+														<f:actionListener
+															binding="#{partialTerminationController.refresh(gCRepoTradeController.id)}" />
 													</p:commandButton>
 													<p:commandButton value="New" styleClass="rounded-button"
-														action="#{gCRepoTradeView.clear}" update="@form">
-														<f:actionListener binding="#{collateralView.clear()}" />
+														action="#{gCRepoTradeController.clear}" update="@form">
 														<f:actionListener
-															binding="#{partialTerminationView.clear()}" />
+															binding="#{collateralController.clear()}" />
+														<f:actionListener
+															binding="#{partialTerminationController.clear()}" />
 													</p:commandButton>
 													<p:outputLabel value="Load by Id"
 														styleClass="tradista-menu-item" />
-													<p:inputText value="#{gCRepoTradeView.idToBeLoaded}"
+													<p:inputText value="#{gCRepoTradeController.idToBeLoaded}"
 														styleClass="tradista-menu-item" />
 													<p:commandButton value="Load" styleClass="rounded-button"
-														action="#{gCRepoTradeView.load}" update="@form">
+														action="#{gCRepoTradeController.load}" update="@form">
 														<f:actionListener
-															binding="#{collateralView.refresh(gCRepoTradeView.idToBeLoaded)}" />
+															binding="#{collateralController.refresh(gCRepoTradeController.idToBeLoaded)}" />
 														<f:actionListener
-															binding="#{partialTerminationView.refresh(gCRepoTradeView.idToBeLoaded)}" />
+															binding="#{partialTerminationController.refresh(gCRepoTradeController.idToBeLoaded)}" />
 													</p:commandButton>
 												</p:column>
 											</p:row>
@@ -306,13 +317,13 @@
 											columnClasses="ui-g-12 ui-md-6 ui-lg-12">
 											<p:row>
 												<p:column>
-													<p:outputLabel value="#{collateralView.context}"
+													<p:outputLabel value="#{collateralController.context}"
 														styleClass="tradista-small-title" />
 													<br />
 													<br />
 													<p:outputLabel value="Collateral" class="label" />
 													<p:dataTable id="collateralDataTable" var="coll"
-														value="#{collateralView.collateralValues}"
+														value="#{collateralController.collateralValues}"
 														allowUnsorting="true" sortMode="single"
 														tableStyleClass="tradista-datatable" size="small">
 														<p:column headerText="ISIN" sortBy="#{coll.security}">
@@ -324,21 +335,22 @@
 															</p:outputLabel>
 														</p:column>
 														<p:column
-															rendered="#{collateralView.context eq 'SUBSTITUTION'}">
+															rendered="#{collateralController.context eq 'SUBSTITUTION'}">
 															<p:commandButton styleClass="rounded-button"
 																icon="pi pi-minus" oncomplete="PF('removeCol').show();"
 																update=":dashboardForm:removeCol"
-																action="#{collateralView.setCollateralToRemove(coll.security, coll.exchange, coll.book, coll.quantity)}">
+																action="#{collateralController.setCollateralToRemove(coll.security, coll.exchange, coll.book, coll.quantity)}">
 															</p:commandButton>
 														</p:column>
 													</p:dataTable>
 												</p:column>
 											</p:row>
-											<p:row rendered="#{not (collateralView.context eq null)}">
+											<p:row
+												rendered="#{not (collateralController.context eq null)}">
 												<p:column>
 													<p:outputLabel value="Available Collateral :" />
 													<p:dataTable id="availableCollateralDataTable" var="coll"
-														value="#{collateralView.availableCollateralValues}"
+														value="#{collateralController.availableCollateralValues}"
 														allowUnsorting="true" sortMode="single"
 														tableStyleClass="tradista-datatable" size="small"
 														lazy="true">
@@ -357,16 +369,17 @@
 															<p:commandButton styleClass="rounded-button"
 																icon="pi pi-plus" oncomplete="PF('addCol').show();"
 																update=":dashboardForm:addCol"
-																action="#{collateralView.setCollateralToAdd(coll.security, coll.exchange, coll.book, coll.quantity)}" />
+																action="#{collateralController.setCollateralToAdd(coll.security, coll.exchange, coll.book, coll.quantity)}" />
 														</p:column>
 													</p:dataTable>
 												</p:column>
 											</p:row>
-											<p:row rendered="#{not (collateralView.context eq null)}">
+											<p:row
+												rendered="#{not (collateralController.context eq null)}">
 												<p:column>
 													<p:outputLabel value="Added :" class="label" />
 													<p:dataTable id="addedCollateralDataTable" var="coll"
-														value="#{collateralView.addedCollateralValues}"
+														value="#{collateralController.addedCollateralValues}"
 														allowUnsorting="true" sortMode="single"
 														tableStyleClass="tradista-datatable" size="small">
 														<p:column headerText="ISIN" sortBy="#{coll.security}">
@@ -383,18 +396,19 @@
 														<p:column>
 															<p:commandButton styleClass="rounded-button"
 																icon="pi pi-minus"
-																action="#{collateralView.removeCollateral(coll.security, coll.exchange, coll.book, coll.quantity)}"
+																action="#{collateralController.removeCollateral(coll.security, coll.exchange, coll.book, coll.quantity)}"
 																update="@form">
 															</p:commandButton>
 														</p:column>
 													</p:dataTable>
 												</p:column>
 											</p:row>
-											<p:row rendered="#{collateralView.context eq 'SUBSTITUTION'}">
+											<p:row
+												rendered="#{collateralController.context eq 'SUBSTITUTION'}">
 												<p:column>
 													<p:outputLabel value="Removed :" class="label" />
 													<p:dataTable id="removedCollateralDataTable" var="coll"
-														value="#{collateralView.removedCollateralValues}"
+														value="#{collateralController.removedCollateralValues}"
 														allowUnsorting="true" sortMode="single"
 														tableStyleClass="tradista-datatable" size="small"
 														lazy="true">
@@ -409,7 +423,7 @@
 														<p:column>
 															<p:commandButton styleClass="rounded-button"
 																icon="pi pi-minus"
-																action="#{collateralView.readdCollateral(coll.security, coll.exchange, coll.book, coll.quantity)}"
+																action="#{collateralController.readdCollateral(coll.security, coll.exchange, coll.book, coll.quantity)}"
 																update="@form">
 															</p:commandButton>
 														</p:column>
@@ -420,11 +434,11 @@
 										<p:divider layout="vertical" />
 										<p:outputLabel>Exposure Gauge</p:outputLabel>
 										<p:donutChart
-											model="#{collateralView.collateralMarketValueDonutModel}" />
+											model="#{collateralController.collateralMarketValueDonutModel}" />
 									</div>
 								</p:tab>
 								<p:tab title="Partial Termination"
-									rendered="#{partialTerminationView.partialTerminations ne null}">
+									rendered="#{partialTerminationController.partialTerminations ne null}">
 									<div class="flex">
 										<p:panelGrid styleClass="tradista-nested"
 											columnClasses="ui-g-12 ui-md-6 ui-lg-12">
@@ -435,7 +449,7 @@
 													<br />
 													<br />
 													<p:dataTable id="partialTerminationsTable" var="pt"
-														value="#{partialTerminationView.partialTerminations}"
+														value="#{partialTerminationController.partialTerminations}"
 														tableStyleClass="tradista-datatable" size="small">
 														<p:column headerText="Date">
 															<p:outputLabel value="#{pt.date}" />
@@ -465,7 +479,7 @@
 										<p:outputLabel value="Pricer" />
 									</p:column>
 									<p:column>
-										<p:outputLabel id="pricer" value="#{pricingView.pricer}"
+										<p:outputLabel id="pricer" value="#{pricingController.pricer}"
 											converter="pricerConverter" />
 									</p:column>
 								</p:row>
@@ -474,9 +488,9 @@
 										<p:outputLabel value="Pricer QuoteSet" />
 									</p:column>
 									<p:column>
-										<p:selectOneMenu value="#{pricingView.quoteSet}"
+										<p:selectOneMenu value="#{pricingController.quoteSet}"
 											converter="quoteSetConverter">
-											<f:selectItems value="#{pricingView.allQuoteSets}" />
+											<f:selectItems value="#{pricingController.allQuoteSets}" />
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
@@ -485,16 +499,17 @@
 										<p:outputLabel value="Pricing Parameter" />
 									</p:column>
 									<p:column>
-										<p:selectOneMenu value="#{pricingView.pricingParameter}"
+										<p:selectOneMenu value="#{pricingController.pricingParameter}"
 											converter="pricingParameterConverter">
-											<f:selectItems value="#{pricingView.allPricingParameters}" />
+											<f:selectItems
+												value="#{pricingController.allPricingParameters}" />
 											<p:ajax update="pricer"
-												listener="#{pricingView.updatePricer}" />
+												listener="#{pricingController.updatePricer}" />
 											<p:ajax update="pricingMeasure"
-												listener="#{pricingView.updatePricingMeasures}" />
+												listener="#{pricingController.updatePricingMeasures}" />
 											<p:ajax
 												update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
-												listener="#{cashflowsView.updateDiscountCurve(pricingView.pricingParameter, gCRepoTradeView.currency)}" />
+												listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
@@ -504,12 +519,13 @@
 									</p:column>
 									<p:column>
 										<p:selectOneMenu id="pricingMeasure"
-											value="#{pricingView.pricerMeasure}"
+											value="#{pricingController.pricerMeasure}"
 											converter="pricerMeasureConverter">
-											<f:selectItems value="#{pricingView.allPricerMeasures}" />
-											<f:attribute name="pricer" value="#{pricingView.pricer}" />
+											<f:selectItems value="#{pricingController.allPricerMeasures}" />
+											<f:attribute name="pricer"
+												value="#{pricingController.pricer}" />
 											<p:ajax update="pricingMethod"
-												listener="#{pricingView.updatePricingMethods}" />
+												listener="#{pricingController.updatePricingMethods}" />
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
@@ -519,8 +535,8 @@
 									</p:column>
 									<p:column>
 										<p:selectOneMenu id="pricingMethod"
-											value="#{pricingView.pricingMethod}">
-											<f:selectItems value="#{pricingView.allPricingMethods}" />
+											value="#{pricingController.pricingMethod}">
+											<f:selectItems value="#{pricingController.allPricingMethods}" />
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
@@ -529,9 +545,9 @@
 										<p:outputLabel value="Pricing Currency" />
 									</p:column>
 									<p:column>
-										<p:selectOneMenu value="#{pricingView.pricingCurrency}"
+										<p:selectOneMenu value="#{pricingController.pricingCurrency}"
 											converter="currencyConverter">
-											<f:selectItems value="#{pricingView.allCurrencies}" />
+											<f:selectItems value="#{pricingController.allCurrencies}" />
 										</p:selectOneMenu>
 									</p:column>
 								</p:row>
@@ -540,7 +556,7 @@
 										<p:outputLabel value="Pricing Date" />
 									</p:column>
 									<p:column>
-										<p:datePicker value="#{pricingView.pricingDate}"
+										<p:datePicker value="#{pricingController.pricingDate}"
 											pattern="dd/MM/yyyy">
 											<p:ajax
 												update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable" />
@@ -551,13 +567,13 @@
 									<p:row>
 										<p:column>
 											<p:commandButton value="Price" styleClass="rounded-button"
-												action="#{pricingView.price(gCRepoTradeView.gcRepoTrade)}"
+												action="#{pricingController.price(gCRepoTradeController.gcRepoTrade)}"
 												update="@form">
 											</p:commandButton>
 										</p:column>
 										<p:column>
 											<p:outputLabel rendered="true" id="priceResult"
-												value="#{pricingView.pricerResult}" />
+												value="#{pricingController.pricerResult}" />
 										</p:column>
 									</p:row>
 								</f:facet>
@@ -569,7 +585,7 @@
 							<p:tabView id="quotesCashflowsTabs">
 								<p:tab title="Quotes">
 									<p:dataTable id="quotesListDataTable" var="quote"
-										value="#{quotesView.quoteValues}" allowUnsorting="true"
+										value="#{quotesController.quoteValues}" allowUnsorting="true"
 										sortMode="single" tableStyleClass="tradista-datatable"
 										size="small">
 										<f:facet name="header">
@@ -578,10 +594,10 @@
 													<p:outputLabel value="Quote Date : " />
 												</p:column>
 												<p:column>
-													<p:datePicker value="#{quotesView.quoteDate}"
+													<p:datePicker value="#{quotesController.quoteDate}"
 														pattern="dd/MM/yyyy">
 														<p:ajax event="dateSelect"
-															listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}"
+															listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}"
 															update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 													</p:datePicker>
 												</p:column>
@@ -590,17 +606,18 @@
 														styleClass="tradista-menu-item" />
 												</p:column>
 												<p:column>
-													<p:selectOneMenu value="#{quotesView.quoteSet}"
+													<p:selectOneMenu value="#{quotesController.quoteSet}"
 														converter="quoteSetConverter"
 														styleClass="tradista-menu-item">
-														<f:selectItems value="#{quotesView.allQuoteSets}" />
+														<f:selectItems value="#{quotesController.allQuoteSets}" />
 														<p:ajax event="change"
-															listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}"
+															listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}"
 															update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 													</p:selectOneMenu>
 												</p:column>
 												<p:column>
-													<p:selectBooleanCheckbox value="#{quotesView.realTime}"
+													<p:selectBooleanCheckbox
+														value="#{quotesController.realTime}"
 														styleClass="tradista-menu-item">
 														<p:outputLabel styleClass="tradista-menu-item">Real Time</p:outputLabel>
 														<p:ajax event="change" update=":dashboardForm:poll" />
@@ -665,7 +682,7 @@
 								</p:tab>
 								<p:tab title="Cashflows forecast">
 									<p:dataTable id="cashflowsListDataTable" var="cf"
-										value="#{cashflowsView.cashflows}" allowUnsorting="true"
+										value="#{cashflowsController.cashflows}" allowUnsorting="true"
 										sortMode="single" tableStyleClass="tradista-datatable"
 										size="small">
 										<f:facet name="header">
@@ -675,7 +692,7 @@
 														styleClass="rounded-button"
 														update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable">
 														<f:actionListener
-															binding="#{cashflowsView.generate(gCRepoTradeView.gcRepoTrade, pricingView.pricingParameter, pricingView.pricingDate)}" />
+															binding="#{cashflowsController.generate(gCRepoTradeController.gcRepoTrade, pricingController.pricingParameter, pricingController.pricingDate)}" />
 													</p:commandButton>
 												</p:column>
 												<p:column>
@@ -683,7 +700,7 @@
 														styleClass="tradista-menu-item" />
 												</p:column>
 												<p:column>
-													<p:outputLabel value="#{pricingView.pricingDate}"
+													<p:outputLabel value="#{pricingController.pricingDate}"
 														styleClass="tradista-menu-item">
 														<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
 													</p:outputLabel>
@@ -693,13 +710,13 @@
 														styleClass="tradista-menu-item" />
 												</p:column>
 												<p:column>
-													<p:outputLabel value="#{cashflowsView.discountCurve}"
+													<p:outputLabel value="#{cashflowsController.discountCurve}"
 														styleClass="tradista-menu-item"
-														rendered="#{not (cashflowsView.discountCurve eq null)}" />
+														rendered="#{not (cashflowsController.discountCurve eq null)}" />
 													<p:outputLabel
-														value="#{cashflowsView.discountCurveWarning(pricingView.pricingParameter, gCRepoTradeView.currency)}"
+														value="#{cashflowsController.discountCurveWarning(pricingController.pricingParameter, gCRepoTradeController.currency)}"
 														styleClass="tradista-warning-label"
-														rendered="#{cashflowsView.discountCurve eq null}" />
+														rendered="#{cashflowsController.discountCurve eq null}" />
 												</p:column>
 											</p:row>
 										</f:facet>
@@ -747,9 +764,9 @@
 						<p:column>
 							<p:outputLabel>
   Please indicate how much   
-  <h:outputText value="#{collateralView.securityToAdd}" />
+  <h:outputText value="#{collateralController.securityToAdd}" />
 to add (up to 
-<h:outputText value="#{collateralView.maxQuantityToAdd}">
+<h:outputText value="#{collateralController.maxQuantityToAdd}">
 									<f:convertNumber pattern="0.00" />
 								</h:outputText>)				
 </p:outputLabel>
@@ -757,17 +774,17 @@ to add (up to
 					</p:row>
 					<p:row>
 						<p:column>
-							<p:inputText value="#{collateralView.quantityToAdd}" />
+							<p:inputText value="#{collateralController.quantityToAdd}" />
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column>
 							<p:commandButton value="Confirm" styleClass="rounded-button"
 								update="@form"
-								action="#{collateralView.updateCollateralToAdd(collateralView.quantityToAdd)}"
+								action="#{collateralController.updateCollateralToAdd(collateralController.quantityToAdd)}"
 								oncomplete="PF('addCol').hide();" />
 							<p:commandButton value="Cancel" styleClass="rounded-button"
-								action="#{collateralView.clearCollateralToAdd()}"
+								action="#{collateralController.clearCollateralToAdd()}"
 								oncomplete="PF('addCol').hide();" />
 						</p:column>
 					</p:row>
@@ -781,9 +798,9 @@ to add (up to
 						<p:column>
 							<p:outputLabel>
   Please indicate how much   
-  <h:outputText value="#{collateralView.securityToRemove}" />
+  <h:outputText value="#{collateralController.securityToRemove}" />
 to remove (up to 
-<h:outputText value="#{collateralView.maxQuantityToRemove}">
+<h:outputText value="#{collateralController.maxQuantityToRemove}">
 									<f:convertNumber pattern="0.00" />
 								</h:outputText>)				
 </p:outputLabel>
@@ -791,25 +808,25 @@ to remove (up to
 					</p:row>
 					<p:row>
 						<p:column>
-							<p:inputText value="#{collateralView.quantityToRemove}" />
+							<p:inputText value="#{collateralController.quantityToRemove}" />
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column>
 							<p:commandButton value="Confirm" styleClass="rounded-button"
 								update="@form"
-								action="#{collateralView.updateCollateralToRemove(collateralView.quantityToRemove)}"
+								action="#{collateralController.updateCollateralToRemove(collateralController.quantityToRemove)}"
 								oncomplete="PF('removeCol').hide();" />
 							<p:commandButton value="Cancel" styleClass="rounded-button"
-								action="#{collateralView.clearCollateralToRemove()}"
+								action="#{collateralController.clearCollateralToRemove()}"
 								oncomplete="PF('removeCol').hide();" />
 						</p:column>
 					</p:row>
 				</p:panelGrid>
 			</p:dialog>
-			<p:poll interval="#{quotesView.frequency}" id="poll"
-				stop="#{not quotesView.realTime}"
-				listener="#{quotesView.refresh(quotesView.quoteDate, quotesView.quoteSet, gCRepoTradeView.quoteNames)}"
+			<p:poll interval="#{quotesController.frequency}" id="poll"
+				stop="#{not quotesController.realTime}"
+				listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}"
 				update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 		</h:form>
 	</ui:define>

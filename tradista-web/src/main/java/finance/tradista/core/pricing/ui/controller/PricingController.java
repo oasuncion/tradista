@@ -1,4 +1,4 @@
-package finance.tradista.core.pricing.ui.view;
+package finance.tradista.core.pricing.ui.controller;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -44,7 +44,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class PricingView implements Serializable {
+public class PricingController implements Serializable {
 
 	private static final long serialVersionUID = 1681707647567789611L;
 

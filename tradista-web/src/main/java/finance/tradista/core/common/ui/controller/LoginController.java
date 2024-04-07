@@ -1,4 +1,4 @@
-package finance.tradista.core.common.ui.view;
+package finance.tradista.core.common.ui.controller;
 
 import java.io.Serializable;
 
@@ -35,7 +35,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class LoginView implements Serializable {
+public class LoginController implements Serializable {
 
 	private static final long serialVersionUID = -7912603586721092288L;
 

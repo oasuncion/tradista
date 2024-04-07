@@ -1,4 +1,4 @@
-package finance.tradista.security.gcrepo.ui.view;
+package finance.tradista.security.gcrepo.ui.controller;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -37,7 +37,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class ProcessingOrgDefaultsCollateralManagementView implements Serializable {
+public class ProcessingOrgDefaultsCollateralManagementController implements Serializable {
 
 	private static final long serialVersionUID = -2740894244286229939L;
 

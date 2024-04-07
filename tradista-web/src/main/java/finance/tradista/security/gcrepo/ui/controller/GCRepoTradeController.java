@@ -1,4 +1,4 @@
-package finance.tradista.security.gcrepo.ui.view;
+package finance.tradista.security.gcrepo.ui.controller;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -57,7 +57,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class GCRepoTradeView implements Serializable {
+public class GCRepoTradeController implements Serializable {
 
 	private static final long serialVersionUID = -8633490083412044246L;
 

@@ -71,7 +71,7 @@ public class AllocationConfiguration extends TradistaObject implements Comparabl
 	@Override
 	public AllocationConfiguration clone() {
 		AllocationConfiguration allocConfig = (AllocationConfiguration) super.clone();
-		allocConfig.setBooks((Set<Book>) TradistaModelUtil.deepCopy(books));
+		allocConfig.books = ((Set<Book>) TradistaModelUtil.deepCopy(books));
 		allocConfig.processingOrg = TradistaModelUtil.clone(processingOrg);
 		return allocConfig;
 	}

@@ -41,7 +41,7 @@ public class AllocationConfigurationServiceBean implements AllocationConfigurati
 	public long saveAllocationConfiguration(AllocationConfiguration allocationConfiguration)
 			throws TradistaBusinessException {
 		if (allocationConfiguration.getId() == 0) {
-			checkNameExistence(allocationConfiguration);
+			checkAllocationConfigurationExistence(allocationConfiguration);
 			return AllocationConfigurationSQL.saveAllocationConfiguration(allocationConfiguration);
 		} else {
 			AllocationConfiguration oldAllocationConfiguration = AllocationConfigurationSQL
@@ -49,18 +49,19 @@ public class AllocationConfigurationServiceBean implements AllocationConfigurati
 			if (!allocationConfiguration.getName().equals(oldAllocationConfiguration.getName())
 					|| !allocationConfiguration.getProcessingOrg()
 							.equals(oldAllocationConfiguration.getProcessingOrg())) {
-				checkNameExistence(allocationConfiguration);
+				checkAllocationConfigurationExistence(allocationConfiguration);
 			}
 			return AllocationConfigurationSQL.saveAllocationConfiguration(allocationConfiguration);
 		}
 	}
 
-	private void checkNameExistence(AllocationConfiguration allocationConfiguration) throws TradistaBusinessException {
+	private void checkAllocationConfigurationExistence(AllocationConfiguration allocationConfiguration)
+			throws TradistaBusinessException {
 		if (AllocationConfigurationSQL.getAllocationConfigurationByNameAndPoId(allocationConfiguration.getName(),
 				allocationConfiguration.getProcessingOrg().getId()) != null) {
-			throw new TradistaBusinessException(
-					String.format("This Allocation Configuration '%s' already exists in the system for the PO %s.",
-							allocationConfiguration.getName(), allocationConfiguration.getProcessingOrg().getId()));
+			throw new TradistaBusinessException(String.format(
+					"This Allocation Configuration '%s' already exists in the system for the PO '%s'.",
+					allocationConfiguration.getName(), allocationConfiguration.getProcessingOrg().getShortName()));
 		}
 	}
 

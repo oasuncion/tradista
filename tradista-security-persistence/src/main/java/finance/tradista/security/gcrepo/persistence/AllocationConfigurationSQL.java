@@ -211,13 +211,13 @@ public class AllocationConfigurationSQL {
 		return allocationConfiguration;
 	}
 
-	public static Object getAllocationConfigurationByNameAndPoId(String name, long id) {
+	public static Object getAllocationConfigurationByNameAndPoId(String name, long poId) {
 		AllocationConfiguration allocationConfiguration = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetAllocationConfigurationByName = con.prepareStatement(
 						"SELECT ALLOCATION_CONFIGURATION.NAME, ALLOCATION_CONFIGURATION.ID, ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID, ALLOCATION_CONFIGURATION_BOOK.BOOK_ID FROM ALLOCATION_CONFIGURATION LEFT OUTER JOIN ALLOCATION_CONFIGURATION_BOOK ON ALLOCATION_CONFIGURATION.ID = ALLOCATION_CONFIGURATION_BOOK.ALLOCATION_CONFIGURATION_ID WHERE ALLOCATION_CONFIGURATION.NAME = ? AND ALLOCATION_CONFIGURATION.PROCESSING_ORG_ID = ?");) {
 			stmtGetAllocationConfigurationByName.setString(1, name);
-			stmtGetAllocationConfigurationByName.setLong(2, id);
+			stmtGetAllocationConfigurationByName.setLong(2, poId);
 			ResultSet results = stmtGetAllocationConfigurationByName.executeQuery();
 			while (results.next()) {
 				if (allocationConfiguration == null) {

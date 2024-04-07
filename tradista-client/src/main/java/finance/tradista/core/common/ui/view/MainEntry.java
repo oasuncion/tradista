@@ -145,6 +145,8 @@ public class MainEntry extends Application {
 
 	private MenuItem processingOrgDefaults;
 
+	private MenuItem allocationConfiguration;
+
 	private static Pane currentWindow;
 
 	public static Pane getCurrentWindow() {
@@ -286,6 +288,7 @@ public class MainEntry extends Application {
 		menuConfiguration = new Menu("Configuration");
 		uiConfiguration = new MenuItem("UI Configuration");
 		processingOrgDefaults = new MenuItem("Processing Org Defaults");
+		allocationConfiguration = new MenuItem("Allocation Configuration");
 
 		setupWindows();
 
@@ -405,6 +408,9 @@ public class MainEntry extends Application {
 				MenuItem productMenuItem;
 				if (product.equals("GCRepo")) {
 					productMenuItem = new MenuItem("GCBasket");
+					menuConfiguration.getItems().add(allocationConfiguration);
+					setupMenuItem(allocationConfiguration, "Allocation Configuration", "AllocationConfiguration",
+							primScreenBounds);
 				} else {
 					productMenuItem = new MenuItem(product);
 				}
@@ -452,7 +458,8 @@ public class MainEntry extends Application {
 		menuItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
 				// GC Repo trade and Processing Org Defaults windows are web based.
-				if (templateName.equals("GCRepoTrade") || templateName.equals("ProcessingOrgDefaults")) {
+				if (templateName.equals("GCRepoTrade") || templateName.equals("ProcessingOrgDefaults")
+						|| templateName.equals("AllocationConfiguration")) {
 					browseUrl(templateName.toLowerCase());
 				} else if (templateName.equals("GCRepoProduct")) {
 					browseUrl("gcbasket");

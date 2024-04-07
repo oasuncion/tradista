@@ -1,9 +1,13 @@
-package finance.tradista.core.processingorgdefaults.service;
+package finance.tradista.security.gcrepo.service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.service.TradistaAuthorizationFilteringInterceptor;
-import finance.tradista.core.processingorgdefaults.model.ProcessingOrgDefaults;
-import finance.tradista.core.processingorgdefaults.model.ProcessingOrgDefaultsModule;
+import finance.tradista.core.user.model.User;
+import finance.tradista.security.gcrepo.model.AllocationConfiguration;
+import jakarta.ejb.EJB;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.InvocationContext;
 
@@ -27,13 +31,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class ProcessingOrgDefaultsFilteringInterceptor extends TradistaAuthorizationFilteringInterceptor {
+public class AllocationConfigurationFilteringInterceptor extends TradistaAuthorizationFilteringInterceptor {
 
-	protected ProcessingOrgDefaultsBusinessDelegate poDefaultsBusinessDelegate;
-
-	public ProcessingOrgDefaultsFilteringInterceptor() {
-		poDefaultsBusinessDelegate = new ProcessingOrgDefaultsBusinessDelegate();
-	}
+	@EJB
+	protected AllocationConfigurationService allocationConfigurationService;
 
 	@AroundInvoke
 	public Object filter(InvocationContext ic) throws Exception {
@@ -45,26 +46,34 @@ public class ProcessingOrgDefaultsFilteringInterceptor extends TradistaAuthoriza
 		Object[] parameters = ic.getParameters();
 		if (parameters.length > 0) {
 			StringBuilder errMsg = new StringBuilder();
-			if (parameters[0] instanceof Long poId) {
-				if (poId != getCurrentUser().getProcessingOrg().getId()) {
-					errMsg.append(String.format(
-							"You are not allowed to access the Processing Org Defaults of this Processing Org.%n"));
-
-				}
-			}
-			if (parameters[0] instanceof ProcessingOrgDefaults pod) {
-				if (pod.getModules() != null && pod.getModules().isEmpty()) {
-					for (ProcessingOrgDefaultsModule module : pod.getModules()) {
-						ProcessingOrgDefaultsModuleValidator validator = poDefaultsBusinessDelegate
-								.getValidator(module);
-						validator.checkAccess(module, errMsg);
-					}
+			if (parameters[0] instanceof AllocationConfiguration allocConfig) {
+				if (!allocConfig.getProcessingOrg().equals(getCurrentUser().getProcessingOrg())) {
+					errMsg.append(String.format("You are not allowed to save this Allocation Configuration.%n"));
 				}
 			}
 			if (errMsg.length() > 0) {
 				throw new TradistaBusinessException(errMsg.toString());
 			}
 		}
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected Object postFilter(Object value) {
+		if (value != null) {
+			User user = getCurrentUser();
+			if (value instanceof AllocationConfiguration allocConfig) {
+				if (!allocConfig.getProcessingOrg().equals(user.getProcessingOrg())) {
+					value = null;
+				}
+			}
+			if (value instanceof Set) {
+				Set<AllocationConfiguration> allocConfigs = (Set<AllocationConfiguration>) value;
+				value = allocConfigs.stream().filter(a -> (a.getProcessingOrg().equals(user.getProcessingOrg())))
+						.collect(Collectors.toSet());
+			}
+		}
+		return value;
 	}
 
 }

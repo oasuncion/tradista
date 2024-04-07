@@ -31,6 +31,8 @@ public class ProcessingOrgDefaultsCollateralManagementModule extends ProcessingO
 	public static final String COLLATERAL_MANAGEMENT = "Collateral Management";
 
 	private QuoteSet quoteSet;
+	
+	private AllocationConfiguration allocationConfiguration;
 
 	public ProcessingOrgDefaultsCollateralManagementModule() {
 		name = COLLATERAL_MANAGEMENT;
@@ -44,10 +46,19 @@ public class ProcessingOrgDefaultsCollateralManagementModule extends ProcessingO
 		quoteSet = qs;
 	}
 
+	public AllocationConfiguration getAllocationConfiguration() {
+		return allocationConfiguration;
+	}
+
+	public void setAllocationConfiguration(AllocationConfiguration allocationConfiguration) {
+		this.allocationConfiguration = allocationConfiguration;
+	}
+
 	@Override
 	public ProcessingOrgDefaultsCollateralManagementModule clone() {
 		ProcessingOrgDefaultsCollateralManagementModule module = (ProcessingOrgDefaultsCollateralManagementModule) super.clone();
 		module.quoteSet = TradistaModelUtil.clone(quoteSet);
+		module.allocationConfiguration = TradistaModelUtil.clone(allocationConfiguration);
 		return module;
 	}
 

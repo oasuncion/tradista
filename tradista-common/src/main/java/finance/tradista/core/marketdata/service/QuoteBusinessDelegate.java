@@ -44,6 +44,12 @@ public class QuoteBusinessDelegate {
 
 	private QuoteService quoteService;
 
+	private static final String QUOTE_NAME_CANNOT_BE_NULL = "The quote name cannot be null.%n";
+
+	private static final String QUOTE_NAME_CANNOT_BE_EMPTY = "The quote name cannot be empty.%n";
+
+	private static final String QUOTE_SET_ID_MUST_BE_POSITIVE = "The quote set id must be positive.%n";
+
 	public QuoteBusinessDelegate() {
 		quoteService = TradistaServiceLocator.getInstance().getQuoteService();
 	}
@@ -56,13 +62,16 @@ public class QuoteBusinessDelegate {
 		return SecurityUtil.run(() -> quoteService.getAllQuoteNames());
 	}
 
-	public QuoteSet getQuoteSetByName(String name) {
+	public QuoteSet getQuoteSetByName(String name) throws TradistaBusinessException {
+		if (StringUtils.isEmpty(name)) {
+			throw new TradistaBusinessException("The quote set name is mandatory.");
+		}
 		return SecurityUtil.run(() -> quoteService.getQuoteSetByName(name));
 	}
 
 	public QuoteSet getQuoteSetById(long quoteSetId) throws TradistaBusinessException {
 		if (quoteSetId <= 0) {
-			throw new TradistaBusinessException("The quote set id must be positive.");
+			throw new TradistaBusinessException(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		return SecurityUtil.run(() -> quoteService.getQuoteSetById(quoteSetId));
 	}
@@ -71,13 +80,13 @@ public class QuoteBusinessDelegate {
 			Year year, Month month) throws TradistaBusinessException {
 		StringBuilder errMsg = new StringBuilder();
 		if (quoteSetId <= 0) {
-			errMsg.append(String.format("The quote set id must be positive.%n"));
+			errMsg.append(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		if (quoteName == null) {
-			errMsg.append(String.format("The quote name cannot be null.%n"));
+			errMsg.append(String.format(QUOTE_NAME_CANNOT_BE_NULL));
 		} else {
 			if (quoteName.isEmpty()) {
-				errMsg.append(String.format("The quote name cannot be empty.%n"));
+				errMsg.append(String.format(QUOTE_NAME_CANNOT_BE_EMPTY));
 			}
 		}
 		if (year == null) {
@@ -177,13 +186,13 @@ public class QuoteBusinessDelegate {
 			QuoteType quoteType, LocalDate startDate, LocalDate endDate) throws TradistaBusinessException {
 		StringBuilder errMsg = new StringBuilder();
 		if (quoteSetId <= 0) {
-			errMsg.append(String.format("The quote set id must be positive.%n"));
+			errMsg.append(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		if (quoteName == null) {
-			errMsg.append(String.format("The quote name cannot be null.%n"));
+			errMsg.append(String.format(QUOTE_NAME_CANNOT_BE_NULL));
 		} else {
 			if (quoteName.isEmpty()) {
-				errMsg.append(String.format("The quote name cannot be empty.%n"));
+				errMsg.append(String.format(QUOTE_NAME_CANNOT_BE_EMPTY));
 			}
 		}
 		if (quoteType == null) {
@@ -217,13 +226,13 @@ public class QuoteBusinessDelegate {
 			QuoteType quoteType, Year year, Month month) throws TradistaBusinessException {
 		StringBuilder errMsg = new StringBuilder();
 		if (quoteSetId <= 0) {
-			errMsg.append(String.format("The quote set id must be positive.%n"));
+			errMsg.append(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		if (quoteName == null) {
-			errMsg.append(String.format("The quote name cannot be null.%n"));
+			errMsg.append(String.format(QUOTE_NAME_CANNOT_BE_NULL));
 		} else {
 			if (quoteName.isEmpty()) {
-				errMsg.append(String.format("The quote name cannot be empty.%n"));
+				errMsg.append(String.format(QUOTE_NAME_CANNOT_BE_EMPTY));
 			}
 		}
 		if (year == null) {
@@ -265,7 +274,7 @@ public class QuoteBusinessDelegate {
 
 	public void deleteQuoteSet(long quoteSetId) throws TradistaBusinessException {
 		if (quoteSetId <= 0) {
-			throw new TradistaBusinessException("The quote set id must be positive.");
+			throw new TradistaBusinessException(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		SecurityUtil.runEx(() -> quoteService.deleteQuoteSet(quoteSetId));
 	}

@@ -62,7 +62,7 @@ public class GCBasketSQL {
 					if (generatedKeys.next()) {
 						gcBasketId = generatedKeys.getLong(1);
 					} else {
-						throw new SQLException("Creating product failed, no generated key obtained.");
+						throw new SQLException("Creating gc basket failed, no generated key obtained.");
 					}
 				}
 			} else {
@@ -96,11 +96,11 @@ public class GCBasketSQL {
 		Map<Long, GCBasket> gcBasketsMap = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetAllGCBaskets = con.prepareStatement(
-						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID WHERE GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID");
+						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID");
 				ResultSet results = stmtGetAllGCBaskets.executeQuery()) {
 			while (results.next()) {
 				if (gcBasketsMap == null) {
-					gcBasketsMap = new HashMap<Long, GCBasket>();
+					gcBasketsMap = new HashMap<>();
 				}
 				long basketId = results.getLong(2);
 
@@ -116,7 +116,7 @@ public class GCBasketSQL {
 				if (securityId != 0) {
 					Set<Security> securities;
 					if (gcBasket.getSecurities() == null) {
-						securities = new HashSet<Security>();
+						securities = new HashSet<>();
 					} else {
 						securities = gcBasket.getSecurities();
 					}
@@ -158,7 +158,7 @@ public class GCBasketSQL {
 				if (securityId != 0) {
 					Set<Security> securities;
 					if (gcBasket.getSecurities() == null) {
-						securities = new HashSet<Security>();
+						securities = new HashSet<>();
 					} else {
 						securities = gcBasket.getSecurities();
 					}
@@ -182,7 +182,7 @@ public class GCBasketSQL {
 		GCBasket gcBasket = null;
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetGCBasketByName = con.prepareStatement(
-						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID WHERE GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID AND GCBASKET.NAME = ?");) {
+						"SELECT GCBASKET.NAME, GCBASKET.ID, GCBASKET_SECURITY.SECURITY_ID FROM GCBASKET LEFT OUTER JOIN GCBASKET_SECURITY ON GCBASKET.ID = GCBASKET_SECURITY.GCBASKET_ID WHERE GCBASKET.NAME = ?");) {
 			stmtGetGCBasketByName.setString(1, name);
 			ResultSet results = stmtGetGCBasketByName.executeQuery();
 			while (results.next()) {
@@ -195,7 +195,7 @@ public class GCBasketSQL {
 				if (securityId != 0) {
 					Set<Security> securities;
 					if (gcBasket.getSecurities() == null) {
-						securities = new HashSet<Security>();
+						securities = new HashSet<>();
 					} else {
 						securities = gcBasket.getSecurities();
 					}

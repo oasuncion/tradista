@@ -6,7 +6,9 @@ import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
 import finance.tradista.core.processingorgdefaults.model.ProcessingOrgDefaultsModule;
 import finance.tradista.core.processingorgdefaults.service.ProcessingOrgDefaultsModuleValidator;
+import finance.tradista.security.gcrepo.model.AllocationConfiguration;
 import finance.tradista.security.gcrepo.model.ProcessingOrgDefaultsCollateralManagementModule;
+import finance.tradista.security.gcrepo.service.AllocationConfigurationBusinessDelegate;
 
 /*
  * Copyright 2024 Olivier Asuncion
@@ -32,29 +34,39 @@ public class ProcessingOrgDefaultsCollateralManagementModuleValidator implements
 
 	private QuoteBusinessDelegate quoteBusinessDelegate;
 
+	private AllocationConfigurationBusinessDelegate allocationConfigurationBusinessDelegate;
+
 	public ProcessingOrgDefaultsCollateralManagementModuleValidator() {
 		quoteBusinessDelegate = new QuoteBusinessDelegate();
+		allocationConfigurationBusinessDelegate = new AllocationConfigurationBusinessDelegate();
 	}
 
 	@Override
 	public void validateModule(ProcessingOrgDefaultsModule module, LegalEntity po) throws TradistaBusinessException {
+		if (po == null) {
+			throw new TradistaBusinessException("The PO is mandatory.");
+		}
 		StringBuilder errMsg = new StringBuilder();
 		QuoteSet qs = ((ProcessingOrgDefaultsCollateralManagementModule) module).getQuoteSet();
+		AllocationConfiguration allocConfig = ((ProcessingOrgDefaultsCollateralManagementModule) module)
+				.getAllocationConfiguration();
 		if (qs != null) {
-			if (po != null && qs.getProcessingOrg() != null && !qs.getProcessingOrg().equals(po)) {
+			if (qs.getProcessingOrg() != null && !qs.getProcessingOrg().equals(po)) {
 				errMsg.append(String.format(
-						"the Processing Org Defaults's PO and the Collateral Management Quote Set %s's PO should be the same.%n",
+						"The Processing Org Defaults's PO and the Collateral Quote Set %s's PO should be the same.%n",
 						qs));
 			}
-			if (po == null && qs.getProcessingOrg() != null) {
+			if (qs.getProcessingOrg() == null) {
 				errMsg.append(String.format(
-						"If the Processing Org Defaults is a global one, the Collateral Management Quote Set %s must also be global.%n",
+						"The Collateral Quote Set %s is a global one, it cannot be added to this Processing Org Defaults.%n",
 						qs));
 			}
-			if (po != null && qs.getProcessingOrg() == null) {
+		}
+		if (allocConfig != null) {
+			if (!allocConfig.getProcessingOrg().equals(po)) {
 				errMsg.append(String.format(
-						"If the Collateral Management Quote Set %s is a global one, the Processing Org Defaults must also be global.%n",
-						qs));
+						"the Processing Org Defaults's PO and the Allocation Configuration %s's PO should be the same.%n",
+						allocConfig));
 			}
 		}
 		if (errMsg.length() > 0) {
@@ -65,10 +77,19 @@ public class ProcessingOrgDefaultsCollateralManagementModuleValidator implements
 	@Override
 	public void checkAccess(ProcessingOrgDefaultsModule module, StringBuilder errMsg) throws TradistaBusinessException {
 		QuoteSet qs = ((ProcessingOrgDefaultsCollateralManagementModule) module).getQuoteSet();
+		AllocationConfiguration allocConfig = ((ProcessingOrgDefaultsCollateralManagementModule) module)
+				.getAllocationConfiguration();
 		if (qs != null) {
 			QuoteSet checkQs = quoteBusinessDelegate.getQuoteSetById(qs.getId());
 			if (checkQs == null) {
-				errMsg.append(String.format("the Collateral Management Quote Set %s was not found.%n", qs));
+				errMsg.append(String.format("the Collateral Quote Set %s was not found.%n", qs));
+			}
+		}
+		if (allocConfig != null) {
+			AllocationConfiguration checkAc = allocationConfigurationBusinessDelegate
+					.getAllocationConfigurationById(allocConfig.getId());
+			if (checkAc == null) {
+				errMsg.append(String.format("the Allocation Configuration %s was not found.%n", allocConfig));
 			}
 		}
 	}

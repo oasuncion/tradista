@@ -1,9 +1,13 @@
-package finance.tradista.core.common.util;
+package finance.tradista.security.gcrepo.service;
 
-import finance.tradista.core.user.model.User;
+import java.util.Set;
+
+import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.security.gcrepo.model.AllocationConfiguration;
+import jakarta.ejb.Remote;
 
 /*
- * Copyright 2019 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -21,26 +25,16 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
-/**
- * To not be used on server side.
- *
- */
-public final class ClientUtil {
 
-	private static User currentUser;
+@Remote
+public interface AllocationConfigurationService {
 
-	private ClientUtil() {
-	}
+	long saveAllocationConfiguration(AllocationConfiguration allocationConfiguration) throws TradistaBusinessException;
 
-	public static void setCurrentUser(User user) {
-		currentUser = user;
-	}
+	AllocationConfiguration getAllocationConfigurationByName(String name);
 
-	public static User getCurrentUser() {
-		return currentUser;
-	}
+	AllocationConfiguration getAllocationConfigurationById(long id);
 
-	public static boolean currentUserIsAdmin() {
-		return currentUser.isAdmin();
-	}
+	Set<AllocationConfiguration> getAllAllocationConfigurations();
+
 }

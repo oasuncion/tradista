@@ -1,9 +1,11 @@
-package finance.tradista.core.common.util;
+package finance.tradista.security.gcrepo.model;
 
-import finance.tradista.core.user.model.User;
+import org.apache.commons.lang3.StringUtils;
+
+import finance.tradista.core.legalentity.model.BlankLegalEntity;
 
 /*
- * Copyright 2019 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -21,26 +23,19 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
-/**
- * To not be used on server side.
- *
- */
-public final class ClientUtil {
 
-	private static User currentUser;
+public final class BlankAllocationConfiguration extends AllocationConfiguration {
 
-	private ClientUtil() {
+	private static final long serialVersionUID = -7247341357965448021L;
+
+	private static final BlankAllocationConfiguration instance = new BlankAllocationConfiguration();
+
+	private BlankAllocationConfiguration() {
+		super(StringUtils.EMPTY, BlankLegalEntity.getInstance());
 	}
 
-	public static void setCurrentUser(User user) {
-		currentUser = user;
+	public static BlankAllocationConfiguration getInstance() {
+		return instance;
 	}
 
-	public static User getCurrentUser() {
-		return currentUser;
-	}
-
-	public static boolean currentUserIsAdmin() {
-		return currentUser.isAdmin();
-	}
 }

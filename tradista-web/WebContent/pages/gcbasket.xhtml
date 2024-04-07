@@ -6,7 +6,7 @@
 	<ui:define name="title">Tradista GC Basket</ui:define>
 	<ui:define name="viewname">Tradista GC Basket</ui:define>
 	<ui:define name="content">
-		<h:form id="dashboardForm">
+		<h:form id="gcBasketForm">
 			<p:panel id="gcBasket" header="GC Basket"
 				styleClass="tradista-central-component">
 				<p:messages showDetail="true" closable="true" id="msg">
@@ -65,7 +65,7 @@
 				<p:inputText value="#{gCBasketView.copyGCBasketName}" />
 				<f:facet name="footer">
 					<p:commandButton value="Ok" styleClass="rounded-button"
-						onclick="PF('copy').hide()" update=":dashboardForm:gcBasket">
+						onclick="PF('copy').hide()" update=":gcBasketForm:gcBasket">
 						<f:actionListener binding="#{gCBasketView.copy()}" />
 					</p:commandButton>
 					<p:commandButton value="Cancel" styleClass="rounded-button"

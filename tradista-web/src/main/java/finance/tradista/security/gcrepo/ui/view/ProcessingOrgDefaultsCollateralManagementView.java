@@ -58,7 +58,6 @@ public class ProcessingOrgDefaultsCollateralManagementView implements Serializab
 		Set<AllocationConfiguration> allAc = allocationConfigurationBusinessDelegate.getAllAllocationConfigurations();
 		allAllocationConfigurations = new TreeSet<>();
 		allAllocationConfigurations.add(BlankAllocationConfiguration.getInstance());
-		
 		if (allAc != null && !allAc.isEmpty()) {
 			allAllocationConfigurations.addAll(allAc);
 		}

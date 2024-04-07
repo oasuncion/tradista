@@ -579,7 +579,8 @@ public class CollateralView implements Serializable {
 			if (trade != null) {
 				AllocationConfiguration ac = ((ProcessingOrgDefaultsCollateralManagementModule) poDefaultsBusinessDelegate
 						.getProcessingOrgDefaultsByPoId(trade.getBook().getProcessingOrg().getId())
-						.getModuleByName("Collateral Management")).getAllocationConfiguration();
+						.getModuleByName(ProcessingOrgDefaultsCollateralManagementModule.COLLATERAL_MANAGEMENT))
+						.getAllocationConfiguration();
 				if (ac == null) {
 					throw new TradistaBusinessException(
 							"An Allocation Configuration must be set in the Processing Org Defaults.");
@@ -587,7 +588,7 @@ public class CollateralView implements Serializable {
 				Set<Book> configuredBooks = ac.getBooks();
 				if (configuredBooks == null || configuredBooks.isEmpty()) {
 					throw new TradistaBusinessException(String
-							.format("Books should be configured in the Allocation Configuration %s.", ac.getName()));
+							.format("Books should be configured in the Allocation Configuration '%s'.", ac.getName()));
 				}
 				if (collateralValues == null) {
 					collateralValues = new ArrayList<>();

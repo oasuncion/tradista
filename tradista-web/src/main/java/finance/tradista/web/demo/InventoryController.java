@@ -51,7 +51,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class InventoryView implements Serializable {
+public class InventoryController implements Serializable {
 
 	private static final long serialVersionUID = 279320826504459625L;
 

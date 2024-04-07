@@ -38,7 +38,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class DashboardView implements Serializable {
+public class DashboardController implements Serializable {
 
 	/**
 	 * 

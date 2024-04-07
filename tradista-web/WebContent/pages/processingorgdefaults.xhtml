@@ -15,15 +15,15 @@
 				</p:messages>
 				<br />
 				<p:outputLabel
-					value="#{'Processing Org '+=processingOrgDefaultsView.processingOrg}"
+					value="#{'Processing Org '+=processingOrgDefaultsController.processingOrg}"
 					styleClass="tradista-small-title"
-					rendered="#{processingOrgDefaultsView.poDefaults ne null}" />
+					rendered="#{processingOrgDefaultsController.poDefaults ne null}" />
 				<br />
 				<br />
 				<p:tabView
-					rendered="#{processingOrgDefaultsView.poDefaults ne null}">
+					rendered="#{processingOrgDefaultsController.poDefaults ne null}">
 					<c:forEach var="mc"
-						items="${processingOrgDefaultsView.moduleControllers}">
+						items="${processingOrgDefaultsController.moduleControllers}">
 						<p:tab title="#{mc.key}">
 							<ui:include src="#{'/pages/'+=mc.value+='.xhtml'}" />
 						</p:tab>
@@ -34,19 +34,22 @@
 						<p:column>
 							<p:outputLabel value="Load by Processing Org"
 								rendered="#{empty userManager.currentUserProcessingOrg}" />
-							<p:selectOneMenu value="#{processingOrgDefaultsView.selectedPo}"
+							<p:selectOneMenu
+								value="#{processingOrgDefaultsController.selectedPo}"
 								styleClass="tradista-menu-item"
 								rendered="#{empty userManager.currentUserProcessingOrg}"
 								converter="legalEntityConverter">
-								<f:selectItems value="#{processingOrgDefaultsView.allPos}" />
+								<f:selectItems value="#{processingOrgDefaultsController.allPos}" />
 							</p:selectOneMenu>
 							<p:commandButton value="Load" styleClass="rounded-button"
 								rendered="#{empty userManager.currentUserProcessingOrg}"
 								update="@form">
-								<f:actionListener binding="#{processingOrgDefaultsView.load()}" />
+								<f:actionListener
+									binding="#{processingOrgDefaultsController.load()}" />
 							</p:commandButton>
 							<p:commandButton value="Save" styleClass="rounded-button">
-								<f:actionListener binding="#{processingOrgDefaultsView.save()}" />
+								<f:actionListener
+									binding="#{processingOrgDefaultsController.save()}" />
 							</p:commandButton>
 						</p:column>
 					</p:row>

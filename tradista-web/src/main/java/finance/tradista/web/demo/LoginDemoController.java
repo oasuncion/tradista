@@ -34,7 +34,7 @@ under the License.    */
 
 @Named
 @RequestScoped
-public class LoginDemoView implements Serializable {
+public class LoginDemoController implements Serializable {
 
 	private static final long serialVersionUID = -7912603586721092288L;
 

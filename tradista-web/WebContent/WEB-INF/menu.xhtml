@@ -8,10 +8,10 @@
 	<div class="menu-wrapper">
 		<div class="layout-menu-container">
 			<h:form id="menuform">
-				<p:menubar model="#{menuView.model}">
+				<p:menubar model="#{menuController.model}">
 					<f:facet name="options">
 						<p:commandButton icon="pi pi-power-off"
-							action="#{menuView.logout}" />
+							action="#{menuController.logout}" />
 					</f:facet>
 				</p:menubar>
 			</h:form>

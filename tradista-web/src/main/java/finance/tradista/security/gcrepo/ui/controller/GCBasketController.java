@@ -1,4 +1,4 @@
-package finance.tradista.security.gcrepo.ui.view;
+package finance.tradista.security.gcrepo.ui.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class GCBasketView implements Serializable {
+public class GCBasketController implements Serializable {
 
 	private static final long serialVersionUID = -6056004849327796923L;
 

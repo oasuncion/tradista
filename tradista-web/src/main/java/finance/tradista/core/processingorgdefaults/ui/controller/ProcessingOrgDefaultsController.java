@@ -1,4 +1,4 @@
-package finance.tradista.core.processingorgdefaults.ui.view;
+package finance.tradista.core.processingorgdefaults.ui.controller;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class ProcessingOrgDefaultsView implements Serializable {
+public class ProcessingOrgDefaultsController implements Serializable {
 
 	private static final long serialVersionUID = -265451284959975672L;
 
@@ -79,8 +79,8 @@ public class ProcessingOrgDefaultsView implements Serializable {
 		moduleControllers = new HashMap<>();
 		Class<?> controllerClass = null;
 		try {
-			controllerClass = TradistaUtil
-					.getClass("finance.tradista.security.gcrepo.ui.view.ProcessingOrgDefaultsCollateralManagementView");
+			controllerClass = TradistaUtil.getClass(
+					"finance.tradista.security.gcrepo.ui.controller.ProcessingOrgDefaultsCollateralManagementController");
 		} catch (TradistaTechnicalException tte) {
 			// TODO Add log info
 		}

@@ -43,7 +43,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class TradesListView implements Serializable {
+public class TradesListController implements Serializable {
 
 	private static final long serialVersionUID = -4314139362201924213L;
 	private List<EquityTrade> trades;

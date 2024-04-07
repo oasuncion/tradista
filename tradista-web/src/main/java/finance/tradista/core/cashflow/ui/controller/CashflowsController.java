@@ -1,4 +1,4 @@
-package finance.tradista.core.cashflow.ui.view;
+package finance.tradista.core.cashflow.ui.controller;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -43,7 +43,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class CashflowsView implements Serializable {
+public class CashflowsController implements Serializable {
 
 	private static final long serialVersionUID = 3525922991038977184L;
 

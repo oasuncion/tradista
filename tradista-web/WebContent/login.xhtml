@@ -30,13 +30,13 @@
 					library="poseidon-layout" width="300" height="300" />
 				<h2 class="login-label">Login To Tradista</h2>
 				<p:inputText placeholder="Login" styleClass="login-input"
-					value="#{loginView.login}" />
+					value="#{loginController.login}" />
 				<p:password placeholder="Password" styleClass="login-input"
-					value="#{loginView.password}" />
+					value="#{loginController.password}" />
 				<br />
 				<p:commandButton value="LOGIN"
 					styleClass="rounded-button login-button"
-					action="#{loginView.login}" update=":loginForm:errMsg" />
+					action="#{loginController.login}" update=":loginForm:errMsg" />
 				<p:messages id="errMsg" for="errMsg" showIcon="false"
 					closable="true" />
 			</h:form>

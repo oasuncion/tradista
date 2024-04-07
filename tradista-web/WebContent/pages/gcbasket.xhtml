@@ -14,10 +14,11 @@
 				</p:messages>
 				<p:outputLabel styleClass="tradista-menu-item"
 					value="GC Basket name :" />
-				<p:inputText value="#{gCBasketView.gcBasket.name}"
+				<p:inputText value="#{gCBasketController.gcBasket.name}"
 					styleClass="tradista-menu-item" />
-				<p:pickList id="gcBasketPickList" value="#{gCBasketView.securities}"
-					var="security" itemValue="#{security}" itemLabel="#{security.isin}"
+				<p:pickList id="gcBasketPickList"
+					value="#{gCBasketController.securities}" var="security"
+					itemValue="#{security}" itemLabel="#{security.isin}"
 					showSourceControls="true" showTargetControls="true"
 					showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
 					filterMatchMode="contains" responsive="true"
@@ -35,23 +36,23 @@
 						<p:column>
 							<p:commandButton value="Save" styleClass="rounded-button"
 								update="@form">
-								<f:actionListener binding="#{gCBasketView.save()}" />
+								<f:actionListener binding="#{gCBasketController.save()}" />
 							</p:commandButton>
 							<p:commandButton value="Copy" type="button"
 								styleClass="rounded-button" update="@form"
 								onclick="PF('copy').show()" />
 							<p:commandButton value="New" styleClass="rounded-button"
-								action="#{gCBasketView.clear()}" update="@form" />
+								action="#{gCBasketController.clear()}" update="@form" />
 							<p:outputLabel value="Load by basket"
 								styleClass="tradista-menu-item" />
-							<p:selectOneMenu value="#{gCBasketView.loadingCriterion}"
+							<p:selectOneMenu value="#{gCBasketController.loadingCriterion}"
 								styleClass="tradista-menu-item">
-								<f:selectItems value="#{gCBasketView.allLoadingCriteria}" />
+								<f:selectItems value="#{gCBasketController.allLoadingCriteria}" />
 							</p:selectOneMenu>
-							<p:inputText value="#{gCBasketView.idOrName}"
+							<p:inputText value="#{gCBasketController.idOrName}"
 								styleClass="tradista-menu-item" />
 							<p:commandButton value="Load" styleClass="rounded-button"
-								action="#{gCBasketView.load()}" update="@form" />
+								action="#{gCBasketController.load()}" update="@form" />
 						</p:column>
 					</p:row>
 				</f:facet>
@@ -62,11 +63,11 @@
 				showEffect="fade" modal="true">
 				<p:outputLabel value="Please choose a GC Basket name :" />
 				<p />
-				<p:inputText value="#{gCBasketView.copyGCBasketName}" />
+				<p:inputText value="#{gCBasketController.copyGCBasketName}" />
 				<f:facet name="footer">
 					<p:commandButton value="Ok" styleClass="rounded-button"
 						onclick="PF('copy').hide()" update=":gcBasketForm:gcBasket">
-						<f:actionListener binding="#{gCBasketView.copy()}" />
+						<f:actionListener binding="#{gCBasketController.copy()}" />
 					</p:commandButton>
 					<p:commandButton value="Cancel" styleClass="rounded-button"
 						onclick="PF('copy').hide()" />

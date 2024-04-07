@@ -1,4 +1,4 @@
-package finance.tradista.core.marketdata.ui.view;
+package finance.tradista.core.marketdata.ui.controller;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -39,7 +39,7 @@ under the License.    */
 
 @Named
 @ViewScoped
-public class QuotesView implements Serializable {
+public class QuotesController implements Serializable {
 
 	private static final long serialVersionUID = -1925132958947152812L;
 

@@ -27,9 +27,6 @@ under the License.    */
 
 public class User extends TradistaObject {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7677381398422965047L;
 
 	@Id

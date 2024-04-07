@@ -1,7 +1,7 @@
 package finance.tradista.ir.irswapoption.validator;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.pricing.pricer.PricingParameter;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 import finance.tradista.core.pricing.service.PricingParameterModuleValidator;
 import finance.tradista.ir.irswapoption.model.PricingParameterVolatilitySurfaceModule;
@@ -37,23 +37,22 @@ public class PricingParameterVolatilitySurfaceModuleValidator implements Pricing
 	}
 
 	@Override
-	public void validateModule(PricingParameterModule module, PricingParameter param) throws TradistaBusinessException {
+	public void validateModule(PricingParameterModule module, LegalEntity po) throws TradistaBusinessException {
 		PricingParameterVolatilitySurfaceModule mod = (PricingParameterVolatilitySurfaceModule) module;
 		StringBuilder errMsg = new StringBuilder();
 		if (mod.getVolatilitySurfaces() != null && !mod.getVolatilitySurfaces().isEmpty()) {
 			for (SwaptionVolatilitySurface surface : mod.getVolatilitySurfaces().values()) {
-				if (param.getProcessingOrg() != null && surface.getProcessingOrg() != null
-						&& !surface.getProcessingOrg().equals(param.getProcessingOrg())) {
+				if (po != null && surface.getProcessingOrg() != null && !surface.getProcessingOrg().equals(po)) {
 					errMsg.append(String.format(
 							"the Pricing Parameters Set's PO and the Swaption Volatility Surface %s's PO should be the same.%n",
 							surface));
 				}
-				if (param.getProcessingOrg() == null && surface.getProcessingOrg() != null) {
+				if (po == null && surface.getProcessingOrg() != null) {
 					errMsg.append(String.format(
 							"If the Pricing Parameters Set is a global one, the Swaption Volatility Surface %s must also be global.%n",
 							surface));
 				}
-				if (param.getProcessingOrg() != null && surface.getProcessingOrg() == null) {
+				if (po != null && surface.getProcessingOrg() == null) {
 					errMsg.append(String.format(
 							"If the Swaption Volatility Surface %s is a global one, the Pricing Parameters Set must also be global.%n",
 							surface));
@@ -73,7 +72,8 @@ public class PricingParameterVolatilitySurfaceModuleValidator implements Pricing
 				SwaptionVolatilitySurface vol = null;
 				try {
 					vol = swaptionVolatilitySurfaceBusinessDelegate.getSwaptionVolatilitySurfaceById(surface.getId());
-				} catch (TradistaBusinessException abe) {
+				} catch (TradistaBusinessException tbe) {
+					// Not expected here.
 				}
 				if (vol == null) {
 					errMsg.append(String.format("the fx volatility surface %s was not found.%n", surface.getName()));

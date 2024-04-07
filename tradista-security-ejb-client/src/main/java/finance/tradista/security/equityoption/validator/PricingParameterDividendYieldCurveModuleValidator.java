@@ -1,9 +1,9 @@
 package finance.tradista.security.equityoption.validator;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.marketdata.service.InterestRateCurveBusinessDelegate;
-import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 import finance.tradista.core.pricing.service.PricingParameterModuleValidator;
 import finance.tradista.security.equityoption.model.PricingParameterDividendYieldCurveModule;
@@ -37,23 +37,22 @@ public class PricingParameterDividendYieldCurveModuleValidator implements Pricin
 	}
 
 	@Override
-	public void validateModule(PricingParameterModule module, PricingParameter param) throws TradistaBusinessException {
+	public void validateModule(PricingParameterModule module, LegalEntity po) throws TradistaBusinessException {
 		PricingParameterDividendYieldCurveModule mod = (PricingParameterDividendYieldCurveModule) module;
 		StringBuilder errMsg = new StringBuilder();
 		if (mod.getDividendYieldCurves() != null && !mod.getDividendYieldCurves().isEmpty()) {
 			for (InterestRateCurve curve : mod.getDividendYieldCurves().values()) {
-				if (param.getProcessingOrg() != null && curve.getProcessingOrg() != null
-						&& !curve.getProcessingOrg().equals(param.getProcessingOrg())) {
+				if (po != null && curve.getProcessingOrg() != null && !curve.getProcessingOrg().equals(po)) {
 					errMsg.append(String.format(
 							"the Pricing Parameters Set's PO and the Dividend Yield curve %s's PO should be the same.%n",
 							curve));
 				}
-				if (param.getProcessingOrg() == null && curve.getProcessingOrg() != null) {
+				if (po == null && curve.getProcessingOrg() != null) {
 					errMsg.append(String.format(
 							"If the Pricing Parameters Set is a global one, the Dividend Yield curve %s must also be global.%n",
 							curve));
 				}
-				if (param.getProcessingOrg() != null && curve.getProcessingOrg() == null) {
+				if (po != null && curve.getProcessingOrg() == null) {
 					errMsg.append(String.format(
 							"If the Dividend Yield curve %s is a global one, the Pricing Parameters Set must also be global.%n",
 							curve));
@@ -73,7 +72,8 @@ public class PricingParameterDividendYieldCurveModuleValidator implements Pricin
 				InterestRateCurve c = null;
 				try {
 					c = interestRateCurveBusinessDelegate.getInterestRateCurveById(curve.getId());
-				} catch (TradistaBusinessException abe) {
+				} catch (TradistaBusinessException tbe) {
+					// Not expected here.
 				}
 				if (c == null) {
 					errMsg.append(String.format("the Dividend Yield curve %s was not found.%n", curve));

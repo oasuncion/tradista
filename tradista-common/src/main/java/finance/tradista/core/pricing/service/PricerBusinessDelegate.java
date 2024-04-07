@@ -53,6 +53,16 @@ public class PricerBusinessDelegate {
 
 	private PricerService pricerService;
 
+	private static final String TRADE_IS_MANDATORY = "The trade is mandatory.%n";
+
+	private static final String PRICING_PARAMETERS_SET_IS_MANDATORY = "The Pricing Parameters Set is mandatory.%n";
+
+	private static final String CURRENCY_IS_MANDATORY = "The currency is mandatory.%n";
+
+	private static final String DATE_IS_MANDATORY = "The date is mandatory.%n";
+
+	private static final String VALUE_DATE_IS_MANDATORY = "The value date is mandatory.%n";
+
 	private Map<String, PricingParameterModuleValidator> validators;
 
 	public PricerBusinessDelegate() {
@@ -214,7 +224,7 @@ public class PricerBusinessDelegate {
 			for (PricingParameterModule module : param.getModules()) {
 				PricingParameterModuleValidator validator = getValidator(module);
 				try {
-					validator.validateModule(module, param);
+					validator.validateModule(module, param.getProcessingOrg());
 				} catch (TradistaBusinessException abe) {
 					errMsg.append(abe.getMessage());
 				}
@@ -252,19 +262,19 @@ public class PricerBusinessDelegate {
 		StringBuilder sBuilder = new StringBuilder();
 		Method measureMethod;
 		if (trade == null) {
-			sBuilder.append("The trade is mandatory.\n");
+			sBuilder.append(String.format(TRADE_IS_MANDATORY));
 		}
 		if (pricer == null) {
 			sBuilder.append("The pricer is mandatory.\n");
 		}
 		if (pp == null) {
-			sBuilder.append("The pricing parameters set is mandatory.\n");
+			sBuilder.append(String.format(PRICING_PARAMETERS_SET_IS_MANDATORY));
 		}
 		if (currency == null) {
-			sBuilder.append("The currency is mandatory.\n");
+			sBuilder.append(String.format(CURRENCY_IS_MANDATORY));
 		}
 		if (date == null) {
-			sBuilder.append("The date is mandatory.\n");
+			sBuilder.append(String.format(DATE_IS_MANDATORY));
 		}
 		if (StringUtils.isEmpty(measure)) {
 			sBuilder.append("The measure name is mandatory.\n");
@@ -305,16 +315,16 @@ public class PricerBusinessDelegate {
 
 		StringBuilder sBuilder = new StringBuilder();
 		if (trade == null) {
-			sBuilder.append("The trade is mandatory.\n");
+			sBuilder.append(String.format(TRADE_IS_MANDATORY));
 		}
 		if (pp == null) {
-			sBuilder.append("The pricing parameters set is mandatory.\n");
+			sBuilder.append(String.format(PRICING_PARAMETERS_SET_IS_MANDATORY));
 		}
 		if (currency == null) {
-			sBuilder.append("The currency is mandatory.\n");
+			sBuilder.append(String.format(CURRENCY_IS_MANDATORY));
 		}
 		if (date == null) {
-			sBuilder.append("The date is mandatory.\n");
+			sBuilder.append(String.format(DATE_IS_MANDATORY));
 		}
 		if (measure == null) {
 			sBuilder.append("The measure is mandatory.\n");
@@ -346,19 +356,19 @@ public class PricerBusinessDelegate {
 		StringBuilder sBuilder = new StringBuilder();
 		Method productMeasureMethod;
 		if (product == null) {
-			sBuilder.append("The trade is mandatory.\n");
+			sBuilder.append(String.format(TRADE_IS_MANDATORY));
 		}
 		if (pricer == null) {
 			sBuilder.append("The pricer is mandatory.\n");
 		}
 		if (pp == null) {
-			sBuilder.append("The pricing parameters set is mandatory.\n");
+			sBuilder.append(String.format(PRICING_PARAMETERS_SET_IS_MANDATORY));
 		}
 		if (currency == null) {
-			sBuilder.append("The currency is mandatory.\n");
+			sBuilder.append(String.format(CURRENCY_IS_MANDATORY));
 		}
 		if (date == null) {
-			sBuilder.append("The date is mandatory.\n");
+			sBuilder.append(String.format(DATE_IS_MANDATORY));
 		}
 		if (StringUtils.isEmpty(measure)) {
 			sBuilder.append("The measure name is mandatory.\n");
@@ -512,11 +522,11 @@ public class PricerBusinessDelegate {
 			errMsg.append(String.format("Trade id must be positive but it is %s.", tradeId));
 		}
 		if (pp == null) {
-			errMsg.append(String.format("The Pricing Parameters Set is mandatory.%n"));
+			errMsg.append(String.format(PRICING_PARAMETERS_SET_IS_MANDATORY));
 		}
 
 		if (valueDate == null) {
-			errMsg.append("The value date is mandatory.");
+			errMsg.append(String.format(VALUE_DATE_IS_MANDATORY));
 		}
 
 		if (errMsg.length() > 0) {
@@ -535,11 +545,11 @@ public class PricerBusinessDelegate {
 		}
 
 		if (pp == null) {
-			errMsg.append(String.format("The Pricing Parameters Set is mandatory.%n"));
+			errMsg.append(String.format(PRICING_PARAMETERS_SET_IS_MANDATORY));
 		}
 
 		if (valueDate == null) {
-			errMsg.append("The value date is mandatory.");
+			errMsg.append(String.format(VALUE_DATE_IS_MANDATORY));
 		}
 
 		if (errMsg.length() > 0) {
@@ -554,11 +564,11 @@ public class PricerBusinessDelegate {
 		StringBuilder errMsg = new StringBuilder();
 
 		if (pp == null) {
-			errMsg.append(String.format("The Pricing Parameters Set is mandatory.%n"));
+			errMsg.append(String.format(PRICING_PARAMETERS_SET_IS_MANDATORY));
 		}
 
 		if (valueDate == null) {
-			errMsg.append("The value date is mandatory.");
+			errMsg.append(String.format(VALUE_DATE_IS_MANDATORY));
 		}
 
 		if (errMsg.length() > 0) {

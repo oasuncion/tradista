@@ -1,7 +1,7 @@
 package finance.tradista.core.pricing.service;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.pricing.pricer.PricingParameter;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 
 /*
@@ -26,7 +26,7 @@ under the License.    */
 
 public interface PricingParameterModuleValidator {
 
-	void validateModule(PricingParameterModule module, PricingParameter param) throws TradistaBusinessException;
+	void validateModule(PricingParameterModule module, LegalEntity po) throws TradistaBusinessException;
 
 	void checkAccess(PricingParameterModule module, StringBuilder errMsg);
 }

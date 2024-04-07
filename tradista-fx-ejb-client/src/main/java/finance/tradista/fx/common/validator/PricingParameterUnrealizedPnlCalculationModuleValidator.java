@@ -3,7 +3,7 @@ package finance.tradista.fx.common.validator;
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.pricing.pricer.PricingParameter;
+import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 import finance.tradista.core.pricing.service.PricingParameterModuleValidator;
 import finance.tradista.fx.common.model.PricingParameterUnrealizedPnlCalculationModule;
@@ -38,26 +38,23 @@ public class PricingParameterUnrealizedPnlCalculationModuleValidator implements 
 	}
 
 	@Override
-	public void validateModule(PricingParameterModule module, PricingParameter param) throws TradistaBusinessException {
+	public void validateModule(PricingParameterModule module, LegalEntity po) throws TradistaBusinessException {
 		PricingParameterUnrealizedPnlCalculationModule mod = (PricingParameterUnrealizedPnlCalculationModule) module;
 		StringBuilder errMsg = new StringBuilder();
 		if (mod.getUnrealizedPnlCalculations() != null && !mod.getUnrealizedPnlCalculations().isEmpty()) {
 			for (BookProductTypePair bookProd : mod.getUnrealizedPnlCalculations().keySet()) {
-				if (param.getProcessingOrg() != null && bookProd.getBook() != null
-						&& bookProd.getBook().getProcessingOrg() != null
-						&& !bookProd.getBook().getProcessingOrg().equals(param.getProcessingOrg())) {
+				if (po != null && bookProd.getBook() != null && bookProd.getBook().getProcessingOrg() != null
+						&& !bookProd.getBook().getProcessingOrg().equals(po)) {
 					errMsg.append(
 							String.format("the Pricing Parameters Set's PO and the book %s's PO should be the same.%n",
 									bookProd.getBook()));
 				}
-				if (param.getProcessingOrg() == null && bookProd.getBook() != null
-						&& bookProd.getBook().getProcessingOrg() != null) {
+				if (po == null && bookProd.getBook() != null && bookProd.getBook().getProcessingOrg() != null) {
 					errMsg.append(String.format(
 							"If the Pricing Parameters Set is a global one, the book %s must also be global.%n",
 							bookProd.getBook()));
 				}
-				if (param.getProcessingOrg() != null && bookProd.getBook() != null
-						&& bookProd.getBook().getProcessingOrg() == null) {
+				if (po != null && bookProd.getBook() != null && bookProd.getBook().getProcessingOrg() == null) {
 					errMsg.append(String.format(
 							"If the book %s is a global one, the Pricing Parameters Set must also be global.%n",
 							bookProd.getBook()));
@@ -77,7 +74,8 @@ public class PricingParameterUnrealizedPnlCalculationModuleValidator implements 
 				Book b = null;
 				try {
 					b = bookBusinessDelegate.getBookById(bookProd.getBook().getId());
-				} catch (TradistaBusinessException abe) {
+				} catch (TradistaBusinessException tbe) {
+					// Not expected here.
 				}
 				if (b == null) {
 					errMsg.append(String.format("the book %s was not found.%n", bookProd.getBook()));

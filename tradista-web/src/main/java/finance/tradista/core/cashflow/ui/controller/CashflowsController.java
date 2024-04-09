@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
@@ -76,14 +74,6 @@ public class CashflowsController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(CF_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
-	}
-
-	public String discountCurveWarning(PricingParameter pp, Currency currency) {
-		if (pp != null && currency != null) {
-			return String.format("Pricing Parameters Set '%s' doesn't contain a discount curve for currency %s.", pp,
-					currency);
-		}
-		return StringUtils.EMPTY;
 	}
 
 	public InterestRateCurve getDiscountCurve() {

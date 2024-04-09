@@ -497,6 +497,7 @@ public class GCRepoTradeController implements Serializable {
 				gcRepoTrade.setRightOfSubstitution(gcTrade.isRightOfSubstitution());
 				gcRepoTrade.setTerminableOnDemand(gcTrade.isTerminableOnDemand());
 				gcRepoTrade.setStatus(gcTrade.getStatus());
+				gcRepoTrade.setPartialTerminations(gcTrade.getPartialTerminations());
 				Set<String> availableActions = workflowBusinessDelegate
 						.getAvailableActionsFromStatus(workflow.getName(), gcTrade.getStatus());
 				if (availableActions != null && !availableActions.isEmpty()) {

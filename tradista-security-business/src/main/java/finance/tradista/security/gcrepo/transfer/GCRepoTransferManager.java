@@ -568,7 +568,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 		repoRate = repoRate.divide(new BigDecimal(100), configurationBusinessDelegate.getScale(),
 				configurationBusinessDelegate.getRoundingMode());
 
-		amount = amount.multiply(repoRate);
+		amount = amount.add(amount.multiply(repoRate));
 		if (amount.signum() == 0) {
 			// No transfer
 			transferBusinessDelegate.deleteTransfer(transfer.getId());

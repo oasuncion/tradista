@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
 
@@ -300,14 +302,71 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 			}
 		}
 
-		// CashFlow for cash of opening leg
-		CashFlow cashOpeningLeg = new CashFlow();
-		cashOpeningLeg.setDate(trade.getSettlementDate());
-		cashOpeningLeg.setAmount(trade.getAmount());
-		cashOpeningLeg.setCurrency(trade.getCurrency());
-		cashOpeningLeg.setPurpose(TransferPurpose.CASH_SETTLEMENT);
-		cashOpeningLeg.setDirection(trade.isBuy() ? CashFlow.Direction.RECEIVE : CashFlow.Direction.PAY);
-		cfs.add(cashOpeningLeg);
+		if (!trade.getSettlementDate().isBefore(pricingDate)) {
+			// CashFlow for cash of opening leg
+			CashFlow cashOpeningLeg = new CashFlow();
+			cashOpeningLeg.setDate(trade.getSettlementDate());
+			cashOpeningLeg.setAmount(trade.getAmount());
+			cashOpeningLeg.setCurrency(trade.getCurrency());
+			cashOpeningLeg.setPurpose(TransferPurpose.CASH_SETTLEMENT);
+			cashOpeningLeg.setDirection(trade.isBuy() ? CashFlow.Direction.RECEIVE : CashFlow.Direction.PAY);
+			cfs.add(cashOpeningLeg);
+		}
+
+		// Retrieve partial terminations after pricing date and generate cashflow for
+		// each of them
+		Map<LocalDate, BigDecimal> ptMap = trade.getPartialTerminations();
+		if (ptMap != null && !ptMap.isEmpty()) {
+			ptMap = ptMap.entrySet().stream().filter(e -> (!e.getKey().isBefore(pricingDate)))
+					.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+			if (!ptMap.isEmpty()) {
+				for (Map.Entry<LocalDate, BigDecimal> pt : ptMap.entrySet()) {
+					BigDecimal interestAmount = null;
+					BigDecimal repoRate = null;
+					if (trade.isFixedRepoRate()) {
+						repoRate = trade.getRepoRate();
+					} else {
+						try {
+							repoRate = PricerUtil.getInterestRateAsOfDate(
+									trade.getIndex().getName() + "." + trade.getIndexTenor(),
+									params.getQuoteSet().getId(), indexCurve.getId(), trade.getIndexTenor(), null,
+									pt.getKey());
+							repoRate = repoRate.add(trade.getIndexOffset());
+						} catch (PricerException pe) {
+							throw new TradistaBusinessException(pe.getMessage());
+						}
+					}
+					repoRate = repoRate.divide(new BigDecimal(100), configurationService.getScale(),
+							configurationService.getRoundingMode());
+					interestAmount = pt.getValue().multiply(repoRate).multiply(PricerUtil
+							.daysToYear(new DayCountConvention("ACT/360"), trade.getSettlementDate(), pt.getKey()));
+					CashFlow cashPt = new CashFlow();
+					CashFlow.Direction direction;
+					cashPt.setDate(pt.getKey());
+					cashPt.setAmount(pt.getValue().add(interestAmount));
+					cashPt.setCurrency(trade.getCurrency());
+					cashPt.setPurpose(TransferPurpose.CASH_SETTLEMENT);
+					if (trade.isBuy()) {
+						if (cashPt.getAmount().signum() > 0) {
+							direction = CashFlow.Direction.PAY;
+						} else {
+							direction = CashFlow.Direction.RECEIVE;
+							cashPt.setAmount(cashPt.getAmount().negate());
+						}
+					} else {
+						if (cashPt.getAmount().signum() > 0) {
+							direction = CashFlow.Direction.RECEIVE;
+						} else {
+							direction = CashFlow.Direction.PAY;
+							cashPt.setAmount(cashPt.getAmount().negate());
+						}
+					}
+					cashPt.setDirection(direction);
+					cfs.add(cashPt);
+				}
+			}
+
+		}
 
 		// Cashflow for cash of closing leg
 		CashFlow cashClosingLeg = new CashFlow();
@@ -366,7 +425,7 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 
 		cashClosingLeg.setAmount(amount);
 		cashClosingLeg.setDirection(direction);
-		cashClosingLeg.setDate(trade.getSettlementDate());
+		cashClosingLeg.setDate(trade.getEndDate());
 		cashClosingLeg.setCurrency(trade.getCurrency());
 		cashClosingLeg.setPurpose(TransferPurpose.RETURNED_CASH_PLUS_INTEREST);
 

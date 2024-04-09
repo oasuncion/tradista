@@ -292,6 +292,9 @@
 															binding="#{collateralController.clear()}" />
 														<f:actionListener
 															binding="#{partialTerminationController.clear()}" />
+														<p:ajax
+															update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
+															listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
 													</p:commandButton>
 													<p:outputLabel value="Load by Id"
 														styleClass="tradista-menu-item" />
@@ -303,6 +306,9 @@
 															binding="#{collateralController.refresh(gCRepoTradeController.idToBeLoaded)}" />
 														<f:actionListener
 															binding="#{partialTerminationController.refresh(gCRepoTradeController.idToBeLoaded)}" />
+														<p:ajax
+															update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
+															listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
 													</p:commandButton>
 												</p:column>
 											</p:row>
@@ -446,13 +452,14 @@
 												<p:column>
 													<p:outputLabel
 														value="Partial terminations for this trade :" />
-													<br />
-													<br />
+													<p />
 													<p:dataTable id="partialTerminationsTable" var="pt"
 														value="#{partialTerminationController.partialTerminations}"
 														tableStyleClass="tradista-datatable" size="small">
 														<p:column headerText="Date">
-															<p:outputLabel value="#{pt.date}" />
+															<p:outputLabel value="#{pt.date}">
+																<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+															</p:outputLabel>
 														</p:column>
 														<p:column headerText="Reduction">
 															<p:outputLabel value="#{pt.reduction}">
@@ -714,15 +721,15 @@
 													<p:outputLabel value="#{cashflowsController.discountCurve}"
 														styleClass="tradista-menu-item"
 														rendered="#{not (cashflowsController.discountCurve eq null)}" />
-													<p:outputLabel
-														value="#{cashflowsController.discountCurveWarning(pricingController.pricingParameter, gCRepoTradeController.currency)}"
-														styleClass="tradista-warning-label"
-														rendered="#{cashflowsController.discountCurve eq null}" />
+													<p:messages showDetail="true" closable="true" id="cfMsg"
+														for="cfMsg" />
 												</p:column>
 											</p:row>
 										</f:facet>
 										<p:column headerText="Date" sortBy="#{cf.date}">
-											<p:outputLabel value="#{cf.date}" />
+											<p:outputLabel value="#{cf.date}">
+												<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+											</p:outputLabel>
 										</p:column>
 										<p:column headerText="Direction" sortBy="#{cf.direction}">
 											<p:outputLabel value="#{cf.direction}" />
@@ -741,9 +748,9 @@
 												<f:convertNumber maxFractionDigits="5" />
 											</p:outputLabel>
 										</p:column>
-										<p:column headerText="Discounted Factor"
-											sortBy="#{cf.discountedFactor}">
-											<p:outputLabel value="#{cf.discountedFactor}">
+										<p:column headerText="Discount Factor"
+											sortBy="#{cf.discountFactor}">
+											<p:outputLabel value="#{cf.discountFactor}">
 												<f:convertNumber maxFractionDigits="5" />
 											</p:outputLabel>
 										</p:column>

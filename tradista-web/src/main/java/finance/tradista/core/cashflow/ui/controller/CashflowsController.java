@@ -47,6 +47,8 @@ public class CashflowsController implements Serializable {
 
 	private static final long serialVersionUID = 3525922991038977184L;
 
+	private static final String CF_MSG = "cfMsg";
+
 	private List<CashFlow> cashflows;
 
 	private InterestRateCurve discountCurve;
@@ -71,7 +73,7 @@ public class CashflowsController implements Serializable {
 		try {
 			cashflows = gcRepoPricerBusinessDelegate.generateCashFlows(trade, pp, pricingDate);
 		} catch (TradistaBusinessException tbe) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			FacesContext.getCurrentInstance().addMessage(CF_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
 	}
@@ -95,6 +97,14 @@ public class CashflowsController implements Serializable {
 	public void updateDiscountCurve(PricingParameter pp, Currency currency) {
 		if (pp != null && currency != null) {
 			discountCurve = pp.getDiscountCurve(currency);
+			if (discountCurve == null) {
+				String errMsg = String.format(
+						"Pricing Parameters Set '%s' doesn't contain a discount curve for currency %s.", pp, currency);
+				FacesContext.getCurrentInstance().addMessage(CF_MSG,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning", errMsg));
+			}
+		} else {
+			discountCurve = null;
 		}
 	}
 

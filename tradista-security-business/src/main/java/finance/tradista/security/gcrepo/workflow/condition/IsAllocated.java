@@ -1,9 +1,10 @@
 package finance.tradista.security.gcrepo.workflow.condition;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import finance.tradista.flow.model.Condition;
-import finance.tradista.security.gcrepo.service.GCRepoTradeBusinessDelegate;
+import finance.tradista.security.gcrepo.service.GCRepoPricerBusinessDelegate;
 import finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
@@ -12,22 +13,24 @@ import jakarta.persistence.Transient;
 public class IsAllocated extends Condition<GCRepoTrade> {
 
 	private static final long serialVersionUID = -1790346124051863865L;
+
 	@Transient
-	private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
+	private GCRepoPricerBusinessDelegate gcRepoPricerBusinessDelegate;
 
 	public IsAllocated() {
-		gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
+		gcRepoPricerBusinessDelegate = new GCRepoPricerBusinessDelegate();
 		setFunction(trade -> {
 			// Calculate the total MTM value of the collateral
-			BigDecimal mtm = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getId());
+			BigDecimal mtm = gcRepoPricerBusinessDelegate
+					.getCurrentCollateralMarketToMarket(trade.getOriginalGCRepoTrade());
 
 			if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
-				mtm = mtm.add(gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getCollateralToAdd(),
-						trade.getBook().getProcessingOrg()));
+				mtm = mtm.add(gcRepoPricerBusinessDelegate.getCollateralMarketToMarket(trade.getCollateralToAdd(),
+						trade.getBook().getProcessingOrg(), LocalDate.now()));
 			}
 
 			// Calculate the exposure (required collateral)
-			BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(trade.getId());
+			BigDecimal exposure = gcRepoPricerBusinessDelegate.getCurrentExposure(trade.getOriginalGCRepoTrade());
 
 			// Compare the collateral value and the required collateral
 

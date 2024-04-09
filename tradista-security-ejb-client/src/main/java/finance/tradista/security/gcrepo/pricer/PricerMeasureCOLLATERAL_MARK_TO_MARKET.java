@@ -3,14 +3,16 @@ package finance.tradista.security.gcrepo.pricer;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
 import finance.tradista.core.pricing.pricer.Pricing;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
+import finance.tradista.security.gcrepo.service.GCRepoPricerBusinessDelegate;
 
 /*
- * Copyright 2018 Olivier Asuncion
+ * Copyright 2024 Olivier Asuncion
  * 
  * Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -29,20 +31,23 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.    */
 
-public class PricerMeasureMOCK extends PricerMeasure {
+public class PricerMeasureCOLLATERAL_MARK_TO_MARKET extends PricerMeasure {
 
-	private static final long serialVersionUID = 6512393551932239154L;
+	private static final long serialVersionUID = -2138609489728203598L;
 
-	public PricerMeasureMOCK() {
-		super();
+	private GCRepoPricerBusinessDelegate gcRepoPricerBusinessDelegate;
+
+	public PricerMeasureCOLLATERAL_MARK_TO_MARKET() {
+		gcRepoPricerBusinessDelegate = new GCRepoPricerBusinessDelegate();
 	}
 
 	public String toString() {
-		return "MOCK";
+		return "COLLATERAL_MARK_TO_MARKET";
 	}
 
 	@Pricing
-	public BigDecimal mockMethod(PricingParameter params, GCRepoTrade trade, Currency currency, LocalDate pricingDate) {
-		return BigDecimal.TEN;
+	public BigDecimal mtm(PricingParameter params, GCRepoTrade trade, Currency currency, LocalDate pricingDate)
+			throws TradistaBusinessException {
+		return gcRepoPricerBusinessDelegate.getCollateralMarketToMarket(trade, currency, pricingDate, params);
 	}
 }

@@ -25,10 +25,9 @@ under the License.    */
 
 public class DayCountConvention extends TradistaObject implements Comparable<DayCountConvention> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3809902839449814333L;
+
+	public static final String ACT_365 = "ACT/365";
 
 	@Id
 	private String name;

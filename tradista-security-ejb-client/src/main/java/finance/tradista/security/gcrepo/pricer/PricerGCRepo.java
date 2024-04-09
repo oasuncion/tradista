@@ -30,7 +30,8 @@ public class PricerGCRepo extends Pricer {
 
 	public PricerGCRepo() {
 		super();
-		getPricerMeasures().add(new PricerMeasureMOCK());
+		getPricerMeasures().add(new PricerMeasureCOLLATERAL_MARK_TO_MARKET());
+		getPricerMeasures().add(new PricerMeasureEXPOSURE());
 	}
 
 }

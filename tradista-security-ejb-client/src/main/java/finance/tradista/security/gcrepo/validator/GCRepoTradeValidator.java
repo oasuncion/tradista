@@ -34,9 +34,6 @@ under the License.    */
 
 public class GCRepoTradeValidator extends DefaultTradeValidator {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8195327334102296257L;
 
 	@Override
@@ -177,7 +174,7 @@ public class GCRepoTradeValidator extends DefaultTradeValidator {
 			}
 		}
 
-		if (errMsg.length() > 0) {
+		if (!errMsg.isEmpty()) {
 			throw new TradistaBusinessException(errMsg.toString());
 		}
 

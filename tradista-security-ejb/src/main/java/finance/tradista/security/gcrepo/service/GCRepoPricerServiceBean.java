@@ -29,7 +29,6 @@ import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.core.pricing.util.PricerUtil;
 import finance.tradista.core.processingorgdefaults.model.ProcessingOrgDefaults;
 import finance.tradista.core.processingorgdefaults.service.ProcessingOrgDefaultsService;
-import finance.tradista.core.trade.service.TradeAuthorizationFilteringInterceptor;
 import finance.tradista.core.transfer.model.TransferPurpose;
 import finance.tradista.security.bond.model.Bond;
 import finance.tradista.security.common.model.Security;
@@ -64,6 +63,7 @@ under the License.    */
 @SecurityDomain(value = "other")
 @PermitAll
 @Stateless
+@Interceptors(GCRepoProductScopeFilteringInterceptor.class)
 public class GCRepoPricerServiceBean implements GCRepoPricerService {
 
 	@EJB
@@ -83,7 +83,6 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	}
 
 	@Override
-	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
 	public BigDecimal getCollateralMarketToMarket(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
 			PricingParameter params) throws TradistaBusinessException {
 		BigDecimal mtm;
@@ -94,7 +93,7 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 		}
 
 		// 1. Get the current collateral
-		Map<Security, Map<Book, BigDecimal>> securities = gcRepoTradeService.getAllocatedCollateral(trade.getId());
+		Map<Security, Map<Book, BigDecimal>> securities = gcRepoTradeService.getAllocatedCollateral(trade);
 
 		// 2. Get the MTM of the current collateral as of pricing date
 		mtm = getCollateralMarketToMarket(securities, trade.getBook().getProcessingOrg(), pricingDate);
@@ -109,10 +108,9 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	}
 
 	@Override
-	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
 	public BigDecimal getCurrentCollateralMarketToMarket(GCRepoTrade trade) throws TradistaBusinessException {
 		// 1. Get the current collateral
-		Map<Security, Map<Book, BigDecimal>> securities = gcRepoTradeService.getAllocatedCollateral(trade.getId());
+		Map<Security, Map<Book, BigDecimal>> securities = gcRepoTradeService.getAllocatedCollateral(trade);
 
 		// 2. Get the MTM of the current collateral as of pricing date
 		return getCollateralMarketToMarket(securities, trade.getBook().getProcessingOrg(), LocalDate.now());
@@ -167,7 +165,6 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	}
 
 	@Override
-	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
 	public BigDecimal getExposure(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException {
 		BigDecimal exposure;
@@ -214,7 +211,6 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	}
 
 	@Override
-	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
 	public BigDecimal getCurrentExposure(GCRepoTrade trade) throws TradistaBusinessException {
 		BigDecimal exposure;
 		BigDecimal rate;

@@ -68,8 +68,6 @@ under the License.    */
 @Stateless
 public class GCRepoTradeServiceBean implements GCRepoTradeService {
 
-	private static final String TRADE_DOES_NOT_EXIST = "The trade %d doesn't exist.";
-
 	private ConnectionFactory factory;
 
 	private JMSContext context;
@@ -212,20 +210,14 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 
 	@Override
 	@Interceptors(TradeAuthorizationFilteringInterceptor.class)
-	public Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(long tradeId) throws TradistaBusinessException {
-
-		GCRepoTrade trade = getGCRepoTradeById(tradeId);
-
-		if (trade == null) {
-			throw new TradistaBusinessException(String.format(TRADE_DOES_NOT_EXIST, tradeId));
-		}
-
+	public Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(GCRepoTrade trade)
+			throws TradistaBusinessException {
 		Map<Security, Map<Book, BigDecimal>> securities = null;
 		List<Transfer> givenCollateral = null;
 
 		try {
 			givenCollateral = transferBusinessDelegate.getTransfers(Type.PRODUCT, Transfer.Status.KNOWN, Direction.PAY,
-					TransferPurpose.COLLATERAL_SETTLEMENT, tradeId, 0, 0, 0, null, null, null, null, null, null);
+					TransferPurpose.COLLATERAL_SETTLEMENT, trade.getId(), 0, 0, 0, null, null, null, null, null, null);
 		} catch (TradistaBusinessException tbe) {
 			// Not expected here.
 		}
@@ -253,8 +245,8 @@ public class GCRepoTradeServiceBean implements GCRepoTradeService {
 		List<Transfer> returnedCollateral = null;
 		try {
 			returnedCollateral = transferBusinessDelegate.getTransfers(Type.PRODUCT, Transfer.Status.KNOWN,
-					Direction.RECEIVE, TransferPurpose.RETURNED_COLLATERAL, tradeId, 0, 0, 0, null, null, null, null,
-					null, null);
+					Direction.RECEIVE, TransferPurpose.RETURNED_COLLATERAL, trade.getId(), 0, 0, 0, null, null, null,
+					null, null, null);
 		} catch (TradistaBusinessException tbe) {
 			// Not expected here.
 		}

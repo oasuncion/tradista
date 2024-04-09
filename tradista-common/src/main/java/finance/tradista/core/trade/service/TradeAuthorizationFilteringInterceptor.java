@@ -69,18 +69,6 @@ public class TradeAuthorizationFilteringInterceptor extends TradistaAuthorizatio
 					throw new TradistaBusinessException(errMsg.toString());
 				}
 			}
-			// Check on method name to avoid recursion on this control
-			if (!ic.getMethod().getName().equals("getTradeById")) {
-				if (parameters[0] instanceof Long tradeId) {
-					if (tradeId != 0) {
-						Trade<?> t = tradeBusinessDelegate.getTradeById(tradeId, true);
-						if (t == null) {
-							throw new TradistaBusinessException(
-									(String.format("The trade %d was not found.%n", tradeId)));
-						}
-					}
-				}
-			}
 		}
 	}
 

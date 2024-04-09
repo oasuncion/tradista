@@ -618,7 +618,7 @@ public class CollateralController implements Serializable {
 				if (trade.getStatus().getName().equals(StatusConstants.ALLOCATED)) {
 					context = "SUBSTITUTION";
 				}
-				allocatedSecurities = gcRepoTradeBusinessDelegate.getAllocatedCollateral(tradeId);
+				allocatedSecurities = gcRepoTradeBusinessDelegate.getAllocatedCollateral(trade);
 
 				if (allocatedSecurities != null) {
 					for (Map.Entry<Security, Map<Book, BigDecimal>> entry : allocatedSecurities.entrySet()) {

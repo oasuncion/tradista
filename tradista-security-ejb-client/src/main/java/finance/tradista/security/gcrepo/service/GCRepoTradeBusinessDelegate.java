@@ -56,11 +56,12 @@ public class GCRepoTradeBusinessDelegate {
 		return SecurityUtil.run(() -> gcRepoTradeService.getGCRepoTradeById(tradeId));
 	}
 
-	public Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(long tradeId) throws TradistaBusinessException {
-		if (tradeId <= 0) {
-			throw new TradistaBusinessException(TRADE_ID_MUST_BE_POSITIVE);
+	public Map<Security, Map<Book, BigDecimal>> getAllocatedCollateral(GCRepoTrade trade)
+			throws TradistaBusinessException {
+		if (trade == null) {
+			throw new TradistaBusinessException("The trade is mandatory.");
 		}
-		return SecurityUtil.runEx(() -> gcRepoTradeService.getAllocatedCollateral(tradeId));
+		return SecurityUtil.runEx(() -> gcRepoTradeService.getAllocatedCollateral(trade));
 	}
 
 }

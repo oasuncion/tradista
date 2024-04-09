@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import finance.tradista.core.book.model.Book;
+import finance.tradista.core.common.model.TradistaModelUtil;
+import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.index.model.Index;
 import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.core.workflow.model.mapping.StatusMapper;
@@ -100,6 +102,14 @@ public class GCRepoTrade implements WorkflowObject {
 		return repoRate;
 	}
 
+	public Currency getCurrency() {
+		Currency currency = null;
+		if (gcRepoTrade != null) {
+			currency = gcRepoTrade.getCurrency();
+		}
+		return currency;
+	}
+
 	public Index getIndex() {
 		Index index = null;
 		if (gcRepoTrade != null) {
@@ -174,6 +184,10 @@ public class GCRepoTrade implements WorkflowObject {
 			collateralToRemove = gcRepoTrade.getCollateralToRemove();
 		}
 		return collateralToRemove;
+	}
+
+	public finance.tradista.security.gcrepo.model.GCRepoTrade getOriginalGCRepoTrade() {
+		return TradistaModelUtil.clone(gcRepoTrade);
 	}
 
 	@Override

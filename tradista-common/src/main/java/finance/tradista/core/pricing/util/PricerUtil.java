@@ -53,6 +53,15 @@ under the License.    */
 
 public final class PricerUtil {
 
+	private static final String CURVE_ID_MUST_BE_POSITIVE = "The curve id must be positive.%n";
+
+	private static final String DATE_CANNOT_BE_NULL = "The date cannot be null.%n";
+
+	private static final String QUOTE_SET_ID_MUST_BE_POSITIVE = "The quote set id must be positive.%n";
+
+	private PricerUtil() {
+	}
+
 	private static ConfigurationBusinessDelegate configurationBusinessDelegate = new ConfigurationBusinessDelegate();
 
 	/**
@@ -218,7 +227,7 @@ public final class PricerUtil {
 					BigDecimal qValue = qv.getValue(quoteValueType);
 					if (qValue != null) {
 						if (values == null) {
-							values = new HashMap<String, BigDecimal>();
+							values = new HashMap<>();
 						}
 						values.put(qv.getQuote().getName(), qValue);
 					}
@@ -268,7 +277,7 @@ public final class PricerUtil {
 							new BigDecimal(daysNumberMin + daysNumberMax),
 							configurationBusinessDelegate.getRoundingMode());
 					if (values == null) {
-						values = new HashMap<String, BigDecimal>();
+						values = new HashMap<>();
 					}
 					values.put(name, minValue.add(progressionByDay.multiply(new BigDecimal(daysNumberMin))));
 				}
@@ -294,7 +303,7 @@ public final class PricerUtil {
 		} catch (TradistaBusinessException tbe) {
 			throw new PricerException(tbe.getMessage());
 		}
-		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<LocalDate, BigDecimal>();
+		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<>();
 		for (RatePoint point : points) {
 			pointsMap.put(point.getDate(), point.getRate());
 		}
@@ -353,14 +362,14 @@ public final class PricerUtil {
 	 */
 	public static BigDecimal discountAmount(BigDecimal amount, long curveId, LocalDate pricingDate, LocalDate date,
 			DayCountConvention dcc) throws PricerException, TradistaBusinessException {
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 
 		if (amount == null) {
 			errMsg.append(String.format("The amount cannot be null.%n"));
 		}
 
 		if (curveId <= 0) {
-			errMsg.append(String.format("The curve id must be positive.%n"));
+			errMsg.append(String.format(CURVE_ID_MUST_BE_POSITIVE));
 		}
 
 		if (pricingDate == null) {
@@ -368,7 +377,7 @@ public final class PricerUtil {
 		}
 
 		if (date == null) {
-			errMsg.append(String.format("The date cannot be null.%n"));
+			errMsg.append(String.format(DATE_CANNOT_BE_NULL));
 		}
 
 		if (errMsg.length() > 0) {
@@ -395,10 +404,10 @@ public final class PricerUtil {
 	public static BigDecimal getDiscountFactor(long curveId, LocalDate pricingDate, LocalDate date,
 			DayCountConvention dcc) throws PricerException, TradistaBusinessException {
 
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 
 		if (curveId <= 0) {
-			errMsg.append(String.format("The curve id must be positive.%n"));
+			errMsg.append(String.format(CURVE_ID_MUST_BE_POSITIVE));
 		}
 
 		if (pricingDate == null) {
@@ -406,7 +415,7 @@ public final class PricerUtil {
 		}
 
 		if (date == null) {
-			errMsg.append(String.format("The date cannot be null.%n"));
+			errMsg.append(String.format(DATE_CANNOT_BE_NULL));
 		}
 
 		if (errMsg.length() > 0) {
@@ -414,7 +423,7 @@ public final class PricerUtil {
 		}
 
 		if (dcc == null) {
-			dcc = new DayCountConvention("ACT/365");
+			dcc = new DayCountConvention(DayCountConvention.ACT_365);
 		}
 		BigDecimal rateAtDate = PricerUtil.getDiscountFactor(curveId, date).divide(BigDecimal.valueOf(100),
 
@@ -434,7 +443,7 @@ public final class PricerUtil {
 	public static void discountCashFlows(List<CashFlow> cashFlows, LocalDate valueDate, long discountCurveId,
 			DayCountConvention dcc) throws PricerException, TradistaBusinessException {
 
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 
 		if (cashFlows == null || cashFlows.isEmpty()) {
 			errMsg.append(String.format("CashFlows list is null or empty.%n"));
@@ -467,7 +476,7 @@ public final class PricerUtil {
 	public static void discountCashFlow(CashFlow cf, LocalDate valueDate, long discountCurveId, DayCountConvention dcc)
 			throws PricerException, TradistaBusinessException {
 
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 
 		if (cf == null) {
 			errMsg.append(String.format("CashFlow cannot be null.%n"));
@@ -519,7 +528,7 @@ public final class PricerUtil {
 			tbe.printStackTrace();
 			throw new PricerException(tbe.getMessage());
 		}
-		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<LocalDate, BigDecimal>();
+		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<>();
 		if (points != null) {
 			for (RatePoint point : points) {
 				pointsMap.put(point.getDate(), point.getRate());
@@ -586,7 +595,7 @@ public final class PricerUtil {
 			tbe.printStackTrace();
 			throw new PricerException(tbe.getMessage());
 		}
-		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<LocalDate, BigDecimal>();
+		Map<LocalDate, BigDecimal> pointsMap = new TreeMap<>();
 		if (points != null) {
 			for (RatePoint point : points) {
 				pointsMap.put(point.getDate(), point.getRate());
@@ -634,7 +643,7 @@ public final class PricerUtil {
 	}
 
 	public static BigDecimal daysToYear(LocalDate startDate, LocalDate endDate) {
-		DayCountConvention dcc = new DayCountConvention("ACT/365");
+		DayCountConvention dcc = new DayCountConvention(DayCountConvention.ACT_365);
 		return daysToYear(dcc, startDate, endDate);
 	}
 
@@ -676,14 +685,14 @@ public final class PricerUtil {
 		int scale = configurationBusinessDelegate.getScale();
 		RoundingMode roundingMode = configurationBusinessDelegate.getRoundingMode();
 		if (dcc == null) {
-			dcc = new DayCountConvention("ACT/365");
+			dcc = new DayCountConvention(DayCountConvention.ACT_365);
 		}
 		switch (dcc.getName()) {
 		case "ACT/360": {
 			BigDecimal diff = BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate));
 			return diff.divide(BigDecimal.valueOf(360), scale, roundingMode);
 		}
-		case "ACT/365": {
+		case DayCountConvention.ACT_365: {
 			BigDecimal diff = BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate));
 			return diff.divide(BigDecimal.valueOf(365), scale, roundingMode);
 		}
@@ -721,9 +730,9 @@ public final class PricerUtil {
 	}
 
 	// The cumulative normal distribution function
-	public static BigDecimal cnd(double X) {
-		double L;
-		BigDecimal K;
+	public static BigDecimal cnd(double x) {
+		double l;
+		BigDecimal k;
 		BigDecimal w;
 		BigDecimal a1 = new BigDecimal("0.31938153");
 		BigDecimal a2 = new BigDecimal("-0.356563782");
@@ -733,17 +742,17 @@ public final class PricerUtil {
 		int scale = configurationBusinessDelegate.getScale();
 		RoundingMode roundingMode = configurationBusinessDelegate.getRoundingMode();
 
-		L = Math.abs(X);
-		K = BigDecimal.ONE.divide(BigDecimal.ONE.add(new BigDecimal("0.2316419").multiply(BigDecimal.valueOf(L))),
+		l = Math.abs(x);
+		k = BigDecimal.ONE.divide(BigDecimal.ONE.add(new BigDecimal("0.2316419").multiply(BigDecimal.valueOf(l))),
 				scale, roundingMode);
 		w = BigDecimal.ONE.subtract(BigDecimal.ONE
 				.divide(BigDecimal
 						.valueOf(Math.sqrt(BigDecimal.valueOf(2).multiply(BigDecimal.valueOf(Math.PI)).doubleValue())),
 						scale, roundingMode)
-				.multiply(BigDecimal.valueOf(Math.exp(-L * L / 2))).multiply(a1.multiply(K).add(a2.multiply(K.pow(2)))
-						.add(a3.multiply(K.pow(3))).add(a4.multiply(K.pow(4))).add(a5.multiply(K.pow(5)))));
+				.multiply(BigDecimal.valueOf(Math.exp(-l * l / 2))).multiply(a1.multiply(k).add(a2.multiply(k.pow(2)))
+						.add(a3.multiply(k.pow(3))).add(a4.multiply(k.pow(4))).add(a5.multiply(k.pow(5)))));
 
-		if (X < 0.0) {
+		if (x < 0.0) {
 			w = BigDecimal.ONE.subtract(w);
 		}
 		return w;
@@ -770,9 +779,9 @@ public final class PricerUtil {
 	public static BigDecimal getForwardRate(long curveId, LocalDate startDate, LocalDate endDate,
 			DayCountConvention dcc) throws PricerException, TradistaBusinessException {
 		LocalDate now = LocalDate.now();
-		StringBuffer errMsg = new StringBuffer();
+		StringBuilder errMsg = new StringBuilder();
 		if (curveId <= 0) {
-			errMsg.append(String.format("The curve id must be positive.%n"));
+			errMsg.append(String.format(CURVE_ID_MUST_BE_POSITIVE));
 		}
 		if (startDate == null) {
 			errMsg.append(String.format("The start date is mandatory.%n"));
@@ -787,8 +796,8 @@ public final class PricerUtil {
 		}
 		if (startDate != null && endDate != null) {
 			if (!startDate.isBefore(endDate)) {
-				errMsg.append(String
-						.format("A forward date can only be calculated if the starting date is before the end date."));
+				errMsg.append(String.format(
+						"A forward date can only be calculated if the starting date is before the end date.%n"));
 			}
 		}
 		if (errMsg.length() > 0) {
@@ -796,7 +805,7 @@ public final class PricerUtil {
 		}
 
 		if (dcc == null) {
-			dcc = new DayCountConvention("ACT/365");
+			dcc = new DayCountConvention(DayCountConvention.ACT_365);
 		}
 		BigDecimal r1 = PricerUtil.getValueAsOfDateFromCurve(curveId, startDate);
 		BigDecimal r2 = PricerUtil.getValueAsOfDateFromCurve(curveId, endDate);
@@ -811,16 +820,16 @@ public final class PricerUtil {
 			long quoteSetId) throws TradistaBusinessException {
 		StringBuilder errorMessage = new StringBuilder();
 		if (primaryCurrency == null) {
-			errorMessage.append("The primary currency cannot be null.%n");
+			errorMessage.append(String.format("The primary currency cannot be null.%n"));
 		}
 		if (quoteCurrency == null) {
-			errorMessage.append("The quote currency cannot be null.%n");
+			errorMessage.append(String.format("The quote currency cannot be null.%n"));
 		}
 		if (date == null) {
-			errorMessage.append("The date cannot be null.%n");
+			errorMessage.append(String.format(DATE_CANNOT_BE_NULL));
 		}
 		if (quoteSetId <= 0) {
-			errorMessage.append("The quote set id must be positive.%n");
+			errorMessage.append(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		if (errorMessage.length() > 0) {
 			throw new TradistaBusinessException(errorMessage.toString());
@@ -845,16 +854,16 @@ public final class PricerUtil {
 			long quoteSetId) throws TradistaBusinessException {
 		StringBuilder errorMessage = new StringBuilder();
 		if (StringUtils.isEmpty(equityIsin)) {
-			errorMessage.append("The equity isin is mandatory.%n");
+			errorMessage.append(String.format("The equity isin is mandatory.%n"));
 		}
 		if (StringUtils.isEmpty(equityExchangeCode)) {
-			errorMessage.append("The equity exchange code is mandatory.%n");
+			errorMessage.append(String.format("The equity exchange code is mandatory.%n"));
 		}
 		if (date == null) {
-			errorMessage.append("The date cannot be null.%n");
+			errorMessage.append(String.format(DATE_CANNOT_BE_NULL));
 		}
 		if (quoteSetId <= 0) {
-			errorMessage.append("The quote set id must be positive.%n");
+			errorMessage.append(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		if (errorMessage.length() > 0) {
 			throw new TradistaBusinessException(errorMessage.toString());
@@ -875,16 +884,16 @@ public final class PricerUtil {
 			LocalDate date, long quoteSetId, long fxCurveId) throws TradistaBusinessException {
 		StringBuilder errorMessage = new StringBuilder();
 		if (amount == null) {
-			errorMessage.append("The amount cannot be null.%n");
+			errorMessage.append(String.format("The amount cannot be null.%n"));
 		}
 		if (sourceCurrency == null) {
-			errorMessage.append("The source currency cannot be null.%n");
+			errorMessage.append(String.format("The source currency cannot be null.%n"));
 		}
 		if (targetCurrency == null) {
-			errorMessage.append("The target currency cannot be null.%n");
+			errorMessage.append(String.format("The target currency cannot be null.%n"));
 		}
 		if (date == null) {
-			errorMessage.append("The date cannot be null.%n");
+			errorMessage.append(String.format(DATE_CANNOT_BE_NULL));
 		}
 		if (errorMessage.length() > 0) {
 			throw new TradistaBusinessException(errorMessage.toString());
@@ -898,13 +907,13 @@ public final class PricerUtil {
 			long quoteSetId, long fxCurveId) throws TradistaBusinessException {
 		StringBuilder errorMessage = new StringBuilder();
 		if (primaryCurrency == null) {
-			errorMessage.append("The primary currency cannot be null.%n");
+			errorMessage.append(String.format("The primary currency cannot be null.%n"));
 		}
 		if (quoteCurrency == null) {
-			errorMessage.append("The quote currency cannot be null.%n");
+			errorMessage.append(String.format("The quote currency cannot be null.%n"));
 		}
 		if (date == null) {
-			errorMessage.append("The date cannot be null.%n");
+			errorMessage.append(String.format(DATE_CANNOT_BE_NULL));
 		}
 		if (errorMessage.length() > 0) {
 			throw new TradistaBusinessException(errorMessage.toString());
@@ -973,16 +982,16 @@ public final class PricerUtil {
 			long quoteSetId) throws TradistaBusinessException {
 		StringBuilder errorMessage = new StringBuilder();
 		if (StringUtils.isEmpty(equityIsin)) {
-			errorMessage.append("The equity isin is mandatory.%n");
+			errorMessage.append(String.format("The equity isin is mandatory.%n"));
 		}
 		if (StringUtils.isEmpty(equityExchangeCode)) {
-			errorMessage.append("The equity exchange code is mandatory.%n");
+			errorMessage.append(String.format("The equity exchange code is mandatory.%n"));
 		}
 		if (quoteSetId <= 0) {
-			errorMessage.append("The quote set id must be positive.%n");
+			errorMessage.append(String.format(QUOTE_SET_ID_MUST_BE_POSITIVE));
 		}
 		if (date == null) {
-			errorMessage.append("The date cannot be null.%n");
+			errorMessage.append(String.format(DATE_CANNOT_BE_NULL));
 		}
 		if (errorMessage.length() > 0) {
 			throw new TradistaBusinessException(errorMessage.toString());

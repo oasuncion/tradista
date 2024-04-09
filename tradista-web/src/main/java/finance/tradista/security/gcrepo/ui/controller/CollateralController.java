@@ -31,6 +31,7 @@ import finance.tradista.security.equity.service.EquityBusinessDelegate;
 import finance.tradista.security.gcrepo.model.AllocationConfiguration;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.gcrepo.model.ProcessingOrgDefaultsCollateralManagementModule;
+import finance.tradista.security.gcrepo.service.GCRepoPricerBusinessDelegate;
 import finance.tradista.security.gcrepo.service.GCRepoTradeBusinessDelegate;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -65,6 +66,8 @@ public class CollateralController implements Serializable {
 	private static final long serialVersionUID = 3483809203529526285L;
 
 	private GCRepoTradeBusinessDelegate gcRepoTradeBusinessDelegate;
+
+	private GCRepoPricerBusinessDelegate gcRepoPricerBusinessDelegate;
 
 	private ProductInventoryBusinessDelegate productInventoryBusinessDelegate;
 
@@ -147,6 +150,7 @@ public class CollateralController implements Serializable {
 	@PostConstruct
 	public void init() {
 		gcRepoTradeBusinessDelegate = new GCRepoTradeBusinessDelegate();
+		gcRepoPricerBusinessDelegate = new GCRepoPricerBusinessDelegate();
 		productInventoryBusinessDelegate = new ProductInventoryBusinessDelegate();
 		collateralMarketValueDonutModel = new DonutChartModel();
 		bondBusinessDelegate = new BondBusinessDelegate();
@@ -614,7 +618,7 @@ public class CollateralController implements Serializable {
 				if (trade.getStatus().getName().equals(StatusConstants.ALLOCATED)) {
 					context = "SUBSTITUTION";
 				}
-				allocatedSecurities = gcRepoTradeBusinessDelegate.getAllocatedCollateral(tradeId);
+				allocatedSecurities = gcRepoTradeBusinessDelegate.getAllocatedCollateral(trade);
 
 				if (allocatedSecurities != null) {
 					for (Map.Entry<Security, Map<Book, BigDecimal>> entry : allocatedSecurities.entrySet()) {
@@ -754,21 +758,23 @@ public class CollateralController implements Serializable {
 		DonutChartDataSet dataSet = new DonutChartDataSet();
 
 		try {
-			BigDecimal collateralMarketValue = gcRepoTradeBusinessDelegate.getCollateralMarketToMarket(trade.getId());
-			BigDecimal exposure = gcRepoTradeBusinessDelegate.getExposure(trade.getId());
+			BigDecimal collateralMarketValue = gcRepoPricerBusinessDelegate.getCurrentCollateralMarketToMarket(trade);
+			BigDecimal exposure = gcRepoPricerBusinessDelegate.getCurrentExposure(trade);
 
 			// Add collateral added from the GUI
 			Map<Security, Map<Book, BigDecimal>> addedSecurities = getAddedSecurities();
 			if (addedSecurities != null && !addedSecurities.isEmpty()) {
-				collateralMarketValue = collateralMarketValue.add(gcRepoTradeBusinessDelegate
-						.getCollateralMarketToMarket(addedSecurities, trade.getBook().getProcessingOrg()));
+				collateralMarketValue = collateralMarketValue
+						.add(gcRepoPricerBusinessDelegate.getCollateralMarketToMarket(addedSecurities,
+								trade.getBook().getProcessingOrg(), LocalDate.now()));
 			}
 
 			// Remove collateral removed from the GUI
 			Map<Security, Map<Book, BigDecimal>> removedSecurities = getRemovedSecurities();
 			if (removedSecurities != null && !removedSecurities.isEmpty()) {
-				collateralMarketValue = collateralMarketValue.subtract(gcRepoTradeBusinessDelegate
-						.getCollateralMarketToMarket(removedSecurities, trade.getBook().getProcessingOrg()));
+				collateralMarketValue = collateralMarketValue
+						.subtract(gcRepoPricerBusinessDelegate.getCollateralMarketToMarket(removedSecurities,
+								trade.getBook().getProcessingOrg(), LocalDate.now()));
 			}
 
 			List<Number> values = new ArrayList<>();

@@ -6,8 +6,8 @@
 	<ui:define name="title">Tradista GC Repo Dashboard</ui:define>
 	<ui:define name="viewname">Tradista GC Repo Dashboard</ui:define>
 	<ui:define name="content">
-		<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
 		<h:form id="dashboardForm">
+			<p:growl id="pricingMsg" for="pricingMsg" showDetail="true" />
 			<p:panelGrid styleClass="tradista"
 				columnClasses="ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-9">
 				<p:row>
@@ -473,7 +473,7 @@
 					<p:column>
 						<p:panel id="pricing" header="Pricing">
 							<p:panelGrid id="pricingGrid" styleClass="tradista-nested"
-								columnClasses="ui-g-12 ui-md-6 ui-lg-6, ui-g-12 ui-md-6 ui-lg-6">
+								columnClasses="ui-g-3 ui-md-3 ui-lg-3, ui-g-4 ui-md-4 ui-lg-4">
 								<p:row>
 									<p:column>
 										<p:outputLabel value="Pricer" />
@@ -573,6 +573,7 @@
 										</p:column>
 										<p:column>
 											<p:outputLabel rendered="true" id="priceResult"
+												styleClass="tradista-menu-item"
 												value="#{pricingController.pricerResult}" />
 										</p:column>
 									</p:row>

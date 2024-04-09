@@ -15,6 +15,7 @@ import finance.tradista.core.pricing.pricer.Pricer;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.core.pricing.service.PricerBusinessDelegate;
+import finance.tradista.core.workflow.service.WorkflowBusinessDelegate;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -48,6 +49,8 @@ public class PricingController implements Serializable {
 
 	private static final long serialVersionUID = 1681707647567789611L;
 
+	protected static final String PRICING_MSG = "pricingMsg";
+
 	private Pricer pricer;
 
 	private PricingParameter pricingParameter;
@@ -70,6 +73,8 @@ public class PricingController implements Serializable {
 
 	private CurrencyBusinessDelegate currencyBusinessDelegate;
 
+	private WorkflowBusinessDelegate workflowBusinessDelegate;
+
 	private String pricingMethod;
 
 	private List<String> allPricingMethods;
@@ -85,6 +90,7 @@ public class PricingController implements Serializable {
 		pricerBusinessDelegate = new PricerBusinessDelegate();
 		quoteBusinessDelegate = new QuoteBusinessDelegate();
 		currencyBusinessDelegate = new CurrencyBusinessDelegate();
+		workflowBusinessDelegate = new WorkflowBusinessDelegate();
 		allPricingParameters = pricerBusinessDelegate.getAllPricingParameters();
 		allQuoteSets = quoteBusinessDelegate.getAllQuoteSets();
 		allCurrencies = currencyBusinessDelegate.getAllCurrencies();
@@ -209,11 +215,19 @@ public class PricingController implements Serializable {
 
 	public void price(GCRepoTrade gcRepoTrade) {
 		try {
-			pricerResult = pricerBusinessDelegate.calculate(gcRepoTrade, pricingParameter, pricingCurrency, pricingDate,
-					pricerMeasure, pricingMethod);
+			GCRepoTrade tradeToBePriced = (GCRepoTrade) gcRepoTrade.clone();
+			if (tradeToBePriced.getId() == 0) {
+				tradeToBePriced.setStatus(workflowBusinessDelegate.getInitialStatus(tradeToBePriced.getWorkflow()));
+
+			}
+			pricerResult = pricerBusinessDelegate.calculate(tradeToBePriced, pricingParameter, pricingCurrency,
+					pricingDate, pricerMeasure, pricingMethod);
 		} catch (TradistaBusinessException tbe) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+			String[] msgs = tbe.getMessage().split(System.lineSeparator());
+			for (String msg : msgs) {
+				FacesContext.getCurrentInstance().addMessage(PRICING_MSG,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", msg));
+			}
 		}
 	}
 

@@ -39,9 +39,6 @@ under the License.    */
  */
 public class GCRepoTrade extends Trade<Product> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8452035320272812574L;
 
 	public static final String GC_REPO = "GCRepo";

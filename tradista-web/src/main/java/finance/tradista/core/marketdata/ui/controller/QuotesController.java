@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PrimeFaces;
-import org.primefaces.component.poll.Poll;
 import org.springframework.util.CollectionUtils;
 
 import finance.tradista.core.index.model.Index;
@@ -65,8 +64,6 @@ public class QuotesController implements Serializable {
 	private int frequency;
 
 	private Set<String> quoteNames;
-
-	private Poll poll;
 
 	@PostConstruct
 	public void init() {
@@ -143,14 +140,6 @@ public class QuotesController implements Serializable {
 
 	public void setQuoteNames(Set<String> quoteNames) {
 		this.quoteNames = quoteNames;
-	}
-
-	public Poll getPoll() {
-		return poll;
-	}
-
-	public void setPoll(Poll poll) {
-		this.poll = poll;
 	}
 
 	public void updateQuoteNames(Index index, Tenor tenor, Set<String> secQuoteNames) {

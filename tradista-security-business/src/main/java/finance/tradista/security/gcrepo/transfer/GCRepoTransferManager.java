@@ -526,7 +526,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 
 		if (quoteValues == null || quoteValues.isEmpty()) {
 			String errorMsg = String.format(
-					"Transfer %n cannot be fixed. Impossible to get the %s index closing value between %tD and %tD in QuoteSet %s.",
+					"Transfer %d cannot be fixed. Impossible to get the %s index closing value between %tD and %tD in QuoteSet %s.",
 					transfer.getId(), quoteName, trade.getSettlementDate(), transfer.getSettlementDate(), quoteSetId);
 			createFixingError(transfer, quoteSetId, quoteName, errorMsg);
 			throw new TradistaBusinessException(errorMsg);
@@ -535,8 +535,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 		Map<LocalDate, QuoteValue> quoteValuesMap = quoteValues.stream()
 				.collect(Collectors.toMap(QuoteValue::getDate, Function.identity()));
 
-		List<LocalDate> dates = trade.getSettlementDate().datesUntil(transfer.getSettlementDate())
-				.collect(Collectors.toList());
+		List<LocalDate> dates = trade.getSettlementDate().datesUntil(transfer.getSettlementDate()).toList();
 
 		BigDecimal repoRate = BigDecimal.ZERO;
 
@@ -552,12 +551,12 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 			if (!quoteValuesMap.containsKey(date) || quoteValuesMap.get(date).getClose() == null) {
 				errorMsg.append(String.format("%tD ", date));
 			} else {
-				repoRate.add(quoteValuesMap.get(date).getClose());
+				repoRate = repoRate.add(quoteValuesMap.get(date).getClose());
 			}
 		}
 		if (errorMsg.length() > 0) {
 			errorMsg = new StringBuilder(String.format(
-					"Transfer %n cannot be fixed. Impossible to get the %s index closing value in QuoteSet %s for dates : ",
+					"Transfer %d cannot be fixed. Impossible to get the %s index closing value in QuoteSet %s for dates : ",
 					transfer.getId(), quoteName, quoteSetId)).append(errorMsg);
 			createFixingError(transfer, quoteSetId, quoteName, errorMsg.toString());
 			throw new TradistaBusinessException(errorMsg.toString());

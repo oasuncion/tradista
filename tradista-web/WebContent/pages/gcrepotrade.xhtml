@@ -633,9 +633,7 @@
 														value="#{quotesController.realTime}"
 														styleClass="tradista-menu-item">
 														<p:outputLabel styleClass="tradista-menu-item">Real Time</p:outputLabel>
-														<p:ajax event="change"
-															listener="#{quotesController.setRealTime(quotesController.realTime)}"
-															update=":dashboardForm:poll" />
+														<p:ajax event="change" update=":dashboardForm:poll" />
 													</p:selectBooleanCheckbox>
 
 												</p:column>
@@ -649,8 +647,9 @@
 												<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
 											</p:outputLabel>
 										</p:column>
-										<p:column headerText="Type" sortBy="#{quote.quote.type}">
-											<p:outputLabel value="#{quote.quote.type}" />
+										<p:column headerText="Type"
+											sortBy="#{quote.quote.type.toString()}">
+											<p:outputLabel value="#{quote.quote.type.toString()}" />
 										</p:column>
 										<p:column headerText="Bid" sortBy="#{quote.bid}">
 											<p:outputLabel value="#{quote.bid}">
@@ -742,11 +741,13 @@
 												<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
 											</p:outputLabel>
 										</p:column>
-										<p:column headerText="Direction" sortBy="#{cf.direction}">
-											<p:outputLabel value="#{cf.direction}" />
+										<p:column headerText="Direction"
+											sortBy="#{cf.direction.toString()}">
+											<p:outputLabel value="#{cf.direction.toString()}" />
 										</p:column>
-										<p:column headerText="Purpose" sortBy="#{cf.purpose}">
-											<p:outputLabel value="#{cf.purpose}" />
+										<p:column headerText="Purpose"
+											sortBy="#{cf.purpose.toString()}">
+											<p:outputLabel value="#{cf.purpose.toString()}" />
 										</p:column>
 										<p:column headerText="Amount" sortBy="#{cf.amount}">
 											<p:outputLabel value="#{cf.amount}">

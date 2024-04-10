@@ -2,7 +2,7 @@ package finance.tradista.core.marketdata.ui.controller;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +48,7 @@ public class QuotesController implements Serializable {
 
 	private static final long serialVersionUID = -1925132958947152812L;
 
-	private Set<QuoteValue> quoteValues;
+	private List<QuoteValue> quoteValues;
 
 	private QuoteSet quoteSet;
 
@@ -73,18 +73,17 @@ public class QuotesController implements Serializable {
 		quoteBusinessDelegate = new QuoteBusinessDelegate();
 		quoteDate = LocalDate.now();
 		allQuoteSets = quoteBusinessDelegate.getAllQuoteSets();
-		quoteValues = Collections.synchronizedSet(new HashSet<>());
 		if (allQuoteSets != null) {
 			quoteSet = allQuoteSets.stream().findFirst().get();
 		}
 		marketDataConfigurationBusinessDelegate = new MarketDataConfigurationBusinessDelegate();
 	}
 
-	public void setQuoteValues(Set<QuoteValue> quoteValues) {
+	public void setQuoteValues(List<QuoteValue> quoteValues) {
 		this.quoteValues = quoteValues;
 	}
 
-	public Set<QuoteValue> getQuoteValues() {
+	public List<QuoteValue> getQuoteValues() {
 		return quoteValues;
 	}
 
@@ -183,7 +182,7 @@ public class QuotesController implements Serializable {
 							.getQuoteValuesByQuoteSetIdQuoteNameAndDate(quoteSet.getId(), quoteName, quoteDate);
 					if (quoteValues != null) {
 						if (this.quoteValues == null) {
-							this.quoteValues = new HashSet<>();
+							this.quoteValues = new ArrayList<>();
 						}
 						this.quoteValues.addAll(quoteValues);
 					}

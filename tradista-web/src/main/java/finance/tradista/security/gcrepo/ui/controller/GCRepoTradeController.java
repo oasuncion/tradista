@@ -97,8 +97,6 @@ public class GCRepoTradeController implements Serializable {
 
 	private Tenor[] allIndexTenors;
 
-	private String[] quoteNames;
-
 	private Workflow workflow;
 
 	private String action;
@@ -529,23 +527,6 @@ public class GCRepoTradeController implements Serializable {
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Form cleared"));
 	}
 
-	public String[] getQuoteNames() {
-		return quoteNames;
-	}
-
-	public void setQuoteNames(String[] quoteNames) {
-		this.quoteNames = quoteNames;
-	}
-
-	public void updateQuoteNames() {
-		if (interestType != null && interestType.equals("Floating")) {
-			quoteNames = new String[] {
-					Index.INDEX + "." + gcRepoTrade.getIndex() + "." + gcRepoTrade.getIndexTenor() };
-		} else {
-			quoteNames = null;
-		}
-	}
-
 	public void updateIndex() {
 		if (interestType != null && interestType.equals("Floating")) {
 			if (gcRepoTrade.getIndex() == null && allIndexes != null && !allIndexes.isEmpty()) {
@@ -554,6 +535,10 @@ public class GCRepoTradeController implements Serializable {
 			if (gcRepoTrade.getIndexTenor() == null) {
 				gcRepoTrade.setIndexTenor(allIndexTenors[0]);
 			}
+		}
+		if (interestType != null && interestType.equals("Fixed")) {
+			gcRepoTrade.setIndex(null);
+			gcRepoTrade.setIndexTenor(null);
 		}
 	}
 

@@ -29,6 +29,8 @@ public class DayCountConvention extends TradistaObject implements Comparable<Day
 
 	public static final String ACT_365 = "ACT/365";
 
+	public static final String ACT_360 = "ACT/360";
+
 	@Id
 	private String name;
 

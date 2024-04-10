@@ -200,8 +200,9 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 			if (trade.isFixedRepoRate()) {
 				BigDecimal repoRate = trade.getRepoRate().divide(new BigDecimal(100),
 						configurationBusinessDelegate.getScale(), configurationBusinessDelegate.getRoundingMode());
-				BigDecimal interestAmount = trade.getAmount().multiply(repoRate).multiply(PricerUtil
-						.daysToYear(new DayCountConvention("ACT/360"), trade.getSettlementDate(), trade.getEndDate()));
+				BigDecimal interestAmount = trade.getAmount().multiply(repoRate)
+						.multiply(PricerUtil.daysToYear(new DayCountConvention(DayCountConvention.ACT_360),
+								trade.getSettlementDate(), trade.getEndDate()));
 				newCashPayment.setAmount(trade.getAmount().add(interestAmount));
 				newCashPayment.setStatus(Transfer.Status.KNOWN);
 				newCashPayment.setFixingDateTime(trade.getCreationDate().atStartOfDay());
@@ -225,8 +226,9 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 			if (trade.isFixedRepoRate()) {
 				BigDecimal repoRate = trade.getRepoRate().divide(new BigDecimal(100),
 						configurationBusinessDelegate.getScale(), configurationBusinessDelegate.getRoundingMode());
-				interestAmount = notionalReduction.multiply(repoRate).multiply(PricerUtil
-						.daysToYear(new DayCountConvention("ACT/360"), trade.getSettlementDate(), LocalDate.now()));
+				interestAmount = notionalReduction.multiply(repoRate)
+						.multiply(PricerUtil.daysToYear(new DayCountConvention(DayCountConvention.ACT_360),
+								trade.getSettlementDate(), LocalDate.now()));
 				cashPartialPayment.setStatus(Transfer.Status.KNOWN);
 				cashPartialPayment.setAmount(notionalReduction.add(interestAmount));
 				cashPartialPayment.setFixingDateTime(trade.getCreationDate().atStartOfDay());
@@ -252,8 +254,8 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 				BigDecimal repoRate = trade.getRepoRate().divide(new BigDecimal(100),
 						configurationBusinessDelegate.getScale(), configurationBusinessDelegate.getRoundingMode());
 				BigDecimal reducedNotional = trade.getAmount().subtract(notionalReduction);
-				interestAmount = reducedNotional.multiply(repoRate).multiply(
-						PricerUtil.daysToYear(new DayCountConvention("ACT/360"), LocalDate.now(), trade.getEndDate()));
+				interestAmount = reducedNotional.multiply(repoRate).multiply(PricerUtil.daysToYear(
+						new DayCountConvention(DayCountConvention.ACT_360), LocalDate.now(), trade.getEndDate()));
 				CashTransfer existingReturnedCashTransfer = (CashTransfer) existingReturnedCashTransfersMap
 						.get(reducedCashPayment);
 				existingReturnedCashTransfer.setAmount(trade.getAmount().add(interestAmount));
@@ -318,7 +320,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 						try {
 							transferBusinessDelegate.deleteTransfer(transfer.getId());
 						} catch (TradistaBusinessException tbe) {
-							// Not expected here;
+							// Not expected here
 						}
 					}
 				}
@@ -327,7 +329,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 
 			// 2.2 Create allocation transfers
 			existingCollateralTransfers = existingCollateralTransfers.stream()
-					.filter(t -> !t.getStatus().equals(Status.POTENTIAL)).collect(Collectors.toList());
+					.filter(t -> !t.getStatus().equals(Status.POTENTIAL)).toList();
 			Map<Transfer, Transfer> existingCollateralTransfersMap = existingCollateralTransfers.stream()
 					.collect(Collectors.toMap(Function.identity(), Function.identity()));
 			if (trade.getCollateralToAdd() != null) {
@@ -451,7 +453,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 
 			// 2.2 Create or update allocation transfers
 			existingCollateralTransfers = existingCollateralTransfers.stream()
-					.filter(t -> !t.getStatus().equals(Status.POTENTIAL)).collect(Collectors.toList());
+					.filter(t -> !t.getStatus().equals(Status.POTENTIAL)).toList();
 			Map<Transfer, Transfer> existingCollateralTransfersMap = existingCollateralTransfers.stream()
 					.collect(Collectors.toMap(Function.identity(), Function.identity()));
 			if (trade.getCollateralToAdd() != null) {
@@ -526,17 +528,16 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 
 		if (quoteValues == null || quoteValues.isEmpty()) {
 			String errorMsg = String.format(
-					"Transfer %n cannot be fixed. Impossible to get the %s index closing value between %tD and %tD in QuoteSet %s.",
+					"Transfer %d cannot be fixed. Impossible to get the %s index closing value between %tD and %tD in QuoteSet %s.",
 					transfer.getId(), quoteName, trade.getSettlementDate(), transfer.getSettlementDate(), quoteSetId);
-			createFixingError(transfer, quoteSetId, quoteName, errorMsg);
+			createFixingError(transfer, errorMsg);
 			throw new TradistaBusinessException(errorMsg);
 		}
 
 		Map<LocalDate, QuoteValue> quoteValuesMap = quoteValues.stream()
 				.collect(Collectors.toMap(QuoteValue::getDate, Function.identity()));
 
-		List<LocalDate> dates = trade.getSettlementDate().datesUntil(transfer.getSettlementDate())
-				.collect(Collectors.toList());
+		List<LocalDate> dates = trade.getSettlementDate().datesUntil(transfer.getSettlementDate()).toList();
 
 		BigDecimal repoRate = BigDecimal.ZERO;
 
@@ -552,14 +553,14 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 			if (!quoteValuesMap.containsKey(date) || quoteValuesMap.get(date).getClose() == null) {
 				errorMsg.append(String.format("%tD ", date));
 			} else {
-				repoRate.add(quoteValuesMap.get(date).getClose());
+				repoRate = repoRate.add(quoteValuesMap.get(date).getClose());
 			}
 		}
-		if (errorMsg.length() > 0) {
+		if (!errorMsg.isEmpty()) {
 			errorMsg = new StringBuilder(String.format(
-					"Transfer %n cannot be fixed. Impossible to get the %s index closing value in QuoteSet %s for dates : ",
+					"Transfer %d cannot be fixed. Impossible to get the %s index closing value in QuoteSet %s for dates : ",
 					transfer.getId(), quoteName, quoteSetId)).append(errorMsg);
-			createFixingError(transfer, quoteSetId, quoteName, errorMsg.toString());
+			createFixingError(transfer, errorMsg.toString());
 			throw new TradistaBusinessException(errorMsg.toString());
 		}
 
@@ -598,8 +599,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 		transferBusinessDelegate.saveTransfer(transfer);
 	}
 
-	private void createFixingError(CashTransfer transfer, long quoteSetId, String quoteName, String errorMsg)
-			throws TradistaBusinessException {
+	private void createFixingError(CashTransfer transfer, String errorMsg) throws TradistaBusinessException {
 		FixingError fixingError = new FixingError();
 		fixingError.setCashTransfer(transfer);
 		fixingError.setErrorDate(LocalDateTime.now());

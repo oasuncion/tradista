@@ -385,16 +385,21 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 
 			for (LocalDate date : dates) {
 				try {
-					repoRate = repoRate.add(PricerUtil.getInterestRateAsOfDate(
+					BigDecimal currentRate = PricerUtil.getInterestRateAsOfDate(
 							trade.getIndex() + "." + trade.getIndexTenor(), params.getQuoteSet().getId(),
-							indexCurve.getId(), trade.getIndexTenor(), null, date));
+							indexCurve.getId(), trade.getIndexTenor(), null, date);
+					if (currentRate != null) {
+						repoRate = repoRate.add(currentRate);
+					} else {
+						errorMsg.append(String.format("%tD ", date));
+					}
 				} catch (PricerException pe) {
 					errorMsg.append(String.format("%tD ", date));
 				}
 			}
 			if (errorMsg.length() > 0) {
 				errorMsg = new StringBuilder(
-						"Repo closing leg cashfow cannot be calculated. Impossible to calculate the rate for dates : ")
+						"Repo closing leg cashflow cannot be calculated. Impossible to calculate the rate for dates : ")
 						.append(errorMsg);
 				throw new TradistaBusinessException(errorMsg.toString());
 			}

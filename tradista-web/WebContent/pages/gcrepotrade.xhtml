@@ -87,10 +87,10 @@
 													<p:ajax event="change"
 														listener="#{gCRepoTradeController.updateIndex()}" />
 													<p:ajax event="change"
-														listener="#{gCRepoTradeController.updateQuoteNames()}" />
+														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, collateralController.securityQuoteNames)}" />
 													<p:ajax event="change"
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
-														listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}" />
+														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -151,10 +151,10 @@
 													disabled="#{gCRepoTradeController.interestType eq 'Fixed' or empty gCRepoTradeController.interestType}">
 													<f:selectItems value="#{gCRepoTradeController.allIndexes}" />
 													<p:ajax event="change"
-														listener="#{gCRepoTradeController.updateQuoteNames()}" />
+														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, collateralController.securityQuoteNames)}" />
 													<p:ajax event="change"
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
-														listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}" />
+														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -185,10 +185,10 @@
 													<f:selectItems
 														value="#{gCRepoTradeController.allIndexTenors}" />
 													<p:ajax event="change"
-														listener="#{gCRepoTradeController.updateQuoteNames()}" />
+														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, collateralController.securityQuoteNames)}" />
 													<p:ajax event="change"
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
-														listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}" />
+														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
 											</p:column>
 											<p:column>
@@ -287,28 +287,33 @@
 															binding="#{partialTerminationController.refresh(gCRepoTradeController.id)}" />
 													</p:commandButton>
 													<p:commandButton value="New" styleClass="rounded-button"
-														action="#{gCRepoTradeController.clear}" update="@form">
+														action="#{gCRepoTradeController.clear}"
+														update="@form :dashboardForm:quotesCashflowsTabs:cashflowsListDataTable :dashboardForm:quotesCashflowsTabs:quotesListDataTable">
 														<f:actionListener
 															binding="#{collateralController.clear()}" />
 														<f:actionListener
 															binding="#{partialTerminationController.clear()}" />
-														<p:ajax
-															update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
-															listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
+														<f:actionListener binding="#{quotesController.clear()}" />
+														<f:actionListener
+															binding="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
+														<f:actionListener binding="#{quotesController.refresh()}" />
 													</p:commandButton>
 													<p:outputLabel value="Load by Id"
 														styleClass="tradista-menu-item" />
 													<p:inputText value="#{gCRepoTradeController.idToBeLoaded}"
 														styleClass="tradista-menu-item" />
 													<p:commandButton value="Load" styleClass="rounded-button"
-														action="#{gCRepoTradeController.load}" update="@form">
+														action="#{gCRepoTradeController.load}"
+														update="@form :dashboardForm:quotesCashflowsTabs:cashflowsListDataTable :dashboardForm:quotesCashflowsTabs:quotesListDataTable">
 														<f:actionListener
 															binding="#{collateralController.refresh(gCRepoTradeController.idToBeLoaded)}" />
 														<f:actionListener
 															binding="#{partialTerminationController.refresh(gCRepoTradeController.idToBeLoaded)}" />
-														<p:ajax
-															update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
-															listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
+														<f:actionListener
+															binding="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, collateralController.securityQuoteNames)}" />
+														<f:actionListener
+															binding="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
+														<f:actionListener binding="#{quotesController.refresh()}" />
 													</p:commandButton>
 												</p:column>
 											</p:row>
@@ -605,7 +610,7 @@
 													<p:datePicker value="#{quotesController.quoteDate}"
 														pattern="dd/MM/yyyy">
 														<p:ajax event="dateSelect"
-															listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}"
+															listener="#{quotesController.refresh()}"
 															update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 													</p:datePicker>
 												</p:column>
@@ -619,7 +624,7 @@
 														styleClass="tradista-menu-item">
 														<f:selectItems value="#{quotesController.allQuoteSets}" />
 														<p:ajax event="change"
-															listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}"
+															listener="#{quotesController.refresh()}"
 															update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 													</p:selectOneMenu>
 												</p:column>
@@ -638,10 +643,13 @@
 											<p:outputLabel value="#{quote.quote.name}" />
 										</p:column>
 										<p:column headerText="Date" sortBy="#{quote.date}">
-											<p:outputLabel value="#{quote.date}" />
+											<p:outputLabel value="#{quote.date}">
+												<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+											</p:outputLabel>
 										</p:column>
-										<p:column headerText="Type" sortBy="#{quote.quote.type}">
-											<p:outputLabel value="#{quote.quote.type}" />
+										<p:column headerText="Type"
+											sortBy="#{quote.quote.type.toString()}">
+											<p:outputLabel value="#{quote.quote.type.toString()}" />
 										</p:column>
 										<p:column headerText="Bid" sortBy="#{quote.bid}">
 											<p:outputLabel value="#{quote.bid}">
@@ -680,7 +688,9 @@
 										</p:column>
 										<p:column headerText="Entered Date"
 											sortBy="#{quote.enteredDate}">
-											<p:outputLabel value="#{quote.enteredDate}" />
+											<p:outputLabel value="#{quote.enteredDate}">
+												<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+											</p:outputLabel>
 										</p:column>
 										<p:column headerText="Source Name"
 											sortBy="#{quote.sourceName}">
@@ -731,11 +741,13 @@
 												<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
 											</p:outputLabel>
 										</p:column>
-										<p:column headerText="Direction" sortBy="#{cf.direction}">
-											<p:outputLabel value="#{cf.direction}" />
+										<p:column headerText="Direction"
+											sortBy="#{cf.direction.toString()}">
+											<p:outputLabel value="#{cf.direction.toString()}" />
 										</p:column>
-										<p:column headerText="Purpose" sortBy="#{cf.purpose}">
-											<p:outputLabel value="#{cf.purpose}" />
+										<p:column headerText="Purpose"
+											sortBy="#{cf.purpose.toString()}">
+											<p:outputLabel value="#{cf.purpose.toString()}" />
 										</p:column>
 										<p:column headerText="Amount" sortBy="#{cf.amount}">
 											<p:outputLabel value="#{cf.amount}">
@@ -833,8 +845,8 @@ to remove (up to
 				</p:panelGrid>
 			</p:dialog>
 			<p:poll interval="#{quotesController.frequency}" id="poll"
-				stop="#{not quotesController.realTime}"
-				listener="#{quotesController.refresh(quotesController.quoteDate, quotesController.quoteSet, gCRepoTradeController.quoteNames)}"
+				widgetVar="poll" autoStart="false"
+				listener="#{quotesController.refresh()}"
 				update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 		</h:form>
 	</ui:define>

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.donut.DonutChartDataSet;
 import org.primefaces.model.charts.donut.DonutChartModel;
+import org.springframework.util.CollectionUtils;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
@@ -110,6 +112,8 @@ public class CollateralController implements Serializable {
 	private BigDecimal quantityToRemove;
 
 	private String exchangeToRemove;
+
+	private Set<String> securityQuoteNames;
 
 	public String getSecurityToRemove() {
 		return securityToRemove;
@@ -574,6 +578,7 @@ public class CollateralController implements Serializable {
 		addedCollateralValues = null;
 		availableCollateralValues = null;
 		collateralMarketValueDonutModel.setData(null);
+		securityQuoteNames = null;
 	}
 
 	public void refresh(long tradeId) {
@@ -668,11 +673,9 @@ public class CollateralController implements Serializable {
 						}
 					}
 				}
-
 				this.trade = trade;
-
 				refreshDonutModel();
-
+				updateSecuryQuoteNames();
 			}
 
 		} catch (TradistaBusinessException tbe) {
@@ -851,6 +854,31 @@ public class CollateralController implements Serializable {
 
 	public String getExchangeToRemove() {
 		return exchangeToRemove;
+	}
+
+	public Set<String> getSecurityQuoteNames() {
+		return securityQuoteNames;
+	}
+
+	public void setSecurityQuoteNames(Set<String> securityQuoteNames) {
+		this.securityQuoteNames = securityQuoteNames;
+	}
+
+	public void updateSecuryQuoteNames() {
+		if (securityQuoteNames != null) {
+			securityQuoteNames.clear();
+		}
+		if (!CollectionUtils.isEmpty(availableCollateralValues)) {
+			securityQuoteNames = availableCollateralValues.stream().map(c -> "%" + c.security + "." + c.exchange)
+					.collect(Collectors.toSet());
+		}
+		if (!CollectionUtils.isEmpty(collateralValues)) {
+			if (securityQuoteNames == null) {
+				securityQuoteNames = new HashSet<>();
+			}
+			securityQuoteNames.addAll(collateralValues.stream().map(c -> "%" + c.security + "." + c.exchange)
+					.collect(Collectors.toSet()));
+		}
 	}
 
 }

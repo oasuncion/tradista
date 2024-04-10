@@ -2,17 +2,21 @@ package finance.tradista.core.marketdata.ui.controller;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.primefaces.PrimeFaces;
+import org.springframework.util.CollectionUtils;
 
+import finance.tradista.core.index.model.Index;
 import finance.tradista.core.marketdata.model.QuoteSet;
 import finance.tradista.core.marketdata.model.QuoteValue;
 import finance.tradista.core.marketdata.service.MarketDataConfigurationBusinessDelegate;
 import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
+import finance.tradista.core.tenor.model.Tenor;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
@@ -43,7 +47,7 @@ public class QuotesController implements Serializable {
 
 	private static final long serialVersionUID = -1925132958947152812L;
 
-	private Set<QuoteValue> quoteValues;
+	private List<QuoteValue> quoteValues;
 
 	private QuoteSet quoteSet;
 
@@ -59,23 +63,24 @@ public class QuotesController implements Serializable {
 
 	private int frequency;
 
+	private Set<String> quoteNames;
+
 	@PostConstruct
 	public void init() {
 		quoteBusinessDelegate = new QuoteBusinessDelegate();
 		quoteDate = LocalDate.now();
 		allQuoteSets = quoteBusinessDelegate.getAllQuoteSets();
-		quoteValues = Collections.synchronizedSet(new HashSet<QuoteValue>());
 		if (allQuoteSets != null) {
 			quoteSet = allQuoteSets.stream().findFirst().get();
 		}
 		marketDataConfigurationBusinessDelegate = new MarketDataConfigurationBusinessDelegate();
 	}
 
-	public void setQuoteValues(Set<QuoteValue> quoteValues) {
+	public void setQuoteValues(List<QuoteValue> quoteValues) {
 		this.quoteValues = quoteValues;
 	}
 
-	public Set<QuoteValue> getQuoteValues() {
+	public List<QuoteValue> getQuoteValues() {
 		return quoteValues;
 	}
 
@@ -101,9 +106,16 @@ public class QuotesController implements Serializable {
 
 	public void setRealTime(boolean realTime) {
 		this.realTime = realTime;
+		String method;
 		if (realTime) {
 			frequency = marketDataConfigurationBusinessDelegate.getFrequency();
 		}
+		if (realTime) {
+			method = "start();";
+		} else {
+			method = "stop();";
+		}
+		PrimeFaces.current().executeScript("PF('poll')." + method);
 	}
 
 	public Set<QuoteSet> getAllQuoteSets() {
@@ -122,19 +134,54 @@ public class QuotesController implements Serializable {
 		this.frequency = frequency;
 	}
 
-	public void refresh(LocalDate quoteDate, QuoteSet quoteSet, String... quoteNames) {
-		quoteValues.clear();
+	public Set<String> getQuoteNames() {
+		return quoteNames;
+	}
+
+	public void setQuoteNames(Set<String> quoteNames) {
+		this.quoteNames = quoteNames;
+	}
+
+	public void updateQuoteNames(Index index, Tenor tenor, Set<String> secQuoteNames) {
+		if (quoteNames != null) {
+			quoteNames.clear();
+		}
+		if (index != null && tenor != null) {
+			if (quoteNames == null) {
+				quoteNames = new HashSet<>();
+			}
+			quoteNames.add(Index.INDEX + "." + index.getName() + "." + tenor);
+		}
+		if (!CollectionUtils.isEmpty(secQuoteNames)) {
+			if (quoteNames == null) {
+				quoteNames = new HashSet<>();
+			}
+			quoteNames.addAll(secQuoteNames);
+		}
+	}
+
+	public void refresh() {
+		if (quoteValues != null) {
+			quoteValues.clear();
+		}
 		if (quoteSet != null && quoteDate != null && quoteNames != null) {
 			for (String quoteName : quoteNames) {
 				if (!StringUtils.isEmpty(quoteName)) {
 					List<QuoteValue> quoteValues = quoteBusinessDelegate
 							.getQuoteValuesByQuoteSetIdQuoteNameAndDate(quoteSet.getId(), quoteName, quoteDate);
 					if (quoteValues != null) {
+						if (this.quoteValues == null) {
+							this.quoteValues = new ArrayList<>();
+						}
 						this.quoteValues.addAll(quoteValues);
 					}
 				}
 			}
 		}
+	}
+
+	public void clear() {
+		quoteValues = null;
 	}
 
 }

@@ -40,11 +40,11 @@ under the License.    */
 @ViewScoped
 public class DashboardController implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2526660705463413881L;
 	private DashboardModel model;
+	private static final String LARGE_COLUMN_RESPONSIVE_CLASS = "col-12 lg:col-6 xl:col-8";
+
+	private static final String SMALL_COLUMN_RESPONSIVE_CLASS = "col-12 lg:col-6 xl:col-4";
 
 	@PostConstruct
 	public void init() {
@@ -52,13 +52,13 @@ public class DashboardController implements Serializable {
 		DashboardWidget column1 = new DefaultDashboardWidget();
 		DashboardWidget column2 = new DefaultDashboardWidget();
 
-		column1.setStyleClass("first");
-		column1.addWidget("tradeBooking");
+		column1.setStyleClass(SMALL_COLUMN_RESPONSIVE_CLASS);
 		column1.addWidget("book");
+		column1.addWidget("inventory");
 
-		column2.setStyleClass("second");
+		column2.setStyleClass(LARGE_COLUMN_RESPONSIVE_CLASS);
+		column2.addWidget("tradeBooking");
 		column2.addWidget("tradesList");
-		column2.addWidget("inventory");
 
 		model.addWidget(column1);
 		model.addWidget(column2);
@@ -89,7 +89,7 @@ public class DashboardController implements Serializable {
 	}
 
 	private void addMessage(FacesMessage message) {
-		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().addMessage("msgs", message);
 	}
 
 	public DashboardModel getModel() {

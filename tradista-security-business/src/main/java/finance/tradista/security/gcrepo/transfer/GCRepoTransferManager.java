@@ -6,9 +6,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.springframework.util.CollectionUtils;
 
 import finance.tradista.core.action.constants.ActionConstants;
 import finance.tradista.core.book.model.Book;
@@ -121,7 +124,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 			// Checking if collateral payments should be updated
 			if (((oldTrade.getEndDate() == null && trade.getEndDate() != null)
 					|| !oldTrade.getSettlementDate().isEqual(trade.getSettlementDate())
-					|| (!oldTrade.getGcBasket().getSecurities().equals(trade.getGcBasket().getSecurities()))
+					|| (!Objects.equals(oldTrade.getGcBasket().getSecurities(), trade.getGcBasket().getSecurities()))
 					|| (oldTrade.isBuy() != trade.isBuy()) || (!oldTrade.getBook().equals(trade.getBook())))
 					|| (isAllocated)) {
 				List<Transfer> existingCollateralTransfers = transferBusinessDelegate.getTransfersByTradeIdAndPurpose(
@@ -135,7 +138,7 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 					|| (oldTrade.getEndDate() != null && trade.getEndDate() == null)
 					|| (oldTrade.getEndDate() != null && trade.getEndDate() != null
 							&& !oldTrade.getEndDate().isEqual(trade.getEndDate()))
-					|| (!oldTrade.getGcBasket().getSecurities().equals(trade.getGcBasket().getSecurities()))
+					|| (!Objects.equals(oldTrade.getGcBasket().getSecurities(), trade.getGcBasket().getSecurities()))
 					|| (oldTrade.isBuy() != trade.isBuy()) || (!oldTrade.getBook().equals(trade.getBook())))
 					|| (isAllocated)) {
 				List<Transfer> existingReturnedCollateralTransfers = transferBusinessDelegate
@@ -283,17 +286,21 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 						.filter(t -> t.getStatus().equals(Status.POTENTIAL)).toList();
 			}
 
-			for (Security sec : trade.getGcBasket().getSecurities()) {
-				ProductTransfer newCollateralPayment = new ProductTransfer(trade.getBook(), sec,
-						TransferPurpose.COLLATERAL_SETTLEMENT, trade.getSettlementDate(), trade);
-				newCollateralPayment.setCreationDateTime(LocalDateTime.now());
-				newCollateralPayment.setDirection(trade.isBuy() ? Transfer.Direction.PAY : Transfer.Direction.RECEIVE);
-				newCollateralPayment.setStatus(Transfer.Status.POTENTIAL);
-				if (existingPotentialCollateralTransfers == null
-						|| !existingPotentialCollateralTransfers.contains(newCollateralPayment)) {
-					collateralPaymentsToBeSaved.add(newCollateralPayment);
+			Set<Security> basketSec = trade.getGcBasket().getSecurities();
+			if (!CollectionUtils.isEmpty(basketSec)) {
+				for (Security sec : basketSec) {
+					ProductTransfer newCollateralPayment = new ProductTransfer(trade.getBook(), sec,
+							TransferPurpose.COLLATERAL_SETTLEMENT, trade.getSettlementDate(), trade);
+					newCollateralPayment.setCreationDateTime(LocalDateTime.now());
+					newCollateralPayment
+							.setDirection(trade.isBuy() ? Transfer.Direction.PAY : Transfer.Direction.RECEIVE);
+					newCollateralPayment.setStatus(Transfer.Status.POTENTIAL);
+					if (existingPotentialCollateralTransfers == null
+							|| !existingPotentialCollateralTransfers.contains(newCollateralPayment)) {
+						collateralPaymentsToBeSaved.add(newCollateralPayment);
+					}
+					newCollateralPayments.add(newCollateralPayment);
 				}
-				newCollateralPayments.add(newCollateralPayment);
 			}
 
 			// we cancel the existing collateral transfers that are not relevant anymore
@@ -406,18 +413,21 @@ public class GCRepoTransferManager implements TransferManager<GCRepoTradeEvent> 
 			}
 
 			if (trade.getEndDate() != null) {
-				for (Security sec : trade.getGcBasket().getSecurities()) {
-					ProductTransfer newCollateralPayment = new ProductTransfer(trade.getBook(), sec,
-							TransferPurpose.RETURNED_COLLATERAL, trade.getEndDate(), trade);
-					newCollateralPayment.setCreationDateTime(LocalDateTime.now());
-					newCollateralPayment
-							.setDirection(trade.isBuy() ? Transfer.Direction.RECEIVE : Transfer.Direction.PAY);
-					newCollateralPayment.setStatus(Transfer.Status.POTENTIAL);
-					if (existingPotentialCollateralTransfers == null
-							|| !existingPotentialCollateralTransfers.contains(newCollateralPayment)) {
-						collateralPaymentsToBeSaved.add(newCollateralPayment);
+				Set<Security> basketSec = trade.getGcBasket().getSecurities();
+				if (!CollectionUtils.isEmpty(basketSec)) {
+					for (Security sec : basketSec) {
+						ProductTransfer newCollateralPayment = new ProductTransfer(trade.getBook(), sec,
+								TransferPurpose.RETURNED_COLLATERAL, trade.getEndDate(), trade);
+						newCollateralPayment.setCreationDateTime(LocalDateTime.now());
+						newCollateralPayment
+								.setDirection(trade.isBuy() ? Transfer.Direction.RECEIVE : Transfer.Direction.PAY);
+						newCollateralPayment.setStatus(Transfer.Status.POTENTIAL);
+						if (existingPotentialCollateralTransfers == null
+								|| !existingPotentialCollateralTransfers.contains(newCollateralPayment)) {
+							collateralPaymentsToBeSaved.add(newCollateralPayment);
+						}
+						newCollateralPayments.add(newCollateralPayment);
 					}
-					newCollateralPayments.add(newCollateralPayment);
 				}
 			}
 

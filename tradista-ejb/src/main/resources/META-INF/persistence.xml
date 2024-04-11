@@ -31,7 +31,7 @@
 		<properties>
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.DerbyDialect" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 		</properties>
 	</persistence-unit>
 </persistence>

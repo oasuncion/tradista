@@ -599,6 +599,13 @@ public class CollateralController implements Serializable {
 					throw new TradistaBusinessException(String
 							.format("Books should be configured in the Allocation Configuration '%s'.", ac.getName()));
 				}
+				Set<Security> basketSecurities = trade.getGcBasket().getSecurities();
+				if (CollectionUtils.isEmpty(basketSecurities)) {
+					FacesContext.getCurrentInstance().addMessage(COL_MSG,
+							new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning",
+									String.format("The basket '%s' doesn't contain securities.", trade.getGcBasket())));
+					return;
+				}
 				if (collateralValues == null) {
 					collateralValues = new ArrayList<>();
 				}
@@ -673,6 +680,7 @@ public class CollateralController implements Serializable {
 						}
 					}
 				}
+
 				this.trade = trade;
 				refreshDonutModel();
 				updateSecuryQuoteNames();

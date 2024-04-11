@@ -14,7 +14,7 @@ public class CollateralAdded extends Guard<GCRepoTrade> {
 		setPredicate(trade -> {
 			boolean collateralAdded = trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty();
 			if (!collateralAdded) {
-				throw new TradistaBusinessException("No collateral has been added.%n");
+				throw new TradistaBusinessException("No collateral has been added.");
 			}
 			return collateralAdded;
 		});

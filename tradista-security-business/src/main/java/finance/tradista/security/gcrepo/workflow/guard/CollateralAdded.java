@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 @Entity
 public class CollateralAdded extends Guard<GCRepoTrade> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4754668279484977088L;
 
 	public CollateralAdded() {
 		setPredicate(trade -> {

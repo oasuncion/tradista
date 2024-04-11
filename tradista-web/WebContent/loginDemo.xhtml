@@ -13,31 +13,36 @@
 			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 	</f:facet>
-	<title>Tradista</title>
+	<link rel="icon" type="image/x-icon"
+		href="#{resource['poseidon-layout:images/tradista-icon-16x16.png']}" />
+	<h:outputStylesheet name="css/layout-light.css"
+		library="poseidon-layout" />
+	<h:outputStylesheet name="tradista.css" />
+	<title>Tradista Demo Login page</title>
 </h:head>
 
 
 <h:body styleClass="login-body #{guestPreferences.inputStyleClass}">
 	<div class="login-wrapper">
 		<div class="login-panel">
-
-			<p:graphicImage name="images/logo-tradista-white.png"
-				library="poseidon-layout" width="200" height="200" />
-
-			<h:form class="login-form">
-				<h2>Login To Tradista</h2>
-				<p:inputText id="email" placeholder="Email"
+			<h:form class="login-form" id="loginForm">
+				<p:graphicImage name="images/logo-tradista-white.png"
+					library="poseidon-layout" width="300" height="300" />
+				<h2 class="login-label">Login To Tradista Demo</h2>
+				<p:inputText placeholder="Login" styleClass="login-input"
 					value="#{loginDemoController.login}" />
-				<p:password id="password" placeholder="Password"
+				<p:password placeholder="Password" styleClass="login-input"
 					value="#{loginDemoController.password}" />
-				<p:commandButton value="LOGIN" action="#{loginDemoController.login}" />
+				<br />
+				<p:commandButton value="LOGIN"
+					styleClass="rounded-button login-button"
+					action="#{loginDemoController.login}" update=":loginForm:errMsg" />
+				<p:messages id="errMsg" for="errMsg" showIcon="false"
+					closable="true" />
 			</h:form>
-			<p/>
+			<p />
 		</div>
 	</div>
-	<h:outputStylesheet name="css/layout-tradista-light.css"
-		library="poseidon-layout" />
-	<h:outputStylesheet name="css/primeicons.css" library="poseidon-layout" />
 </h:body>
 
 </html>

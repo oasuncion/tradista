@@ -67,12 +67,11 @@ public class LoginDemoController implements Serializable {
 			request.login(getLogin(), getPassword());
 			ClientUtil.setCurrentUser(
 					new UserBusinessDelegate().getUserByLogin(externalContext.getUserPrincipal().getName()));
-		} catch (ServletException e) {
-			e.printStackTrace();
-			context.addMessage(null, new FacesMessage("Login failed " + e));
-			return "loginError.xhtml";
+		} catch (ServletException se) {
+			context.addMessage(null, new FacesMessage("Login failed " + se));
+			return null;
 		}
 
-		return "dashboard.xhtml?faces-redirect=true";
+		return "/pages/dashboard.xhtml?faces-redirect=true";
 	}
 }

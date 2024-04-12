@@ -604,7 +604,6 @@ public class CollateralController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(COL_MSG,
 							new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning",
 									String.format("The basket '%s' doesn't contain securities.", trade.getGcBasket())));
-					return;
 				}
 				if (collateralValues == null) {
 					collateralValues = new ArrayList<>();
@@ -647,35 +646,37 @@ public class CollateralController implements Serializable {
 					}
 				}
 
-				for (Book b : configuredBooks) {
-					inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(), LocalDate.now(),
-							Bond.BOND, 0, b.getId(), false);
+				if (!CollectionUtils.isEmpty(basketSecurities)) {
+					for (Book b : configuredBooks) {
+						inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(),
+								LocalDate.now(), Bond.BOND, 0, b.getId(), false);
 
-					if (inventory != null) {
-						for (ProductInventory inv : inventory) {
-							if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
-								Collateral col = new Collateral();
-								col.setQuantity(inv.getQuantity());
-								col.setSecurity(((Bond) inv.getProduct()).getIsin());
-								col.setExchange(((Bond) inv.getProduct()).getExchange().getCode());
-								col.setBook(inv.getBook().getName());
-								availableCollateralValues.add(col);
+						if (inventory != null) {
+							for (ProductInventory inv : inventory) {
+								if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
+									Collateral col = new Collateral();
+									col.setQuantity(inv.getQuantity());
+									col.setSecurity(((Bond) inv.getProduct()).getIsin());
+									col.setExchange(((Bond) inv.getProduct()).getExchange().getCode());
+									col.setBook(inv.getBook().getName());
+									availableCollateralValues.add(col);
+								}
 							}
 						}
-					}
 
-					inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(), LocalDate.now(),
-							Equity.EQUITY, 0, b.getId(), false);
+						inventory = productInventoryBusinessDelegate.getProductInventories(LocalDate.now(),
+								LocalDate.now(), Equity.EQUITY, 0, b.getId(), false);
 
-					if (inventory != null) {
-						for (ProductInventory inv : inventory) {
-							if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
-								Collateral col = new Collateral();
-								col.setQuantity(inv.getQuantity());
-								col.setSecurity(((Equity) inv.getProduct()).getIsin());
-								col.setExchange(((Equity) inv.getProduct()).getExchange().getCode());
-								col.setBook(inv.getBook().getName());
-								availableCollateralValues.add(col);
+						if (inventory != null) {
+							for (ProductInventory inv : inventory) {
+								if (trade.getGcBasket().getSecurities().contains(inv.getProduct())) {
+									Collateral col = new Collateral();
+									col.setQuantity(inv.getQuantity());
+									col.setSecurity(((Equity) inv.getProduct()).getIsin());
+									col.setExchange(((Equity) inv.getProduct()).getExchange().getCode());
+									col.setBook(inv.getBook().getName());
+									availableCollateralValues.add(col);
+								}
 							}
 						}
 					}

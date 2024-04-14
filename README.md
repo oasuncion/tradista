@@ -6,7 +6,9 @@ See more on [tradista.finance](https://www.tradista.finance)
 
 Tradista is released under the Apache License, Version 2.0.
 
-![Dashboard](./ReadmePic.PNG)
+|![Login](./login.PNG)|![Dashboard](./ReadmePic.PNG)|
+|:-:|:-:|
+
 
 Tradista is a Java based application. The server is based on WildFly and the clients are based on JavaFX and PrimeFaces.
 

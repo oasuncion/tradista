@@ -1,5 +1,6 @@
 # Tradista: the first open source Financial Risk Management Solution
 
+![License](https://img.shields.io/badge/License-Apache_2.0-33ff99.svg?link=https://www.apache.org/licenses/LICENSE-2.0)
 
 Tradista is a lightweight Financial Risk Management Solution enabling you to manage in a single tool your daily treasury & risk management tasks. Tradista, among other possibilities, can be used for market data analyses, pre-deal checks and trades booking, P&L management, financial inventory management and reporting.
 See more on [tradista.finance](https://www.tradista.finance)

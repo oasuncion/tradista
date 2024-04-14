@@ -4,15 +4,17 @@
 Tradista is a lightweight Financial Risk Management Solution enabling you to manage in a single tool your daily treasury & risk management tasks. Tradista, among other possibilities, can be used for market data analyses, pre-deal checks and trades booking, P&L management, financial inventory management and reporting.
 See more on [tradista.finance](https://www.tradista.finance)
 
+Tradista is released under the Apache License, Version 2.0.
+
 ![Dashboard](./ReadmePic.PNG)
 
 Tradista is a Java based application. The server is based on WildFly and the clients are based on JavaFX and PrimeFaces.
 
 Tested configuration:
 - Server: WildFly 27.0.1.Final
-- JRE: Oracle JRE v17.0.5 or OpenJDK JRE (RedHat implementation) v17.0.5
+- JRE: Oracle JRE v17.0.10, OpenJDK JRE RedHat implementation v17.0.10.0.7-2 and OpenJDK JRE Eclipse Temurin implementation v17.0.10+7
 - Database: Derby 10.16.1.1
-- Build automation tool: Maven 3.8.5
+- Build automation tool: Maven 3.9.6
 
 Tradista can be built using Maven, build the whole application using the tradista-parent project.
 
@@ -37,5 +39,6 @@ Tradista is made possible using powerful third party tools:
 - [Quandl4J](https://github.com/jimmoores/quandl4j) to connect to Quandl REST API
 - [Quartz](http://www.quartz-scheduler.org/) for job scheduling
 - [Spring](https://spring.io/) for dependency injection, introspection and many more
+- [Tradista Flow](https://github.com/oasuncion/tradista-flow) for Workflow management
 - [Tweety](https://tweetyproject.org/) for first order logic processing
 - [WildFly](https://www.wildfly.org/) for the server

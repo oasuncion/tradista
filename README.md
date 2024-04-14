@@ -6,7 +6,7 @@ See more on [tradista.finance](https://www.tradista.finance)
 
 Tradista is released under the Apache License, Version 2.0.
 
-|![Login](./login.PNG)|![Dashboard](./ReadmePic.PNG)|
+|![Login](./login.PNG)|![Dashboard](./dashboard.PNG)|
 |:-:|:-:|
 | Login Page | Trading Dashboard |
 

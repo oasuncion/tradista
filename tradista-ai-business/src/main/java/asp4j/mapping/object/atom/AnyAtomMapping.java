@@ -34,6 +34,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  *
  * @author hbeck Jun 1, 2013
  */
-public interface AnyAtomMapping<T> extends AnyMapping<T,Atom>, HasSymbol {
+public interface AnyAtomMapping<T> extends AnyMapping<T, Atom>, HasSymbol {
 
 }

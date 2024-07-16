@@ -8,31 +8,24 @@ import finance.tradista.core.product.validator.DefaultProductValidator;
 import finance.tradista.ir.future.model.Future;
 import finance.tradista.ir.future.service.FutureBusinessDelegate;
 
-/*
- * Copyright 2018 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2018 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class FutureValidator extends DefaultProductValidator {
 
-	/**
-	* 
-	*/
 	private static final long serialVersionUID = 1121603261939982187L;
 
 	@Override
@@ -66,7 +59,8 @@ public class FutureValidator extends DefaultProductValidator {
 		}
 		// Checking symbol format.
 		if (symbol.length() != 5) {
-			throw new TradistaBusinessException(String.format("The symbol (%s)'s length must be 5 characters.", symbol));
+			throw new TradistaBusinessException(
+					String.format("The symbol (%s)'s length must be 5 characters.", symbol));
 		}
 
 		// Checking the year.

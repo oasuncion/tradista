@@ -14,45 +14,42 @@ import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 import finance.tradista.core.common.util.DateUtil;
 
-/*
- * Copyright 2018 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2018 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
-  http://www.apache.org/licenses/LICENSE-2.0
+public abstract class AbstractUnivariateInterpolator
+		implements finance.tradista.core.marketdata.interpolator.UnivariateInterpolator {
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
-
-public abstract class AbstractUnivariateInterpolator implements finance.tradista.core.marketdata.interpolator.UnivariateInterpolator {	
-	
 	private org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator interpolator;
-	
+
 	public AbstractUnivariateInterpolator(UnivariateInterpolator interpolator) {
 		this.interpolator = interpolator;
 	}
-	
+
 	@Override
 	public Map<Long, BigDecimal> interpolate2(SortedMap<Long, BigDecimal> points) {
 		// Create two double arrays from the map
 		double x[] = convertLongSet(points.keySet());
 		double y[] = convertBigDecimalCollection(points.values());
 		// Interpolate
-		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolator.interpolate(x, y);
+		PolynomialSplineFunction function = (PolynomialSplineFunction) interpolator.interpolate(x, y);
 		// Create the map from the UnivariateFunction object
 		return createResult2(function, points.firstKey());
 	}
-	
+
 	private double[] convertLongSet(Set<Long> keySet) {
 		double y[] = new double[keySet.size()];
 		int i = 0;
@@ -69,14 +66,14 @@ public abstract class AbstractUnivariateInterpolator implements finance.tradista
 		double x[] = convertLocalDateSet(points.keySet());
 		double y[] = convertBigDecimalCollection(points.values());
 		// Interpolate
-		PolynomialSplineFunction function = (PolynomialSplineFunction)interpolator.interpolate(x, y);
+		PolynomialSplineFunction function = (PolynomialSplineFunction) interpolator.interpolate(x, y);
 		// Create the map from the UnivariateFunction object
 		return createResult(function, points.firstKey());
 	}
-	
+
 	private Map<LocalDate, BigDecimal> createResult(PolynomialSplineFunction function, LocalDate firstDate) {
 		Map<LocalDate, BigDecimal> result = new TreeMap<LocalDate, BigDecimal>();
-		int i=0;
+		int i = 0;
 		while (function.isValidPoint(i)) {
 			System.out.println("i: " + i);
 			System.out.println("function(i): " + function.value(i));
@@ -85,10 +82,10 @@ public abstract class AbstractUnivariateInterpolator implements finance.tradista
 		}
 		return result;
 	}
-	
+
 	private Map<Long, BigDecimal> createResult2(PolynomialSplineFunction function, Long firstLong) {
 		Map<Long, BigDecimal> result = new TreeMap<Long, BigDecimal>();
-		long i=firstLong;
+		long i = firstLong;
 		while (function.isValidPoint(i)) {
 			System.out.println("i: " + i);
 			System.out.println("function(i): " + function.value(i));
@@ -130,6 +127,5 @@ public abstract class AbstractUnivariateInterpolator implements finance.tradista
 		}
 		return x;
 	}
-
 
 }

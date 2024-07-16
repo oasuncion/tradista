@@ -34,8 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  *
  * @author hbeck Jun 1, 2013
  */
-public interface InputMapping<T,E extends LangElem> extends AnyMapping<T,E> {    
-    
-    E asLangElem(T t) throws MappingException;
+public interface InputMapping<T, E extends LangElem> extends AnyMapping<T, E> {
+
+	E asLangElem(T t) throws MappingException;
 
 }

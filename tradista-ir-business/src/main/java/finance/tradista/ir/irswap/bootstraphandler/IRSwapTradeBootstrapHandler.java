@@ -17,25 +17,21 @@ import finance.tradista.core.tenor.model.Tenor;
 import finance.tradista.ir.irswap.model.IRSwapTrade;
 import finance.tradista.ir.irswap.model.SingleCurrencyIRSwapTrade;
 
-/*
- * Copyright 2018 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2018 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class IRSwapTradeBootstrapHandler implements BootstrapHandler {
 
@@ -46,8 +42,8 @@ public class IRSwapTradeBootstrapHandler implements BootstrapHandler {
 
 	@Override
 	/**
-	 * IRSwap quote name : IRSwap.CURVENAME.FREQUENCY.MATURITY IRSwap quote key
-	 * : INDEX.FREQUENCY.MATURITY
+	 * IRSwap quote name : IRSwap.CURVENAME.FREQUENCY.MATURITY IRSwap quote key :
+	 * INDEX.FREQUENCY.MATURITY
 	 */
 	public String getKeyFromQuoteName(String quoteName) {
 		return quoteName.substring(IRSwapTrade.IR_SWAP.length() + 1);
@@ -131,9 +127,9 @@ public class IRSwapTradeBootstrapHandler implements BootstrapHandler {
 	}
 
 	/**
-	 * To calculate the ir swap pending cfs, we handle it as a Bond. This,
-	 * because a par swap rate is equal to the coupon of a par bond that sets
-	 * the present value of a bond to 100. Sources : A financial bestiary :
+	 * To calculate the ir swap pending cfs, we handle it as a Bond. This, because a
+	 * par swap rate is equal to the coupon of a par bond that sets the present
+	 * value of a bond to 100. Sources : A financial bestiary :
 	 * https://books.google.fr/books?id=23LIzAAcp4oC&pg=PA138&lpg=PA138&dq=%
 	 * 22swap+par+rate%22+bond&source=bl&ots=OVKaK3Z7rZ&sig=
 	 * cCcaC5o1x_2DIin_Y_UKZzZNXGw&hl=en&sa=X&ei=OyKxVIigI4Lj7QaBhIHwAw&ved=
@@ -235,8 +231,8 @@ public class IRSwapTradeBootstrapHandler implements BootstrapHandler {
 
 	@Override
 	/**
-	 * 100 because a par swap rate is equal to the coupon of a par bond that
-	 * sets the present value of a bond to 100.
+	 * 100 because a par swap rate is equal to the coupon of a par bond that sets
+	 * the present value of a bond to 100.
 	 */
 	public BigDecimal getPrice(BigDecimal price) {
 		return BigDecimal.valueOf(100);

@@ -1,9 +1,21 @@
-import java.util.List;
-
-import finance.tradista.ai.reasoning.common.model.Formula;
-import finance.tradista.ai.reasoning.common.service.FormulaBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.user.service.UserBusinessDelegate;
+
+/********************************************************************************
+ * Copyright (c) 2022 Olivier Asuncion
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class FXTester {
 
@@ -17,28 +29,29 @@ public class FXTester {
 		}
 
 		// 1. Save the formulas
-		//Formula formula1 = new Formula("ExpectedBenefit = 0.2.");
+		// Formula formula1 = new Formula("ExpectedBenefit = 0.2.");
 //		//FolFormula formula2 = new FolFormula(
 //		//		"forall X: (forall Y: (forall Z: !(NPVFX(X,Y,Z) > ExpectedBenefit) || BUYFX(X,Y,Z)))");
-	// Formula formula2 = new Formula(
-	// "NPVFX(X,Y,Z) > ExpectedBenefit :- BUYFX(X,Y,Z).");
-		//new FormulaBusinessDelegate().saveFormulas(formula1,
+		// Formula formula2 = new Formula(
+		// "NPVFX(X,Y,Z) > ExpectedBenefit :- BUYFX(X,Y,Z).");
+		// new FormulaBusinessDelegate().saveFormulas(formula1,
 		// formula2);
 
 		// 3. Save the book
-		
-		//Book book = new Book();
-		//book.setName("TEST_AI");
-		//try {
-		//	book.setProcessingOrg(new LegalEntityBusinessDelegate().getLegalEntityById(2));
-		//} catch (TradistaBusinessException e1) {
-			// TODO Auto-generated catch block
-		//	e1.printStackTrace();
-		//}
-		//new BookBusinessDelegate().saveBook(book);
 
-		//3. Save the mandate
-		
+		// Book book = new Book();
+		// book.setName("TEST_AI");
+		// try {
+		// book.setProcessingOrg(new
+		// LegalEntityBusinessDelegate().getLegalEntityById(2));
+		// } catch (TradistaBusinessException e1) {
+		// TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+		// new BookBusinessDelegate().saveBook(book);
+
+		// 3. Save the mandate
+
 //		Mandate mandate = new Mandate();
 //		mandate.setAcceptedRiskLevel(Mandate.RiskLevel.AVERAGE);
 //		try {
@@ -80,8 +93,8 @@ public class FXTester {
 //		} catch (TradistaBusinessException e) { // TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
-		//4. Save the QS
+
+		// 4. Save the QS
 //		QuoteSet qs;
 //		try {
 //			qs = new QuoteSet("TEST_AI", new LegalEntityBusinessDelegate().getLegalEntityById(2));
@@ -90,8 +103,8 @@ public class FXTester {
 //			// TODO Auto-generated catch block
 //			e1.printStackTrace();
 //		}
-		
-		//5. Save the pricing parameter
+
+		// 5. Save the pricing parameter
 //		PricingParameter pp;
 //		try {
 //			pp = new PricingParameter("TEST_AI", new QuoteBusinessDelegate().getQuoteSetByName("TEST_AI"), new LegalEntityBusinessDelegate().getLegalEntityById(2));
@@ -117,7 +130,6 @@ public class FXTester {
 //		} catch (TradistaBusinessException e) { // TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
 
 		// Formula formula1;
 		// try {

@@ -33,6 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  *
  * @author hbeck May 31, 2013
  */
-public interface AtomOutputMapping<T> extends AnyAtomMapping<T>, OutputMapping<T,Atom> {
-    
+public interface AtomOutputMapping<T> extends AnyAtomMapping<T>, OutputMapping<T, Atom> {
+
 }

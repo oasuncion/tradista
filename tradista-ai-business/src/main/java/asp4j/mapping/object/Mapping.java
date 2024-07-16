@@ -29,10 +29,11 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
- * Defines how objects of class T are mappend to ASP language elements and vice versa
+ * Defines how objects of class T are mappend to ASP language elements and vice
+ * versa
  *
  * @author hbeck Jun 1, 2013
  */
-public interface Mapping<T,E extends LangElem> extends InputMapping<T,E>, OutputMapping<T,E> {
+public interface Mapping<T, E extends LangElem> extends InputMapping<T, E>, OutputMapping<T, E> {
 
 }

@@ -39,10 +39,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface MapAs {
-    
-    /**
-     * @return mapping name for enum constant (instead of default name)
-     */
-    String value();    
-    
+
+	/**
+	 * @return mapping name for enum constant (instead of default name)
+	 */
+	String value();
+
 }

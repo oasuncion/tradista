@@ -11,31 +11,24 @@ import finance.tradista.core.trade.model.Trade;
 import finance.tradista.core.trade.validator.DefaultTradeValidator;
 import finance.tradista.ir.irswap.model.IRSwapTrade;
 
-/*
- * Copyright 2018 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2018 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class IRSwapTradeValidator extends DefaultTradeValidator {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7848048519693419248L;
 
 	@Override
@@ -133,16 +126,20 @@ public class IRSwapTradeValidator extends DefaultTradeValidator {
 		if (irSwapTrade.getReceptionInterestFixing() == null) {
 			errMsg.append(String.format("The reception interest fixing is mandatory.%n"));
 		}
-		
+
 		if (irSwapTrade.getPaymentInterestPayment() != null && irSwapTrade.getPaymentInterestFixing() != null) {
-			if (irSwapTrade.getPaymentInterestPayment().equals(InterestPayment.BEGINNING_OF_PERIOD) && irSwapTrade.getPaymentInterestFixing().equals(InterestPayment.END_OF_PERIOD)) {
-				errMsg.append(String.format("It is not possible to have payment interest payment before payment interest fixing.%n"));	
+			if (irSwapTrade.getPaymentInterestPayment().equals(InterestPayment.BEGINNING_OF_PERIOD)
+					&& irSwapTrade.getPaymentInterestFixing().equals(InterestPayment.END_OF_PERIOD)) {
+				errMsg.append(String.format(
+						"It is not possible to have payment interest payment before payment interest fixing.%n"));
 			}
 		}
-		
+
 		if (irSwapTrade.getReceptionInterestPayment() != null && irSwapTrade.getReceptionInterestFixing() != null) {
-			if (irSwapTrade.getReceptionInterestPayment().equals(InterestPayment.BEGINNING_OF_PERIOD) && irSwapTrade.getReceptionInterestFixing().equals(InterestPayment.END_OF_PERIOD)) {
-				errMsg.append(String.format("It is not possible to have reception interest payment before reception interest fixing.%n"));	
+			if (irSwapTrade.getReceptionInterestPayment().equals(InterestPayment.BEGINNING_OF_PERIOD)
+					&& irSwapTrade.getReceptionInterestFixing().equals(InterestPayment.END_OF_PERIOD)) {
+				errMsg.append(String.format(
+						"It is not possible to have reception interest payment before reception interest fixing.%n"));
 			}
 		}
 

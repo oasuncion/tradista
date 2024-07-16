@@ -8,25 +8,21 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.daterollconvention.model.DateRollingConvention;
 import finance.tradista.core.tenor.model.Tenor;
 
-/*
- * Copyright 2018 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2018 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class DateUtil {
 
@@ -34,10 +30,8 @@ public class DateUtil {
 	 * Days difference between two dates (Absolute value). As it is the absolute
 	 * value, difference(date1, date2) is equal to difference(date2, date1)
 	 * 
-	 * @param firstDate
-	 *            a first date to make the comparison
-	 * @param secondDate
-	 *            a second date to make the comparison
+	 * @param firstDate  a first date to make the comparison
+	 * @param secondDate a second date to make the comparison
 	 * @return the difference between two dates, expressed in days
 	 */
 	public static int difference(LocalDate firstDate, LocalDate secondDate) {
@@ -50,14 +44,11 @@ public class DateUtil {
 	 * calendars. The result date should be a business day for all the selected
 	 * calendars.
 	 * 
-	 * @param date
-	 *            the date where to start the search
-	 * @param calendars
-	 *            the calendars used.
+	 * @param date      the date where to start the search
+	 * @param calendars the calendars used.
 	 * @return the next business day AFTER the given date, for the selected
 	 *         calendars.
-	 * @throws TradistaBusinessException
-	 *             if the date is null
+	 * @throws TradistaBusinessException if the date is null
 	 */
 	public static LocalDate nextBusinessDay(LocalDate date, Calendar... calendars) throws TradistaBusinessException {
 		if (date == null) {
@@ -78,14 +69,11 @@ public class DateUtil {
 	/**
 	 * Indicates if a date is a business day according to given calendars.
 	 * 
-	 * @param date
-	 *            the date to be checked
-	 * @param calendars
-	 *            the calendars (optional)
+	 * @param date      the date to be checked
+	 * @param calendars the calendars (optional)
 	 * @return true if the date is a business day for ALL the calendars, false
 	 *         otherwise
-	 * @throws TradistaBusinessException
-	 *             if the date is null
+	 * @throws TradistaBusinessException if the date is null
 	 */
 	public static boolean isBusinessDay(LocalDate date, Calendar... calendars) throws TradistaBusinessException {
 		if (date == null) {
@@ -111,17 +99,15 @@ public class DateUtil {
 	 * calendars. The rolled date should be a business day for all the selected
 	 * calendars.
 	 * 
-	 * @param date
-	 *            the date where to start the search
-	 * @param calendars
-	 *            the calendars used. If null, no calendar is used (all days will be
-	 *            considered as Business days).
+	 * @param date      the date where to start the search
+	 * @param calendars the calendars used. If null, no calendar is used (all days
+	 *                  will be considered as Business days).
 	 * @return the next business day BEFORE the given date, for the selected
 	 *         calendars.
-	 * @throws TradistaBusinessException
-	 *             if the date is null
+	 * @throws TradistaBusinessException if the date is null
 	 */
-	public static LocalDate previousBusinessDay(LocalDate date, Calendar... calendars) throws TradistaBusinessException {
+	public static LocalDate previousBusinessDay(LocalDate date, Calendar... calendars)
+			throws TradistaBusinessException {
 		if (date == null) {
 			throw new TradistaBusinessException("The date cannot be null");
 		}
@@ -141,17 +127,14 @@ public class DateUtil {
 	 * Adds x business day to the given date, for the selected calendar, and returns
 	 * the date.
 	 * 
-	 * @param date
-	 *            the date where to start the search
-	 * @param calendar
-	 *            the calendar used.
-	 * @param daysNumber
-	 *            the number of days to add.
+	 * @param date       the date where to start the search
+	 * @param calendar   the calendar used.
+	 * @param daysNumber the number of days to add.
 	 * @return the date being the parameter date plus 'daysNumber' business days.
-	 * @throws TradistaBusinessException
-	 *             if the date is null
+	 * @throws TradistaBusinessException if the date is null
 	 */
-	public static LocalDate addBusinessDay(LocalDate date, Calendar calendar, int days) throws TradistaBusinessException {
+	public static LocalDate addBusinessDay(LocalDate date, Calendar calendar, int days)
+			throws TradistaBusinessException {
 		if (date == null) {
 			throw new TradistaBusinessException("The date cannot be null");
 		}
@@ -259,13 +242,10 @@ public class DateUtil {
 	/**
 	 * Rolls the date according to the convention.
 	 * 
-	 * @param date
-	 *            the date to be rolled
-	 * @param calendars
-	 *            the calendars to be applied (optional)
+	 * @param date      the date to be rolled
+	 * @param calendars the calendars to be applied (optional)
 	 * @return the date resulted from the rolling
-	 * @exception if
-	 *                the date is null.
+	 * @exception if the date is null.
 	 */
 	public static LocalDate roll(DateRollingConvention drc, LocalDate date, Calendar... calendars)
 			throws TradistaBusinessException {

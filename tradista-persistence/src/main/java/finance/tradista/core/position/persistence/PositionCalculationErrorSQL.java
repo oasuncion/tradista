@@ -20,25 +20,21 @@ import finance.tradista.core.position.model.PositionCalculationError;
 import finance.tradista.core.product.persistence.ProductSQL;
 import finance.tradista.core.trade.persistence.TradeSQL;
 
-/*
- * Copyright 2016 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2016 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class PositionCalculationErrorSQL {
 
@@ -124,7 +120,8 @@ public class PositionCalculationErrorSQL {
 				PreparedStatement stmtSolvePositionCalculationErrors = con.prepareStatement(
 						"UPDATE ERROR SET STATUS = ?, SOLVING_DATE = ? WHERE ID IN (SELECT ERROR_ID FROM POSITION_CALCULATION_ERROR WHERE POSITION_DEFINITION_ID = ?)")) {
 			for (long id : solved) {
-				stmtSolvePositionCalculationErrors.setString(1, finance.tradista.core.error.model.Error.Status.SOLVED.name());
+				stmtSolvePositionCalculationErrors.setString(1,
+						finance.tradista.core.error.model.Error.Status.SOLVED.name());
 				stmtSolvePositionCalculationErrors.setDate(2, java.sql.Date.valueOf(date));
 				stmtSolvePositionCalculationErrors.setLong(3, id);
 				stmtSolvePositionCalculationErrors.addBatch();
@@ -141,7 +138,8 @@ public class PositionCalculationErrorSQL {
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtSolvePositionCalculationError = con.prepareStatement(
 						"UPDATE ERROR SET STATUS = ?, SOLVING_DATE = ? WHERE ID IN (SELECT ERROR_ID FROM POSITION_CALCULATION_ERROR WHERE POSITION_DEFINITION_ID = ?)")) {
-			stmtSolvePositionCalculationError.setString(1, finance.tradista.core.error.model.Error.Status.SOLVED.name());
+			stmtSolvePositionCalculationError.setString(1,
+					finance.tradista.core.error.model.Error.Status.SOLVED.name());
 			stmtSolvePositionCalculationError.setDate(2, java.sql.Date.valueOf(date));
 			stmtSolvePositionCalculationError.setLong(3, positionDefinitionId);
 			stmtSolvePositionCalculationError.executeUpdate();

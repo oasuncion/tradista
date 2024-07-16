@@ -8,25 +8,21 @@ import finance.tradista.ai.reasoning.fol.model.FolFormula;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.servicelocator.TradistaServiceLocator;
 
-/*
- * Copyright 2018 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2018 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class FolFormulaBusinessDelegate {
 
@@ -41,26 +37,26 @@ public class FolFormulaBusinessDelegate {
 	}
 
 	public boolean saveFolFormulas(FolFormula... formulas) throws TradistaBusinessException {
-		if (formulas != null && formulas.length > 0 ) {
+		if (formulas != null && formulas.length > 0) {
 			return folFormulaService.saveFolFormulas(formulas);
 		}
 		return false;
 
 	}
-	
+
 	public List<FolFormula> validateFolFormulas(FolFormula... formulas) throws TradistaBusinessException {
-		if (formulas != null && formulas.length > 0 ) {
+		if (formulas != null && formulas.length > 0) {
 			return folFormulaService.validateFolFormulas(formulas);
 		}
 		return null;
 
 	}
 
-	public boolean query(String functionName, String... parameters) throws TradistaBusinessException{
+	public boolean query(String functionName, String... parameters) throws TradistaBusinessException {
 		if (StringUtils.isEmpty(functionName)) {
 			throw new TradistaBusinessException("The function name is mandatory.");
 		}
 		return folFormulaService.query(functionName, parameters);
 	}
-	
+
 }

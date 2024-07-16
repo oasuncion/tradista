@@ -7,31 +7,24 @@ import finance.tradista.core.trade.model.Trade;
 import finance.tradista.core.trade.validator.DefaultTradeValidator;
 import finance.tradista.ir.ircapfloorcollar.model.IRCapFloorCollarTrade;
 
-/*
- * Copyright 2018 Olivier Asuncion
+/********************************************************************************
+ * Copyright (c) 2018 Olivier Asuncion
  * 
- * Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.    */
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 
 public class IRCapFloorCollarTradeValidator extends DefaultTradeValidator {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -13584296905203575L;
 
 	@Override
@@ -80,9 +73,14 @@ public class IRCapFloorCollarTradeValidator extends DefaultTradeValidator {
 			if (irCapFloorCollarTrade.getIrForwardTrade().getInterestFixing() == null) {
 				errMsg.append(String.format("The IR Forward trade (underlying) interest fixing is mandatory.%n"));
 			}
-			if (irCapFloorCollarTrade.getIrForwardTrade().getInterestPayment() != null && irCapFloorCollarTrade.getIrForwardTrade().getInterestFixing() != null) {
-				if (irCapFloorCollarTrade.getIrForwardTrade().getInterestPayment().equals(InterestPayment.BEGINNING_OF_PERIOD) && irCapFloorCollarTrade.getIrForwardTrade().getInterestFixing().equals(InterestPayment.END_OF_PERIOD)) {
-					errMsg.append(String.format("It is not possible to have interest payment before interest fixing.%n"));	
+			if (irCapFloorCollarTrade.getIrForwardTrade().getInterestPayment() != null
+					&& irCapFloorCollarTrade.getIrForwardTrade().getInterestFixing() != null) {
+				if (irCapFloorCollarTrade.getIrForwardTrade().getInterestPayment()
+						.equals(InterestPayment.BEGINNING_OF_PERIOD)
+						&& irCapFloorCollarTrade.getIrForwardTrade().getInterestFixing()
+								.equals(InterestPayment.END_OF_PERIOD)) {
+					errMsg.append(
+							String.format("It is not possible to have interest payment before interest fixing.%n"));
 				}
 			}
 		}

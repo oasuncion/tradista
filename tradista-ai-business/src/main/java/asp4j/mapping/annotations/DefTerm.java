@@ -33,16 +33,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
  *
- * @author hbeck
- *  May 30, 2013
+ * @author hbeck May 30, 2013
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface DefTerm {
-    
-    /**
-     * @return function symbol
-     */
-    String value();    
-    
+
+	/**
+	 * @return function symbol
+	 */
+	String value();
+
 }

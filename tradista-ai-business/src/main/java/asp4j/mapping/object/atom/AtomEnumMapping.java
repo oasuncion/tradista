@@ -34,20 +34,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  *
  * @author hbeck Jun 8, 2013
  */
-public final class AtomEnumMapping<T extends Enum<T>> extends EnumMappingBase<T,Atom> implements AtomMapping<T> {
+public final class AtomEnumMapping<T extends Enum<T>> extends EnumMappingBase<T, Atom> implements AtomMapping<T> {
 
-    public AtomEnumMapping(Class<T> enumType) {
-        super(enumType);
-    }
+	public AtomEnumMapping(Class<T> enumType) {
+		super(enumType);
+	}
 
-    @Override
-    public String symbol() {
-        throw new UnsupportedOperationException();
-    }
+	@Override
+	public String symbol() {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public Atom asLangElem(T t) {
-        return new AtomImpl(getTargetName(t));
-    }
+	@Override
+	public Atom asLangElem(T t) {
+		return new AtomImpl(getTargetName(t));
+	}
 
 }

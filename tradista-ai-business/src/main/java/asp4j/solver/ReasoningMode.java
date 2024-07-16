@@ -28,18 +28,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
  *
- * @author hbeck
- *  May 27, 2013
+ * @author hbeck May 27, 2013
  */
 public enum ReasoningMode {
-    
-    /**
-     * truth in some answer set
-     */
-    BRAVE,
-    /**
-     * truth in all answer sets
-     */
-    CAUTIOUS;
+
+	/**
+	 * truth in some answer set
+	 */
+	BRAVE,
+	/**
+	 * truth in all answer sets
+	 */
+	CAUTIOUS;
 
 }

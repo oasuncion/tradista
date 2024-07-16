@@ -28,11 +28,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
  *
- * @author hbeck
- *  May 14, 2013
+ * @author hbeck May 14, 2013
  */
 public interface HasSymbol {
-    
-   String symbol();
+
+	String symbol();
 
 }

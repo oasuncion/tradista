@@ -34,15 +34,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  *
  * @author hbeck Jun 8, 2013
  */
-public final class ConstantEnumMapping<T extends Enum<T>> extends EnumMappingBase<T,Constant> implements ConstantMapping<T> {
+public final class ConstantEnumMapping<T extends Enum<T>> extends EnumMappingBase<T, Constant>
+		implements ConstantMapping<T> {
 
-    public ConstantEnumMapping(Class<T> enumType) {
-        super(enumType);
-    }
+	public ConstantEnumMapping(Class<T> enumType) {
+		super(enumType);
+	}
 
-    @Override
-    public Constant asLangElem(T t) {
-        return new ConstantImpl(getTargetName(t));
-    }
+	@Override
+	public Constant asLangElem(T t) {
+		return new ConstantImpl(getTargetName(t));
+	}
 
 }

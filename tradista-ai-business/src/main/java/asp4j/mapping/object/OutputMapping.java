@@ -34,8 +34,8 @@ import asp4j.mapping.MappingException;
  *
  * @author hbeck Jun 1, 2013
  */
-public interface OutputMapping<T,E extends LangElem> extends AnyMapping<T,E> {
-    
-    T asObject(E e) throws MappingException;
+public interface OutputMapping<T, E extends LangElem> extends AnyMapping<T, E> {
+
+	T asObject(E e) throws MappingException;
 
 }

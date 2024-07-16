@@ -31,13 +31,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
  *
- * @author hbeck
- *  May 19, 2013
+ * @author hbeck May 19, 2013
  */
 public interface Program<T> {
-    
-    Collection<T> getInput();
 
-    Collection<File> getFiles();
+	Collection<T> getInput();
+
+	Collection<File> getFiles();
 
 }

@@ -32,20 +32,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  */
 public class SolverException extends Exception {
 
-    public SolverException(String message) {
-        super(message);
-    }
+	public SolverException(String message) {
+		super(message);
+	}
 
-    public SolverException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public SolverException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public SolverException(Throwable cause) {
-        super(cause);
-    }
+	public SolverException(Throwable cause) {
+		super(cause);
+	}
 
-    public SolverException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }    
+	public SolverException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 
 }

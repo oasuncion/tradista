@@ -28,11 +28,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
  *
- * @author hbeck
- *  May 30, 2013
+ * @author hbeck May 30, 2013
  */
 public interface HasArgs {
-    
-    public Term getArg(int idx);
+
+	public Term getArg(int idx);
 
 }

@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  * @author hbeck Jun 8, 2013
  */
 public interface HasTargetNames {
-    
-    Set<String> getTargetNames();
+
+	Set<String> getTargetNames();
 
 }

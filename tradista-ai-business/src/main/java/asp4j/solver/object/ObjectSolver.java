@@ -38,21 +38,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  * @author hbeck May 19, 2013
  */
 public interface ObjectSolver {
-    
-    List<AnswerSet<Object>> getAnswerSets(Program<Object> program) throws SolverException;
 
-    List<AnswerSet<Object>> getAnswerSets(Program<Object> program, Binding binding) throws SolverException;
-    
-    List<AnswerSet<Object>> getAnswerSets(Program<Object> program, Filter filter) throws SolverException;
-    
-    List<AnswerSet<Object>> getAnswerSets(Program<Object> program, Binding binding, Filter filter) throws SolverException;
-    
-    Set<Object> getConsequence(Program<Object> program, ReasoningMode mode) throws SolverException;
-    
-    Set<Object> getConsequence(Program<Object> program, ReasoningMode mode, Binding binding) throws SolverException;
-    
-    Set<Object> getConsequence(Program<Object> program, ReasoningMode mode, Filter filter) throws SolverException;
-    
-    Set<Object> getConsequence(Program<Object> program, ReasoningMode mode, Binding binding, Filter filter) throws SolverException;
-    
+	List<AnswerSet<Object>> getAnswerSets(Program<Object> program) throws SolverException;
+
+	List<AnswerSet<Object>> getAnswerSets(Program<Object> program, Binding binding) throws SolverException;
+
+	List<AnswerSet<Object>> getAnswerSets(Program<Object> program, Filter filter) throws SolverException;
+
+	List<AnswerSet<Object>> getAnswerSets(Program<Object> program, Binding binding, Filter filter)
+			throws SolverException;
+
+	Set<Object> getConsequence(Program<Object> program, ReasoningMode mode) throws SolverException;
+
+	Set<Object> getConsequence(Program<Object> program, ReasoningMode mode, Binding binding) throws SolverException;
+
+	Set<Object> getConsequence(Program<Object> program, ReasoningMode mode, Filter filter) throws SolverException;
+
+	Set<Object> getConsequence(Program<Object> program, ReasoningMode mode, Binding binding, Filter filter)
+			throws SolverException;
+
 }

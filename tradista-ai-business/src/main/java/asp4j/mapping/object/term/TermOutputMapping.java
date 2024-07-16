@@ -33,6 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  *
  * @author hbeck May 31, 2013
  */
-public interface TermOutputMapping<T> extends AnyTermMapping<T>, OutputMapping<T,Term> {
-    
+public interface TermOutputMapping<T> extends AnyTermMapping<T>, OutputMapping<T, Term> {
+
 }

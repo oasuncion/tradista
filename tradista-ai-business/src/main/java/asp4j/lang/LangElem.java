@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  * @author hbeck May 30, 2013
  */
 public interface LangElem extends HasSymbol {
-    
-    int arity();
+
+	int arity();
 
 }

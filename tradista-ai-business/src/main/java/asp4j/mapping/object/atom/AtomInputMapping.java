@@ -33,6 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
  *
  * @author hbeck May 31, 2013
  */
-public interface AtomInputMapping<T> extends AnyAtomMapping<T>, InputMapping<T,Atom> {
-    
+public interface AtomInputMapping<T> extends AnyAtomMapping<T>, InputMapping<T, Atom> {
+
 }

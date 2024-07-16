@@ -34,36 +34,36 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
  *
- * @author hbeck  May 27, 2013
+ * @author hbeck May 27, 2013
  */
 public class SolverClingo extends SolverBase {
 
-    @Override
-    protected String solverCommand() {
-        return "clingo 0 --verbose=0";
-    }
+	@Override
+	protected String solverCommand() {
+		return "clingo 0 --verbose=0";
+	}
 
-    @Override
-    protected List<String> getAnswerSetStrings(Process exec) throws IOException {
-        InputStream inputStream = exec.getInputStream();
-        List<String> allLines = IOUtils.readLines(inputStream);
-        List<String> answerSetLines = new ArrayList<>();
-        for (String line : allLines) {
-            if (line.startsWith("%") || line.startsWith("SATISFIABLE")) {
-                continue;
-            }
-            answerSetLines.add(line);
-        }
-        return answerSetLines;
-    }
+	@Override
+	protected List<String> getAnswerSetStrings(Process exec) throws IOException {
+		InputStream inputStream = exec.getInputStream();
+		List<String> allLines = IOUtils.readLines(inputStream);
+		List<String> answerSetLines = new ArrayList<>();
+		for (String line : allLines) {
+			if (line.startsWith("%") || line.startsWith("SATISFIABLE")) {
+				continue;
+			}
+			answerSetLines.add(line);
+		}
+		return answerSetLines;
+	}
 
-    @Override
-    protected String prepareAnswerSetString(String answerSetString) {
-        return answerSetString;
-    }
+	@Override
+	protected String prepareAnswerSetString(String answerSetString) {
+		return answerSetString;
+	}
 
-    @Override
-    protected String atomDelimiter() {
-        return " ";
-    }
+	@Override
+	protected String atomDelimiter() {
+		return " ";
+	}
 }

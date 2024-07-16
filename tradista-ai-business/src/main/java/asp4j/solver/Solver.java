@@ -34,28 +34,28 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 /**
  *
- * @author hbeck 
- *  2013-04-14
+ * @author hbeck 2013-04-14
  */
 public interface Solver {
-    
-    /**
-     * list of answer sets in order as reported by the solver
-     * 
-     * @param program
-     * @return answer sets
-     *  
-     */
-    List<AnswerSet<Atom>> getAnswerSets(Program<Atom> program) throws SolverException;
 
-    /**
-     * derive logical consequence of a program
-     * 
-     * @param program
-     * @param mode BRAVE reports atoms found in any answer set, CAUTIOUS those found in all answer sets
-     * @return logical consequence by means of the answer set semantics
-     *  
-     */
-    Set<Atom> getConsequence(Program<Atom> program, ReasoningMode mode) throws SolverException;
-    
+	/**
+	 * list of answer sets in order as reported by the solver
+	 * 
+	 * @param program
+	 * @return answer sets
+	 * 
+	 */
+	List<AnswerSet<Atom>> getAnswerSets(Program<Atom> program) throws SolverException;
+
+	/**
+	 * derive logical consequence of a program
+	 * 
+	 * @param program
+	 * @param mode    BRAVE reports atoms found in any answer set, CAUTIOUS those
+	 *                found in all answer sets
+	 * @return logical consequence by means of the answer set semantics
+	 * 
+	 */
+	Set<Atom> getConsequence(Program<Atom> program, ReasoningMode mode) throws SolverException;
+
 }

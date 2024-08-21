@@ -15,7 +15,7 @@ import finance.tradista.core.book.persistence.BookSQL;
 import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.persistence.db.TradistaDB;
 import finance.tradista.core.legalentity.persistence.LegalEntitySQL;
-import finance.tradista.security.gcrepo.model.AllocationConfiguration;
+import finance.tradista.security.repo.model.AllocationConfiguration;
 
 /********************************************************************************
  * Copyright (c) 2024 Olivier Asuncion

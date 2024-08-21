@@ -6,20 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import finance.tradista.core.book.model.Book;
+import finance.tradista.core.book.service.BookBusinessDelegate;
+import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.util.ColorUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
-
-import org.primefaces.model.charts.ChartData;
-import org.primefaces.model.charts.donut.DonutChartDataSet;
-import org.primefaces.model.charts.donut.DonutChartModel;
-
-import finance.tradista.core.book.model.Book;
-import finance.tradista.core.book.service.BookBusinessDelegate;
-import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.core.common.util.ColorUtil;
+import software.xdev.chartjs.model.charts.DoughnutChart;
+import software.xdev.chartjs.model.color.Color;
+import software.xdev.chartjs.model.data.DoughnutData;
+import software.xdev.chartjs.model.dataset.DoughnutDataset;
+import software.xdev.chartjs.model.options.DoughnutOptions;
 
 /********************************************************************************
  * Copyright (c) 2022 Olivier Asuncion
@@ -43,33 +43,31 @@ public class BookController implements Serializable {
 
 	private static final long serialVersionUID = -7107650532883558795L;
 
-	private DonutChartModel productDonutModel;
+	private String productDonutModel;
 
-	private DonutChartModel cashDonutModel;
+	private String cashDonutModel;
 
 	private BookBusinessDelegate bookBusinessDelegate;
 
 	@PostConstruct
 	public void init() {
 		bookBusinessDelegate = new BookBusinessDelegate();
-		productDonutModel = new DonutChartModel();
-		cashDonutModel = new DonutChartModel();
 		loadBook();
 	}
 
-	public DonutChartModel getProductDonutModel() {
+	public String getProductDonutModel() {
 		return productDonutModel;
 	}
 
-	public void setProductDonutModel(DonutChartModel productDonutModel) {
+	public void setProductDonutModel(String productDonutModel) {
 		this.productDonutModel = productDonutModel;
 	}
 
-	public DonutChartModel getCashDonutModel() {
+	public String getCashDonutModel() {
 		return cashDonutModel;
 	}
 
-	public void setCashDonutModel(DonutChartModel cashDonutModel) {
+	public void setCashDonutModel(String cashDonutModel) {
 		this.cashDonutModel = cashDonutModel;
 	}
 
@@ -83,23 +81,17 @@ public class BookController implements Serializable {
 	}
 
 	public void refresh(Book book) {
-		ChartData productData = new ChartData();
-		ChartData currencyData = new ChartData();
 		Map<String, Map<String, BigDecimal>> bookContent = null;
 
-		DonutChartDataSet productDataSet = new DonutChartDataSet();
-		DonutChartDataSet currencyDataSet = new DonutChartDataSet();
 		List<Number> productValues = new ArrayList<>();
 		List<Number> currencyValues = new ArrayList<>();
 
-		List<String> blueColors = new ArrayList<>();
+		List<Color> blueColors = new ArrayList<>();
 		blueColors.addAll(ColorUtil.getBlueColorsList());
 
-		List<String> redColors = new ArrayList<>();
+		List<Color> redColors = new ArrayList<>();
 		redColors.addAll(ColorUtil.getRedColorsList());
 
-		productData.addChartDataSet(productDataSet);
-		currencyData.addChartDataSet(currencyDataSet);
 		List<String> productLabels = new ArrayList<>();
 		List<String> currencyLabels = new ArrayList<>();
 
@@ -127,14 +119,25 @@ public class BookController implements Serializable {
 			}
 		}
 
-		productDataSet.setBackgroundColor(blueColors);
-		productDataSet.setData(productValues);
-		currencyDataSet.setBackgroundColor(redColors);
-		currencyDataSet.setData(currencyValues);
-		productData.setLabels(productLabels);
-		currencyData.setLabels(currencyLabels);
-		productDonutModel.setData(productData);
-		cashDonutModel.setData(currencyData);
+		cashDonutModel = new DoughnutChart()
+                .setData(new DoughnutData()
+                .addDataset(new DoughnutDataset()
+                        .setData(currencyValues)
+                        .addBackgroundColors(redColors.toArray(new Color[0]))
+                )
+                .setLabels(currencyLabels))
+                .setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE))
+                .toJson();
+		
+		productDonutModel = new DoughnutChart()
+                .setData(new DoughnutData()
+                .addDataset(new DoughnutDataset()
+                        .setData(productValues)
+                        .addBackgroundColors(blueColors.toArray(new Color[0]))
+                )
+                .setLabels(productLabels))
+                .setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE))
+                .toJson();  
 	}
 
 }

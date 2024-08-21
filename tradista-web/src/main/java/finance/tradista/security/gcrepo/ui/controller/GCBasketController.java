@@ -9,11 +9,8 @@ import java.util.Set;
 import org.primefaces.model.DualListModel;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
-import finance.tradista.security.bond.model.Bond;
-import finance.tradista.security.bond.service.BondBusinessDelegate;
 import finance.tradista.security.common.model.Security;
-import finance.tradista.security.equity.model.Equity;
-import finance.tradista.security.equity.service.EquityBusinessDelegate;
+import finance.tradista.security.common.service.SecurityBusinessDelegate;
 import finance.tradista.security.gcrepo.model.GCBasket;
 import finance.tradista.security.gcrepo.service.GCBasketBusinessDelegate;
 import jakarta.annotation.PostConstruct;
@@ -58,26 +55,19 @@ public class GCBasketController implements Serializable {
 
 	private GCBasketBusinessDelegate gcBasketBusinessDelegate;
 
-	private BondBusinessDelegate bondBusinessDelegate;
-
-	private EquityBusinessDelegate equityBusinessDelegate;
+	private SecurityBusinessDelegate securityBusinessDelegate;
 
 	private List<Security> availableSecurities;
 
 	@PostConstruct
 	public void init() {
 		gcBasketBusinessDelegate = new GCBasketBusinessDelegate();
-		bondBusinessDelegate = new BondBusinessDelegate();
-		equityBusinessDelegate = new EquityBusinessDelegate();
+		securityBusinessDelegate = new SecurityBusinessDelegate();
 		gcBasket = new GCBasket();
 		availableSecurities = new ArrayList<>();
-		Set<Bond> bonds = bondBusinessDelegate.getAllBonds();
-		Set<Equity> equities = equityBusinessDelegate.getAllEquities();
-		if (bonds != null) {
-			availableSecurities.addAll(bonds);
-		}
-		if (equities != null) {
-			availableSecurities.addAll(equities);
+		Set<Security> allSecurities = securityBusinessDelegate.getAllSecurities();
+		if (allSecurities != null) {
+			availableSecurities.addAll(allSecurities);
 		}
 		initModel();
 	}

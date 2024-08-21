@@ -519,6 +519,8 @@ public class GCRepoTradeController implements Serializable {
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
 		originalCashAmount = null;
+		action = null;
+		allAvailableActions = null;
 		FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Form cleared"));
 	}

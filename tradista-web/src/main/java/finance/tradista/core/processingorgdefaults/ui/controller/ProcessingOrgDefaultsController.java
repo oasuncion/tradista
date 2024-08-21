@@ -76,7 +76,7 @@ public class ProcessingOrgDefaultsController implements Serializable {
 		Class<?> controllerClass = null;
 		try {
 			controllerClass = TradistaUtil.getClass(
-					"finance.tradista.security.gcrepo.ui.controller.ProcessingOrgDefaultsCollateralManagementController");
+					"finance.tradista.security.repo.ui.controller.ProcessingOrgDefaultsCollateralManagementController");
 		} catch (TradistaTechnicalException tte) {
 			// TODO Add log info
 		}

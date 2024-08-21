@@ -42,7 +42,7 @@ public class GCRepoTradeSQL {
 
 		try (Connection con = TradistaDB.getConnection();
 				PreparedStatement stmtGetTradeById = con.prepareStatement(
-						"SELECT * FROM GCREPO_TRADE INNER JOIN TRADE ON TRADE.ID = GCREPO_TRADE.GCREPO_TRADE_ID"
+						"SELECT * FROM GCREPO_TRADE INNER JOIN TRADE ON TRADE.ID = GCREPO_TRADE.GCREPO_TRADE_ID INNER JOIN REPO_TRADE ON REPO_TRADE.REPO_TRADE_ID = GCREPO_TRADE.GCREPO_TRADE_ID"
 								+ " LEFT OUTER JOIN PARTIAL_TERMINATION ON PARTIAL_TERMINATION.TRADE_ID = GCREPO_TRADE.GCREPO_TRADE_ID"
 								+ " WHERE GCREPO_TRADE.GCREPO_TRADE_ID = ?")) {
 			stmtGetTradeById.setLong(1, id);
@@ -93,10 +93,13 @@ public class GCRepoTradeSQL {
 						Statement.RETURN_GENERATED_KEYS)
 						: con.prepareStatement(
 								"UPDATE TRADE SET BUY_SELL=?, TRADE_DATE=?, PRODUCT_ID=?, COUNTERPARTY_ID=?, AMOUNT=?, BOOK_ID=?, SETTLEMENT_DATE=?, CURRENCY_ID=?, STATUS_ID=? WHERE ID = ?");
-				PreparedStatement stmtSaveGCTrade = (trade.getId() == 0) ? con.prepareStatement(
-						"INSERT INTO GCREPO_TRADE(CROSS_CURRENCY_COLLATERAL, END_DATE, INDEX_ID, INDEX_TENOR, INDEX_OFFSET, MARGIN_RATE, NOTICE_PERIOD, REPO_RATE, RIGHT_OF_REUSE, RIGHT_OF_SUBSTITUTION, TERMINABLE_ON_DEMAND, GCBASKET_ID, GCREPO_TRADE_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ")
+				PreparedStatement stmtSaveRepoTrade = (trade.getId() == 0) ? con.prepareStatement(
+						"INSERT INTO REPO_TRADE(CROSS_CURRENCY_COLLATERAL, END_DATE, INDEX_ID, INDEX_TENOR, INDEX_OFFSET, MARGIN_RATE, NOTICE_PERIOD, REPO_RATE, RIGHT_OF_REUSE, RIGHT_OF_SUBSTITUTION, TERMINABLE_ON_DEMAND, REPO_TRADE_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ")
 						: con.prepareStatement(
-								"UPDATE GCREPO_TRADE SET CROSS_CURRENCY_COLLATERAL = ?, END_DATE = ?, INDEX_ID = ?, INDEX_TENOR = ?, INDEX_OFFSET = ?, MARGIN_RATE = ?, NOTICE_PERIOD = ?, REPO_RATE = ?, RIGHT_OF_REUSE = ?, RIGHT_OF_SUBSTITUTION = ?, TERMINABLE_ON_DEMAND = ?, GCBASKET_ID = ? WHERE GCREPO_TRADE_ID = ?");
+								"UPDATE REPO_TRADE SET CROSS_CURRENCY_COLLATERAL = ?, END_DATE = ?, INDEX_ID = ?, INDEX_TENOR = ?, INDEX_OFFSET = ?, MARGIN_RATE = ?, NOTICE_PERIOD = ?, REPO_RATE = ?, RIGHT_OF_REUSE = ?, RIGHT_OF_SUBSTITUTION = ?, TERMINABLE_ON_DEMAND = ? WHERE REPO_TRADE_ID = ?");
+				PreparedStatement stmtSaveGCRepoTrade = (trade.getId() == 0)
+						? con.prepareStatement("INSERT INTO GCREPO_TRADE(GCBASKET_ID, GCREPO_TRADE_ID) VALUES (?, ?) ")
+						: con.prepareStatement("UPDATE GCREPO_TRADE SET GCBASKET_ID = ? WHERE GCREPO_TRADE_ID = ?");
 				PreparedStatement stmtDeletePartialTerminations = con
 						.prepareStatement("DELETE FROM PARTIAL_TERMINATION WHERE TRADE_ID = ?");
 				PreparedStatement stmtSavePartialTermination = con.prepareStatement(
@@ -147,30 +150,34 @@ public class GCRepoTradeSQL {
 			} else {
 				tradeId = trade.getId();
 			}
-			stmtSaveGCTrade.setBoolean(1, trade.isCrossCurrencyCollateral());
+			stmtSaveRepoTrade.setBoolean(1, trade.isCrossCurrencyCollateral());
 			LocalDate endDate = trade.getEndDate();
 			if (endDate != null) {
-				stmtSaveGCTrade.setDate(2, java.sql.Date.valueOf(endDate));
+				stmtSaveRepoTrade.setDate(2, java.sql.Date.valueOf(endDate));
 			} else {
-				stmtSaveGCTrade.setNull(2, Types.DATE);
+				stmtSaveRepoTrade.setNull(2, Types.DATE);
 			}
 			if (!trade.isFixedRepoRate()) {
-				stmtSaveGCTrade.setLong(3, trade.getIndex().getId());
-				stmtSaveGCTrade.setString(4, trade.getIndexTenor().name());
+				stmtSaveRepoTrade.setLong(3, trade.getIndex().getId());
+				stmtSaveRepoTrade.setString(4, trade.getIndexTenor().name());
 			} else {
-				stmtSaveGCTrade.setNull(3, Types.BIGINT);
-				stmtSaveGCTrade.setNull(4, Types.VARCHAR);
+				stmtSaveRepoTrade.setNull(3, Types.BIGINT);
+				stmtSaveRepoTrade.setNull(4, Types.VARCHAR);
 			}
-			stmtSaveGCTrade.setBigDecimal(5, trade.getIndexOffset());
-			stmtSaveGCTrade.setBigDecimal(6, trade.getMarginRate());
-			stmtSaveGCTrade.setShort(7, trade.getNoticePeriod());
-			stmtSaveGCTrade.setBigDecimal(8, trade.getRepoRate());
-			stmtSaveGCTrade.setBoolean(9, trade.isRightOfReuse());
-			stmtSaveGCTrade.setBoolean(10, trade.isRightOfSubstitution());
-			stmtSaveGCTrade.setBoolean(11, trade.isTerminableOnDemand());
-			stmtSaveGCTrade.setLong(12, trade.getGcBasket().getId());
-			stmtSaveGCTrade.setLong(13, tradeId);
-			stmtSaveGCTrade.executeUpdate();
+			stmtSaveRepoTrade.setBigDecimal(5, trade.getIndexOffset());
+			stmtSaveRepoTrade.setBigDecimal(6, trade.getMarginRate());
+			stmtSaveRepoTrade.setShort(7, trade.getNoticePeriod());
+			stmtSaveRepoTrade.setBigDecimal(8, trade.getRepoRate());
+			stmtSaveRepoTrade.setBoolean(9, trade.isRightOfReuse());
+			stmtSaveRepoTrade.setBoolean(10, trade.isRightOfSubstitution());
+			stmtSaveRepoTrade.setBoolean(11, trade.isTerminableOnDemand());
+			stmtSaveRepoTrade.setLong(12, tradeId);
+			stmtSaveRepoTrade.executeUpdate();
+
+			stmtSaveGCRepoTrade.setLong(1, trade.getGcBasket().getId());
+			stmtSaveGCRepoTrade.setLong(2, tradeId);
+			stmtSaveGCRepoTrade.executeUpdate();
+
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			throw new TradistaTechnicalException(sqle);

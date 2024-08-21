@@ -402,12 +402,17 @@ public class MainEntry extends Application {
 					&& !product.equals("IRSwapOption") && !product.equals("LoanDeposit")
 					&& !product.equals("IRCapFloorCollar") && !product.equals("FRA") && !product.equals("Future")) {
 				MenuItem productMenuItem;
-				if (product.equals("GCRepo")) {
-					productMenuItem = new MenuItem("GCBasket");
+				if ((product.equals("GCRepo")) || (product.equals("SpecialRepo"))) {
+					if (product.equals("GCRepo")) {
+						productMenuItem = new MenuItem("GCBasket");
+					} else {
+						productMenuItem = new MenuItem(product);
+					}
 					menuConfiguration.getItems().add(allocationConfiguration);
 					setupMenuItem(allocationConfiguration, "Allocation Configuration", "AllocationConfiguration",
-							primScreenBounds);
-				} else {
+							primScreenBounds);					
+				} 
+				 else {
 					productMenuItem = new MenuItem(product);
 				}
 				menuProduct.getItems().add(productMenuItem);
@@ -453,8 +458,10 @@ public class MainEntry extends Application {
 	private void setupMenuItem(MenuItem menuItem, String title, String templateName, Rectangle2D primScreenBounds) {
 		menuItem.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent t) {
-				// GC Repo trade and Processing Org Defaults windows are web based.
-				if (templateName.equals("GCRepoTrade") || templateName.equals("ProcessingOrgDefaults")
+				// Repo trade, Allocation Configuration, GC Baskets, Processing Org Defaults
+				// windows are web based.
+				if (templateName.equals("GCRepoTrade") || templateName.equals("SpecialRepoTrade")
+						|| templateName.equals("ProcessingOrgDefaults")
 						|| templateName.equals("AllocationConfiguration")) {
 					browseUrl(templateName.toLowerCase());
 				} else if (templateName.equals("GCRepoProduct")) {

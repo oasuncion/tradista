@@ -56,7 +56,7 @@ public class SpecificRepoTradeController implements Serializable {
 
 	private static final long serialVersionUID = -2030826935731150653L;
 
-	private SpecificRepoTrade specificRepoTrade;
+	private SpecificRepoTrade trade;
 
 	private Set<LegalEntity> allCounterparties;
 
@@ -117,7 +117,7 @@ public class SpecificRepoTradeController implements Serializable {
 		allIndexes = indexBusinessDelegate.getAllIndexes();
 		allBooks = bookBusinessDelegate.getAllBooks();
 		allDirections = Trade.Direction.values();
-		specificRepoTrade = new SpecificRepoTrade();
+		trade = new SpecificRepoTrade();
 		allInterestTypes = new String[] { "Fixed", "Floating" };
 		allIndexTenors = Arrays.asList(Tenor.values()).stream().filter(t -> !t.equals(Tenor.NO_TENOR))
 				.toArray(Tenor[]::new);
@@ -128,11 +128,11 @@ public class SpecificRepoTradeController implements Serializable {
 	}
 
 	public String getId() {
-		return specificRepoTrade.getId() == 0 ? "" : Long.toString(specificRepoTrade.getId());
+		return trade.getId() == 0 ? "" : Long.toString(trade.getId());
 	}
 
 	public void setId(String id) {
-		specificRepoTrade.setId(Long.parseLong(id));
+		trade.setId(Long.parseLong(id));
 	}
 
 	public Direction[] getAllDirections() {
@@ -144,171 +144,171 @@ public class SpecificRepoTradeController implements Serializable {
 	}
 
 	public BigDecimal getAmount() {
-		return specificRepoTrade.getAmount();
+		return trade.getAmount();
 	}
 
 	public void setAmount(BigDecimal amount) {
-		specificRepoTrade.setAmount(amount);
+		trade.setAmount(amount);
 	}
 
 	public Status getStatus() {
-		return specificRepoTrade.getStatus();
+		return trade.getStatus();
 	}
 
 	public void setStatus(Status status) {
-		specificRepoTrade.setStatus(status);
+		trade.setStatus(status);
 	}
 
-	public SpecificRepoTrade getSpecificRepoTrade() {
-		return specificRepoTrade;
+	public SpecificRepoTrade getTrade() {
+		return trade;
 	}
 
-	public void setSpecificRepoTrade(SpecificRepoTrade specificRepoTrade) {
-		this.specificRepoTrade = specificRepoTrade;
+	public void setTrade(SpecificRepoTrade trade) {
+		this.trade = trade;
 	}
 
 	public BigDecimal getRepoRate() {
-		return specificRepoTrade.getRepoRate();
+		return trade.getRepoRate();
 	}
 
 	public void setRepoRate(BigDecimal repoRate) {
-		specificRepoTrade.setRepoRate(repoRate);
+		trade.setRepoRate(repoRate);
 	}
 
 	public Trade.Direction getDirection() {
-		return (specificRepoTrade.isBuy() ? Direction.BUY : Direction.SELL);
+		return (trade.isBuy() ? Direction.BUY : Direction.SELL);
 	}
 
 	public void setDirection(Trade.Direction direction) {
-		specificRepoTrade.setBuySell(Direction.BUY.equals(direction));
+		trade.setBuySell(Direction.BUY.equals(direction));
 	}
 
 	public LocalDate getTradeDate() {
-		return specificRepoTrade.getTradeDate();
+		return trade.getTradeDate();
 	}
 
 	public void setTradeDate(LocalDate tradeDate) {
-		specificRepoTrade.setTradeDate(tradeDate);
+		trade.setTradeDate(tradeDate);
 	}
 
 	public LocalDate getStartDate() {
-		return specificRepoTrade.getSettlementDate();
+		return trade.getSettlementDate();
 	}
 
 	public void setStartDate(LocalDate startDate) {
-		specificRepoTrade.setSettlementDate(startDate);
+		trade.setSettlementDate(startDate);
 	}
 
 	public LocalDate getEndDate() {
-		return specificRepoTrade.getEndDate();
+		return trade.getEndDate();
 	}
 
 	public void setEndDate(LocalDate endDate) {
-		specificRepoTrade.setEndDate(endDate);
+		trade.setEndDate(endDate);
 	}
 
 	public Currency getCurrency() {
-		return specificRepoTrade.getCurrency();
+		return trade.getCurrency();
 	}
 
 	public void setCurrency(Currency currency) {
-		specificRepoTrade.setCurrency(currency);
+		trade.setCurrency(currency);
 	}
 
 	public LegalEntity getCounterparty() {
-		return specificRepoTrade.getCounterparty();
+		return trade.getCounterparty();
 	}
 
 	public void setCounterparty(LegalEntity legalEntity) {
-		specificRepoTrade.setCounterparty(legalEntity);
+		trade.setCounterparty(legalEntity);
 	}
 
 	public Book getBook() {
-		return specificRepoTrade.getBook();
+		return trade.getBook();
 	}
 
 	public void setBook(Book book) {
-		specificRepoTrade.setBook(book);
+		trade.setBook(book);
 	}
 
 	public Index getIndex() {
-		return specificRepoTrade.getIndex();
+		return trade.getIndex();
 	}
 
 	public void setIndex(Index index) {
-		specificRepoTrade.setIndex(index);
+		trade.setIndex(index);
 	}
 
 	public Tenor getIndexTenor() {
-		return specificRepoTrade.getIndexTenor();
+		return trade.getIndexTenor();
 	}
 
 	public void setIndexTenor(Tenor indexTenor) {
-		specificRepoTrade.setIndexTenor(indexTenor);
+		trade.setIndexTenor(indexTenor);
 	}
 
 	public BigDecimal getIndexOffset() {
-		return specificRepoTrade.getIndexOffset();
+		return trade.getIndexOffset();
 	}
 
 	public void setIndexOffset(BigDecimal indexOffset) {
-		specificRepoTrade.setIndexOffset(indexOffset);
+		trade.setIndexOffset(indexOffset);
 	}
 
 	public boolean getRightOfSubstitution() {
-		return specificRepoTrade.isRightOfSubstitution();
+		return trade.isRightOfSubstitution();
 	}
 
 	public void setRightOfSubstitution(boolean rightOfSubstitution) {
-		specificRepoTrade.setRightOfSubstitution(rightOfSubstitution);
+		trade.setRightOfSubstitution(rightOfSubstitution);
 	}
 
 	public boolean getRightOfReuse() {
-		return specificRepoTrade.isRightOfReuse();
+		return trade.isRightOfReuse();
 	}
 
 	public void setRightOfReuse(boolean rightOfReuse) {
-		specificRepoTrade.setRightOfReuse(rightOfReuse);
+		trade.setRightOfReuse(rightOfReuse);
 	}
 
 	public boolean getCrossCurrencyCollateral() {
-		return specificRepoTrade.isCrossCurrencyCollateral();
+		return trade.isCrossCurrencyCollateral();
 	}
 
 	public void setCrossCurrencyCollateral(boolean crossCurrencyCollateral) {
-		specificRepoTrade.setCrossCurrencyCollateral(crossCurrencyCollateral);
+		trade.setCrossCurrencyCollateral(crossCurrencyCollateral);
 	}
 
 	public boolean getTerminableOnDemand() {
-		return specificRepoTrade.isTerminableOnDemand();
+		return trade.isTerminableOnDemand();
 	}
 
 	public void setTerminableOnDemand(boolean terminableOnDemand) {
-		specificRepoTrade.setTerminableOnDemand(terminableOnDemand);
+		trade.setTerminableOnDemand(terminableOnDemand);
 	}
 
 	public Short getNoticePeriod() {
-		return specificRepoTrade.getNoticePeriod();
+		return trade.getNoticePeriod();
 	}
 
 	public void setNoticePeriod(Short noticePeriod) {
-		specificRepoTrade.setNoticePeriod(noticePeriod);
+		trade.setNoticePeriod(noticePeriod);
 	}
 
 	public BigDecimal getMarginRate() {
-		return specificRepoTrade.getMarginRate();
+		return trade.getMarginRate();
 	}
 
 	public void setMarginRate(BigDecimal marginRate) {
-		specificRepoTrade.setMarginRate(marginRate);
+		trade.setMarginRate(marginRate);
 	}
 
 	public Security getSecurity() {
-		return specificRepoTrade.getSecurity();
+		return trade.getSecurity();
 	}
 
 	public void setSecurity(Security security) {
-		specificRepoTrade.setSecurity(security);
+		trade.setSecurity(security);
 	}
 
 	public Set<Currency> getAllCurrencies() {
@@ -394,29 +394,29 @@ public class SpecificRepoTradeController implements Serializable {
 	public void save() {
 		try {
 			final String actionToApply = (action != null) ? action : Action.NEW;
-			if (specificRepoTrade.getId() == 0) {
-				specificRepoTrade.setCreationDate(LocalDate.now());
-				specificRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+			if (trade.getId() == 0) {
+				trade.setCreationDate(LocalDate.now());
+				trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
 
 			}
 			if (interestType == null || interestType.equals("Fixed")) {
-				specificRepoTrade.setIndex(null);
-				specificRepoTrade.setIndexTenor(null);
-				specificRepoTrade.setIndexOffset(null);
+				trade.setIndex(null);
+				trade.setIndexTenor(null);
+				trade.setIndexOffset(null);
 			}
-			long tradeId = specificRepoTradeBusinessDelegate.saveSpecificRepoTrade(specificRepoTrade, actionToApply);
-			if (specificRepoTrade.getId() == 0) {
-				specificRepoTrade.setId(tradeId);
+			long tradeId = specificRepoTradeBusinessDelegate.saveSpecificRepoTrade(trade, actionToApply);
+			if (trade.getId() == 0) {
+				trade.setId(tradeId);
 			}
-			specificRepoTrade = specificRepoTradeBusinessDelegate.getSpecificRepoTradeById(tradeId);
+			trade = specificRepoTradeBusinessDelegate.getSpecificRepoTradeById(tradeId);
 			Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
-					specificRepoTrade.getStatus());
+					trade.getStatus());
 			if (availableActions != null && !availableActions.isEmpty()) {
 				allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 			}
-			originalCashAmount = specificRepoTrade.getAmount();
+			originalCashAmount = trade.getAmount();
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-					"Trade " + specificRepoTrade.getId() + " successfully saved"));
+					"Trade " + trade.getId() + " successfully saved"));
 		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
@@ -424,39 +424,39 @@ public class SpecificRepoTradeController implements Serializable {
 	}
 
 	public void copy() {
-		long oldId = specificRepoTrade.getId();
-		Map<LocalDate, BigDecimal> oldPartialTerminations = specificRepoTrade.getPartialTerminations();
-		Map<Security, Map<Book, BigDecimal>> oldCollateralToAdd = specificRepoTrade.getCollateralToAdd();
-		Map<Security, Map<Book, BigDecimal>> oldCollateralToRemove = specificRepoTrade.getCollateralToRemove();
+		long oldId = trade.getId();
+		Map<LocalDate, BigDecimal> oldPartialTerminations = trade.getPartialTerminations();
+		Map<Security, Map<Book, BigDecimal>> oldCollateralToAdd = trade.getCollateralToAdd();
+		Map<Security, Map<Book, BigDecimal>> oldCollateralToRemove = trade.getCollateralToRemove();
 		try {
-			specificRepoTrade.setCreationDate(LocalDate.now());
-			specificRepoTrade.setId(0);
-			specificRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+			trade.setCreationDate(LocalDate.now());
+			trade.setId(0);
+			trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
 			if (interestType == null || interestType.equals("Fixed")) {
-				specificRepoTrade.setIndex(null);
-				specificRepoTrade.setIndexTenor(null);
-				specificRepoTrade.setIndexOffset(null);
+				trade.setIndex(null);
+				trade.setIndexTenor(null);
+				trade.setIndexOffset(null);
 			}
 			// Copied trades will not have added/removed collaterals and partial
 			// terminations
-			specificRepoTrade.setCollateralToAdd(null);
-			specificRepoTrade.setCollateralToRemove(null);
-			specificRepoTrade.setPartialTerminations(null);
-			long tradeId = specificRepoTradeBusinessDelegate.saveSpecificRepoTrade(specificRepoTrade, Action.NEW);
-			specificRepoTrade = specificRepoTradeBusinessDelegate.getSpecificRepoTradeById(tradeId);
+			trade.setCollateralToAdd(null);
+			trade.setCollateralToRemove(null);
+			trade.setPartialTerminations(null);
+			long tradeId = specificRepoTradeBusinessDelegate.saveSpecificRepoTrade(trade, Action.NEW);
+			trade = specificRepoTradeBusinessDelegate.getSpecificRepoTradeById(tradeId);
 			Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
-					specificRepoTrade.getStatus());
+					trade.getStatus());
 			if (availableActions != null && !availableActions.isEmpty()) {
 				allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 			}
-			originalCashAmount = specificRepoTrade.getAmount();
+			originalCashAmount = trade.getAmount();
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-					"Trade " + specificRepoTrade.getId() + " successfully created"));
+					"Trade " + trade.getId() + " successfully created"));
 		} catch (TradistaBusinessException tbe) {
-			specificRepoTrade.setId(oldId);
-			specificRepoTrade.setCollateralToAdd(oldCollateralToAdd);
-			specificRepoTrade.setCollateralToRemove(oldCollateralToRemove);
-			specificRepoTrade.setPartialTerminations(oldPartialTerminations);
+			trade.setId(oldId);
+			trade.setCollateralToAdd(oldCollateralToAdd);
+			trade.setCollateralToRemove(oldCollateralToRemove);
+			trade.setPartialTerminations(oldPartialTerminations);
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
@@ -468,29 +468,29 @@ public class SpecificRepoTradeController implements Serializable {
 			tradeId = Long.parseLong(idToBeLoaded);
 			SpecificRepoTrade specialTrade = specificRepoTradeBusinessDelegate.getSpecificRepoTradeById(tradeId);
 			if (specialTrade != null) {
-				specificRepoTrade.setId(specialTrade.getId());
-				specificRepoTrade.setBuySell(specialTrade.isBuy());
-				specificRepoTrade.setCounterparty(specialTrade.getCounterparty());
-				specificRepoTrade.setCurrency(specialTrade.getCurrency());
-				specificRepoTrade.setProduct(specialTrade.getProduct());
-				specificRepoTrade.setAmount(specialTrade.getAmount());
-				specificRepoTrade.setSettlementDate(specialTrade.getSettlementDate());
-				specificRepoTrade.setTradeDate(specialTrade.getTradeDate());
-				specificRepoTrade.setBook(specialTrade.getBook());
-				specificRepoTrade.setCreationDate(specialTrade.getCreationDate());
-				specificRepoTrade.setCrossCurrencyCollateral(specialTrade.isCrossCurrencyCollateral());
-				specificRepoTrade.setSecurity(specialTrade.getSecurity());
-				specificRepoTrade.setEndDate(specialTrade.getEndDate());
-				specificRepoTrade.setIndex(specialTrade.getIndex());
-				specificRepoTrade.setIndexOffset(specialTrade.getIndexOffset());
-				specificRepoTrade.setMarginRate(specialTrade.getMarginRate());
-				specificRepoTrade.setNoticePeriod(specialTrade.getNoticePeriod());
-				specificRepoTrade.setRepoRate(specialTrade.getRepoRate());
-				specificRepoTrade.setRightOfReuse(specialTrade.isRightOfReuse());
-				specificRepoTrade.setRightOfSubstitution(specialTrade.isRightOfSubstitution());
-				specificRepoTrade.setTerminableOnDemand(specialTrade.isTerminableOnDemand());
-				specificRepoTrade.setStatus(specialTrade.getStatus());
-				specificRepoTrade.setPartialTerminations(specialTrade.getPartialTerminations());
+				trade.setId(specialTrade.getId());
+				trade.setBuySell(specialTrade.isBuy());
+				trade.setCounterparty(specialTrade.getCounterparty());
+				trade.setCurrency(specialTrade.getCurrency());
+				trade.setProduct(specialTrade.getProduct());
+				trade.setAmount(specialTrade.getAmount());
+				trade.setSettlementDate(specialTrade.getSettlementDate());
+				trade.setTradeDate(specialTrade.getTradeDate());
+				trade.setBook(specialTrade.getBook());
+				trade.setCreationDate(specialTrade.getCreationDate());
+				trade.setCrossCurrencyCollateral(specialTrade.isCrossCurrencyCollateral());
+				trade.setSecurity(specialTrade.getSecurity());
+				trade.setEndDate(specialTrade.getEndDate());
+				trade.setIndex(specialTrade.getIndex());
+				trade.setIndexOffset(specialTrade.getIndexOffset());
+				trade.setMarginRate(specialTrade.getMarginRate());
+				trade.setNoticePeriod(specialTrade.getNoticePeriod());
+				trade.setRepoRate(specialTrade.getRepoRate());
+				trade.setRightOfReuse(specialTrade.isRightOfReuse());
+				trade.setRightOfSubstitution(specialTrade.isRightOfSubstitution());
+				trade.setTerminableOnDemand(specialTrade.isTerminableOnDemand());
+				trade.setStatus(specialTrade.getStatus());
+				trade.setPartialTerminations(specialTrade.getPartialTerminations());
 				Set<String> availableActions = workflowBusinessDelegate
 						.getAvailableActionsFromStatus(workflow.getName(), specialTrade.getStatus());
 				if (availableActions != null && !availableActions.isEmpty()) {
@@ -498,7 +498,7 @@ public class SpecificRepoTradeController implements Serializable {
 				}
 				originalCashAmount = specialTrade.getAmount();
 				FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Info", "Trade " + specificRepoTrade.getId() + " successfully loaded."));
+						"Info", "Trade " + trade.getId() + " successfully loaded."));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Error", "Trade " + idToBeLoaded + " was not found."));
@@ -514,7 +514,7 @@ public class SpecificRepoTradeController implements Serializable {
 	}
 
 	public void clear() {
-		specificRepoTrade = new SpecificRepoTrade();
+		trade = new SpecificRepoTrade();
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
 		originalCashAmount = null;
@@ -526,16 +526,16 @@ public class SpecificRepoTradeController implements Serializable {
 
 	public void updateIndex() {
 		if (interestType != null && interestType.equals("Floating")) {
-			if (specificRepoTrade.getIndex() == null && allIndexes != null && !allIndexes.isEmpty()) {
-				specificRepoTrade.setIndex(allIndexes.stream().findFirst().get());
+			if (trade.getIndex() == null && allIndexes != null && !allIndexes.isEmpty()) {
+				trade.setIndex(allIndexes.stream().findFirst().get());
 			}
-			if (specificRepoTrade.getIndexTenor() == null) {
-				specificRepoTrade.setIndexTenor(allIndexTenors[0]);
+			if (trade.getIndexTenor() == null) {
+				trade.setIndexTenor(allIndexTenors[0]);
 			}
 		}
 		if (interestType != null && interestType.equals("Fixed")) {
-			specificRepoTrade.setIndex(null);
-			specificRepoTrade.setIndexTenor(null);
+			trade.setIndex(null);
+			trade.setIndexTenor(null);
 		}
 	}
 
@@ -558,14 +558,13 @@ public class SpecificRepoTradeController implements Serializable {
 	public void updateTrade(Map<Security, Map<Book, BigDecimal>> securitiesToAdd,
 			Map<Security, Map<Book, BigDecimal>> securitiesToRemove) {
 		if (securitiesToAdd != null && !securitiesToAdd.isEmpty()) {
-			specificRepoTrade.setCollateralToAdd(securitiesToAdd);
+			trade.setCollateralToAdd(securitiesToAdd);
 		}
 		if (securitiesToRemove != null && !securitiesToRemove.isEmpty()) {
-			specificRepoTrade.setCollateralToRemove(securitiesToRemove);
+			trade.setCollateralToRemove(securitiesToRemove);
 		}
 		if (action != null && action.equals(ActionConstants.PARTIALLY_TERMINATE)) {
-			specificRepoTrade.addParTialTermination(LocalDate.now(),
-					originalCashAmount.subtract(specificRepoTrade.getAmount()));
+			trade.addParTialTermination(LocalDate.now(), originalCashAmount.subtract(trade.getAmount()));
 		}
 	}
 

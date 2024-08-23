@@ -3,6 +3,10 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
+	<f:metadata>
+		<f:event type="preRenderView"
+			listener="#{pricingController.initPricer(tradeController.trade.productType)}" />
+	</f:metadata>
 	<p:panel id="pricing" header="Pricing">
 		<p:panelGrid id="pricingGrid" styleClass="tradista-nested" columns="2"
 			columnClasses="ui-g-3 ui-md-3 ui-lg-3, ui-g-9 ui-md-9 ui-lg-9">
@@ -35,12 +39,12 @@
 						converter="pricingParameterConverter">
 						<f:selectItems value="#{pricingController.allPricingParameters}" />
 						<p:ajax update="pricer"
-							listener="#{pricingController.updatePricer}" />
+							listener="#{pricingController.updatePricer(tradeController.trade.productType)}" />
 						<p:ajax update="pricingMeasure"
 							listener="#{pricingController.updatePricingMeasures}" />
 						<p:ajax
 							update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable"
-							listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
+							listener="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, tradeController.currency)}" />
 					</p:selectOneMenu>
 				</p:column>
 			</p:row>
@@ -97,7 +101,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton value="Price" styleClass="rounded-button"
-							action="#{pricingController.price(gCRepoTradeController.gcRepoTrade)}"
+							action="#{pricingController.price(tradeController.trade)}"
 							update="@form">
 						</p:commandButton>
 					</p:column>

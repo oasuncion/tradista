@@ -57,7 +57,7 @@ public class GCRepoTradeController implements Serializable {
 
 	private static final long serialVersionUID = -8633490083412044246L;
 
-	private GCRepoTrade gcRepoTrade;
+	private GCRepoTrade trade;
 
 	private Set<LegalEntity> allCounterparties;
 
@@ -118,7 +118,7 @@ public class GCRepoTradeController implements Serializable {
 		allIndexes = indexBusinessDelegate.getAllIndexes();
 		allBooks = bookBusinessDelegate.getAllBooks();
 		allDirections = Trade.Direction.values();
-		gcRepoTrade = new GCRepoTrade();
+		trade = new GCRepoTrade();
 		allInterestTypes = new String[] { "Fixed", "Floating" };
 		allIndexTenors = Arrays.asList(Tenor.values()).stream().filter(t -> !t.equals(Tenor.NO_TENOR))
 				.toArray(Tenor[]::new);
@@ -129,11 +129,11 @@ public class GCRepoTradeController implements Serializable {
 	}
 
 	public String getId() {
-		return gcRepoTrade.getId() == 0 ? "" : Long.toString(gcRepoTrade.getId());
+		return trade.getId() == 0 ? "" : Long.toString(trade.getId());
 	}
 
 	public void setId(String id) {
-		gcRepoTrade.setId(Long.parseLong(id));
+		trade.setId(Long.parseLong(id));
 	}
 
 	public Direction[] getAllDirections() {
@@ -145,171 +145,171 @@ public class GCRepoTradeController implements Serializable {
 	}
 
 	public BigDecimal getAmount() {
-		return gcRepoTrade.getAmount();
+		return trade.getAmount();
 	}
 
 	public void setAmount(BigDecimal amount) {
-		gcRepoTrade.setAmount(amount);
+		trade.setAmount(amount);
 	}
 
 	public Status getStatus() {
-		return gcRepoTrade.getStatus();
+		return trade.getStatus();
 	}
 
 	public void setStatus(Status status) {
-		gcRepoTrade.setStatus(status);
+		trade.setStatus(status);
 	}
 
-	public GCRepoTrade getGcRepoTrade() {
-		return gcRepoTrade;
+	public GCRepoTrade getTrade() {
+		return trade;
 	}
 
-	public void setGcRepoTrade(GCRepoTrade gcRepoTrade) {
-		this.gcRepoTrade = gcRepoTrade;
+	public void setTrade(GCRepoTrade trade) {
+		this.trade = trade;
 	}
 
 	public BigDecimal getRepoRate() {
-		return gcRepoTrade.getRepoRate();
+		return trade.getRepoRate();
 	}
 
 	public void setRepoRate(BigDecimal repoRate) {
-		gcRepoTrade.setRepoRate(repoRate);
+		trade.setRepoRate(repoRate);
 	}
 
 	public Trade.Direction getDirection() {
-		return (gcRepoTrade.isBuy() ? Direction.BUY : Direction.SELL);
+		return (trade.isBuy() ? Direction.BUY : Direction.SELL);
 	}
 
 	public void setDirection(Trade.Direction direction) {
-		gcRepoTrade.setBuySell(Direction.BUY.equals(direction));
+		trade.setBuySell(Direction.BUY.equals(direction));
 	}
 
 	public LocalDate getTradeDate() {
-		return gcRepoTrade.getTradeDate();
+		return trade.getTradeDate();
 	}
 
 	public void setTradeDate(LocalDate tradeDate) {
-		gcRepoTrade.setTradeDate(tradeDate);
+		trade.setTradeDate(tradeDate);
 	}
 
 	public LocalDate getStartDate() {
-		return gcRepoTrade.getSettlementDate();
+		return trade.getSettlementDate();
 	}
 
 	public void setStartDate(LocalDate startDate) {
-		gcRepoTrade.setSettlementDate(startDate);
+		trade.setSettlementDate(startDate);
 	}
 
 	public LocalDate getEndDate() {
-		return gcRepoTrade.getEndDate();
+		return trade.getEndDate();
 	}
 
 	public void setEndDate(LocalDate endDate) {
-		gcRepoTrade.setEndDate(endDate);
+		trade.setEndDate(endDate);
 	}
 
 	public Currency getCurrency() {
-		return gcRepoTrade.getCurrency();
+		return trade.getCurrency();
 	}
 
 	public void setCurrency(Currency currency) {
-		gcRepoTrade.setCurrency(currency);
+		trade.setCurrency(currency);
 	}
 
 	public LegalEntity getCounterparty() {
-		return gcRepoTrade.getCounterparty();
+		return trade.getCounterparty();
 	}
 
 	public void setCounterparty(LegalEntity legalEntity) {
-		gcRepoTrade.setCounterparty(legalEntity);
+		trade.setCounterparty(legalEntity);
 	}
 
 	public Book getBook() {
-		return gcRepoTrade.getBook();
+		return trade.getBook();
 	}
 
 	public void setBook(Book book) {
-		gcRepoTrade.setBook(book);
+		trade.setBook(book);
 	}
 
 	public Index getIndex() {
-		return gcRepoTrade.getIndex();
+		return trade.getIndex();
 	}
 
 	public void setIndex(Index index) {
-		gcRepoTrade.setIndex(index);
+		trade.setIndex(index);
 	}
 
 	public Tenor getIndexTenor() {
-		return gcRepoTrade.getIndexTenor();
+		return trade.getIndexTenor();
 	}
 
 	public void setIndexTenor(Tenor indexTenor) {
-		gcRepoTrade.setIndexTenor(indexTenor);
+		trade.setIndexTenor(indexTenor);
 	}
 
 	public BigDecimal getIndexOffset() {
-		return gcRepoTrade.getIndexOffset();
+		return trade.getIndexOffset();
 	}
 
 	public void setIndexOffset(BigDecimal indexOffset) {
-		gcRepoTrade.setIndexOffset(indexOffset);
+		trade.setIndexOffset(indexOffset);
 	}
 
 	public boolean getRightOfSubstitution() {
-		return gcRepoTrade.isRightOfSubstitution();
+		return trade.isRightOfSubstitution();
 	}
 
 	public void setRightOfSubstitution(boolean rightOfSubstitution) {
-		gcRepoTrade.setRightOfSubstitution(rightOfSubstitution);
+		trade.setRightOfSubstitution(rightOfSubstitution);
 	}
 
 	public boolean getRightOfReuse() {
-		return gcRepoTrade.isRightOfReuse();
+		return trade.isRightOfReuse();
 	}
 
 	public void setRightOfReuse(boolean rightOfReuse) {
-		gcRepoTrade.setRightOfReuse(rightOfReuse);
+		trade.setRightOfReuse(rightOfReuse);
 	}
 
 	public boolean getCrossCurrencyCollateral() {
-		return gcRepoTrade.isCrossCurrencyCollateral();
+		return trade.isCrossCurrencyCollateral();
 	}
 
 	public void setCrossCurrencyCollateral(boolean crossCurrencyCollateral) {
-		gcRepoTrade.setCrossCurrencyCollateral(crossCurrencyCollateral);
+		trade.setCrossCurrencyCollateral(crossCurrencyCollateral);
 	}
 
 	public boolean getTerminableOnDemand() {
-		return gcRepoTrade.isTerminableOnDemand();
+		return trade.isTerminableOnDemand();
 	}
 
 	public void setTerminableOnDemand(boolean terminableOnDemand) {
-		gcRepoTrade.setTerminableOnDemand(terminableOnDemand);
+		trade.setTerminableOnDemand(terminableOnDemand);
 	}
 
 	public Short getNoticePeriod() {
-		return gcRepoTrade.getNoticePeriod();
+		return trade.getNoticePeriod();
 	}
 
 	public void setNoticePeriod(Short noticePeriod) {
-		gcRepoTrade.setNoticePeriod(noticePeriod);
+		trade.setNoticePeriod(noticePeriod);
 	}
 
 	public BigDecimal getMarginRate() {
-		return gcRepoTrade.getMarginRate();
+		return trade.getMarginRate();
 	}
 
 	public void setMarginRate(BigDecimal marginRate) {
-		gcRepoTrade.setMarginRate(marginRate);
+		trade.setMarginRate(marginRate);
 	}
 
 	public GCBasket getBasket() {
-		return gcRepoTrade.getGcBasket();
+		return trade.getGcBasket();
 	}
 
 	public void setBasket(GCBasket gcBasket) {
-		gcRepoTrade.setGcBasket(gcBasket);
+		trade.setGcBasket(gcBasket);
 	}
 
 	public Set<Currency> getAllCurrencies() {
@@ -395,29 +395,29 @@ public class GCRepoTradeController implements Serializable {
 	public void save() {
 		try {
 			final String actionToApply = (action != null) ? action : Action.NEW;
-			if (gcRepoTrade.getId() == 0) {
-				gcRepoTrade.setCreationDate(LocalDate.now());
-				gcRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+			if (trade.getId() == 0) {
+				trade.setCreationDate(LocalDate.now());
+				trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
 
 			}
 			if (interestType == null || interestType.equals("Fixed")) {
-				gcRepoTrade.setIndex(null);
-				gcRepoTrade.setIndexTenor(null);
-				gcRepoTrade.setIndexOffset(null);
+				trade.setIndex(null);
+				trade.setIndexTenor(null);
+				trade.setIndexOffset(null);
 			}
-			long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, actionToApply);
-			if (gcRepoTrade.getId() == 0) {
-				gcRepoTrade.setId(tradeId);
+			long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(trade, actionToApply);
+			if (trade.getId() == 0) {
+				trade.setId(tradeId);
 			}
-			gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
+			trade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
 			Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
-					gcRepoTrade.getStatus());
+					trade.getStatus());
 			if (availableActions != null && !availableActions.isEmpty()) {
 				allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 			}
-			originalCashAmount = gcRepoTrade.getAmount();
+			originalCashAmount = trade.getAmount();
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-					"Trade " + gcRepoTrade.getId() + " successfully saved"));
+					"Trade " + trade.getId() + " successfully saved"));
 		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
@@ -425,39 +425,39 @@ public class GCRepoTradeController implements Serializable {
 	}
 
 	public void copy() {
-		long oldId = gcRepoTrade.getId();
-		Map<LocalDate, BigDecimal> oldPartialTerminations = gcRepoTrade.getPartialTerminations();
-		Map<Security, Map<Book, BigDecimal>> oldCollateralToAdd = gcRepoTrade.getCollateralToAdd();
-		Map<Security, Map<Book, BigDecimal>> oldCollateralToRemove = gcRepoTrade.getCollateralToRemove();
+		long oldId = trade.getId();
+		Map<LocalDate, BigDecimal> oldPartialTerminations = trade.getPartialTerminations();
+		Map<Security, Map<Book, BigDecimal>> oldCollateralToAdd = trade.getCollateralToAdd();
+		Map<Security, Map<Book, BigDecimal>> oldCollateralToRemove = trade.getCollateralToRemove();
 		try {
-			gcRepoTrade.setCreationDate(LocalDate.now());
-			gcRepoTrade.setId(0);
-			gcRepoTrade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+			trade.setCreationDate(LocalDate.now());
+			trade.setId(0);
+			trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
 			if (interestType == null || interestType.equals("Fixed")) {
-				gcRepoTrade.setIndex(null);
-				gcRepoTrade.setIndexTenor(null);
-				gcRepoTrade.setIndexOffset(null);
+				trade.setIndex(null);
+				trade.setIndexTenor(null);
+				trade.setIndexOffset(null);
 			}
 			// Copied trades will not have added/removed collaterals and partial
 			// terminations
-			gcRepoTrade.setCollateralToAdd(null);
-			gcRepoTrade.setCollateralToRemove(null);
-			gcRepoTrade.setPartialTerminations(null);
-			long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(gcRepoTrade, Action.NEW);
-			gcRepoTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
+			trade.setCollateralToAdd(null);
+			trade.setCollateralToRemove(null);
+			trade.setPartialTerminations(null);
+			long tradeId = gcRepoTradeBusinessDelegate.saveGCRepoTrade(trade, Action.NEW);
+			trade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
 			Set<String> availableActions = workflowBusinessDelegate.getAvailableActionsFromStatus(workflow.getName(),
-					gcRepoTrade.getStatus());
+					trade.getStatus());
 			if (availableActions != null && !availableActions.isEmpty()) {
 				allAvailableActions = availableActions.toArray(new String[availableActions.size()]);
 			}
-			originalCashAmount = gcRepoTrade.getAmount();
+			originalCashAmount = trade.getAmount();
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
-					"Trade " + gcRepoTrade.getId() + " successfully created"));
+					"Trade " + trade.getId() + " successfully created"));
 		} catch (TradistaBusinessException tbe) {
-			gcRepoTrade.setId(oldId);
-			gcRepoTrade.setCollateralToAdd(oldCollateralToAdd);
-			gcRepoTrade.setCollateralToRemove(oldCollateralToRemove);
-			gcRepoTrade.setPartialTerminations(oldPartialTerminations);
+			trade.setId(oldId);
+			trade.setCollateralToAdd(oldCollateralToAdd);
+			trade.setCollateralToRemove(oldCollateralToRemove);
+			trade.setPartialTerminations(oldPartialTerminations);
 			FacesContext.getCurrentInstance().addMessage(TRADE_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
 		}
@@ -469,29 +469,29 @@ public class GCRepoTradeController implements Serializable {
 			tradeId = Long.parseLong(idToBeLoaded);
 			GCRepoTrade gcTrade = gcRepoTradeBusinessDelegate.getGCRepoTradeById(tradeId);
 			if (gcTrade != null) {
-				gcRepoTrade.setId(gcTrade.getId());
-				gcRepoTrade.setBuySell(gcTrade.isBuy());
-				gcRepoTrade.setCounterparty(gcTrade.getCounterparty());
-				gcRepoTrade.setCurrency(gcTrade.getCurrency());
-				gcRepoTrade.setProduct(gcTrade.getProduct());
-				gcRepoTrade.setAmount(gcTrade.getAmount());
-				gcRepoTrade.setSettlementDate(gcTrade.getSettlementDate());
-				gcRepoTrade.setTradeDate(gcTrade.getTradeDate());
-				gcRepoTrade.setBook(gcTrade.getBook());
-				gcRepoTrade.setCreationDate(gcTrade.getCreationDate());
-				gcRepoTrade.setCrossCurrencyCollateral(gcTrade.isCrossCurrencyCollateral());
-				gcRepoTrade.setGcBasket(gcTrade.getGcBasket());
-				gcRepoTrade.setEndDate(gcTrade.getEndDate());
-				gcRepoTrade.setIndex(gcTrade.getIndex());
-				gcRepoTrade.setIndexOffset(gcTrade.getIndexOffset());
-				gcRepoTrade.setMarginRate(gcTrade.getMarginRate());
-				gcRepoTrade.setNoticePeriod(gcTrade.getNoticePeriod());
-				gcRepoTrade.setRepoRate(gcTrade.getRepoRate());
-				gcRepoTrade.setRightOfReuse(gcTrade.isRightOfReuse());
-				gcRepoTrade.setRightOfSubstitution(gcTrade.isRightOfSubstitution());
-				gcRepoTrade.setTerminableOnDemand(gcTrade.isTerminableOnDemand());
-				gcRepoTrade.setStatus(gcTrade.getStatus());
-				gcRepoTrade.setPartialTerminations(gcTrade.getPartialTerminations());
+				trade.setId(gcTrade.getId());
+				trade.setBuySell(gcTrade.isBuy());
+				trade.setCounterparty(gcTrade.getCounterparty());
+				trade.setCurrency(gcTrade.getCurrency());
+				trade.setProduct(gcTrade.getProduct());
+				trade.setAmount(gcTrade.getAmount());
+				trade.setSettlementDate(gcTrade.getSettlementDate());
+				trade.setTradeDate(gcTrade.getTradeDate());
+				trade.setBook(gcTrade.getBook());
+				trade.setCreationDate(gcTrade.getCreationDate());
+				trade.setCrossCurrencyCollateral(gcTrade.isCrossCurrencyCollateral());
+				trade.setGcBasket(gcTrade.getGcBasket());
+				trade.setEndDate(gcTrade.getEndDate());
+				trade.setIndex(gcTrade.getIndex());
+				trade.setIndexOffset(gcTrade.getIndexOffset());
+				trade.setMarginRate(gcTrade.getMarginRate());
+				trade.setNoticePeriod(gcTrade.getNoticePeriod());
+				trade.setRepoRate(gcTrade.getRepoRate());
+				trade.setRightOfReuse(gcTrade.isRightOfReuse());
+				trade.setRightOfSubstitution(gcTrade.isRightOfSubstitution());
+				trade.setTerminableOnDemand(gcTrade.isTerminableOnDemand());
+				trade.setStatus(gcTrade.getStatus());
+				trade.setPartialTerminations(gcTrade.getPartialTerminations());
 				Set<String> availableActions = workflowBusinessDelegate
 						.getAvailableActionsFromStatus(workflow.getName(), gcTrade.getStatus());
 				if (availableActions != null && !availableActions.isEmpty()) {
@@ -499,7 +499,7 @@ public class GCRepoTradeController implements Serializable {
 				}
 				originalCashAmount = gcTrade.getAmount();
 				FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Info", "Trade " + gcRepoTrade.getId() + " successfully loaded."));
+						"Info", "Trade " + trade.getId() + " successfully loaded."));
 			} else {
 				FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"Error", "Trade " + idToBeLoaded + " was not found."));
@@ -515,7 +515,7 @@ public class GCRepoTradeController implements Serializable {
 	}
 
 	public void clear() {
-		gcRepoTrade = new GCRepoTrade();
+		trade = new GCRepoTrade();
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
 		originalCashAmount = null;
@@ -527,16 +527,16 @@ public class GCRepoTradeController implements Serializable {
 
 	public void updateIndex() {
 		if (interestType != null && interestType.equals("Floating")) {
-			if (gcRepoTrade.getIndex() == null && allIndexes != null && !allIndexes.isEmpty()) {
-				gcRepoTrade.setIndex(allIndexes.stream().findFirst().get());
+			if (trade.getIndex() == null && allIndexes != null && !allIndexes.isEmpty()) {
+				trade.setIndex(allIndexes.stream().findFirst().get());
 			}
-			if (gcRepoTrade.getIndexTenor() == null) {
-				gcRepoTrade.setIndexTenor(allIndexTenors[0]);
+			if (trade.getIndexTenor() == null) {
+				trade.setIndexTenor(allIndexTenors[0]);
 			}
 		}
 		if (interestType != null && interestType.equals("Fixed")) {
-			gcRepoTrade.setIndex(null);
-			gcRepoTrade.setIndexTenor(null);
+			trade.setIndex(null);
+			trade.setIndexTenor(null);
 		}
 	}
 
@@ -559,13 +559,13 @@ public class GCRepoTradeController implements Serializable {
 	public void updateTrade(Map<Security, Map<Book, BigDecimal>> securitiesToAdd,
 			Map<Security, Map<Book, BigDecimal>> securitiesToRemove) {
 		if (securitiesToAdd != null && !securitiesToAdd.isEmpty()) {
-			gcRepoTrade.setCollateralToAdd(securitiesToAdd);
+			trade.setCollateralToAdd(securitiesToAdd);
 		}
 		if (securitiesToRemove != null && !securitiesToRemove.isEmpty()) {
-			gcRepoTrade.setCollateralToRemove(securitiesToRemove);
+			trade.setCollateralToRemove(securitiesToRemove);
 		}
 		if (action != null && action.equals(ActionConstants.PARTIALLY_TERMINATE)) {
-			gcRepoTrade.addParTialTermination(LocalDate.now(), originalCashAmount.subtract(gcRepoTrade.getAmount()));
+			trade.addParTialTermination(LocalDate.now(), originalCashAmount.subtract(trade.getAmount()));
 		}
 	}
 

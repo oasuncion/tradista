@@ -15,8 +15,8 @@ import finance.tradista.core.pricing.pricer.Pricer;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.core.pricing.service.PricerBusinessDelegate;
+import finance.tradista.core.trade.model.Trade;
 import finance.tradista.core.workflow.service.WorkflowBusinessDelegate;
-import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -93,15 +93,6 @@ public class PricingController implements Serializable {
 		pricingDate = LocalDate.now();
 		if (allPricingParameters != null && !allPricingParameters.isEmpty()) {
 			pricingParameter = allPricingParameters.stream().findFirst().get();
-		}
-		updatePricer();
-		updatePricerMeasures();
-		if (allPricerMeasures != null && !allPricerMeasures.isEmpty()) {
-			pricerMeasure = allPricerMeasures.stream().findFirst().get();
-		}
-		updatePricingMethods();
-		if (allPricingMethods != null && !allPricingMethods.isEmpty()) {
-			pricingMethod = allPricingMethods.stream().findFirst().get();
 		}
 	}
 
@@ -209,9 +200,9 @@ public class PricingController implements Serializable {
 		this.pricerResult = pricerResult;
 	}
 
-	public void price(GCRepoTrade gcRepoTrade) {
+	public void price(Trade<?> trade) {
 		try {
-			GCRepoTrade tradeToBePriced = (GCRepoTrade) gcRepoTrade.clone();
+			Trade<?> tradeToBePriced = trade.clone();
 			if (tradeToBePriced.getId() == 0) {
 				tradeToBePriced.setStatus(workflowBusinessDelegate.getInitialStatus(tradeToBePriced.getWorkflow()));
 
@@ -243,15 +234,29 @@ public class PricingController implements Serializable {
 		}
 	}
 
-	public void updatePricer() {
+	public void updatePricer(String productType) {
 		if (pricingParameter == null) {
 			pricer = null;
 		} else {
 			try {
-				pricer = pricerBusinessDelegate.getPricer(GCRepoTrade.GC_REPO, pricingParameter);
+				pricer = pricerBusinessDelegate.getPricer(productType, pricingParameter);
 			} catch (TradistaBusinessException tbe) {
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+			}
+		}
+	}
+
+	public void initPricer(String productType) {
+		if (pricer == null) {
+			updatePricer(productType);
+			updatePricerMeasures();
+			if (allPricerMeasures != null && !allPricerMeasures.isEmpty()) {
+				pricerMeasure = allPricerMeasures.stream().findFirst().get();
+			}
+			updatePricingMethods();
+			if (allPricingMethods != null && !allPricingMethods.isEmpty()) {
+				pricingMethod = allPricingMethods.stream().findFirst().get();
 			}
 		}
 	}

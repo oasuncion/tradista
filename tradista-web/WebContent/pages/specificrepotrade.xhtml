@@ -3,8 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
-	<ui:define name="title">Tradista GC Repo Dashboard</ui:define>
-	<ui:define name="viewname">Tradista GC Repo Dashboard</ui:define>
+	<ui:define name="title">Tradista Specific Repo Dashboard</ui:define>
+	<ui:define name="viewname">Tradista Specific Repo Dashboard</ui:define>
 	<ui:define name="content">
 		<h:form id="dashboardForm">
 			<p:growl id="pricingMsg" for="pricingMsg" showDetail="true" />
@@ -73,13 +73,12 @@
 													value="#{specificRepoTradeController.interestType}">
 													<f:selectItems
 														value="#{specificRepoTradeController.allInterestTypes}" />
-													<p:ajax event="change"
-														update="repoRate indexName indexTenor indexOffset" />
-													<p:ajax event="change"
+													<p:ajax update="repoRate indexName indexTenor indexOffset" />
+													<p:ajax
 														listener="#{specificRepoTradeController.updateIndex()}" />
-													<p:ajax event="change"
-														listener="#{quotesController.updateQuoteNames(specificRepoTradeController.specificRepoTrade.index, specificRepoTradeController.specificRepoTrade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
-													<p:ajax event="change"
+													<p:ajax
+														listener="#{quotesController.updateQuoteNames(specificRepoTradeController.trade.index, specificRepoTradeController.trade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
+													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
 														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
@@ -127,7 +126,7 @@
 											<p:column>
 												<p:selectOneMenu value="#{specificRepoTradeController.book}"
 													converter="bookConverter">
-													<p:ajax event="change"
+													<p:ajax
 														listener="#{bookController.refresh(specificRepoTradeController.book)}"
 														update=":dashboardForm:book" />
 													<f:selectItems
@@ -144,9 +143,9 @@
 													disabled="#{specificRepoTradeController.interestType eq 'Fixed' or empty specificRepoTradeController.interestType}">
 													<f:selectItems
 														value="#{specificRepoTradeController.allIndexes}" />
-													<p:ajax event="change"
-														listener="#{quotesController.updateQuoteNames(specificRepoTradeController.specificRepoTrade.index, specificRepoTradeController.specificRepoTrade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
-													<p:ajax event="change"
+													<p:ajax
+														listener="#{quotesController.updateQuoteNames(specificRepoTradeController.trade.index, specificRepoTradeController.trade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
+													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
 														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
@@ -179,9 +178,9 @@
 													disabled="#{specificRepoTradeController.interestType eq 'Fixed' or empty specificRepoTradeController.interestType}">
 													<f:selectItems
 														value="#{specificRepoTradeController.allIndexTenors}" />
-													<p:ajax event="change"
-														listener="#{quotesController.updateQuoteNames(specificRepoTradeController.specificRepoTrade.index, specificRepoTradeController.specificRepoTrade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
-													<p:ajax event="change"
+													<p:ajax
+														listener="#{quotesController.updateQuoteNames(specificRepoTradeController.trade.index, specificRepoTradeController.trade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
+													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
 														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
@@ -316,7 +315,7 @@
 														<f:actionListener
 															binding="#{specificRepoPartialTerminationController.refresh(specificRepoTradeController.idToBeLoaded)}" />
 														<f:actionListener
-															binding="#{quotesController.updateQuoteNames(specificRepoTradeController.specificRepoTrade.index, specificRepoTradeController.specificRepoTrade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
+															binding="#{quotesController.updateQuoteNames(specificRepoTradeController.trade.index, specificRepoTradeController.trade.indexTenor, specificRepoCollateralController.securityQuoteNames)}" />
 														<f:actionListener
 															binding="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, specificRepoTradeController.currency)}" />
 														<f:actionListener binding="#{quotesController.refresh()}" />
@@ -491,7 +490,10 @@
 				</p:row>
 				<p:row>
 					<p:column>
-						<ui:include src="/components/pricer.xhtml" />
+						<ui:include src="/components/pricer.xhtml">
+							<ui:param name="tradeController"
+								value="#{specificRepoTradeController}" />
+						</ui:include>
 					</p:column>
 					<p:column>
 						<p:panel>

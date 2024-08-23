@@ -72,13 +72,11 @@
 													value="#{gCRepoTradeController.interestType}">
 													<f:selectItems
 														value="#{gCRepoTradeController.allInterestTypes}" />
-													<p:ajax event="change"
-														update="repoRate indexName indexTenor indexOffset" />
-													<p:ajax event="change"
-														listener="#{gCRepoTradeController.updateIndex()}" />
-													<p:ajax event="change"
-														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
-													<p:ajax event="change"
+													<p:ajax update="repoRate indexName indexTenor indexOffset" />
+													<p:ajax listener="#{gCRepoTradeController.updateIndex()}" />
+													<p:ajax
+														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.trade.index, gCRepoTradeController.trade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
+													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
 														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
@@ -125,7 +123,7 @@
 											<p:column>
 												<p:selectOneMenu value="#{gCRepoTradeController.book}"
 													converter="bookConverter">
-													<p:ajax event="change"
+													<p:ajax
 														listener="#{bookController.refresh(gCRepoTradeController.book)}"
 														update=":dashboardForm:book" />
 													<f:selectItems value="#{gCRepoTradeController.allBooks}" />
@@ -140,9 +138,9 @@
 													converter="indexConverter"
 													disabled="#{gCRepoTradeController.interestType eq 'Fixed' or empty gCRepoTradeController.interestType}">
 													<f:selectItems value="#{gCRepoTradeController.allIndexes}" />
-													<p:ajax event="change"
-														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
-													<p:ajax event="change"
+													<p:ajax
+														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.trade.index, gCRepoTradeController.trade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
+													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
 														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
@@ -174,9 +172,9 @@
 													disabled="#{gCRepoTradeController.interestType eq 'Fixed' or empty gCRepoTradeController.interestType}">
 													<f:selectItems
 														value="#{gCRepoTradeController.allIndexTenors}" />
-													<p:ajax event="change"
-														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
-													<p:ajax event="change"
+													<p:ajax
+														listener="#{quotesController.updateQuoteNames(gCRepoTradeController.trade.index, gCRepoTradeController.trade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
+													<p:ajax
 														update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable"
 														listener="#{quotesController.refresh()}" />
 												</p:selectOneMenu>
@@ -302,7 +300,7 @@
 														<f:actionListener
 															binding="#{gCRepoPartialTerminationController.refresh(gCRepoTradeController.idToBeLoaded)}" />
 														<f:actionListener
-															binding="#{quotesController.updateQuoteNames(gCRepoTradeController.gcRepoTrade.index, gCRepoTradeController.gcRepoTrade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
+															binding="#{quotesController.updateQuoteNames(gCRepoTradeController.trade.index, gCRepoTradeController.trade.indexTenor, gCRepoCollateralController.securityQuoteNames)}" />
 														<f:actionListener
 															binding="#{cashflowsController.updateDiscountCurve(pricingController.pricingParameter, gCRepoTradeController.currency)}" />
 														<f:actionListener binding="#{quotesController.refresh()}" />
@@ -477,7 +475,9 @@
 				</p:row>
 				<p:row>
 					<p:column>
-						<ui:include src="/components/pricer.xhtml" />
+						<ui:include src="/components/pricer.xhtml">
+							<ui:param name="tradeController" value="#{gCRepoTradeController}" />
+						</ui:include>
 					</p:column>
 					<p:column>
 						<p:panel>

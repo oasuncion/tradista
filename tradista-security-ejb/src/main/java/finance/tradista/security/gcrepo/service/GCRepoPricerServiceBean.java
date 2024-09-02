@@ -75,26 +75,23 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 			throws TradistaBusinessException {
 		return RepoPricerUtil.generateCashFlows(params, trade, pricingDate);
 	}
-	
+
 	@Override
-	public BigDecimal pnlDefault(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
-	PricingParameter params) throws TradistaBusinessException {
-		//TODO
-		return null;
+	public BigDecimal pnlDefault(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException {
+		return RepoPricerUtil.pnlDefault(trade, currency, pricingDate, params);
 	}
-	
+
 	@Override
 	public BigDecimal realizedPayments(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
-	PricingParameter params) throws TradistaBusinessException {
-		//TODO
-		return null;
+			PricingParameter params) throws TradistaBusinessException {
+		return RepoPricerUtil.realizedPayments(trade, currency, pricingDate, params);
 	}
-	
+
 	@Override
 	public BigDecimal discountedPayments(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
-	PricingParameter params) throws TradistaBusinessException {
-		//TODO
-		return null;
+			PricingParameter params) throws TradistaBusinessException {
+		return RepoPricerUtil.discountedPayments(trade, currency, pricingDate, params);
 	}
 
 }

@@ -203,4 +203,24 @@ public class SpecificRepoPricerBusinessDelegate implements Serializable {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> specificRepoPricerService.getCurrentExposure(trade));
 	}
+
+	public BigDecimal pnlDefault(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> specificRepoPricerService.pnlDefault(trade, currency, pricingDate, params));
+	}
+
+	public BigDecimal realizedPayments(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil
+				.runEx(() -> specificRepoPricerService.realizedPayments(trade, currency, pricingDate, params));
+	}
+
+	public BigDecimal discountedPayments(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil
+				.runEx(() -> specificRepoPricerService.discountedPayments(trade, currency, pricingDate, params));
+	}
 }

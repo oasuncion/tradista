@@ -1,12 +1,12 @@
 package finance.tradista.core.pricing.ui.controller;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.util.TradistaGUIUtil;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.service.CurrencyBusinessDelegate;
 import finance.tradista.core.marketdata.model.QuoteSet;
@@ -79,7 +79,7 @@ public class PricingController implements Serializable {
 
 	private Set<Currency> allCurrencies;
 
-	private BigDecimal pricerResult;
+	private String pricerResult;
 
 	@PostConstruct
 	public void init() {
@@ -192,11 +192,11 @@ public class PricingController implements Serializable {
 		this.allCurrencies = allCurrencies;
 	}
 
-	public BigDecimal getPricerResult() {
+	public String getPricerResult() {
 		return pricerResult;
 	}
 
-	public void setPricerResult(BigDecimal pricerResult) {
+	public void setPricerResult(String pricerResult) {
 		this.pricerResult = pricerResult;
 	}
 
@@ -207,8 +207,8 @@ public class PricingController implements Serializable {
 				tradeToBePriced.setStatus(workflowBusinessDelegate.getInitialStatus(tradeToBePriced.getWorkflow()));
 
 			}
-			pricerResult = pricerBusinessDelegate.calculate(tradeToBePriced, pricingParameter, pricingCurrency,
-					pricingDate, pricerMeasure, pricingMethod);
+			pricerResult = TradistaGUIUtil.formatAmount(pricerBusinessDelegate.calculate(tradeToBePriced,
+					pricingParameter, pricingCurrency, pricingDate, pricerMeasure, pricingMethod));
 		} catch (TradistaBusinessException tbe) {
 			String[] msgs = tbe.getMessage().split(System.lineSeparator());
 			for (String msg : msgs) {

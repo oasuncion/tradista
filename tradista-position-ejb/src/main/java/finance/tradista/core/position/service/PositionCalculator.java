@@ -250,7 +250,6 @@ public class PositionCalculator {
 
 				if (!posErrors.isEmpty()) {
 					errors.addAll(posErrors);
-					continue;
 				} else {
 					// 2.2 if there is no exception, create a position
 					// in

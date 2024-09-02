@@ -50,4 +50,13 @@ public interface SpecificRepoPricerService {
 
 	BigDecimal getCurrentExposure(SpecificRepoTrade trade) throws TradistaBusinessException;
 
+	BigDecimal pnlDefault(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException;
+
+	BigDecimal realizedPayments(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException;
+
+	BigDecimal discountedPayments(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException;
+
 }

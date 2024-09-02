@@ -1,10 +1,7 @@
-package finance.tradista.security.gcrepo.pricer;
-
-import finance.tradista.core.pricing.pricer.Parameterizable;
-import finance.tradista.core.pricing.pricer.Pricer;
+package finance.tradista.core.common.util;
 
 /********************************************************************************
- * Copyright (c) 2023 Olivier Asuncion
+ * Copyright (c) 2024 Olivier Asuncion
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Apache License, Version 2.0 which is available at
@@ -19,18 +16,13 @@ import finance.tradista.core.pricing.pricer.Pricer;
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-@Parameterizable(name = "Default GCRepo Pricer")
-public class PricerGCRepo extends Pricer {
+public final class TradistaGUIUtil {
 
-	private static final long serialVersionUID = -2117530334698161662L;
+	private TradistaGUIUtil() {
+	}
 
-	public PricerGCRepo() {
-		super();
-		getPricerMeasures().add(new PricerMeasureCOLLATERAL_MARK_TO_MARKET());
-		getPricerMeasures().add(new PricerMeasureEXPOSURE());
-		getPricerMeasures().add(new PricerMeasureREALIZED_PNL());
-		getPricerMeasures().add(new PricerMeasureUNREALIZED_PNL());
-		getPricerMeasures().add(new PricerMeasurePNL());
+	public static String formatAmount(Object amount) {
+		return MathProperties.getUIDecimalFormat().format(amount);
 	}
 
 }

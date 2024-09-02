@@ -16,10 +16,6 @@ import finance.tradista.core.book.model.Book;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
-import finance.tradista.core.index.model.Index;
-import finance.tradista.core.marketdata.model.QuoteType;
-import finance.tradista.core.marketdata.model.QuoteValue;
-import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
 import finance.tradista.core.pricing.util.PricerUtil;
 import finance.tradista.core.transfer.model.CashTransfer;
 import finance.tradista.core.transfer.model.FixingError;
@@ -32,6 +28,7 @@ import finance.tradista.core.transfer.service.TransferBusinessDelegate;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
 import finance.tradista.security.repo.model.RepoTrade;
+import finance.tradista.security.repo.trade.RepoTradeUtil;
 import finance.tradista.security.specificrepo.model.SpecificRepoTrade;
 
 /********************************************************************************
@@ -57,8 +54,6 @@ public final class RepoTransferUtil {
 	private static TransferBusinessDelegate transferBusinessDelegate = new TransferBusinessDelegate();
 
 	private static FixingErrorBusinessDelegate fixingErrorBusinessDelegate = new FixingErrorBusinessDelegate();
-
-	private static QuoteBusinessDelegate quoteBusinessDelegate = new QuoteBusinessDelegate();
 
 	private RepoTransferUtil() {
 	}
@@ -454,56 +449,8 @@ public final class RepoTransferUtil {
 	}
 
 	public static void fixCashTransfer(CashTransfer transfer, long quoteSetId) throws TradistaBusinessException {
-		GCRepoTrade trade = (GCRepoTrade) transfer.getTrade();
-		BigDecimal amount;
-		String quoteName = Index.INDEX + "." + trade.getIndex() + "." + trade.getIndexTenor();
-		Set<QuoteValue> quoteValues = quoteBusinessDelegate.getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(quoteSetId,
-				quoteName, QuoteType.INTEREST_RATE, trade.getSettlementDate(), transfer.getSettlementDate());
-
-		if (quoteValues == null || quoteValues.isEmpty()) {
-			String errorMsg = String.format(
-					"Transfer %d cannot be fixed. Impossible to get the %s index closing value between %tD and %tD in QuoteSet %s.",
-					transfer.getId(), quoteName, trade.getSettlementDate(), transfer.getSettlementDate(), quoteSetId);
-			createFixingError(transfer, errorMsg);
-			throw new TradistaBusinessException(errorMsg);
-		}
-
-		Map<LocalDate, QuoteValue> quoteValuesMap = quoteValues.stream()
-				.collect(Collectors.toMap(QuoteValue::getDate, Function.identity()));
-
-		List<LocalDate> dates = trade.getSettlementDate().datesUntil(transfer.getSettlementDate()).toList();
-
-		BigDecimal repoRate = BigDecimal.ZERO;
-
-		if (trade.getPartialTerminations().get(transfer.getSettlementDate()) != null) {
-			// Cases of partial terminations
-			amount = trade.getPartialTerminations().get(transfer.getSettlementDate());
-		} else {
-			amount = trade.getAmount();
-		}
-
-		StringBuilder errorMsg = new StringBuilder();
-		for (LocalDate date : dates) {
-			if (!quoteValuesMap.containsKey(date) || quoteValuesMap.get(date).getClose() == null) {
-				errorMsg.append(String.format("%tD ", date));
-			} else {
-				repoRate = repoRate.add(quoteValuesMap.get(date).getClose());
-			}
-		}
-		if (!errorMsg.isEmpty()) {
-			errorMsg = new StringBuilder(String.format(
-					"Transfer %d cannot be fixed. Impossible to get the %s index closing value in QuoteSet %s for dates : ",
-					transfer.getId(), quoteName, quoteSetId)).append(errorMsg);
-			createFixingError(transfer, errorMsg.toString());
-			throw new TradistaBusinessException(errorMsg.toString());
-		}
-
-		repoRate = repoRate.divide(new BigDecimal(dates.size()));
-		repoRate = repoRate.add(trade.getIndexOffset());
-		repoRate = repoRate.divide(new BigDecimal(100), configurationBusinessDelegate.getScale(),
-				configurationBusinessDelegate.getRoundingMode());
-
-		amount = amount.add(amount.multiply(repoRate));
+		RepoTrade trade = (RepoTrade) transfer.getTrade();
+		BigDecimal amount = RepoTradeUtil.getClosingLegPayment(trade, quoteSetId, new DayCountConvention(DayCountConvention.ACT_360));
 		if (amount.signum() == 0) {
 			// No transfer
 			transferBusinessDelegate.deleteTransfer(transfer.getId());

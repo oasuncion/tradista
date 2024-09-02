@@ -1,19 +1,18 @@
-package finance.tradista.fx.fx.pricer;
+package finance.tradista.security.gcrepo.pricer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
-import finance.tradista.core.pricing.exception.PricerException;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
 import finance.tradista.core.pricing.pricer.Pricing;
 import finance.tradista.core.pricing.pricer.PricingParameter;
-import finance.tradista.fx.fx.model.FXTrade;
-import finance.tradista.fx.fx.service.FXPricerBusinessDelegate;
+import finance.tradista.security.gcrepo.model.GCRepoTrade;
+import finance.tradista.security.gcrepo.service.GCRepoPricerBusinessDelegate;
 
 /********************************************************************************
- * Copyright (c) 2018 Olivier Asuncion
+ * Copyright (c) 2024 Olivier Asuncion
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Apache License, Version 2.0 which is available at
@@ -28,26 +27,25 @@ import finance.tradista.fx.fx.service.FXPricerBusinessDelegate;
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-public class PricerMeasurePNL extends PricerMeasure {
+public class PricerMeasureREALIZED_PNL extends PricerMeasure {
 
-	private static final long serialVersionUID = 6777167098422578509L;
+	private static final long serialVersionUID = 6704824077719847379L;
 
-	private FXPricerBusinessDelegate fxPricerBusinessDelegate;
+	private GCRepoPricerBusinessDelegate gcRepoPricerBusinessDelegate;
 
-	public PricerMeasurePNL() {
-		super();
-		fxPricerBusinessDelegate = new FXPricerBusinessDelegate();
+	public PricerMeasureREALIZED_PNL() {
+		gcRepoPricerBusinessDelegate = new GCRepoPricerBusinessDelegate();
 	}
 
-	@Pricing(defaultPNL = true)
-	public BigDecimal defaultPNL(PricingParameter params, FXTrade trade, Currency currency, LocalDate pricingDate)
-			throws PricerException, TradistaBusinessException {
+	@Pricing(defaultREALIZED_PNL = true)
+	public BigDecimal realizedPayments(PricingParameter params, GCRepoTrade trade, Currency currency,
+			LocalDate pricingDate) throws TradistaBusinessException {
 
-		return fxPricerBusinessDelegate.defaultPNL(params, (FXTrade) trade, currency, pricingDate);
+		return gcRepoPricerBusinessDelegate.realizedPayments(trade, currency, pricingDate, params);
 	}
 
 	public String toString() {
-		return "PNL";
+		return "REALIZED_PNL";
 	}
 
 }

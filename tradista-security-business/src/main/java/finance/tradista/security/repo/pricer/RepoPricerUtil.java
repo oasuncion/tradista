@@ -12,7 +12,7 @@ import finance.tradista.core.book.model.Book;
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.util.DateUtil;
-import finance.tradista.core.configuration.service.ConfigurationService;
+import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.currency.model.CurrencyPair;
 import finance.tradista.core.daycountconvention.model.DayCountConvention;
@@ -58,7 +58,7 @@ public final class RepoPricerUtil {
 
 	private static QuoteBusinessDelegate quoteBusinessDelegate = new QuoteBusinessDelegate();
 
-	private static ConfigurationService configurationService;
+	private static ConfigurationBusinessDelegate configurationBusinessDelegate = new ConfigurationBusinessDelegate();
 
 	private RepoPricerUtil() {
 	}
@@ -309,10 +309,11 @@ public final class RepoPricerUtil {
 							throw new TradistaBusinessException(pe.getMessage());
 						}
 					}
-					repoRate = repoRate.divide(new BigDecimal(100), configurationService.getScale(),
-							configurationService.getRoundingMode());
-					interestAmount = pt.getValue().multiply(repoRate).multiply(PricerUtil
-							.daysToYear(new DayCountConvention("ACT/360"), trade.getSettlementDate(), pt.getKey()));
+					repoRate = repoRate.divide(new BigDecimal(100), configurationBusinessDelegate.getScale(),
+							configurationBusinessDelegate.getRoundingMode());
+					interestAmount = pt.getValue().multiply(repoRate)
+							.multiply(PricerUtil.daysToYear(new DayCountConvention(DayCountConvention.ACT_360),
+									trade.getSettlementDate(), pt.getKey()));
 					CashFlow cashPt = new CashFlow();
 					CashFlow.Direction direction;
 					cashPt.setDate(pt.getKey());
@@ -346,10 +347,10 @@ public final class RepoPricerUtil {
 		BigDecimal amount;
 		CashFlow.Direction direction;
 		if (trade.isFixedRepoRate()) {
-			BigDecimal repoRate = trade.getRepoRate().divide(new BigDecimal(100), configurationService.getScale(),
-					configurationService.getRoundingMode());
-			BigDecimal interestAmount = trade.getAmount().multiply(repoRate).multiply(PricerUtil
-					.daysToYear(new DayCountConvention("ACT/360"), trade.getSettlementDate(), trade.getEndDate()));
+			BigDecimal repoRate = trade.getRepoRate().divide(new BigDecimal(100),
+					configurationBusinessDelegate.getScale(), configurationBusinessDelegate.getRoundingMode());
+			BigDecimal interestAmount = trade.getAmount().multiply(repoRate).multiply(PricerUtil.daysToYear(
+					new DayCountConvention(DayCountConvention.ACT_360), trade.getSettlementDate(), trade.getEndDate()));
 			amount = trade.getAmount().add(interestAmount);
 		} else {
 			List<LocalDate> dates = trade.getSettlementDate().datesUntil(trade.getEndDate()).toList();
@@ -379,8 +380,8 @@ public final class RepoPricerUtil {
 
 			repoRate = repoRate.divide(new BigDecimal(dates.size()));
 			repoRate = repoRate.add(trade.getIndexOffset());
-			repoRate = repoRate.divide(new BigDecimal(100), configurationService.getScale(),
-					configurationService.getRoundingMode());
+			repoRate = repoRate.divide(new BigDecimal(100), configurationBusinessDelegate.getScale(),
+					configurationBusinessDelegate.getRoundingMode());
 
 			amount = trade.getAmount().multiply(repoRate);
 		}
@@ -423,6 +424,174 @@ public final class RepoPricerUtil {
 		}
 
 		return cfs;
+	}
+
+	public static BigDecimal pnlDefault(RepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		return realizedPayments(trade, currency, pricingDate, params)
+				.add(discountedPayments(trade, currency, pricingDate, params));
+	}
+
+	public static BigDecimal realizedPayments(RepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		BigDecimal pnl;
+		Currency tradeCurrency = trade.getCurrency();
+		CurrencyPair pair = new CurrencyPair(tradeCurrency, currency);
+		FXCurve paramFXCurve = params.getFxCurves().get(pair);
+		if (paramFXCurve == null) {
+			// TODO Add log warn
+		}
+
+		// Payment for the opening leg
+		if (pricingDate.isAfter(trade.getSettlementDate()) || pricingDate.equals(trade.getSettlementDate())) {
+
+			BigDecimal openingLegAmount = trade.getAmount();
+
+			// if there are partial terminations, rebuild the initial nominal from them
+			if (trade.getPartialTerminations() != null && !trade.getPartialTerminations().isEmpty()) {
+				openingLegAmount = openingLegAmount
+						.add(trade.getPartialTerminations().values().stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+			}
+
+			// Finally apply the conversion to the pricing currency
+			openingLegAmount = PricerUtil.convertAmount(openingLegAmount, tradeCurrency, currency, pricingDate,
+					params.getQuoteSet().getId(), paramFXCurve != null ? paramFXCurve.getId() : 0);
+
+			if (trade.isSell()) {
+				openingLegAmount = openingLegAmount.negate();
+			}
+
+			pnl = openingLegAmount;
+
+			// Payment for the closing leg
+			if (pricingDate.isAfter(trade.getEndDate()) || pricingDate.equals(trade.getEndDate())) {
+
+				// 1. Get the closing payment amount
+				BigDecimal closingLegAmount = RepoTradeUtil.getClosingLegPayment(trade, params.getQuoteSet().getId(),
+						new DayCountConvention(DayCountConvention.ACT_360));
+
+				// Finally apply the conversion to the pricing currency
+				closingLegAmount = PricerUtil.convertAmount(closingLegAmount, tradeCurrency, currency, pricingDate,
+						params.getQuoteSet().getId(), paramFXCurve != null ? paramFXCurve.getId() : 0);
+
+				if (trade.isBuy()) {
+					closingLegAmount = closingLegAmount.negate();
+				}
+
+				pnl = pnl.add(closingLegAmount);
+
+			}
+
+			// Add the partial terminations
+			if (trade.getPartialTerminations() != null && !trade.getPartialTerminations().isEmpty()) {
+				BigDecimal partialTerminations = BigDecimal.ZERO;
+				for (Map.Entry<LocalDate, BigDecimal> e : trade.getPartialTerminations().entrySet()) {
+					if (!pricingDate.isAfter(e.getKey())) {
+						partialTerminations = partialTerminations.add(e.getValue());
+					}
+				}
+				if (trade.isBuy()) {
+					partialTerminations = partialTerminations.negate();
+				}
+				pnl = pnl.add(partialTerminations);
+
+			}
+
+			return pnl;
+		}
+
+		// if pricing date is before settlement date, there is no realized pnl.
+		return BigDecimal.ZERO;
+	}
+
+	public static BigDecimal discountedPayments(RepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		BigDecimal pnl = BigDecimal.ZERO;
+		DayCountConvention dcc = new DayCountConvention(DayCountConvention.ACT_360);
+		if (pricingDate.isAfter(trade.getEndDate()) || pricingDate.equals(trade.getEndDate())) {
+			// if pricing date is equal to or after the repo end date,
+			// the pnl is already realized
+			return pnl;
+		}
+
+		// Payment for the opening leg
+
+		if (LocalDate.now().isBefore(trade.getSettlementDate()) && pricingDate.isBefore(trade.getSettlementDate())) {
+			try {
+				Currency tradeCurrency = trade.getCurrency();
+				CurrencyPair pair = new CurrencyPair(tradeCurrency, currency);
+				FXCurve paramFXCurve = params.getFxCurves().get(pair);
+				if (paramFXCurve == null) {
+					// TODO Add log warn
+				}
+				// 1. Primary currency IR curve retrieval
+				InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(tradeCurrency);
+				if (paramTradeCurrIRCurve == null) {
+					throw new TradistaBusinessException(String.format(
+							"%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.",
+							params.getName(), tradeCurrency));
+				}
+
+				// 2. Discount the opening leg payment
+				BigDecimal discountedOpeningLegPayment = PricerUtil.discountAmount(trade.getAmount(),
+						paramTradeCurrIRCurve.getId(), pricingDate, trade.getSettlementDate(), dcc);
+
+				// Finally apply the conversion to the pricing currency
+				discountedOpeningLegPayment = PricerUtil.convertAmount(discountedOpeningLegPayment, tradeCurrency,
+						currency, pricingDate, params.getQuoteSet().getId(),
+						paramFXCurve != null ? paramFXCurve.getId() : 0);
+
+				if (trade.isSell()) {
+					discountedOpeningLegPayment = discountedOpeningLegPayment.negate();
+				}
+
+				pnl = discountedOpeningLegPayment;
+			} catch (PricerException pe) {
+				pe.printStackTrace();
+				throw new TradistaBusinessException(pe.getMessage());
+			}
+		}
+
+		// Payment for the closing leg
+		if (LocalDate.now().isBefore(trade.getEndDate())) {
+			try {
+				Currency tradeCurrency = trade.getCurrency();
+				CurrencyPair pair = new CurrencyPair(tradeCurrency, currency);
+				FXCurve paramFXCurve = params.getFxCurves().get(pair);
+				if (paramFXCurve == null) {
+					// TODO Add log warn
+				}
+				// 1. Primary currency IR curve retrieval
+				InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(tradeCurrency);
+				if (paramTradeCurrIRCurve == null) {
+					throw new TradistaBusinessException(String.format(
+							"%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.",
+							params.getName(), tradeCurrency));
+				}
+				// 2. Get the closing payment amount
+				BigDecimal amount = RepoTradeUtil.getClosingLegPayment(trade, params.getQuoteSet().getId(), dcc);
+
+				// 3. Discount the closing leg payment
+				BigDecimal discountedClosingLegPayment = PricerUtil.discountAmount(amount,
+						paramTradeCurrIRCurve.getId(), pricingDate, trade.getSettlementDate(), dcc);
+
+				// Finally apply the conversion to the pricing currency
+				discountedClosingLegPayment = PricerUtil.convertAmount(discountedClosingLegPayment, tradeCurrency,
+						currency, pricingDate, params.getQuoteSet().getId(),
+						paramFXCurve != null ? paramFXCurve.getId() : 0);
+
+				if (trade.isBuy()) {
+					discountedClosingLegPayment = discountedClosingLegPayment.negate();
+				}
+
+				pnl = pnl.add(discountedClosingLegPayment);
+			} catch (PricerException pe) {
+				pe.printStackTrace();
+				throw new TradistaBusinessException(pe.getMessage());
+			}
+		}
+
+		return pnl;
 	}
 
 }

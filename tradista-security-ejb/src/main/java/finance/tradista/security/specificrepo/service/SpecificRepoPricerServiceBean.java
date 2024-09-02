@@ -76,4 +76,22 @@ public class SpecificRepoPricerServiceBean implements SpecificRepoPricerService 
 		return RepoPricerUtil.generateCashFlows(params, trade, pricingDate);
 	}
 
+	@Override
+	public BigDecimal pnlDefault(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		return RepoPricerUtil.pnlDefault(trade, currency, pricingDate, params);
+	}
+
+	@Override
+	public BigDecimal realizedPayments(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		return RepoPricerUtil.realizedPayments(trade, currency, pricingDate, params);
+	}
+
+	@Override
+	public BigDecimal discountedPayments(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		return RepoPricerUtil.discountedPayments(trade, currency, pricingDate, params);
+	}
+
 }

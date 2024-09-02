@@ -35,7 +35,6 @@ public class PricerMeasurePNL extends PricerMeasure {
 	private BondPricerBusinessDelegate bondPricerBusinessDelegate;
 
 	public PricerMeasurePNL() {
-		super();
 		bondPricerBusinessDelegate = new BondPricerBusinessDelegate();
 	}
 

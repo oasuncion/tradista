@@ -5,10 +5,20 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;
+import finance.tradista.core.daycountconvention.model.DayCountConvention;
+import finance.tradista.core.index.model.Index;
+import finance.tradista.core.marketdata.model.QuoteType;
+import finance.tradista.core.marketdata.model.QuoteValue;
+import finance.tradista.core.marketdata.service.QuoteBusinessDelegate;
+import finance.tradista.core.pricing.util.PricerUtil;
 import finance.tradista.core.transfer.model.ProductTransfer;
 import finance.tradista.core.transfer.model.Transfer;
 import finance.tradista.core.transfer.model.Transfer.Direction;
@@ -46,6 +56,10 @@ public final class RepoTradeUtil {
 	private static EquityBusinessDelegate equityBusinessDelegate = new EquityBusinessDelegate();
 
 	private static BookBusinessDelegate bookBusinessDelegate = new BookBusinessDelegate();
+
+	private static QuoteBusinessDelegate quoteBusinessDelegate = new QuoteBusinessDelegate();
+
+	private static ConfigurationBusinessDelegate configurationBusinessDelegate = new ConfigurationBusinessDelegate();
 
 	private RepoTradeUtil() {
 	}
@@ -182,6 +196,59 @@ public final class RepoTradeUtil {
 		if (!errMsg.isEmpty()) {
 			throw new TradistaBusinessException(errMsg.toString());
 		}
+	}
+
+	public static BigDecimal getClosingLegPayment(RepoTrade trade, long quoteSetId, DayCountConvention dcc) throws TradistaBusinessException {
+		BigDecimal amount = trade.getAmount();
+		BigDecimal repoRate;
+		if (trade.isFixedRepoRate()) {
+			repoRate = trade.getRepoRate().divide(new BigDecimal(100), configurationBusinessDelegate.getScale(),
+					configurationBusinessDelegate.getRoundingMode());
+		} else {
+
+			String quoteName = Index.INDEX + "." + trade.getIndex() + "." + trade.getIndexTenor();
+			Set<QuoteValue> quoteValues = quoteBusinessDelegate.getQuoteValueByQuoteSetIdQuoteNameTypeAndDates(
+					quoteSetId, quoteName, QuoteType.INTEREST_RATE, trade.getSettlementDate(), trade.getEndDate());
+
+			if (quoteValues == null || quoteValues.isEmpty()) {
+				String errorMsg = String.format(
+						"Floating rate cannot be determined. Impossible to get the %s index closing value between %tD and %tD in QuoteSet %s.",
+						quoteName, trade.getSettlementDate(), trade.getEndDate(), quoteSetId);
+				throw new TradistaBusinessException(errorMsg);
+			}
+
+			Map<LocalDate, QuoteValue> quoteValuesMap = quoteValues.stream()
+					.collect(Collectors.toMap(QuoteValue::getDate, Function.identity()));
+
+			List<LocalDate> dates = trade.getSettlementDate().datesUntil(trade.getEndDate()).toList();
+
+			repoRate = BigDecimal.ZERO;
+
+			StringBuilder errorMsg = new StringBuilder();
+			for (LocalDate date : dates) {
+				if (!quoteValuesMap.containsKey(date) || quoteValuesMap.get(date).getClose() == null) {
+					errorMsg.append(String.format("%tD ", date));
+				} else {
+					repoRate = repoRate.add(quoteValuesMap.get(date).getClose());
+				}
+			}
+			if (!errorMsg.isEmpty()) {
+				errorMsg = new StringBuilder(String.format(
+						"Floating rate cannot be determined. Impossible to get the %s index closing value in QuoteSet %s for dates : ",
+						quoteName, quoteSetId)).append(errorMsg);
+				throw new TradistaBusinessException(errorMsg.toString());
+			}
+
+			repoRate = repoRate.divide(new BigDecimal(dates.size()));
+			repoRate = repoRate.add(trade.getIndexOffset());
+			repoRate = repoRate.divide(new BigDecimal(100), configurationBusinessDelegate.getScale(),
+					configurationBusinessDelegate.getRoundingMode());
+		}
+
+		// 3. Multiply notional by repo rate (applying the accrual factor) then add it
+		// to the nominal amount to get the closing leg payment
+		return amount.add(trade.getAmount().multiply(repoRate)
+				.multiply(PricerUtil.daysToYear(dcc, trade.getSettlementDate(), trade.getEndDate())));
 	}
 
 }

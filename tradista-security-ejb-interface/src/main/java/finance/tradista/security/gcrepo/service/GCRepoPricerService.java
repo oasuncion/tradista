@@ -50,4 +50,13 @@ public interface GCRepoPricerService {
 
 	BigDecimal getCurrentExposure(GCRepoTrade trade) throws TradistaBusinessException;
 
+	BigDecimal pnlDefault(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException;
+
+	BigDecimal realizedPayments(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException;
+
+	BigDecimal discountedPayments(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException;
+
 }

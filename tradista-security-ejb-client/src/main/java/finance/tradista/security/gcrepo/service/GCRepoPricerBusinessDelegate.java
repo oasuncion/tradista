@@ -201,4 +201,22 @@ public class GCRepoPricerBusinessDelegate implements Serializable {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentExposure(trade));
 	}
+
+	public BigDecimal pnlDefault(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> gcRepoPricerService.pnlDefault(trade, currency, pricingDate, params));
+	}
+
+	public BigDecimal realizedPayments(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> gcRepoPricerService.realizedPayments(trade, currency, pricingDate, params));
+	}
+
+	public BigDecimal discountedPayments(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> gcRepoPricerService.discountedPayments(trade, currency, pricingDate, params));
+	}
 }

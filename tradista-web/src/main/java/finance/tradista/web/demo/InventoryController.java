@@ -12,12 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
-
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.line.LineChartDataSet;
 import org.primefaces.model.charts.line.LineChartModel;
@@ -28,6 +22,11 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.util.ColorUtil;
 import finance.tradista.core.inventory.model.ProductInventory;
 import finance.tradista.core.productinventory.service.ProductInventoryBusinessDelegate;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 
 /********************************************************************************
  * Copyright (c) 2022 Olivier Asuncion
@@ -75,7 +74,7 @@ public class InventoryController implements Serializable {
 		Set<ProductInventory> inventory = null;
 
 		List<String> bgColors = new ArrayList<>();
-		bgColors.addAll(ColorUtil.getBlueColorsList());
+		bgColors.addAll(ColorUtil.getBlueColorsAsStringList());
 
 		List<String> labels = new ArrayList<>();
 
@@ -119,7 +118,7 @@ public class InventoryController implements Serializable {
 					dataSet.setLabel(entry.getKey());
 					dataSet.setFill(false);
 					dataSet.setTension(0.1);
-					dataSet.setBorderColor(ColorUtil.getBlueColorsList().get(i));
+					dataSet.setBorderColor(ColorUtil.getBlueColorsAsStringList().get(i));
 					List<Object> values = new ArrayList<>();
 					for (LocalDate d : daysOfTheWeek) {
 						for (ProductInventory inv : entry.getValue()) {

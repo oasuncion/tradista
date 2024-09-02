@@ -39,8 +39,8 @@ public class ProcessingOrgDefaultsBusinessDelegate {
 		ProcessingOrgDefaultsModuleValidator validator = null;
 		try {
 			validator = TradistaUtil.getInstance(ProcessingOrgDefaultsModuleValidator.class,
-					"finance.tradista.security.gcrepo.validator.ProcessingOrgDefaultsCollateralManagementModuleValidator");
-			validators.put("finance.tradista.security.gcrepo.model.ProcessingOrgDefaultsCollateralManagementModule",
+					"finance.tradista.security.repo.validator.ProcessingOrgDefaultsCollateralManagementModuleValidator");
+			validators.put("finance.tradista.security.repo.model.ProcessingOrgDefaultsCollateralManagementModule",
 					validator);
 		} catch (TradistaTechnicalException tte) {
 			// TODO Add log info

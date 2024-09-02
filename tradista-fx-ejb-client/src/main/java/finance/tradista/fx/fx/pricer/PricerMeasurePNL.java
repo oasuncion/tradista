@@ -30,9 +30,6 @@ import finance.tradista.fx.fx.service.FXPricerBusinessDelegate;
 
 public class PricerMeasurePNL extends PricerMeasure {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6777167098422578509L;
 
 	private FXPricerBusinessDelegate fxPricerBusinessDelegate;

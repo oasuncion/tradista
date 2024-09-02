@@ -1,10 +1,9 @@
 package finance.tradista.security.gcrepo.workflow.mapping;
 
 import finance.tradista.flow.model.Workflow;
-import finance.tradista.security.gcrepo.model.GCRepoTrade;
 
 /********************************************************************************
- * Copyright (c) 2023 Olivier Asuncion
+ * Copyright (c) 2024 Olivier Asuncion
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Apache License, Version 2.0 which is available at
@@ -19,20 +18,15 @@ import finance.tradista.security.gcrepo.model.GCRepoTrade;
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-public class GCRepoTradeMapper {
+public final class GCRepoTradeMapper {
 
 	private GCRepoTradeMapper() {
 	}
 
-	public static finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade map(GCRepoTrade gcRepoTrade,
-			Workflow wkf) {
-
-		finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade gcRepoTradeResult = new finance.tradista.security.gcrepo.workflow.mapping.GCRepoTrade(
-				wkf);
-		gcRepoTradeResult.setGcRepoTrade(gcRepoTrade);
-
+	public static GCRepoTrade map(finance.tradista.security.gcrepo.model.GCRepoTrade gcRepoTrade, Workflow wkf) {
+		GCRepoTrade gcRepoTradeResult = new GCRepoTrade(wkf);
+		gcRepoTradeResult.setRepoTrade(gcRepoTrade);
 		return gcRepoTradeResult;
-
 	}
 
 }

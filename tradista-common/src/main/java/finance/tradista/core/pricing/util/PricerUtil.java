@@ -684,7 +684,7 @@ public final class PricerUtil {
 			dcc = new DayCountConvention(DayCountConvention.ACT_365);
 		}
 		switch (dcc.getName()) {
-		case "ACT/360": {
+		case DayCountConvention.ACT_360: {
 			BigDecimal diff = BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate));
 			return diff.divide(BigDecimal.valueOf(360), scale, roundingMode);
 		}

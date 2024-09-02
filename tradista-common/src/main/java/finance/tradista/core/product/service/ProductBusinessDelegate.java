@@ -52,6 +52,7 @@ public class ProductBusinessDelegate {
 		canBeOTC.add("FRA");
 		canBeOTC.add("EquityOption");
 		canBeOTC.add("GCRepo");
+		canBeOTC.add("SpecificRepo");
 
 		canBeListed = new HashSet<>();
 		canBeListed.add("EquityOption");
@@ -138,6 +139,8 @@ public class ProductBusinessDelegate {
 		case "EquityOption":
 			return "security";
 		case "GCRepo":
+			return "security";
+		case "SpecificRepo":
 			return "security";
 		}
 		throw new TradistaBusinessException(String.format("This product type %s is not identified.", productType));

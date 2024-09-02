@@ -90,10 +90,12 @@ import finance.tradista.security.equityoption.service.EquityOptionPricerService;
 import finance.tradista.security.equityoption.service.EquityOptionService;
 import finance.tradista.security.equityoption.service.EquityOptionTradeService;
 import finance.tradista.security.equityoption.service.EquityOptionVolatilitySurfaceService;
-import finance.tradista.security.gcrepo.service.AllocationConfigurationService;
 import finance.tradista.security.gcrepo.service.GCBasketService;
 import finance.tradista.security.gcrepo.service.GCRepoPricerService;
 import finance.tradista.security.gcrepo.service.GCRepoTradeService;
+import finance.tradista.security.repo.service.AllocationConfigurationService;
+import finance.tradista.security.specificrepo.service.SpecificRepoPricerService;
+import finance.tradista.security.specificrepo.service.SpecificRepoTradeService;
 
 /********************************************************************************
  * Copyright (c) 2018 Olivier Asuncion
@@ -131,7 +133,11 @@ public class TradistaServiceLocator {
 
 	private static final String BOND_SERVICE_PACKAGE = "finance.tradista.security.bond.service";
 
+	private static final String REPO_SERVICE_PACKAGE = "finance.tradista.security.repo.service";
+
 	private static final String GC_REPO_SERVICE_PACKAGE = "finance.tradista.security.gcrepo.service";
+
+	private static final String SPECIFIC_REPO_SERVICE_PACKAGE = "finance.tradista.security.specificrepo.service";
 
 	private static final String EQUITY_SERVICE_PACKAGE = "finance.tradista.security.equity.service";
 
@@ -445,8 +451,18 @@ public class TradistaServiceLocator {
 		return (GCRepoPricerService) getService(APP, SECURITY_EJB, GC_REPO_SERVICE_PACKAGE, "GCRepoPricerService");
 	}
 
+	public SpecificRepoTradeService getSpecificRepoTradeService() {
+		return (SpecificRepoTradeService) getService(APP, SECURITY_EJB, SPECIFIC_REPO_SERVICE_PACKAGE,
+				"SpecificRepoTradeService");
+	}
+
+	public SpecificRepoPricerService getSpecificRepoPricerService() {
+		return (SpecificRepoPricerService) getService(APP, SECURITY_EJB, SPECIFIC_REPO_SERVICE_PACKAGE,
+				"SpecificRepoPricerService");
+	}
+
 	public AllocationConfigurationService getAllocationConfigurationService() {
-		return (AllocationConfigurationService) getService(APP, SECURITY_EJB, GC_REPO_SERVICE_PACKAGE,
+		return (AllocationConfigurationService) getService(APP, SECURITY_EJB, REPO_SERVICE_PACKAGE,
 				"AllocationConfigurationService");
 	}
 

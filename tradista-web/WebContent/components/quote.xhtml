@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:tab title="Quotes">
+		<p:dataTable id="quotesListDataTable" var="quote"
+			value="#{quotesController.quoteValues}" allowUnsorting="true"
+			sortMode="single" tableStyleClass="tradista-datatable" size="small">
+			<f:facet name="header">
+				<p:row>
+					<p:column>
+						<p:outputLabel value="Quote Date : " />
+					</p:column>
+					<p:column>
+						<p:datePicker value="#{quotesController.quoteDate}"
+							pattern="dd/MM/yyyy">
+							<p:ajax event="dateSelect"
+								listener="#{quotesController.refresh()}"
+								update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
+						</p:datePicker>
+					</p:column>
+					<p:column>
+						<p:outputLabel value="Quote Set : "
+							styleClass="tradista-menu-item" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{quotesController.quoteSet}"
+							converter="quoteSetConverter" styleClass="tradista-menu-item">
+							<f:selectItems value="#{quotesController.allQuoteSets}" />
+							<p:ajax event="change" listener="#{quotesController.refresh()}"
+								update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:selectBooleanCheckbox value="#{quotesController.realTime}"
+							styleClass="tradista-menu-item">
+							<p:outputLabel styleClass="tradista-menu-item">Real Time</p:outputLabel>
+							<p:ajax event="change" update=":dashboardForm:quotesCashflowsTabs:poll" />
+						</p:selectBooleanCheckbox>
+
+					</p:column>
+				</p:row>
+			</f:facet>
+			<p:column headerText="Name" sortBy="#{quote.quote.name}">
+				<p:outputLabel value="#{quote.quote.name}" />
+			</p:column>
+			<p:column headerText="Date" sortBy="#{quote.date}">
+				<p:outputLabel value="#{quote.date}">
+					<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Type" sortBy="#{quote.quote.type.toString()}">
+				<p:outputLabel value="#{quote.quote.type.toString()}" />
+			</p:column>
+			<p:column headerText="Bid" sortBy="#{quote.bid}">
+				<p:outputLabel value="#{quote.bid}">
+					<f:convertNumber maxFractionDigits="5" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Ask" sortBy="#{quote.ask}">
+				<p:outputLabel value="#{quote.ask}">
+					<f:convertNumber maxFractionDigits="5" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Open" sortBy="#{quote.open}">
+				<p:outputLabel value="#{quote.open}">
+					<f:convertNumber maxFractionDigits="5" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Close" sortBy="#{quote.close}">
+				<p:outputLabel value="#{quote.close}">
+					<f:convertNumber maxFractionDigits="5" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="High" sortBy="#{quote.high}">
+				<p:outputLabel value="#{quote.high}">
+					<f:convertNumber maxFractionDigits="5" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Low" sortBy="#{quote.low}">
+				<p:outputLabel value="#{quote.low}">
+					<f:convertNumber maxFractionDigits="5" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Last" sortBy="#{quote.last}">
+				<p:outputLabel value="#{quote.last}">
+					<f:convertNumber maxFractionDigits="5" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Entered Date" sortBy="#{quote.enteredDate}">
+				<p:outputLabel value="#{quote.enteredDate}">
+					<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Source Name" sortBy="#{quote.sourceName}">
+				<p:outputLabel value="#{quote.sourceName}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+	<p:poll interval="#{quotesController.frequency}" id="poll"
+		widgetVar="poll" autoStart="false"
+		listener="#{quotesController.refresh()}"
+		update=":quotesCashflowsTabs:quotesCashflowsTabs:quotesListDataTable" />
+</ui:composition>

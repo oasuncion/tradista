@@ -2,7 +2,10 @@ package finance.tradista.core.common.ui.controller;
 
 import java.io.Serializable;
 
+import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.common.util.ClientUtil;
+import finance.tradista.core.common.util.MathProperties;
+import finance.tradista.core.configuration.service.ConfigurationBusinessDelegate;
 import finance.tradista.core.user.service.UserBusinessDelegate;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -41,10 +44,13 @@ public class LoginController implements Serializable {
 
 	private String originalUrl;
 
+	private ConfigurationBusinessDelegate configurationBusinessDelegate;
+
 	@PostConstruct
 	public void init() {
 		originalUrl = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
 				.get("jakarta.servlet.forward.servlet_path");
+		configurationBusinessDelegate = new ConfigurationBusinessDelegate();
 	}
 
 	public String getLogin() {
@@ -73,9 +79,13 @@ public class LoginController implements Serializable {
 			request.login(getLogin(), getPassword());
 			ClientUtil.setCurrentUser(
 					new UserBusinessDelegate().getUserByLogin(externalContext.getUserPrincipal().getName()));
+			MathProperties.setUIDecimalFormat(
+					configurationBusinessDelegate.getUIConfiguration(ClientUtil.getCurrentUser()).getDecimalFormat());
 		} catch (ServletException se) {
 			context.addMessage("errMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed.", null));
 			return null;
+		} catch (TradistaBusinessException tbe) {
+			// Cannot appear here.
 		}
 		if (originalUrl != null) {
 			url = originalUrl + FACES_REDIRECT_EQUALS_TRUE;

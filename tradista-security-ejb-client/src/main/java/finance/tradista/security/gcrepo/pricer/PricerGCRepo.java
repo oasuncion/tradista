@@ -4,7 +4,7 @@ import finance.tradista.core.pricing.pricer.Parameterizable;
 import finance.tradista.core.pricing.pricer.Pricer;
 
 /********************************************************************************
- * Copyright (c) 2018 Olivier Asuncion
+ * Copyright (c) 2023 Olivier Asuncion
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Apache License, Version 2.0 which is available at
@@ -28,6 +28,9 @@ public class PricerGCRepo extends Pricer {
 		super();
 		getPricerMeasures().add(new PricerMeasureCOLLATERAL_MARK_TO_MARKET());
 		getPricerMeasures().add(new PricerMeasureEXPOSURE());
+		getPricerMeasures().add(new PricerMeasureREALIZED_PNL());
+		getPricerMeasures().add(new PricerMeasureUNREALIZED_PNL());
+		getPricerMeasures().add(new PricerMeasurePNL());
 	}
 
 }

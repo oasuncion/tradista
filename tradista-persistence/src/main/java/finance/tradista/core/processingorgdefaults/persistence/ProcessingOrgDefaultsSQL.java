@@ -39,8 +39,8 @@ public class ProcessingOrgDefaultsSQL {
 		Class<?> daoClass = null;
 		try {
 			daoClass = TradistaUtil.getClass(
-					"finance.tradista.security.gcrepo.persistence.ProcessingOrgDefaultsCollateralManagementSQL");
-			daoClasses.put("finance.tradista.security.gcrepo.model.ProcessingOrgDefaultsCollateralManagementModule",
+					"finance.tradista.security.repo.persistence.ProcessingOrgDefaultsCollateralManagementSQL");
+			daoClasses.put("finance.tradista.security.repo.model.ProcessingOrgDefaultsCollateralManagementModule",
 					daoClass);
 		} catch (TradistaTechnicalException tte) {
 			// TODO Add log info

@@ -12,10 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.primefaces.model.charts.ChartData;
-import org.primefaces.model.charts.line.LineChartDataSet;
-import org.primefaces.model.charts.line.LineChartModel;
-
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
@@ -27,6 +23,11 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import software.xdev.chartjs.model.charts.LineChart;
+import software.xdev.chartjs.model.data.LineData;
+import software.xdev.chartjs.model.dataset.LineDataset;
+import software.xdev.chartjs.model.options.LineOptions;
+import software.xdev.chartjs.model.options.elements.Fill;
 
 /********************************************************************************
  * Copyright (c) 2022 Olivier Asuncion
@@ -50,33 +51,33 @@ public class InventoryController implements Serializable {
 
 	private static final long serialVersionUID = 279320826504459625L;
 
-	private LineChartModel lineModel;
+	private String lineModel;
 
 	private BookBusinessDelegate bookBusinessDelegate;
 
 	@PostConstruct
 	public void init() {
 		bookBusinessDelegate = new BookBusinessDelegate();
-		lineModel = new LineChartModel();
 		loadInventory();
 	}
 
-	public LineChartModel getLineModel() {
+	public String getLineModel() {
 		return lineModel;
 	}
 
-	public void setLineModel(LineChartModel lineModel) {
+	public void setLineModel(String lineModel) {
 		this.lineModel = lineModel;
 	}
 
 	public void loadInventory() {
-		ChartData data = new ChartData();
 		Set<ProductInventory> inventory = null;
 
 		List<String> bgColors = new ArrayList<>();
 		bgColors.addAll(ColorUtil.getBlueColorsAsStringList());
 
 		List<String> labels = new ArrayList<>();
+		LineData data = new LineData();
+		LineChart lineChart = new LineChart();
 
 		Set<LocalDate> daysOfTheWeek = new TreeSet<>();
 
@@ -114,12 +115,12 @@ public class InventoryController implements Serializable {
 			if (invMap != null && !invMap.isEmpty()) {
 				int i = 0;
 				for (Map.Entry<String, Set<ProductInventory>> entry : invMap.entrySet()) {
-					LineChartDataSet dataSet = new LineChartDataSet();
+					LineDataset dataSet = new LineDataset();
 					dataSet.setLabel(entry.getKey());
-					dataSet.setFill(false);
-					dataSet.setTension(0.1);
+					dataSet.setFill(new Fill<Boolean>(false));
+					dataSet.setLineTension(0.1f);
 					dataSet.setBorderColor(ColorUtil.getBlueColorsAsStringList().get(i));
-					List<Object> values = new ArrayList<>();
+					List<Number> values = new ArrayList<>();
 					for (LocalDate d : daysOfTheWeek) {
 						for (ProductInventory inv : entry.getValue()) {
 							if ((inv.getTo() == null)) {
@@ -134,14 +135,19 @@ public class InventoryController implements Serializable {
 						}
 					}
 					dataSet.setData(values);
-					data.addChartDataSet(dataSet);
+					data.addDataset(dataSet);
 					i++;
 				}
 			}
 		}
 
 		data.setLabels(labels);
-		lineModel.setData(data);
+
+		lineChart.setData(data).setOptions(new LineOptions().setMaintainAspectRatio(Boolean.FALSE));
+
+		if (lineChart.isDrawable()) {
+			lineModel = lineChart.toJson();
+		}
 	}
 
 }

@@ -137,12 +137,12 @@
 				</h:form>
 			</p:panel>
 			<p:panel id="book" header="Book">
-				<p:donutChart id="bookDonutChart"
-					model="#{bookController.productDonutModel}" />
+				<p:chart id="bookDonutChart"
+					value="#{bookController.productDonutModel}" type="donut" />
 			</p:panel>
 			<p:panel id="inventory" header="Inventory">
-				<p:lineChart id="inventoryLineChart"
-					model="#{inventoryController.lineModel}" />
+				<p:chart id="inventoryLineChart"
+					value="#{inventoryController.lineModel}" type="line" />
 			</p:panel>
 		</p:dashboard>
 	</ui:define>

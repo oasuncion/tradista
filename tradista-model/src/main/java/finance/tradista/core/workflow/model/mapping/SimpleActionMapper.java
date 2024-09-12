@@ -1,7 +1,10 @@
 package finance.tradista.core.workflow.model.mapping;
 
+import java.util.stream.Collectors;
+
 import finance.tradista.core.workflow.model.SimpleAction;
 import finance.tradista.flow.model.Workflow;
+import finance.tradista.flow.model.WorkflowObject;
 
 /********************************************************************************
  * Copyright (c) 2023 Olivier Asuncion
@@ -24,7 +27,7 @@ public final class SimpleActionMapper {
 	private SimpleActionMapper() {
 	}
 
-	public static SimpleAction map(finance.tradista.flow.model.SimpleAction action) {
+	public static SimpleAction map(finance.tradista.flow.model.SimpleAction<?> action) {
 		SimpleAction actionResult = null;
 		if (action != null) {
 			actionResult = new SimpleAction();
@@ -32,22 +35,34 @@ public final class SimpleActionMapper {
 			actionResult.setName(action.getName());
 			actionResult.setArrivalStatus(StatusMapper.map(action.getArrivalStatus()));
 			actionResult.setDepartureStatus(StatusMapper.map(action.getDepartureStatus()));
-			actionResult.setGuard(GuardMapper.map(action.getGuard()));
-			actionResult.setProcess(ProcessMapper.map(action.getProcess()));
+			if (action.getGuards() != null) {
+				actionResult.setGuards(action.getGuards().stream().map(GuardMapper::map).collect(Collectors.toSet()));
+			}
+			if (action.getProcesses() != null) {
+				actionResult.setProcesses(
+						action.getProcesses().stream().map(ProcessMapper::map).collect(Collectors.toSet()));
+			}
 		}
 		return actionResult;
 	}
 
-	public static finance.tradista.flow.model.SimpleAction map(SimpleAction action, Workflow workflow) {
-		finance.tradista.flow.model.SimpleAction actionResult = null;
+	public static <X extends WorkflowObject> finance.tradista.flow.model.SimpleAction<X> map(SimpleAction action,
+			Workflow<X> workflow) {
+		finance.tradista.flow.model.SimpleAction<X> actionResult = null;
 		if (action != null) {
-			actionResult = new finance.tradista.flow.model.SimpleAction();
+			actionResult = new finance.tradista.flow.model.SimpleAction<>();
 			actionResult.setId(action.getId());
 			actionResult.setName(action.getName());
 			actionResult.setArrivalStatus(StatusMapper.map(action.getArrivalStatus(), workflow));
 			actionResult.setDepartureStatus(StatusMapper.map(action.getDepartureStatus(), workflow));
-			actionResult.setGuard(GuardMapper.map(action.getGuard()));
-			actionResult.setProcess(ProcessMapper.map(action.getProcess()));
+			if (action.getGuards() != null) {
+				actionResult.setGuards(
+						action.getGuards().stream().map(GuardMapper::map).collect(Collectors.toSet()));
+			}
+			if (action.getProcesses() != null) {
+				actionResult.setProcesses(
+						action.getProcesses().stream().map(ProcessMapper::map).collect(Collectors.toSet()));
+			}
 			actionResult.setWorkflow(workflow);
 		}
 		return actionResult;

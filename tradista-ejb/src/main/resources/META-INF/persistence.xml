@@ -28,6 +28,8 @@
 		</class>
 		<class>finance.tradista.security.repo.workflow.guard.TradeEndDateReached
 		</class>
+		<class>finance.tradista.security.repo.workflow.guard.IsSubstitutionAllowed
+		</class>
 		<properties>
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.DerbyDialect" />

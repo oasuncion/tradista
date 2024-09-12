@@ -1,6 +1,7 @@
 package finance.tradista.core.workflow.model;
 
 import java.util.Objects;
+import java.util.Set;
 
 import finance.tradista.core.common.model.TradistaModelUtil;
 import finance.tradista.core.common.model.TradistaObject;
@@ -33,7 +34,7 @@ public abstract class Action extends TradistaObject {
 
 	private Status departureStatus;
 
-	private Guard guard;
+	private Set<Guard> guards;
 
 	public String getName() {
 		return name;
@@ -59,19 +60,21 @@ public abstract class Action extends TradistaObject {
 		this.departureStatus = departureStatus;
 	}
 
-	public Guard getGuard() {
-		return TradistaModelUtil.clone(guard);
+	@SuppressWarnings("unchecked")
+	public Set<Guard> getGuards() {
+		return (Set<Guard>) TradistaModelUtil.deepCopy(guards);
 	}
 
-	public void setGuard(Guard guard) {
-		this.guard = guard;
+	public void setGuards(Set<Guard> guards) {
+		this.guards = guards;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Action clone() {
 		Action action = (Action) super.clone();
 		action.departureStatus = TradistaModelUtil.clone(departureStatus);
-		action.guard = TradistaModelUtil.clone(guard);
+		action.guards = (Set<Guard>) TradistaModelUtil.deepCopy(guards);
 		return action;
 	}
 

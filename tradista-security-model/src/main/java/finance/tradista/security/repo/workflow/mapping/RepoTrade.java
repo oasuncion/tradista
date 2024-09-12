@@ -178,6 +178,15 @@ public abstract class RepoTrade implements WorkflowObject {
 		return collateralToRemove;
 	}
 
+	public boolean isRightOfSubstitution() {
+		boolean isRightOfSubstitution = false;
+		;
+		if (repoTrade != null) {
+			isRightOfSubstitution = repoTrade.isRightOfSubstitution();
+		}
+		return isRightOfSubstitution;
+	}
+
 	@Override
 	public finance.tradista.flow.model.WorkflowObject clone() throws java.lang.CloneNotSupportedException {
 		RepoTrade repoTrade = (RepoTrade) super.clone();

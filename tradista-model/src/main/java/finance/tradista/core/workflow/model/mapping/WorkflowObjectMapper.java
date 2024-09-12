@@ -25,13 +25,14 @@ public final class WorkflowObjectMapper {
 	private WorkflowObjectMapper() {
 	}
 
-	public static finance.tradista.flow.model.WorkflowObject map(WorkflowObject wo, Workflow wkf) {
+	public static finance.tradista.flow.model.WorkflowObject map(WorkflowObject wo, Workflow<?> wkf) {
 		return new finance.tradista.flow.model.WorkflowObject() {
 
-			private finance.tradista.flow.model.Status status = StatusMapper.map(wo.getStatus(), wkf);
+			private finance.tradista.flow.model.Status<?> status = StatusMapper.map(wo.getStatus(), wkf);
 
+			@SuppressWarnings("unchecked")
 			@Override
-			public finance.tradista.flow.model.Status getStatus() {
+			public finance.tradista.flow.model.Status<?> getStatus() {
 				return status;
 			}
 
@@ -41,7 +42,7 @@ public final class WorkflowObjectMapper {
 			}
 
 			@Override
-			public void setStatus(finance.tradista.flow.model.Status status) {
+			public void setStatus(finance.tradista.flow.model.Status<?> status) {
 				this.status = status;
 			}
 

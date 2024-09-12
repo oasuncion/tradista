@@ -3,6 +3,7 @@ package finance.tradista.core.workflow.model.mapping;
 import finance.tradista.core.workflow.model.PseudoStatus;
 import finance.tradista.core.workflow.model.Status;
 import finance.tradista.flow.model.Workflow;
+import finance.tradista.flow.model.WorkflowObject;
 
 /********************************************************************************
  * Copyright (c) 2023 Olivier Asuncion
@@ -25,7 +26,7 @@ public final class StatusMapper {
 	private StatusMapper() {
 	}
 
-	public static Status map(finance.tradista.flow.model.Status status) {
+	public static Status map(finance.tradista.flow.model.Status<?> status) {
 		Status statusResult = null;
 		if (status != null) {
 			if (status instanceof finance.tradista.flow.model.PseudoStatus) {
@@ -40,13 +41,14 @@ public final class StatusMapper {
 		return statusResult;
 	}
 
-	public static finance.tradista.flow.model.Status map(Status status, Workflow workflow) {
-		finance.tradista.flow.model.Status statusResult = null;
+	public static <X extends WorkflowObject> finance.tradista.flow.model.Status<X> map(Status status,
+			Workflow<X> workflow) {
+		finance.tradista.flow.model.Status<X> statusResult = null;
 		if (status != null) {
 			if (status instanceof PseudoStatus) {
-				statusResult = new finance.tradista.flow.model.PseudoStatus();
+				statusResult = new finance.tradista.flow.model.PseudoStatus<>();
 			} else {
-				statusResult = new finance.tradista.flow.model.Status();
+				statusResult = new finance.tradista.flow.model.Status<>();
 			}
 			statusResult.setId(status.getId());
 			statusResult.setName(status.getName());

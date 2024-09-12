@@ -4,6 +4,7 @@ import finance.tradista.core.workflow.model.Action;
 import finance.tradista.core.workflow.model.ConditionalAction;
 import finance.tradista.core.workflow.model.SimpleAction;
 import finance.tradista.flow.model.Workflow;
+import finance.tradista.flow.model.WorkflowObject;
 
 /********************************************************************************
  * Copyright (c) 2023 Olivier Asuncion
@@ -26,20 +27,21 @@ public final class ActionMapper {
 	private ActionMapper() {
 	}
 
-	public static Action map(finance.tradista.flow.model.Action action) {
+	public static Action map(finance.tradista.flow.model.Action<?> action) {
 		Action actionResult = null;
 		if (action != null) {
-			if (action instanceof finance.tradista.flow.model.SimpleAction simpleAction) {
+			if (action instanceof finance.tradista.flow.model.SimpleAction<?> simpleAction) {
 				actionResult = SimpleActionMapper.map(simpleAction);
 			} else {
-				actionResult = ConditionalActionMapper.map((finance.tradista.flow.model.ConditionalAction) action);
+				actionResult = ConditionalActionMapper.map((finance.tradista.flow.model.ConditionalAction<?>) action);
 			}
 		}
 		return actionResult;
 	}
 
-	public static finance.tradista.flow.model.Action map(Action action, Workflow workflow) {
-		finance.tradista.flow.model.Action actionResult = null;
+	public static <X extends WorkflowObject> finance.tradista.flow.model.Action<X> map(Action action,
+			Workflow<X> workflow) {
+		finance.tradista.flow.model.Action<X> actionResult = null;
 		if (action != null) {
 			if (action instanceof SimpleAction simpleAction) {
 				actionResult = SimpleActionMapper.map(simpleAction, workflow);

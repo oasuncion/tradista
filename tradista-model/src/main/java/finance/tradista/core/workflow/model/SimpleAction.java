@@ -1,6 +1,7 @@
 package finance.tradista.core.workflow.model;
 
 import java.util.Objects;
+import java.util.Set;
 
 import finance.tradista.core.common.model.TradistaModelUtil;
 
@@ -24,16 +25,17 @@ public class SimpleAction extends Action {
 
 	private static final long serialVersionUID = 1L;
 
-	private Process process;
+	private Set<Process> processes;
 
 	private Status arrivalStatus;
 
-	public Process getProcess() {
-		return TradistaModelUtil.clone(process);
+	@SuppressWarnings("unchecked")
+	public Set<Process> getProcesses() {
+		return (Set<Process>) TradistaModelUtil.deepCopy(processes);
 	}
 
-	public void setProcess(Process process) {
-		this.process = process;
+	public void setProcesses(Set<Process> processes) {
+		this.processes = processes;
 	}
 
 	public Status getArrivalStatus() {
@@ -44,11 +46,12 @@ public class SimpleAction extends Action {
 		this.arrivalStatus = arrivalStatus;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SimpleAction clone() {
 		SimpleAction action = (SimpleAction) super.clone();
 		action.arrivalStatus = TradistaModelUtil.clone(arrivalStatus);
-		action.process = TradistaModelUtil.clone(process);
+		action.processes = (Set<Process>) TradistaModelUtil.deepCopy(processes);
 		return action;
 	}
 

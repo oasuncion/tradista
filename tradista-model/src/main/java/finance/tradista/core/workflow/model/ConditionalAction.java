@@ -29,8 +29,6 @@ public class ConditionalAction extends Action {
 
 	private Map<Integer, Status> conditionalRouting;
 
-	private Map<Status, Process> conditionalProcesses;
-
 	private Status choicePseudoStatus;
 
 	private Set<SimpleAction> conditionalActions;
@@ -50,15 +48,6 @@ public class ConditionalAction extends Action {
 
 	public void setConditionalRouting(Map<Integer, Status> conditionalRouting) {
 		this.conditionalRouting = conditionalRouting;
-	}
-
-	@SuppressWarnings("unchecked")
-	public Map<Status, Process> getConditionalProcesses() {
-		return (Map<Status, Process>) TradistaModelUtil.deepCopy(conditionalProcesses);
-	}
-
-	public void setConditionalProcesses(Map<Status, Process> conditionalProcesses) {
-		this.conditionalProcesses = conditionalProcesses;
 	}
 
 	public Status getChoicePseudoStatus() {
@@ -84,7 +73,6 @@ public class ConditionalAction extends Action {
 		ConditionalAction action = (ConditionalAction) super.clone();
 		action.condition = TradistaModelUtil.clone(condition);
 		action.conditionalRouting = (Map<Integer, Status>) TradistaModelUtil.deepCopy(conditionalRouting);
-		action.conditionalProcesses = (Map<Status, Process>) TradistaModelUtil.deepCopy(conditionalProcesses);
 		action.conditionalActions = (Set<SimpleAction>) TradistaModelUtil.deepCopy(conditionalActions);
 		return action;
 	}

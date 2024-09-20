@@ -223,4 +223,10 @@ public class SpecificRepoPricerBusinessDelegate implements Serializable {
 		return SecurityUtil
 				.runEx(() -> specificRepoPricerService.discountedPayments(trade, currency, pricingDate, params));
 	}
+
+	public BigDecimal getDelta(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> specificRepoPricerService.getDelta(trade, currency, pricingDate, params));
+	}
 }

@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.cashflow.model.CashFlow;
 import finance.tradista.core.common.exception.TradistaBusinessException;
@@ -31,7 +33,11 @@ import finance.tradista.core.processingorgdefaults.model.ProcessingOrgDefaults;
 import finance.tradista.core.processingorgdefaults.service.ProcessingOrgDefaultsBusinessDelegate;
 import finance.tradista.core.transfer.model.TransferPurpose;
 import finance.tradista.security.bond.model.Bond;
+import finance.tradista.security.bond.model.BondTrade;
+import finance.tradista.security.bond.service.BondPricerBusinessDelegate;
 import finance.tradista.security.common.model.Security;
+import finance.tradista.security.equity.model.Equity;
+import finance.tradista.security.equity.pricer.PricerEquityUtil;
 import finance.tradista.security.repo.model.ProcessingOrgDefaultsCollateralManagementModule;
 import finance.tradista.security.repo.model.RepoTrade;
 import finance.tradista.security.repo.trade.RepoTradeUtil;
@@ -59,6 +65,8 @@ public final class RepoPricerUtil {
 	private static QuoteBusinessDelegate quoteBusinessDelegate = new QuoteBusinessDelegate();
 
 	private static ConfigurationBusinessDelegate configurationBusinessDelegate = new ConfigurationBusinessDelegate();
+
+	private static BondPricerBusinessDelegate bondPricerBusinessDelegate = new BondPricerBusinessDelegate();
 
 	private RepoPricerUtil() {
 	}
@@ -524,7 +532,7 @@ public final class RepoPricerUtil {
 				if (paramFXCurve == null) {
 					// TODO Add log warn
 				}
-				// 1. Primary currency IR curve retrieval
+				// 1. Trade currency IR curve retrieval
 				InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(tradeCurrency);
 				if (paramTradeCurrIRCurve == null) {
 					throw new TradistaBusinessException(String.format(
@@ -592,6 +600,100 @@ public final class RepoPricerUtil {
 		}
 
 		return pnl;
+	}
+
+	public static BigDecimal getDelta(RepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+
+		if (!pricingDate.isAfter(trade.getSettlementDate())) {
+			throw new TradistaBusinessException(
+					"Delta cannot be calculated when the pricing date is not after the repo trade settlement date");
+		}
+		// 1. Trade currency IR curve retrieval
+		InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(trade.getCurrency());
+		if (paramTradeCurrIRCurve == null) {
+			throw new TradistaBusinessException(String.format(
+					"%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.",
+					params.getName(), trade.getCurrency()));
+		}
+		// 2. Get collateral prices variations
+
+		// 2.a Get the collaterals
+		Map<Security, Map<Book, BigDecimal>> allocatedSecurities = RepoTradeUtil.getAllocatedCollateral(trade);
+
+		BigDecimal collateralsPricesVariation = BigDecimal.ZERO;
+
+		// 2.b browse the collaterals and calculate the prices variations
+		if (!ObjectUtils.isEmpty(allocatedSecurities)) {
+			for (Map.Entry<Security, Map<Book, BigDecimal>> entry : allocatedSecurities.entrySet()) {
+				Security security = entry.getKey();
+				BigDecimal quantity = entry.getValue().values().stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+				String quoteName = security.getProductType() + "." + security.getIsin() + "." + security.getExchange();
+				QuoteType quoteType = security.getProductType().equals(Bond.BOND) ? QuoteType.BOND_PRICE
+						: QuoteType.EQUITY_PRICE;
+				// Get price as of trade settlement date
+				BigDecimal initialPrice = PricerUtil.getValueAsOfDateFromQuote(quoteName, params.getQuoteSet().getId(),
+						quoteType, QuoteValue.CLOSE, trade.getSettlementDate());
+				BigDecimal price = null;
+				if (pricingDate.isBefore(LocalDate.now()) || pricingDate.isEqual(LocalDate.now())) {
+					String quoteValueType = pricingDate.isBefore(LocalDate.now()) ? QuoteValue.CLOSE : QuoteValue.LAST;
+					price = PricerUtil.getValueAsOfDateFromQuote(quoteName, params.getQuoteSet().getId(), quoteType,
+							quoteValueType, pricingDate);
+					if (price == null) {
+						throw new TradistaBusinessException(String.format(
+								"Price for security %s cannot be found as of %tD (quote name: %s, quote type: %s, quote value type: %s, quote set: %s)",
+								security.getIsin(), pricingDate, quoteName, quoteType, quoteValueType,
+								params.getQuoteSet()));
+					}
+				}
+				if (pricingDate.isAfter(LocalDate.now())) {
+					if (security.getProductType().equals(Bond.BOND)) {
+						// Create a dummy bond trade for determination of the bond clean price
+						BondTrade dummyTrade = new BondTrade();
+						dummyTrade.setCounterparty(trade.getCounterparty());
+						dummyTrade.setAmount(BigDecimal.ONE);
+						dummyTrade.setQuantity(BigDecimal.ONE);
+						dummyTrade.setTradeDate(trade.getTradeDate());
+						dummyTrade.setSettlementDate(trade.getSettlementDate());
+						dummyTrade.setBook(trade.getBook());
+						dummyTrade.setBuySell(trade.isBuy());
+						dummyTrade.setProduct((Bond) security);
+						price = bondPricerBusinessDelegate.cleanPriceDiscountedCashFlow(params, dummyTrade, currency,
+								pricingDate);
+					} else {
+						try {
+							price = PricerEquityUtil.getEquityPrice(params, (Equity) security, pricingDate);
+						} catch (PricerException pe) {
+							throw new TradistaBusinessException(pe);
+						}
+					}
+				}
+				collateralsPricesVariation = collateralsPricesVariation
+						.add((price.subtract(initialPrice)).multiply(quantity));
+			}
+		} else {
+			throw new TradistaBusinessException(
+					"Delta cannot be calculated: there is no allocated collateral for the repo trade.");
+		}
+		// 3. Convert the collateral prices variation in pricing currency
+		collateralsPricesVariation = PricerUtil.convertAmount(collateralsPricesVariation, currency, currency,
+				pricingDate, params.getQuoteSet().getId(), paramTradeCurrIRCurve.getId());
+
+		// 4. Get the repo trade value variation
+		// 4.a Get the repo trade value as of trade settlement date
+		BigDecimal initialRepoTradePrice = discountedPayments(trade, currency, trade.getSettlementDate(), params);
+		// 4.b Get the repo trade value as of pricing date
+		BigDecimal repoTradePrice = discountedPayments(trade, currency, pricingDate, params);
+		BigDecimal repoTradeValueVariation = repoTradePrice.subtract(initialRepoTradePrice);
+
+		// 5. Convert the repo trade value variation in pricing currency
+		repoTradeValueVariation = PricerUtil.convertAmount(repoTradeValueVariation, currency, currency, pricingDate,
+				params.getQuoteSet().getId(), paramTradeCurrIRCurve.getId());
+
+		// 6. Calculate the delta : repo trade value variation in pricing currency /
+		// collateral prices variation in pricing currency
+		return repoTradeValueVariation.divide(collateralsPricesVariation,
+				configurationBusinessDelegate.getRoundingMode());
 	}
 
 }

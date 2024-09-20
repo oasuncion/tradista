@@ -59,4 +59,7 @@ public interface GCRepoPricerService {
 	BigDecimal discountedPayments(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException;
 
+	BigDecimal getDelta(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException;
+
 }

@@ -195,9 +195,6 @@ public class GCRepoPricerBusinessDelegate implements Serializable {
 	}
 
 	public BigDecimal getCurrentExposure(GCRepoTrade trade) throws TradistaBusinessException {
-		if (trade == null) {
-			throw new TradistaBusinessException(String.format(TRADE_IS_MANDATORY));
-		}
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentExposure(trade));
 	}
@@ -218,5 +215,11 @@ public class GCRepoPricerBusinessDelegate implements Serializable {
 			PricingParameter params) throws TradistaBusinessException {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> gcRepoPricerService.discountedPayments(trade, currency, pricingDate, params));
+	}
+
+	public BigDecimal getDelta(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> gcRepoPricerService.getDelta(trade, currency, pricingDate, params));
 	}
 }

@@ -77,7 +77,7 @@ public final class PricerEquityUtil {
 		return price;
 	}
 
-	private static BigDecimal getEquityPrice(PricingParameter params, Equity equity, LocalDate date)
+	public static BigDecimal getEquityPrice(PricingParameter params, Equity equity, LocalDate date)
 			throws PricerException, TradistaBusinessException {
 		EquityTrade trade = new EquityTrade();
 

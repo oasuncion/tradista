@@ -59,4 +59,7 @@ public interface SpecificRepoPricerService {
 	BigDecimal discountedPayments(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
 			PricingParameter params) throws TradistaBusinessException;
 
+	BigDecimal getDelta(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException;
+
 }

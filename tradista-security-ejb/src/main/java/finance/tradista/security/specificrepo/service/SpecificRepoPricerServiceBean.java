@@ -93,5 +93,11 @@ public class SpecificRepoPricerServiceBean implements SpecificRepoPricerService 
 			PricingParameter params) throws TradistaBusinessException {
 		return RepoPricerUtil.discountedPayments(trade, currency, pricingDate, params);
 	}
+	
+	@Override
+	public BigDecimal getDelta(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		return RepoPricerUtil.getDelta(trade, currency, pricingDate, params);
+	}
 
 }

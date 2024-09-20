@@ -94,4 +94,10 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 		return RepoPricerUtil.discountedPayments(trade, currency, pricingDate, params);
 	}
 
+	@Override
+	public BigDecimal getDelta(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException {
+		return RepoPricerUtil.getDelta(trade, currency, pricingDate, params);
+	}
+
 }

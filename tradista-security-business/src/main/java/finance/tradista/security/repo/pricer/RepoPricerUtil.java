@@ -60,6 +60,8 @@ import finance.tradista.security.repo.trade.RepoTradeUtil;
 
 public final class RepoPricerUtil {
 
+	private static String PP_DOES_NOT_CONTAIN_DISCOUNT_CURVE = "%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.";
+
 	private static ProcessingOrgDefaultsBusinessDelegate poDefaultsBusinessDelegate = new ProcessingOrgDefaultsBusinessDelegate();
 
 	private static QuoteBusinessDelegate quoteBusinessDelegate = new QuoteBusinessDelegate();
@@ -189,7 +191,7 @@ public final class RepoPricerUtil {
 		borrowedCashValue = calculateCashValue(trade, pricingDate, params);
 
 		// 2. Get the collateral value
-		collateralValue = calculateCollateralValue(trade, currency, pricingDate, params);
+		collateralValue = calculateCollateralValue(trade, currency, pricingDate);
 
 		// 3. Deduce the exposition
 		// For the trade buyer (cash taker), exposure is collateral value - borrowed
@@ -203,13 +205,12 @@ public final class RepoPricerUtil {
 		return exposure;
 	}
 
-	private static BigDecimal calculateCollateralValue(RepoTrade trade, Currency currency, LocalDate pricingDate,
-			PricingParameter params) throws TradistaBusinessException {
+	private static BigDecimal calculateCollateralValue(RepoTrade trade, Currency currency, LocalDate pricingDate)
+			throws TradistaBusinessException {
 		BigDecimal collateralValue;
-		// 2. Get the collateral value
-		// 2.a get the collateral MTM
+		// 1. Get the collateral MTM
 		collateralValue = calculateCollateralMarketToMarket(trade, currency, pricingDate);
-		// 2.b Apply the margin rate (by convention, margin rate is noted as follows:
+		// 2. Apply the margin rate (by convention, margin rate is noted as follows:
 		// 105
 		// for 5%)
 		BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
@@ -221,9 +222,8 @@ public final class RepoPricerUtil {
 			throws TradistaBusinessException {
 		BigDecimal borrowedCashValue;
 		BigDecimal rate;
-		// 1. Calculate the borrowed cash value
 
-		// 1.a Determinate the repo rate
+		// 1. Determinate the repo rate
 		if (trade.isFixedRepoRate()) {
 			rate = trade.getRepoRate();
 			rate = rate.divide(new BigDecimal(100));
@@ -242,7 +242,7 @@ public final class RepoPricerUtil {
 			}
 		}
 
-		// 1.b Calculate the borrowed cash
+		// 2. Calculate the borrowed cash
 		borrowedCashValue = trade.getAmount().add(
 				trade.getAmount().multiply(rate.multiply(PricerUtil.daysToYear(LocalDate.now(), trade.getEndDate()))));
 		return borrowedCashValue;
@@ -286,7 +286,7 @@ public final class RepoPricerUtil {
 	}
 
 	public static BigDecimal getCurrentCollateralValue(RepoTrade trade) throws TradistaBusinessException {
-		return calculateCollateralValue(trade, trade.getCurrency(), LocalDate.now(), null);
+		return calculateCollateralValue(trade, trade.getCurrency(), LocalDate.now());
 	}
 
 	public static List<CashFlow> generateCashFlows(PricingParameter params, RepoTrade trade, LocalDate pricingDate)
@@ -577,9 +577,8 @@ public final class RepoPricerUtil {
 				// 1. Trade currency IR curve retrieval
 				InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(tradeCurrency);
 				if (paramTradeCurrIRCurve == null) {
-					throw new TradistaBusinessException(String.format(
-							"%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.",
-							params.getName(), tradeCurrency));
+					throw new TradistaBusinessException(
+							String.format(PP_DOES_NOT_CONTAIN_DISCOUNT_CURVE, params.getName(), tradeCurrency));
 				}
 
 				// 2. Discount the opening leg payment
@@ -614,9 +613,8 @@ public final class RepoPricerUtil {
 				// 1. Primary currency IR curve retrieval
 				InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(tradeCurrency);
 				if (paramTradeCurrIRCurve == null) {
-					throw new TradistaBusinessException(String.format(
-							"%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.",
-							params.getName(), tradeCurrency));
+					throw new TradistaBusinessException(
+							String.format(PP_DOES_NOT_CONTAIN_DISCOUNT_CURVE, params.getName(), tradeCurrency));
 				}
 				// 2. Get the closing payment amount
 				BigDecimal amount = RepoTradeUtil.getClosingLegPayment(trade, params.getQuoteSet().getId(), dcc);
@@ -654,9 +652,8 @@ public final class RepoPricerUtil {
 		// 1. Trade currency IR curve retrieval
 		InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(trade.getCurrency());
 		if (paramTradeCurrIRCurve == null) {
-			throw new TradistaBusinessException(String.format(
-					"%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.",
-					params.getName(), trade.getCurrency()));
+			throw new TradistaBusinessException(
+					String.format(PP_DOES_NOT_CONTAIN_DISCOUNT_CURVE, params.getName(), trade.getCurrency()));
 		}
 		// 2. Get collateral prices variations
 

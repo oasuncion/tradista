@@ -32,19 +32,24 @@ public class IsAllocated extends Condition<RepoTrade> {
 	public IsAllocated() {
 		setFunction(trade -> {
 			// Calculate the total MTM value of the collateral
+			BigDecimal collateralValue;
 			BigDecimal mtm = RepoPricerUtil.getCurrentCollateralMarketToMarket(trade.getOriginalRepoTrade());
 
+			// Add the MTM of the collateral being added
 			if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
 				mtm = mtm.add(RepoPricerUtil.getCollateralMarketToMarket(trade.getCollateralToAdd(),
 						trade.getBook().getProcessingOrg(), LocalDate.now()));
 			}
 
-			// Calculate the exposure (required collateral)
-			BigDecimal exposure = RepoPricerUtil.getCurrentExposure(trade.getOriginalRepoTrade());
+			// Applied the margin rate to this MTM
+			collateralValue = mtm.divide(trade.getMarginRate().divide(new BigDecimal(100)));
 
-			// Compare the collateral value and the required collateral
+			// Calculate the current value of cash
+			BigDecimal cashValue = RepoPricerUtil.getCurrentCashValue(trade.getOriginalRepoTrade());
 
-			return exposure.compareTo(mtm) != -1 ? 1 : 2;
+			// Compare collateral and cash values
+
+			return collateralValue.compareTo(cashValue) == -1 ? 1 : 2;
 
 		});
 	}

@@ -95,6 +95,15 @@ public final class RepoPricerUtil {
 		return mtm;
 	}
 
+	private static BigDecimal calculateCollateralMarketToMarket(RepoTrade trade, Currency currency,
+			LocalDate pricingDate) throws TradistaBusinessException {
+		// 1. Get the current collateral
+		Map<Security, Map<Book, BigDecimal>> securities = RepoTradeUtil.getAllocatedCollateral(trade);
+
+		// 2. Get the MTM of the current collateral as of pricing date
+		return getCollateralMarketToMarket(securities, trade.getBook().getProcessingOrg(), pricingDate);
+	}
+
 	public static BigDecimal getCurrentCollateralMarketToMarket(RepoTrade trade) throws TradistaBusinessException {
 		// 1. Get the current collateral
 		Map<Security, Map<Book, BigDecimal>> securities = RepoTradeUtil.getAllocatedCollateral(trade);
@@ -153,20 +162,75 @@ public final class RepoPricerUtil {
 	public static BigDecimal getExposure(RepoTrade trade, Currency currency, LocalDate pricingDate,
 			PricingParameter params) throws TradistaBusinessException {
 		BigDecimal exposure;
-		BigDecimal rate;
 		CurrencyPair pair = new CurrencyPair(trade.getCurrency(), currency);
 		FXCurve paramTradeCcyPricingCcyFXCurve = params.getFxCurves().get(pair);
 		if (paramTradeCcyPricingCcyFXCurve == null) {
 			// TODO Add log warn
 		}
 
-		// Calculate the required exposure
+		exposure = calculateExposure(trade, currency, pricingDate, params);
 
+		if (!currency.equals(trade.getCurrency())) {
+			exposure = PricerUtil.convertAmount(exposure, trade.getCurrency(), currency, pricingDate,
+					params.getQuoteSet().getId(),
+					paramTradeCcyPricingCcyFXCurve != null ? paramTradeCcyPricingCcyFXCurve.getId() : 0);
+		}
+
+		return exposure;
+	}
+
+	private static BigDecimal calculateExposure(RepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		BigDecimal exposure;
+		BigDecimal collateralValue;
+		BigDecimal borrowedCashValue;
+
+		// 1. Calculate the borrowed cash value
+		borrowedCashValue = calculateCashValue(trade, pricingDate, params);
+
+		// 2. Get the collateral value
+		collateralValue = calculateCollateralValue(trade, currency, pricingDate, params);
+
+		// 3. Deduce the exposition
+		// For the trade buyer (cash taker), exposure is collateral value - borrowed
+		// cash value
+		exposure = collateralValue.subtract(borrowedCashValue);
+		// For the trade seller (cash giver), exposure is borrowed cash value -
+		// collateral value
+		if (trade.isSell()) {
+			exposure = exposure.negate();
+		}
+		return exposure;
+	}
+
+	private static BigDecimal calculateCollateralValue(RepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		BigDecimal collateralValue;
+		// 2. Get the collateral value
+		// 2.a get the collateral MTM
+		collateralValue = calculateCollateralMarketToMarket(trade, currency, pricingDate);
+		// 2.b Apply the margin rate (by convention, margin rate is noted as follows:
+		// 105
+		// for 5%)
+		BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
+		collateralValue = collateralValue.divide(marginRate);
+		return collateralValue;
+	}
+
+	private static BigDecimal calculateCashValue(RepoTrade trade, LocalDate pricingDate, PricingParameter params)
+			throws TradistaBusinessException {
+		BigDecimal borrowedCashValue;
+		BigDecimal rate;
+		// 1. Calculate the borrowed cash value
+
+		// 1.a Determinate the repo rate
 		if (trade.isFixedRepoRate()) {
 			rate = trade.getRepoRate();
+			rate = rate.divide(new BigDecimal(100));
 		} else {
 			if (!pricingDate.isAfter(LocalDate.now())) {
 				rate = getFloatingRate(trade, pricingDate);
+				rate = rate.divide(new BigDecimal(100));
 			} else {
 				InterestRateCurve indexCurve = params.getIndexCurves().get(trade.getIndex());
 				try {
@@ -178,21 +242,10 @@ public final class RepoPricerUtil {
 			}
 		}
 
-		exposure = trade.getAmount()
-				.multiply(rate.multiply(PricerUtil.daysToYear(LocalDate.now(), trade.getEndDate())));
-
-		// Apply the margin rate (by convention, margin rate is noted as follows: 105
-		// for 5%)
-		BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
-		exposure = exposure.multiply(marginRate);
-
-		if (!currency.equals(trade.getCurrency())) {
-			exposure = PricerUtil.convertAmount(exposure, trade.getCurrency(), currency, pricingDate,
-					params.getQuoteSet().getId(),
-					paramTradeCcyPricingCcyFXCurve != null ? paramTradeCcyPricingCcyFXCurve.getId() : 0);
-		}
-
-		return exposure;
+		// 1.b Calculate the borrowed cash
+		borrowedCashValue = trade.getAmount().add(
+				trade.getAmount().multiply(rate.multiply(PricerUtil.daysToYear(LocalDate.now(), trade.getEndDate()))));
+		return borrowedCashValue;
 	}
 
 	private static BigDecimal getFloatingRate(RepoTrade trade, LocalDate date) throws TradistaBusinessException {
@@ -225,26 +278,15 @@ public final class RepoPricerUtil {
 	}
 
 	public static BigDecimal getCurrentExposure(RepoTrade trade) throws TradistaBusinessException {
-		BigDecimal exposure;
-		BigDecimal rate;
+		return calculateExposure(trade, trade.getCurrency(), LocalDate.now(), null);
+	}
 
-		// Calculate the required exposure
+	public static BigDecimal getCurrentCashValue(RepoTrade trade) throws TradistaBusinessException {
+		return calculateCashValue(trade, LocalDate.now(), null);
+	}
 
-		if (trade.isFixedRepoRate()) {
-			rate = trade.getRepoRate();
-		} else {
-			rate = getFloatingRate(trade, LocalDate.now());
-		}
-
-		exposure = trade.getAmount()
-				.multiply(rate.multiply(PricerUtil.daysToYear(LocalDate.now(), trade.getEndDate())));
-
-		// Apply the margin rate (by convention, margin rate is noted as follows: 105
-		// for 5%)
-		BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
-		exposure = exposure.multiply(marginRate);
-
-		return exposure;
+	public static BigDecimal getCurrentCollateralValue(RepoTrade trade) throws TradistaBusinessException {
+		return calculateCollateralValue(trade, trade.getCurrency(), LocalDate.now(), null);
 	}
 
 	public static List<CashFlow> generateCashFlows(PricingParameter params, RepoTrade trade, LocalDate pricingDate)

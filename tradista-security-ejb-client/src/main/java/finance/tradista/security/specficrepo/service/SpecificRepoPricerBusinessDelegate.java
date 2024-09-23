@@ -197,11 +197,13 @@ public class SpecificRepoPricerBusinessDelegate implements Serializable {
 	}
 
 	public BigDecimal getCurrentExposure(SpecificRepoTrade trade) throws TradistaBusinessException {
-		if (trade == null) {
-			throw new TradistaBusinessException(String.format(TRADE_IS_MANDATORY));
-		}
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> specificRepoPricerService.getCurrentExposure(trade));
+	}
+	
+	public BigDecimal getCurrentCollateralValue(SpecificRepoTrade trade) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> specificRepoPricerService.getCurrentCollateralValue(trade));
 	}
 
 	public BigDecimal pnlDefault(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,

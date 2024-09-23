@@ -199,6 +199,11 @@ public class GCRepoPricerBusinessDelegate implements Serializable {
 		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentExposure(trade));
 	}
 
+	public BigDecimal getCurrentCollateralValue(GCRepoTrade trade) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentExposure(trade));
+	}
+
 	public BigDecimal pnlDefault(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException {
 		validator.validateTrade(trade);

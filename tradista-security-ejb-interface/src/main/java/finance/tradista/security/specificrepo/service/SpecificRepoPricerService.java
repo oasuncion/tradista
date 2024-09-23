@@ -49,6 +49,8 @@ public interface SpecificRepoPricerService {
 	BigDecimal getCurrentCollateralMarketToMarket(SpecificRepoTrade trade) throws TradistaBusinessException;
 
 	BigDecimal getCurrentExposure(SpecificRepoTrade trade) throws TradistaBusinessException;
+	
+	BigDecimal getCurrentCollateralValue(SpecificRepoTrade trade) throws TradistaBusinessException;
 
 	BigDecimal pnlDefault(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException;

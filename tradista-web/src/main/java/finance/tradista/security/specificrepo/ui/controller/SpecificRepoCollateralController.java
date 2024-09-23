@@ -88,7 +88,7 @@ public class SpecificRepoCollateralController implements Serializable {
 
 	private List<Collateral> removedCollateralValues;
 
-	private String collateralMarketValueDonutModel;
+	private String collateralValueDonutModel;
 
 	private String securityToAdd;
 
@@ -160,7 +160,7 @@ public class SpecificRepoCollateralController implements Serializable {
 		DoughnutChart dc = new DoughnutChart();
 		dc.setData(DoughnutChart.data());
 		dc.getData().addDataset(new DoughnutDataset());
-		collateralMarketValueDonutModel = dc.toJson();
+		collateralValueDonutModel = dc.toJson();
 	}
 
 	public List<Collateral> getCollateralValues() {
@@ -498,7 +498,7 @@ public class SpecificRepoCollateralController implements Serializable {
 		collateralValues = null;
 		addedCollateralValues = null;
 		availableCollateralValues = null;
-		collateralMarketValueDonutModel = null;
+		collateralValueDonutModel = null;
 		securityQuoteNames = null;
 	}
 
@@ -600,12 +600,12 @@ public class SpecificRepoCollateralController implements Serializable {
 		this.context = context;
 	}
 
-	public String getCollateralMarketValueDonutModel() {
-		return collateralMarketValueDonutModel;
+	public String getCollateralValueDonutModel() {
+		return collateralValueDonutModel;
 	}
 
-	public void setCollateralMarketValueDonutModel(String collateralMarketValueDonutModel) {
-		this.collateralMarketValueDonutModel = collateralMarketValueDonutModel;
+	public void setCollateralValueDonutModel(String collateralValueDonutModel) {
+		this.collateralValueDonutModel = collateralValueDonutModel;
 	}
 
 	public String getSecurityToAdd() {
@@ -667,14 +667,21 @@ public class SpecificRepoCollateralController implements Serializable {
 	public void refreshDonutModel() {
 
 		try {
-			BigDecimal collateralMarketValue = specificRepoPricerBusinessDelegate
-					.getCurrentCollateralMarketToMarket(trade);
+			BigDecimal collateralValue = specificRepoPricerBusinessDelegate.getCurrentCollateralValue(trade);
 			BigDecimal exposure = specificRepoPricerBusinessDelegate.getCurrentExposure(trade);
+			BigDecimal pendingCollateralValue = BigDecimal.ZERO;
+			BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
+
+			// We want to show : cash value - collateral value, ie the exposition for the
+			// repo seller (cash giver)
+			if (trade.isBuy()) {
+				exposure = exposure.negate();
+			}
 
 			// Add collateral added from the GUI
 			Map<Security, Map<Book, BigDecimal>> addedSecurities = getAddedSecurities();
 			if (addedSecurities != null && !addedSecurities.isEmpty()) {
-				collateralMarketValue = collateralMarketValue
+				pendingCollateralValue = pendingCollateralValue
 						.add(specificRepoPricerBusinessDelegate.getCollateralMarketToMarket(addedSecurities,
 								trade.getBook().getProcessingOrg(), LocalDate.now()));
 			}
@@ -682,24 +689,31 @@ public class SpecificRepoCollateralController implements Serializable {
 			// Remove collateral removed from the GUI
 			Map<Security, Map<Book, BigDecimal>> removedSecurities = getRemovedSecurities();
 			if (removedSecurities != null && !removedSecurities.isEmpty()) {
-				collateralMarketValue = collateralMarketValue
+				pendingCollateralValue = pendingCollateralValue
 						.subtract(specificRepoPricerBusinessDelegate.getCollateralMarketToMarket(removedSecurities,
 								trade.getBook().getProcessingOrg(), LocalDate.now()));
 			}
 
+			pendingCollateralValue = pendingCollateralValue.divide(marginRate);
+			collateralValue = collateralValue.add(pendingCollateralValue);
+			exposure = exposure.subtract(pendingCollateralValue);
+
+			collateralValue = collateralValue.max(BigDecimal.ZERO);
+			exposure = exposure.max(BigDecimal.ZERO);
+
 			List<Number> values = new ArrayList<>();
-			values.add(collateralMarketValue);
-			values.add(exposure.subtract(collateralMarketValue));
+			values.add(collateralValue);
+			values.add(exposure);
 
 			List<Color> bgColors = new ArrayList<>();
 			bgColors.add(ColorUtil.getTurquoise());
 			bgColors.add(ColorUtil.getBloodRed());
 
 			List<String> labels = new ArrayList<>();
-			labels.add("Collateral Mark to Market");
+			labels.add("Collateral Value");
 			labels.add("Uncovered exposure");
 
-			collateralMarketValueDonutModel = new DoughnutChart()
+			collateralValueDonutModel = new DoughnutChart()
 					.setData(new DoughnutData().addDataset(
 							new DoughnutDataset().setData(values).addBackgroundColors(bgColors.toArray(new Color[0])))
 							.setLabels(labels))

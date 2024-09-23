@@ -69,6 +69,11 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	public BigDecimal getCurrentExposure(GCRepoTrade trade) throws TradistaBusinessException {
 		return RepoPricerUtil.getCurrentExposure(trade);
 	}
+	
+	@Override
+	public BigDecimal getCurrentCollateralValue(GCRepoTrade trade) throws TradistaBusinessException {
+		return RepoPricerUtil.getCurrentCollateralValue(trade);
+	}
 
 	@Override
 	public List<CashFlow> generateCashFlows(PricingParameter params, GCRepoTrade trade, LocalDate pricingDate)

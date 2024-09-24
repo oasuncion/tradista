@@ -1,4 +1,4 @@
-package finance.tradista.security.specficrepo.service;
+package finance.tradista.security.specificrepo.service;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

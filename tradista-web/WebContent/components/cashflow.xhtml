@@ -13,7 +13,7 @@
 						<p:commandButton value="Generate" styleClass="rounded-button"
 							update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable">
 							<f:actionListener
-								binding="#{cashflowsController.generate(gCRepoTradeController.gcRepoTrade, pricingController.pricingParameter, pricingController.pricingDate)}" />
+								binding="#{cashflowsController.generate(tradeController.trade, pricingController.pricingParameter, pricingController.pricingDate)}" />
 						</p:commandButton>
 					</p:column>
 					<p:column>

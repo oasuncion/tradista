@@ -71,6 +71,11 @@ public class SpecificRepoPricerServiceBean implements SpecificRepoPricerService 
 	}
 
 	@Override
+	public BigDecimal getCurrentCollateralValue(SpecificRepoTrade trade) throws TradistaBusinessException {
+		return RepoPricerUtil.getCurrentCollateralValue(trade);
+	}
+
+	@Override
 	public List<CashFlow> generateCashFlows(PricingParameter params, SpecificRepoTrade trade, LocalDate pricingDate)
 			throws TradistaBusinessException {
 		return RepoPricerUtil.generateCashFlows(params, trade, pricingDate);
@@ -93,11 +98,23 @@ public class SpecificRepoPricerServiceBean implements SpecificRepoPricerService 
 			PricingParameter params) throws TradistaBusinessException {
 		return RepoPricerUtil.discountedPayments(trade, currency, pricingDate, params);
 	}
-	
+
 	@Override
 	public BigDecimal getDelta(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
 			PricingParameter params) throws TradistaBusinessException {
 		return RepoPricerUtil.getDelta(trade, currency, pricingDate, params);
+	}
+
+	@Override
+	public BigDecimal getPendingCollateralValue(SpecificRepoTrade trade,
+			Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException {
+		return RepoPricerUtil.getPendingCollateralValue(trade, addedSecurities, removedSecurities);
+	}
+
+	@Override
+	public BigDecimal getCurrentCashValue(SpecificRepoTrade trade) throws TradistaBusinessException {
+		return RepoPricerUtil.getCurrentCashValue(trade);
 	}
 
 }

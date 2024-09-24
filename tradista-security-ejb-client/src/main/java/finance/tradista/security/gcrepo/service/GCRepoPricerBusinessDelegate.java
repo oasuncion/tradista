@@ -199,6 +199,11 @@ public class GCRepoPricerBusinessDelegate implements Serializable {
 		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentExposure(trade));
 	}
 
+	public BigDecimal getCurrentCollateralValue(GCRepoTrade trade) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentExposure(trade));
+	}
+
 	public BigDecimal pnlDefault(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException {
 		validator.validateTrade(trade);
@@ -221,5 +226,17 @@ public class GCRepoPricerBusinessDelegate implements Serializable {
 			throws TradistaBusinessException {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> gcRepoPricerService.getDelta(trade, currency, pricingDate, params));
+	}
+
+	public BigDecimal getPendingCollateralValue(GCRepoTrade trade, Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil
+				.runEx(() -> gcRepoPricerService.getPendingCollateralValue(trade, addedSecurities, removedSecurities));
+	}
+
+	public BigDecimal getCurrentCashValue(GCRepoTrade trade) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentCashValue(trade));
 	}
 }

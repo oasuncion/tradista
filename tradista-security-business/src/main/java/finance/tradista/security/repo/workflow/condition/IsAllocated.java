@@ -1,7 +1,6 @@
 package finance.tradista.security.repo.workflow.condition;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import finance.tradista.flow.model.Condition;
 import finance.tradista.security.repo.pricer.RepoPricerUtil;
@@ -32,19 +31,15 @@ public class IsAllocated extends Condition<RepoTrade> {
 	public IsAllocated() {
 		setFunction(trade -> {
 			// Calculate the total MTM value of the collateral
-			BigDecimal mtm = RepoPricerUtil.getCurrentCollateralMarketToMarket(trade.getOriginalRepoTrade());
+			BigDecimal collateralValue = RepoPricerUtil.getPendingCollateralValue(trade.getOriginalRepoTrade(),
+					trade.getCollateralToAdd(), trade.getCollateralToRemove());
 
-			if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
-				mtm = mtm.add(RepoPricerUtil.getCollateralMarketToMarket(trade.getCollateralToAdd(),
-						trade.getBook().getProcessingOrg(), LocalDate.now()));
-			}
+			// Calculate the current value of cash
+			BigDecimal cashValue = RepoPricerUtil.getCurrentCashValue(trade.getOriginalRepoTrade());
 
-			// Calculate the exposure (required collateral)
-			BigDecimal exposure = RepoPricerUtil.getCurrentExposure(trade.getOriginalRepoTrade());
+			// Compare collateral and cash values
 
-			// Compare the collateral value and the required collateral
-
-			return exposure.compareTo(mtm) != -1 ? 1 : 2;
+			return collateralValue.compareTo(cashValue) == -1 ? 1 : 2;
 
 		});
 	}

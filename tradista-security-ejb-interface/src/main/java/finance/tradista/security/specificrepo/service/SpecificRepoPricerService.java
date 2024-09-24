@@ -50,6 +50,8 @@ public interface SpecificRepoPricerService {
 
 	BigDecimal getCurrentExposure(SpecificRepoTrade trade) throws TradistaBusinessException;
 
+	BigDecimal getCurrentCollateralValue(SpecificRepoTrade trade) throws TradistaBusinessException;
+
 	BigDecimal pnlDefault(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException;
 
@@ -61,5 +63,10 @@ public interface SpecificRepoPricerService {
 
 	BigDecimal getDelta(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException;
+
+	BigDecimal getPendingCollateralValue(SpecificRepoTrade trade, Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException;
+
+	BigDecimal getCurrentCashValue(SpecificRepoTrade trade) throws TradistaBusinessException;
 
 }

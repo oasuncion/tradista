@@ -105,4 +105,16 @@ public class SpecificRepoPricerServiceBean implements SpecificRepoPricerService 
 		return RepoPricerUtil.getDelta(trade, currency, pricingDate, params);
 	}
 
+	@Override
+	public BigDecimal getPendingCollateralValue(SpecificRepoTrade trade,
+			Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException {
+		return RepoPricerUtil.getPendingCollateralValue(trade, addedSecurities, removedSecurities);
+	}
+
+	@Override
+	public BigDecimal getCurrentCashValue(SpecificRepoTrade trade) throws TradistaBusinessException {
+		return RepoPricerUtil.getCurrentCashValue(trade);
+	}
+
 }

@@ -735,4 +735,26 @@ public final class RepoPricerUtil {
 				configurationBusinessDelegate.getRoundingMode());
 	}
 
+	public static BigDecimal getPendingCollateralValue(RepoTrade trade,
+			Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException {
+		BigDecimal collateralValue = getCurrentCollateralValue(trade);
+		BigDecimal pendingCollateralValue = BigDecimal.ZERO;
+		BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
+
+		// Add collateral added from the GUI
+		if (!ObjectUtils.isEmpty(addedSecurities)) {
+			pendingCollateralValue = pendingCollateralValue.add(
+					getCollateralMarketToMarket(addedSecurities, trade.getBook().getProcessingOrg(), LocalDate.now()));
+		}
+
+		// Remove collateral removed from the GUI
+		if (!ObjectUtils.isEmpty(removedSecurities)) {
+			pendingCollateralValue = pendingCollateralValue.subtract(getCollateralMarketToMarket(removedSecurities,
+					trade.getBook().getProcessingOrg(), LocalDate.now()));
+		}
+		pendingCollateralValue = pendingCollateralValue.divide(marginRate);
+		return collateralValue.add(pendingCollateralValue);
+	}
+
 }

@@ -1,7 +1,6 @@
 package finance.tradista.security.repo.workflow.condition;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import finance.tradista.flow.model.Condition;
 import finance.tradista.security.repo.pricer.RepoPricerUtil;
@@ -32,17 +31,8 @@ public class IsAllocated extends Condition<RepoTrade> {
 	public IsAllocated() {
 		setFunction(trade -> {
 			// Calculate the total MTM value of the collateral
-			BigDecimal collateralValue;
-			BigDecimal mtm = RepoPricerUtil.getCurrentCollateralMarketToMarket(trade.getOriginalRepoTrade());
-
-			// Add the MTM of the collateral being added
-			if (trade.getCollateralToAdd() != null && !trade.getCollateralToAdd().isEmpty()) {
-				mtm = mtm.add(RepoPricerUtil.getCollateralMarketToMarket(trade.getCollateralToAdd(),
-						trade.getBook().getProcessingOrg(), LocalDate.now()));
-			}
-
-			// Applied the margin rate to this MTM
-			collateralValue = mtm.divide(trade.getMarginRate().divide(new BigDecimal(100)));
+			BigDecimal collateralValue = RepoPricerUtil.getPendingCollateralValue(trade.getOriginalRepoTrade(),
+					trade.getCollateralToAdd(), trade.getCollateralToRemove());
 
 			// Calculate the current value of cash
 			BigDecimal cashValue = RepoPricerUtil.getCurrentCashValue(trade.getOriginalRepoTrade());

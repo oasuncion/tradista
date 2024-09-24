@@ -200,7 +200,7 @@ public class SpecificRepoPricerBusinessDelegate implements Serializable {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> specificRepoPricerService.getCurrentExposure(trade));
 	}
-	
+
 	public BigDecimal getCurrentCollateralValue(SpecificRepoTrade trade) throws TradistaBusinessException {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> specificRepoPricerService.getCurrentCollateralValue(trade));
@@ -230,5 +230,18 @@ public class SpecificRepoPricerBusinessDelegate implements Serializable {
 			PricingParameter params) throws TradistaBusinessException {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> specificRepoPricerService.getDelta(trade, currency, pricingDate, params));
+	}
+
+	public BigDecimal getPendingCollateralValue(SpecificRepoTrade trade,
+			Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(
+				() -> specificRepoPricerService.getPendingCollateralValue(trade, addedSecurities, removedSecurities));
+	}
+
+	public BigDecimal getCurrentCashValue(SpecificRepoTrade trade) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil.runEx(() -> specificRepoPricerService.getCurrentCashValue(trade));
 	}
 }

@@ -691,34 +691,10 @@ public class GCRepoCollateralController implements Serializable {
 	public void refreshDonutModel() {
 
 		try {
-			BigDecimal collateralValue = gcRepoPricerBusinessDelegate.getCurrentCollateralValue(trade);
-			BigDecimal exposure = gcRepoPricerBusinessDelegate.getCurrentExposure(trade);
-			BigDecimal pendingCollateralValue = BigDecimal.ZERO;
-			BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
-
-			// We want to show : cash value - collateral value, ie the exposition for the
-			// repo seller (cash giver)
-			if (trade.isBuy()) {
-				exposure = exposure.negate();
-			}
-
-			// Add collateral added from the GUI
-			Map<Security, Map<Book, BigDecimal>> addedSecurities = getAddedSecurities();
-			if (addedSecurities != null && !addedSecurities.isEmpty()) {
-				collateralValue = collateralValue.add(gcRepoPricerBusinessDelegate.getCollateralMarketToMarket(
-						addedSecurities, trade.getBook().getProcessingOrg(), LocalDate.now()));
-			}
-
-			// Remove collateral removed from the GUI
-			Map<Security, Map<Book, BigDecimal>> removedSecurities = getRemovedSecurities();
-			if (removedSecurities != null && !removedSecurities.isEmpty()) {
-				collateralValue = collateralValue.subtract(gcRepoPricerBusinessDelegate.getCollateralMarketToMarket(
-						removedSecurities, trade.getBook().getProcessingOrg(), LocalDate.now()));
-			}
-
-			pendingCollateralValue = pendingCollateralValue.divide(marginRate);
-			collateralValue = collateralValue.add(pendingCollateralValue);
-			exposure = exposure.subtract(pendingCollateralValue);
+			BigDecimal collateralValue = gcRepoPricerBusinessDelegate.getPendingCollateralValue(trade,
+					getAddedSecurities(), getRemovedSecurities());
+			BigDecimal cashValue = gcRepoPricerBusinessDelegate.getCurrentCashValue(trade);
+			BigDecimal exposure = cashValue.subtract(collateralValue);
 
 			collateralValue = collateralValue.max(BigDecimal.ZERO);
 			exposure = exposure.max(BigDecimal.ZERO);

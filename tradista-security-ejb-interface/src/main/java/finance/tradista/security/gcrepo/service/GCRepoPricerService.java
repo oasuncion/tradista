@@ -64,4 +64,9 @@ public interface GCRepoPricerService {
 
 	BigDecimal getCurrentCollateralValue(GCRepoTrade trade) throws TradistaBusinessException;
 
+	BigDecimal getPendingCollateralValue(GCRepoTrade trade, Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException;
+
+	BigDecimal getCurrentCashValue(GCRepoTrade trade) throws TradistaBusinessException;
+
 }

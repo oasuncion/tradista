@@ -667,36 +667,10 @@ public class SpecificRepoCollateralController implements Serializable {
 	public void refreshDonutModel() {
 
 		try {
-			BigDecimal collateralValue = specificRepoPricerBusinessDelegate.getCurrentCollateralValue(trade);
-			BigDecimal exposure = specificRepoPricerBusinessDelegate.getCurrentExposure(trade);
-			BigDecimal pendingCollateralValue = BigDecimal.ZERO;
-			BigDecimal marginRate = trade.getMarginRate().divide(BigDecimal.valueOf(100));
-
-			// We want to show : cash value - collateral value, ie the exposition for the
-			// repo seller (cash giver)
-			if (trade.isBuy()) {
-				exposure = exposure.negate();
-			}
-
-			// Add collateral added from the GUI
-			Map<Security, Map<Book, BigDecimal>> addedSecurities = getAddedSecurities();
-			if (addedSecurities != null && !addedSecurities.isEmpty()) {
-				pendingCollateralValue = pendingCollateralValue
-						.add(specificRepoPricerBusinessDelegate.getCollateralMarketToMarket(addedSecurities,
-								trade.getBook().getProcessingOrg(), LocalDate.now()));
-			}
-
-			// Remove collateral removed from the GUI
-			Map<Security, Map<Book, BigDecimal>> removedSecurities = getRemovedSecurities();
-			if (removedSecurities != null && !removedSecurities.isEmpty()) {
-				pendingCollateralValue = pendingCollateralValue
-						.subtract(specificRepoPricerBusinessDelegate.getCollateralMarketToMarket(removedSecurities,
-								trade.getBook().getProcessingOrg(), LocalDate.now()));
-			}
-
-			pendingCollateralValue = pendingCollateralValue.divide(marginRate);
-			collateralValue = collateralValue.add(pendingCollateralValue);
-			exposure = exposure.subtract(pendingCollateralValue);
+			BigDecimal collateralValue = specificRepoPricerBusinessDelegate.getPendingCollateralValue(trade,
+					getAddedSecurities(), getRemovedSecurities());
+			BigDecimal cashValue = specificRepoPricerBusinessDelegate.getCurrentCashValue(trade);
+			BigDecimal exposure = cashValue.subtract(collateralValue);
 
 			collateralValue = collateralValue.max(BigDecimal.ZERO);
 			exposure = exposure.max(BigDecimal.ZERO);

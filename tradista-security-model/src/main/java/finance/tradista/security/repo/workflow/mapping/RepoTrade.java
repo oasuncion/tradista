@@ -180,7 +180,6 @@ public abstract class RepoTrade implements WorkflowObject {
 
 	public boolean isRightOfSubstitution() {
 		boolean isRightOfSubstitution = false;
-		;
 		if (repoTrade != null) {
 			isRightOfSubstitution = repoTrade.isRightOfSubstitution();
 		}

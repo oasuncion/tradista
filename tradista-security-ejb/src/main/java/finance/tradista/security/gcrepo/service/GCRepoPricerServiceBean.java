@@ -69,7 +69,7 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	public BigDecimal getCurrentExposure(GCRepoTrade trade) throws TradistaBusinessException {
 		return RepoPricerUtil.getCurrentExposure(trade);
 	}
-	
+
 	@Override
 	public BigDecimal getCurrentCollateralValue(GCRepoTrade trade) throws TradistaBusinessException {
 		return RepoPricerUtil.getCurrentCollateralValue(trade);
@@ -103,6 +103,17 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 	public BigDecimal getDelta(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException {
 		return RepoPricerUtil.getDelta(trade, currency, pricingDate, params);
+	}
+
+	@Override
+	public BigDecimal getPendingCollateralValue(GCRepoTrade trade, Map<Security, Map<Book, BigDecimal>> addedSecurities,
+			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException {
+		return RepoPricerUtil.getPendingCollateralValue(trade, addedSecurities, removedSecurities);
+	}
+
+	@Override
+	public BigDecimal getCurrentCashValue(GCRepoTrade trade) throws TradistaBusinessException {
+		return RepoPricerUtil.getCurrentCashValue(trade);
 	}
 
 }

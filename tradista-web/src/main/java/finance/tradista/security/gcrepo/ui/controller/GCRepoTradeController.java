@@ -118,14 +118,15 @@ public class GCRepoTradeController implements Serializable {
 		allIndexes = indexBusinessDelegate.getAllIndexes();
 		allBooks = bookBusinessDelegate.getAllBooks();
 		allDirections = Trade.Direction.values();
-		trade = new GCRepoTrade();
 		allInterestTypes = new String[] { "Fixed", "Floating" };
 		allIndexTenors = Arrays.asList(Tenor.values()).stream().filter(t -> !t.equals(Tenor.NO_TENOR))
 				.toArray(Tenor[]::new);
 		allBaskets = gcBasketBusinessDelegate.getAllGCBaskets();
+		workflow = workflowBusinessDelegate.getWorkflowByName(GCRepoTrade.GC_REPO);
+		trade = new GCRepoTrade();
+		trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
-		workflow = workflowBusinessDelegate.getWorkflowByName(GCRepoTrade.GC_REPO);
 	}
 
 	public String getId() {
@@ -397,8 +398,6 @@ public class GCRepoTradeController implements Serializable {
 			final String actionToApply = (action != null) ? action : Action.NEW;
 			if (trade.getId() == 0) {
 				trade.setCreationDate(LocalDate.now());
-				trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
-
 			}
 			if (interestType == null || interestType.equals("Fixed")) {
 				trade.setIndex(null);
@@ -516,6 +515,12 @@ public class GCRepoTradeController implements Serializable {
 
 	public void clear() {
 		trade = new GCRepoTrade();
+		try {
+			trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+		} catch (TradistaBusinessException tbe) {
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", String.format("Could not clear trade data: %s", tbe.getMessage())));
+		}
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
 		originalCashAmount = null;

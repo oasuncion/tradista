@@ -65,7 +65,7 @@ public class CashflowsController implements Serializable {
 
 	public void generate(RepoTrade trade, PricingParameter pp, LocalDate pricingDate) {
 		try {
-			cashflows = pricerBusinessDelegate.generateCashFlows(trade.getId(), pp, pricingDate);
+			cashflows = pricerBusinessDelegate.generateCashFlows(trade, pp, pricingDate);
 		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(CF_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));

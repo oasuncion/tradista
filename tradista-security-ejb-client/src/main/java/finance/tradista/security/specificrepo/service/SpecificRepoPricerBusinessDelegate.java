@@ -17,7 +17,6 @@ import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.specificrepo.model.SpecificRepoTrade;
-import finance.tradista.security.specificrepo.service.SpecificRepoPricerService;
 import finance.tradista.security.specificrepo.validator.SpecificRepoTradeValidator;
 
 /********************************************************************************

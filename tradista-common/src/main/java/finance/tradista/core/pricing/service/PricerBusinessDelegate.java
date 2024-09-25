@@ -28,6 +28,7 @@ import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.core.pricing.pricer.PricingParameterModule;
 import finance.tradista.core.product.model.Product;
 import finance.tradista.core.trade.model.Trade;
+import finance.tradista.core.trade.validator.TradeValidator;
 
 /********************************************************************************
  * Copyright (c) 2018 Olivier Asuncion
@@ -529,6 +530,37 @@ public class PricerBusinessDelegate {
 			throw new TradistaBusinessException(errMsg.toString());
 		}
 		return SecurityUtil.runEx(() -> pricerService.generateCashFlows(tradeId, pp, valueDate));
+	}
+	
+	public List<CashFlow> generateCashFlows(Trade<?> trade, PricingParameter pp, LocalDate valueDate)
+			throws TradistaBusinessException {
+
+		StringBuilder errMsg = new StringBuilder();
+		TradeValidator validator;
+		
+		if (trade == null) {
+			errMsg.append(TRADE_IS_MANDATORY);
+		} else {
+		validator = TradistaUtil.getTradeValidator(trade.getProductType());
+		try {
+		validator.validateTrade(trade);
+		} catch (TradistaBusinessException tbe) {
+			errMsg.append(tbe.getMessage());
+		}
+		}		
+		
+		if (pp == null) {
+			errMsg.append(String.format(PRICING_PARAMETERS_SET_IS_MANDATORY));
+		}
+
+		if (valueDate == null) {
+			errMsg.append(String.format(VALUE_DATE_IS_MANDATORY));
+		}
+
+		if (errMsg.length() > 0) {
+			throw new TradistaBusinessException(errMsg.toString());
+		}
+		return SecurityUtil.runEx(() -> pricerService.generateCashFlows(trade, pp, valueDate));
 	}
 
 	public List<CashFlow> generateCashFlows(PricingParameter pp, LocalDate valueDate, long positionDefinitionId)

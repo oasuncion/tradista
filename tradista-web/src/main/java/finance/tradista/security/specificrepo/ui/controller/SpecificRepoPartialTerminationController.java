@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.security.repo.ui.controller.PartialTermination;
-import finance.tradista.security.specficrepo.service.SpecificRepoTradeBusinessDelegate;
 import finance.tradista.security.specificrepo.model.SpecificRepoTrade;
+import finance.tradista.security.specificrepo.service.SpecificRepoTradeBusinessDelegate;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;

@@ -11,8 +11,8 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.currency.model.Currency;
 import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.pricing.pricer.PricingParameter;
-import finance.tradista.security.gcrepo.model.GCRepoTrade;
-import finance.tradista.security.gcrepo.service.GCRepoPricerBusinessDelegate;
+import finance.tradista.core.pricing.service.PricerBusinessDelegate;
+import finance.tradista.security.repo.model.RepoTrade;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -47,12 +47,12 @@ public class CashflowsController implements Serializable {
 
 	private InterestRateCurve discountCurve;
 
-	private GCRepoPricerBusinessDelegate gcRepoPricerBusinessDelegate;
+	private PricerBusinessDelegate pricerBusinessDelegate;
 
 	@PostConstruct
 	public void init() {
 		cashflows = Collections.synchronizedList(new ArrayList<CashFlow>());
-		gcRepoPricerBusinessDelegate = new GCRepoPricerBusinessDelegate();
+		pricerBusinessDelegate = new PricerBusinessDelegate();
 	}
 
 	public void setCashflows(List<CashFlow> cashflows) {
@@ -63,9 +63,9 @@ public class CashflowsController implements Serializable {
 		return cashflows;
 	}
 
-	public void generate(GCRepoTrade trade, PricingParameter pp, LocalDate pricingDate) {
+	public void generate(RepoTrade trade, PricingParameter pp, LocalDate pricingDate) {
 		try {
-			cashflows = gcRepoPricerBusinessDelegate.generateCashFlows(trade, pp, pricingDate);
+			cashflows = pricerBusinessDelegate.generateCashFlows(trade, pp, pricingDate);
 		} catch (TradistaBusinessException tbe) {
 			FacesContext.getCurrentInstance().addMessage(CF_MSG,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));

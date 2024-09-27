@@ -45,8 +45,7 @@ public class CashFlowPreFilteringInterceptor extends TradistaAuthorizationFilter
 
 	protected void preFilter(InvocationContext ic) throws TradistaBusinessException {
 		Object[] parameters = ic.getParameters();
-		if (parameters[0] instanceof Long) {
-			long tradeId = (long) parameters[0];
+		if (parameters[0] instanceof Long tradeId) {
 			if (tradeId != 0) {
 				Trade<?> trade = tradeBusinessDelegate.getTradeById(tradeId, false);
 				if (trade == null) {

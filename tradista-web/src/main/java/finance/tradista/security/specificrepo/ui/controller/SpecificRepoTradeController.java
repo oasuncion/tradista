@@ -26,8 +26,8 @@ import finance.tradista.core.workflow.service.WorkflowBusinessDelegate;
 import finance.tradista.legalentity.service.LegalEntityBusinessDelegate;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.common.service.SecurityBusinessDelegate;
-import finance.tradista.security.specficrepo.service.SpecificRepoTradeBusinessDelegate;
 import finance.tradista.security.specificrepo.model.SpecificRepoTrade;
+import finance.tradista.security.specificrepo.service.SpecificRepoTradeBusinessDelegate;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -117,14 +117,15 @@ public class SpecificRepoTradeController implements Serializable {
 		allIndexes = indexBusinessDelegate.getAllIndexes();
 		allBooks = bookBusinessDelegate.getAllBooks();
 		allDirections = Trade.Direction.values();
-		trade = new SpecificRepoTrade();
 		allInterestTypes = new String[] { "Fixed", "Floating" };
 		allIndexTenors = Arrays.asList(Tenor.values()).stream().filter(t -> !t.equals(Tenor.NO_TENOR))
 				.toArray(Tenor[]::new);
 		allSecurities = securityBusinessDelegate.getAllSecurities();
+		workflow = workflowBusinessDelegate.getWorkflowByName(SpecificRepoTrade.SPECIFIC_REPO);
+		trade = new SpecificRepoTrade();
+		trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
-		workflow = workflowBusinessDelegate.getWorkflowByName(SpecificRepoTrade.SPECIFIC_REPO);
 	}
 
 	public String getId() {
@@ -396,8 +397,6 @@ public class SpecificRepoTradeController implements Serializable {
 			final String actionToApply = (action != null) ? action : Action.NEW;
 			if (trade.getId() == 0) {
 				trade.setCreationDate(LocalDate.now());
-				trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
-
 			}
 			if (interestType == null || interestType.equals("Fixed")) {
 				trade.setIndex(null);
@@ -515,6 +514,12 @@ public class SpecificRepoTradeController implements Serializable {
 
 	public void clear() {
 		trade = new SpecificRepoTrade();
+		try {
+			trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+		} catch (TradistaBusinessException tbe) {
+			FacesContext.getCurrentInstance().addMessage(TRADE_MSG, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", String.format("Could not clear trade data: %s", tbe.getMessage())));
+		}
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
 		originalCashAmount = null;

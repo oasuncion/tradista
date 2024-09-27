@@ -23,6 +23,7 @@ import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.error.model.Error;
 import finance.tradista.core.product.service.ProductBusinessDelegate;
 import finance.tradista.core.trade.messaging.TradeEvent;
+import finance.tradista.core.trade.validator.TradeValidator;
 import finance.tradista.core.transfer.model.TransferManager;
 
 /********************************************************************************
@@ -47,6 +48,8 @@ public final class TradistaUtil {
 	}
 
 	private static Map<String, TransferManager<TradeEvent<?>>> transferManagersCache = new HashMap<>();
+
+	private static Map<String, TradeValidator> tradeValidatorCache = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public static <T> List<Class<T>> getAllClassesByType(Class<T> type, String pckg) {
@@ -163,6 +166,18 @@ public final class TradistaUtil {
 					getClassByProductTypeSubPackageAndName(productType, "transfer", productType + "TransferManager"));
 			transferManagersCache.put(productType, transferManager);
 			return transferManager;
+		}
+	}
+
+	public static TradeValidator getTradeValidator(String productType) throws TradistaBusinessException {
+
+		if (tradeValidatorCache.containsKey(productType)) {
+			return tradeValidatorCache.get(productType);
+		} else {
+			TradeValidator tradeValidator = (TradeValidator) TradistaUtil.getInstance(
+					getClassByProductTypeSubPackageAndName(productType, "validator", productType + "TradeValidator"));
+			tradeValidatorCache.put(productType, tradeValidator);
+			return tradeValidator;
 		}
 	}
 

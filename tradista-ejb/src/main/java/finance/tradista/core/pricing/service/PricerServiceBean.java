@@ -206,6 +206,21 @@ public class PricerServiceBean implements PricerService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CashFlow> generateCashFlows(Trade<?> trade, PricingParameter pp, LocalDate valueDate)
+			throws TradistaBusinessException {
+		try {
+			String productFamily = productBusinessDelegate.getProductFamily(trade.getProductType());
+			String fullClassName = TRADISTA_PACKAGE + "." + productFamily + "." + trade.getProductType().toLowerCase()
+					+ ".service." + trade.getProductType() + "PricerBusinessDelegate";
+			return (TradistaUtil.callMethod(fullClassName, List.class, "generateCashFlows", trade, pp, valueDate));
+		} catch (TradistaBusinessException tbe) {
+			String errMsg = "Trade id " + trade.getId() + ": " + tbe.getMessage();
+			throw new TradistaBusinessException(errMsg);
+		}
+	}
+
 	@Interceptors({ PositionDefinitionProductScopeFilteringInterceptor.class, CashFlowPreFilteringInterceptor.class })
 	@SuppressWarnings("unchecked")
 	@Override

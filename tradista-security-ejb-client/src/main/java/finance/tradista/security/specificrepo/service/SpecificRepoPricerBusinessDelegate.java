@@ -1,4 +1,4 @@
-package finance.tradista.security.specficrepo.service;
+package finance.tradista.security.specificrepo.service;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,7 +17,6 @@ import finance.tradista.core.marketdata.model.InterestRateCurve;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.specificrepo.model.SpecificRepoTrade;
-import finance.tradista.security.specificrepo.service.SpecificRepoPricerService;
 import finance.tradista.security.specificrepo.validator.SpecificRepoTradeValidator;
 
 /********************************************************************************

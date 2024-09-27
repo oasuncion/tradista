@@ -483,7 +483,10 @@
 						<p:panel>
 							<p:tabView id="quotesCashflowsTabs">
 								<ui:include src="/components/quote.xhtml" />
-								<ui:include src="/components/cashflow.xhtml" />
+								<ui:include src="/components/cashflow.xhtml">
+									<ui:param name="tradeController"
+										value="#{gCRepoTradeController}" />
+								</ui:include>
 							</p:tabView>
 						</p:panel>
 					</p:column>

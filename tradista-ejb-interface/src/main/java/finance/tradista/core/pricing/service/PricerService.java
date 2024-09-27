@@ -9,6 +9,7 @@ import finance.tradista.core.common.exception.TradistaBusinessException;
 import finance.tradista.core.pricing.pricer.Pricer;
 import finance.tradista.core.pricing.pricer.PricerMeasure;
 import finance.tradista.core.pricing.pricer.PricingParameter;
+import finance.tradista.core.trade.model.Trade;
 import jakarta.ejb.Remote;
 
 /********************************************************************************
@@ -47,6 +48,9 @@ public interface PricerService {
 	Set<String> getPricingParametersSetByQuoteSetId(long quoteSetId);
 
 	List<CashFlow> generateCashFlows(long tradeId, PricingParameter pp, LocalDate valueDate)
+			throws TradistaBusinessException;
+
+	List<CashFlow> generateCashFlows(Trade<?> trade, PricingParameter pp, LocalDate valueDate)
 			throws TradistaBusinessException;
 
 	List<CashFlow> generateCashFlows(PricingParameter pp, LocalDate valueDate, long positionDefinitionId)

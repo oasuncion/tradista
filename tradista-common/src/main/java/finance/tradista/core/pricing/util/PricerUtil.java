@@ -1058,4 +1058,19 @@ public final class PricerUtil {
 		}
 		return totalFlowsAmount;
 	}
+
+	/**
+	 * Divides dividend by divisor, using scale and rounding mode from Tradista
+	 * configuration.
+	 * 
+	 * @param dividend the dividend
+	 * @param divisor  the divisor (should be different from 0)
+	 * @return dividend/divisor (using scale and rounding mode from Tradista
+	 *         configuration)
+	 */
+	public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor) {
+		return dividend.divide(divisor, configurationBusinessDelegate.getScale(),
+				configurationBusinessDelegate.getRoundingMode());
+	}
+
 }

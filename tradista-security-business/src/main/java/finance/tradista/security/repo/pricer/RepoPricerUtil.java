@@ -60,7 +60,7 @@ import finance.tradista.security.repo.trade.RepoTradeUtil;
 
 public final class RepoPricerUtil {
 
-	private static String PP_DOES_NOT_CONTAIN_DISCOUNT_CURVE = "%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.";
+	private static final String PP_DOES_NOT_CONTAIN_DISCOUNT_CURVE = "%s Pricing Parameter doesn't contain a discount curve for currency %s. please add it or change the Pricing Parameter.";
 
 	private static ProcessingOrgDefaultsBusinessDelegate poDefaultsBusinessDelegate = new ProcessingOrgDefaultsBusinessDelegate();
 
@@ -753,7 +753,7 @@ public final class RepoPricerUtil {
 			pendingCollateralValue = pendingCollateralValue.subtract(getCollateralMarketToMarket(removedSecurities,
 					trade.getBook().getProcessingOrg(), LocalDate.now()));
 		}
-		pendingCollateralValue = pendingCollateralValue.divide(marginRate);
+		pendingCollateralValue = PricerUtil.divide(pendingCollateralValue, marginRate);
 		return collateralValue.add(pendingCollateralValue);
 	}
 

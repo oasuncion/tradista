@@ -714,6 +714,12 @@ public final class RepoPricerUtil {
 			throw new TradistaBusinessException(
 					"Delta cannot be calculated: there is no allocated collateral for the repo trade.");
 		}
+
+		// If there is no collateral price variation, we cannot calculate the delta
+		if (collateralsPricesVariation.compareTo(BigDecimal.ZERO) == 0) {
+			throw new TradistaBusinessException(
+					"Delta cannot be calculated: there is no collateral price variation for the repo trade.");
+		}
 		// 3. Convert the collateral prices variation in pricing currency
 		collateralsPricesVariation = PricerUtil.convertAmount(collateralsPricesVariation, currency, currency,
 				pricingDate, params.getQuoteSet().getId(), paramTradeCurrIRCurve.getId());

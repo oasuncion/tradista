@@ -8,6 +8,7 @@ import finance.tradista.core.calendar.model.BlankCalendar;
 import finance.tradista.core.calendar.model.Calendar;
 import finance.tradista.core.calendar.service.CalendarBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.ui.controller.TradistaControllerAdapter;
 import finance.tradista.core.common.ui.util.TradistaGUIUtil;
 import finance.tradista.core.common.ui.view.TradistaAlert;
@@ -84,22 +85,22 @@ public class ExchangesController extends TradistaControllerAdapter {
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			try {
+				if (code.isVisible()) {
+					exchange = new Exchange(code.getText());
+					codeLabel.setText(code.getText());
+				}
 				if (!calendar.getValue().equals(BlankCalendar.getInstance())) {
 					exchange.setCalendar(calendar.getValue());
 				} else {
 					exchange.setCalendar(null);
-				}
-				if (code.isVisible()) {
-					exchange = new Exchange(code.getText());
-					codeLabel.setText(code.getText());
 				}
 				exchange.setName(name.getText());
 				exchange.setOtc(isOtc.isSelected());
 				exchange.setId(exchangeBusinessDelegate.saveExchange(exchange));
 				code.setVisible(false);
 				codeLabel.setVisible(true);
-			} catch (TradistaBusinessException tbe) {
-				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
+			} catch (TradistaBusinessException | TradistaTechnicalException te) {
+				TradistaAlert alert = new TradistaAlert(AlertType.ERROR, te.getMessage());
 				alert.showAndWait();
 			}
 		}
@@ -126,8 +127,8 @@ public class ExchangesController extends TradistaControllerAdapter {
 				codeLabel.setText(exchange.getCode());
 				name.setText(exchange.getName());
 			}
-		} catch (TradistaBusinessException tbe) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
+		} catch (TradistaBusinessException | TradistaTechnicalException te) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, te.getMessage());
 			alert.showAndWait();
 		}
 	}
@@ -152,8 +153,8 @@ public class ExchangesController extends TradistaControllerAdapter {
 			}
 
 			load(exchange);
-		} catch (TradistaBusinessException tbe) {
-			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tbe.getMessage());
+		} catch (TradistaBusinessException | TradistaTechnicalException te) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, te.getMessage());
 			alert.showAndWait();
 		}
 	}
@@ -186,11 +187,16 @@ public class ExchangesController extends TradistaControllerAdapter {
 	@Override
 	@FXML
 	public void refresh() {
-		List<Calendar> calendars = new ArrayList<Calendar>();
-		calendars.add(BlankCalendar.getInstance());
-		calendars.addAll(calendarBusinessDelegate.getAllCalendars());
-		TradistaGUIUtil.fillComboBox(calendars, calendar);
-		TradistaGUIUtil.fillComboBox(exchangeBusinessDelegate.getAllExchanges(), load);
+		try {
+			List<Calendar> calendars = new ArrayList<>();
+			calendars.add(BlankCalendar.getInstance());
+			calendars.addAll(calendarBusinessDelegate.getAllCalendars());
+			TradistaGUIUtil.fillComboBox(calendars, calendar);
+			TradistaGUIUtil.fillComboBox(exchangeBusinessDelegate.getAllExchanges(), load);
+		} catch (TradistaTechnicalException tte) {
+			TradistaAlert alert = new TradistaAlert(AlertType.ERROR, tte.getMessage());
+			alert.showAndWait();
+		}
 	}
 
 }

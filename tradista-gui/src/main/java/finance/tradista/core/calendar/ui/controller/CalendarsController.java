@@ -85,7 +85,7 @@ public class CalendarsController extends TradistaControllerAdapter {
 
 		Optional<ButtonType> result = confirmation.showAndWait();
 		if (result.get() == ButtonType.OK) {
-			Set<DayOfWeek> weekEnd = new HashSet<DayOfWeek>();
+			Set<DayOfWeek> weekEnd = new HashSet<>();
 			if (monday.isSelected()) {
 				weekEnd.add(DayOfWeek.MONDAY);
 			}
@@ -107,7 +107,7 @@ public class CalendarsController extends TradistaControllerAdapter {
 			if (sunday.isSelected()) {
 				weekEnd.add(DayOfWeek.SUNDAY);
 			}
-			Set<LocalDate> holidays = new HashSet<LocalDate>();
+			Set<LocalDate> holidays = new HashSet<>();
 
 			holidays.addAll(holidaysList.getItems());
 
@@ -138,7 +138,7 @@ public class CalendarsController extends TradistaControllerAdapter {
 		Optional<String> result = dialog.showAndWait();
 
 		if (result.isPresent()) {
-			Set<DayOfWeek> weekEnd = new HashSet<DayOfWeek>();
+			Set<DayOfWeek> weekEnd = new HashSet<>();
 			if (monday.isSelected()) {
 				weekEnd.add(DayOfWeek.MONDAY);
 			}
@@ -160,7 +160,7 @@ public class CalendarsController extends TradistaControllerAdapter {
 			if (sunday.isSelected()) {
 				weekEnd.add(DayOfWeek.SUNDAY);
 			}
-			Set<LocalDate> holidays = new HashSet<LocalDate>();
+			Set<LocalDate> holidays = new HashSet<>();
 			holidays.addAll(holidaysList.getItems());
 			try {
 				Calendar copyCalendar = new Calendar(result.get());

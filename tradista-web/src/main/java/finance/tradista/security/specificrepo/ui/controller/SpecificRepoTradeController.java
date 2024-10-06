@@ -56,6 +56,10 @@ public class SpecificRepoTradeController implements Serializable {
 
 	private static final long serialVersionUID = -2030826935731150653L;
 
+	private static final String FIXED = "Fixed";
+
+	private static final String FLOATING = "Floating";
+
 	private SpecificRepoTrade trade;
 
 	private Set<LegalEntity> allCounterparties;
@@ -117,13 +121,15 @@ public class SpecificRepoTradeController implements Serializable {
 		allIndexes = indexBusinessDelegate.getAllIndexes();
 		allBooks = bookBusinessDelegate.getAllBooks();
 		allDirections = Trade.Direction.values();
-		allInterestTypes = new String[] { "Fixed", "Floating" };
+		allInterestTypes = new String[] { FIXED, FLOATING };
 		allIndexTenors = Arrays.asList(Tenor.values()).stream().filter(t -> !t.equals(Tenor.NO_TENOR))
 				.toArray(Tenor[]::new);
 		allSecurities = securityBusinessDelegate.getAllSecurities();
 		workflow = workflowBusinessDelegate.getWorkflowByName(SpecificRepoTrade.SPECIFIC_REPO);
 		trade = new SpecificRepoTrade();
 		trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
+		setDirection(Direction.BUY);
+		setInterestType(FIXED);
 		setTradeDate(LocalDate.now());
 		setStartDate(LocalDate.now());
 	}
@@ -398,7 +404,7 @@ public class SpecificRepoTradeController implements Serializable {
 			if (trade.getId() == 0) {
 				trade.setCreationDate(LocalDate.now());
 			}
-			if (interestType == null || interestType.equals("Fixed")) {
+			if (interestType == null || interestType.equals(FIXED)) {
 				trade.setIndex(null);
 				trade.setIndexTenor(null);
 				trade.setIndexOffset(null);
@@ -431,7 +437,7 @@ public class SpecificRepoTradeController implements Serializable {
 			trade.setCreationDate(LocalDate.now());
 			trade.setId(0);
 			trade.setStatus(workflowBusinessDelegate.getInitialStatus(workflow.getName()));
-			if (interestType == null || interestType.equals("Fixed")) {
+			if (interestType == null || interestType.equals(FIXED)) {
 				trade.setIndex(null);
 				trade.setIndexTenor(null);
 				trade.setIndexOffset(null);
@@ -530,7 +536,7 @@ public class SpecificRepoTradeController implements Serializable {
 	}
 
 	public void updateIndex() {
-		if (interestType != null && interestType.equals("Floating")) {
+		if (interestType != null && interestType.equals(FLOATING)) {
 			if (trade.getIndex() == null && allIndexes != null && !allIndexes.isEmpty()) {
 				trade.setIndex(allIndexes.stream().findFirst().get());
 			}
@@ -538,7 +544,7 @@ public class SpecificRepoTradeController implements Serializable {
 				trade.setIndexTenor(allIndexTenors[0]);
 			}
 		}
-		if (interestType != null && interestType.equals("Fixed")) {
+		if (interestType != null && interestType.equals(FIXED)) {
 			trade.setIndex(null);
 			trade.setIndexTenor(null);
 		}

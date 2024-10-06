@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 import finance.tradista.core.book.model.Book;
 import finance.tradista.core.book.service.BookBusinessDelegate;
 import finance.tradista.core.common.exception.TradistaBusinessException;
+import finance.tradista.core.common.exception.TradistaTechnicalException;
 import finance.tradista.core.common.util.ColorUtil;
 import finance.tradista.core.inventory.model.ProductInventory;
 import finance.tradista.core.processingorgdefaults.service.ProcessingOrgDefaultsBusinessDelegate;
@@ -37,7 +38,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import software.xdev.chartjs.model.charts.DoughnutChart;
-import software.xdev.chartjs.model.color.Color;
+import software.xdev.chartjs.model.color.RGBAColor;
 import software.xdev.chartjs.model.data.DoughnutData;
 import software.xdev.chartjs.model.dataset.DoughnutDataset;
 import software.xdev.chartjs.model.options.DoughnutOptions;
@@ -679,7 +680,7 @@ public class SpecificRepoCollateralController implements Serializable {
 			values.add(collateralValue);
 			values.add(exposure);
 
-			List<Color> bgColors = new ArrayList<>();
+			List<RGBAColor> bgColors = new ArrayList<>();
 			bgColors.add(ColorUtil.getTurquoise());
 			bgColors.add(ColorUtil.getBloodRed());
 
@@ -688,14 +689,15 @@ public class SpecificRepoCollateralController implements Serializable {
 			labels.add("Uncovered exposure");
 
 			collateralValueDonutModel = new DoughnutChart()
-					.setData(new DoughnutData().addDataset(
-							new DoughnutDataset().setData(values).addBackgroundColors(bgColors.toArray(new Color[0])))
+					.setData(new DoughnutData()
+							.addDataset(new DoughnutDataset().setData(values)
+									.addBackgroundColors((Object[]) bgColors.toArray(new RGBAColor[0])))
 							.setLabels(labels))
 					.setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE)).toJson();
 
-		} catch (TradistaBusinessException tbe) {
+		} catch (TradistaBusinessException | TradistaTechnicalException te) {
 			FacesContext.getCurrentInstance().addMessage(COL_MSG,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", tbe.getMessage()));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", te.getMessage()));
 		}
 	}
 

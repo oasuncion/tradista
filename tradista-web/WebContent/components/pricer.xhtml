@@ -25,7 +25,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu value="#{pricingController.quoteSet}"
-						converter="quoteSetConverter">
+						converter="quoteSetConverter" autoWidth="false">
 						<f:selectItems value="#{pricingController.allQuoteSets}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -36,7 +36,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu value="#{pricingController.pricingParameter}"
-						converter="pricingParameterConverter">
+						converter="pricingParameterConverter" autoWidth="false">
 						<f:selectItems value="#{pricingController.allPricingParameters}" />
 						<p:ajax update="pricer"
 							listener="#{pricingController.updatePricer(tradeController.trade.productType)}" />
@@ -55,7 +55,7 @@
 				<p:column>
 					<p:selectOneMenu id="pricingMeasure"
 						value="#{pricingController.pricerMeasure}"
-						converter="pricerMeasureConverter">
+						converter="pricerMeasureConverter" autoWidth="false">
 						<f:selectItems value="#{pricingController.allPricerMeasures}" />
 						<f:attribute name="pricer" value="#{pricingController.pricer}" />
 						<p:ajax update="pricingMethod"
@@ -69,7 +69,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu id="pricingMethod"
-						value="#{pricingController.pricingMethod}">
+						value="#{pricingController.pricingMethod}" autoWidth="false">>
 						<f:selectItems value="#{pricingController.allPricingMethods}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -80,7 +80,7 @@
 				</p:column>
 				<p:column>
 					<p:selectOneMenu value="#{pricingController.pricingCurrency}"
-						converter="currencyConverter">
+						converter="currencyConverter" autoWidth="false">>
 						<f:selectItems value="#{pricingController.allCurrencies}" />
 					</p:selectOneMenu>
 				</p:column>
@@ -90,11 +90,11 @@
 					<p:outputLabel value="Pricing Date" />
 				</p:column>
 				<p:column>
-					<p:datePicker value="#{pricingController.pricingDate}"
+					<p:calendar value="#{pricingController.pricingDate}"
 						pattern="dd/MM/yyyy">
 						<p:ajax
 							update=":dashboardForm:quotesCashflowsTabs:cashflowsListDataTable" />
-					</p:datePicker>
+					</p:calendar>
 				</p:column>
 			</p:row>
 			<f:facet name="footer">
@@ -107,7 +107,7 @@
 					</p:column>
 					<p:column>
 						<p:outputLabel rendered="true" id="priceResult"
-							styleClass="tradista-menu-item"
+							styleClass="tradista-menu-item tradista-highlighted-value"
 							value="#{pricingController.pricerResult}" />
 					</p:column>
 				</p:row>

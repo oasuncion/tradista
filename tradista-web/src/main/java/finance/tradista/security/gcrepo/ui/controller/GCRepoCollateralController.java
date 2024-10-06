@@ -38,7 +38,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import software.xdev.chartjs.model.charts.DoughnutChart;
-import software.xdev.chartjs.model.color.Color;
+import software.xdev.chartjs.model.color.RGBAColor;
 import software.xdev.chartjs.model.data.DoughnutData;
 import software.xdev.chartjs.model.dataset.DoughnutDataset;
 import software.xdev.chartjs.model.options.DoughnutOptions;
@@ -703,7 +703,7 @@ public class GCRepoCollateralController implements Serializable {
 			values.add(collateralValue);
 			values.add(exposure);
 
-			List<Color> bgColors = new ArrayList<>();
+			List<RGBAColor> bgColors = new ArrayList<>();
 			bgColors.add(ColorUtil.getTurquoise());
 			bgColors.add(ColorUtil.getBloodRed());
 
@@ -712,8 +712,9 @@ public class GCRepoCollateralController implements Serializable {
 			labels.add("Uncovered exposure");
 
 			collateralValueDonutModel = new DoughnutChart()
-					.setData(new DoughnutData().addDataset(
-							new DoughnutDataset().setData(values).addBackgroundColors(bgColors.toArray(new Color[0])))
+					.setData(new DoughnutData()
+							.addDataset(new DoughnutDataset().setData(values)
+									.addBackgroundColors((Object[]) bgColors.toArray(new RGBAColor[0])))
 							.setLabels(labels))
 					.setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE)).toJson();
 

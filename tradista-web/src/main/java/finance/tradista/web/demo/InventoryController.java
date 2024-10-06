@@ -145,9 +145,8 @@ public class InventoryController implements Serializable {
 
 		lineChart.setData(data).setOptions(new LineOptions().setMaintainAspectRatio(Boolean.FALSE));
 
-		if (lineChart.isDrawable()) {
-			lineModel = lineChart.toJson();
-		}
+		lineModel = lineChart.toJson();
+
 	}
 
 }

@@ -19,7 +19,7 @@ package finance.tradista.core.common.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import software.xdev.chartjs.model.color.Color;
+import software.xdev.chartjs.model.color.RGBAColor;
 
 public final class ColorUtil {
 
@@ -67,20 +67,20 @@ public final class ColorUtil {
 	 * 
 	 * @return a series of shade of blue colors
 	 */
-	public static List<Color> getBlueColorsList() {
-		List<Color> colors = new ArrayList<>();
-		Color turquoise = new Color(64, 224, 208);
-		Color aquamarine = new Color(127, 255, 212);
-		Color cornflowerblue = new Color(100, 149, 237);
-		Color blue = new Color(0, 0, 255);
-		Color cadetblue = new Color(95, 158, 160);
-		Color navy = new Color(0, 0, 128);
-		Color deepskyblue = new Color(0, 191, 255);
-		Color cyan = new Color(0, 255, 255);
-		Color steelblue = new Color(70, 130, 180);
-		Color teal = new Color(0, 128, 128);
-		Color royalblue = new Color(65, 105, 225);
-		Color dodgerblue = new Color(30, 144, 255);
+	public static List<RGBAColor> getBlueColorsList() {
+		List<RGBAColor> colors = new ArrayList<>();
+		RGBAColor turquoise = new RGBAColor(64, 224, 208);
+		RGBAColor aquamarine = new RGBAColor(127, 255, 212);
+		RGBAColor cornflowerblue = new RGBAColor(100, 149, 237);
+		RGBAColor blue = new RGBAColor(0, 0, 255);
+		RGBAColor cadetblue = new RGBAColor(95, 158, 160);
+		RGBAColor navy = new RGBAColor(0, 0, 128);
+		RGBAColor deepskyblue = new RGBAColor(0, 191, 255);
+		RGBAColor cyan = new RGBAColor(0, 255, 255);
+		RGBAColor steelblue = new RGBAColor(70, 130, 180);
+		RGBAColor teal = new RGBAColor(0, 128, 128);
+		RGBAColor royalblue = new RGBAColor(65, 105, 225);
+		RGBAColor dodgerblue = new RGBAColor(30, 144, 255);
 		colors.add(turquoise);
 		colors.add(aquamarine);
 		colors.add(cornflowerblue);
@@ -137,20 +137,20 @@ public final class ColorUtil {
 	 * 
 	 * @return a series of shade of red colors
 	 */
-	public static List<Color> getRedColorsList() {
-		List<Color> colors = new ArrayList<>();
-		Color bloodred = new Color(136, 8, 8);
-		Color brickred = new Color(170, 74, 68);
-		Color burntorange = new Color(204, 85, 0);
-		Color byzantium = new Color(112, 41, 99);
-		Color cadmiumred = new Color(210, 43, 43);
-		Color carmine = new Color(215, 0, 64);
-		Color cerise = new Color(222, 49, 99);
-		Color claret = new Color(129, 19, 49);
-		Color mahogany = new Color(192, 64, 0);
-		Color neonred = new Color(255, 49, 49);
-		Color pastelred = new Color(250, 160, 160);
-		Color raspberry = new Color(227, 11, 92);
+	public static List<RGBAColor> getRedColorsList() {
+		List<RGBAColor> colors = new ArrayList<>();
+		RGBAColor bloodred = new RGBAColor(136, 8, 8);
+		RGBAColor brickred = new RGBAColor(170, 74, 68);
+		RGBAColor burntorange = new RGBAColor(204, 85, 0);
+		RGBAColor byzantium = new RGBAColor(112, 41, 99);
+		RGBAColor cadmiumred = new RGBAColor(210, 43, 43);
+		RGBAColor carmine = new RGBAColor(215, 0, 64);
+		RGBAColor cerise = new RGBAColor(222, 49, 99);
+		RGBAColor claret = new RGBAColor(129, 19, 49);
+		RGBAColor mahogany = new RGBAColor(192, 64, 0);
+		RGBAColor neonred = new RGBAColor(255, 49, 49);
+		RGBAColor pastelred = new RGBAColor(250, 160, 160);
+		RGBAColor raspberry = new RGBAColor(227, 11, 92);
 		colors.add(bloodred);
 		colors.add(brickred);
 		colors.add(burntorange);
@@ -189,7 +189,7 @@ public final class ColorUtil {
 	 * 
 	 * @return the blood red color
 	 */
-	public static Color getBloodRed() {
+	public static RGBAColor getBloodRed() {
 		return getRedColorsList().get(0);
 	}
 
@@ -198,7 +198,7 @@ public final class ColorUtil {
 	 * 
 	 * @return the turquoise color
 	 */
-	public static Color getTurquoise() {
+	public static RGBAColor getTurquoise() {
 		return getBlueColorsList().get(0);
 	}
 

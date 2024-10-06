@@ -10,6 +10,23 @@ html {
 	background-color: transparent;
 }
 
+.ui-selectonemenu {
+	max-width: 100%;
+}
+
+.ui-selectonebutton {
+	min-width: 300px;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-items-wrapper {
+	max-width: 100%;
+	overflow: hidden !important;
+}
+
+.separator {
+	max-width: 10px;
+}
+
 body {
 	min-height: 100%;
 	background: linear-gradient(to top right, #00455E, #197B84);
@@ -32,6 +49,10 @@ body .ui-inputfield {
 }
 
 /* Specific customizations */
+.tradista-header {
+	float: left;
+}
+
 .tradista.ui-panelgrid>*>tr, .tradista.ui-panelgrid .ui-panelgrid-cell {
 	border: none;
 	background-color: transparent;
@@ -67,6 +88,10 @@ body .ui-inputfield {
 	max-width: 1000px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.tradista-highlighted-value {
+	font-weight: bold;
 }
 
 .tradista-picklist-item {

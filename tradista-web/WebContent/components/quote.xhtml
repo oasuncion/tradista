@@ -9,35 +9,35 @@
 			sortMode="single" tableStyleClass="tradista-datatable" size="small">
 			<f:facet name="header">
 				<p:row>
-					<p:column>
+					<p:column colspan="6">
 						<p:outputLabel value="Quote Date : " />
-					</p:column>
-					<p:column>
-						<p:datePicker value="#{quotesController.quoteDate}"
+					
+						<p:calendar value="#{quotesController.quoteDate}"
 							pattern="dd/MM/yyyy">
 							<p:ajax event="dateSelect"
 								listener="#{quotesController.refresh()}"
 								update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
-						</p:datePicker>
-					</p:column>
-					<p:column>
+						</p:calendar>
+					<p:spacer width="20"/>
 						<p:outputLabel value="Quote Set : "
 							styleClass="tradista-menu-item" />
-					</p:column>
-					<p:column>
+					
 						<p:selectOneMenu value="#{quotesController.quoteSet}"
-							converter="quoteSetConverter" styleClass="tradista-menu-item">
+							converter="quoteSetConverter" styleClass="tradista-menu-item"
+							autoWidth="false">
 							<f:selectItems value="#{quotesController.allQuoteSets}" />
 							<p:ajax event="change" listener="#{quotesController.refresh()}"
 								update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 						</p:selectOneMenu>
-					</p:column>
-					<p:column>
-						<p:selectBooleanCheckbox value="#{quotesController.realTime}"
+					
+					<p:spacer width="20"/>
+					
+						<p:toggleSwitch value="#{quotesController.realTime}"
 							styleClass="tradista-menu-item">
 							<p:outputLabel styleClass="tradista-menu-item">Real Time</p:outputLabel>
-							<p:ajax event="change" update=":dashboardForm:quotesCashflowsTabs:poll" />
-						</p:selectBooleanCheckbox>
+							<p:ajax event="change"
+								update=":dashboardForm:quotesCashflowsTabs:poll" />
+						</p:toggleSwitch>
 
 					</p:column>
 				</p:row>

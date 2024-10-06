@@ -16,7 +16,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import software.xdev.chartjs.model.charts.DoughnutChart;
-import software.xdev.chartjs.model.color.Color;
+import software.xdev.chartjs.model.color.RGBAColor;
 import software.xdev.chartjs.model.data.DoughnutData;
 import software.xdev.chartjs.model.dataset.DoughnutDataset;
 import software.xdev.chartjs.model.options.DoughnutOptions;
@@ -86,10 +86,10 @@ public class BookController implements Serializable {
 		List<Number> productValues = new ArrayList<>();
 		List<Number> currencyValues = new ArrayList<>();
 
-		List<Color> blueColors = new ArrayList<>();
+		List<RGBAColor> blueColors = new ArrayList<>();
 		blueColors.addAll(ColorUtil.getBlueColorsList());
 
-		List<Color> redColors = new ArrayList<>();
+		List<RGBAColor> redColors = new ArrayList<>();
 		redColors.addAll(ColorUtil.getRedColorsList());
 
 		List<String> productLabels = new ArrayList<>();
@@ -120,24 +120,18 @@ public class BookController implements Serializable {
 		}
 
 		cashDonutModel = new DoughnutChart()
-                .setData(new DoughnutData()
-                .addDataset(new DoughnutDataset()
-                        .setData(currencyValues)
-                        .addBackgroundColors(redColors.toArray(new Color[0]))
-                )
-                .setLabels(currencyLabels))
-                .setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE))
-                .toJson();
-		
+				.setData(new DoughnutData()
+						.addDataset(new DoughnutDataset().setData(currencyValues)
+								.addBackgroundColors((Object[]) redColors.toArray(new RGBAColor[0])))
+						.setLabels(currencyLabels))
+				.setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE)).toJson();
+
 		productDonutModel = new DoughnutChart()
-                .setData(new DoughnutData()
-                .addDataset(new DoughnutDataset()
-                        .setData(productValues)
-                        .addBackgroundColors(blueColors.toArray(new Color[0]))
-                )
-                .setLabels(productLabels))
-                .setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE))
-                .toJson();  
+				.setData(new DoughnutData()
+						.addDataset(new DoughnutDataset().setData(productValues)
+								.addBackgroundColors((Object[]) blueColors.toArray(new RGBAColor[0])))
+						.setLabels(productLabels))
+				.setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE)).toJson();
 	}
 
 }

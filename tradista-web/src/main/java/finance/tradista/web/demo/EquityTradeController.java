@@ -86,6 +86,7 @@ public class EquityTradeController implements Serializable {
 		equityTrade.setTradeDate(LocalDate.now());
 		equityTrade.setSettlementDate(LocalDate.now());
 		equityTrade.setBook(bookBusinessDelegate.getBookByName("Demo Book"));
+		equityTrade.setBuySell(true);
 		equityTradeBusinessDelegate = new EquityTradeBusinessDelegate();
 	}
 

@@ -11,17 +11,15 @@
 				<p:row>
 					<p:column colspan="6">
 						<p:outputLabel value="Quote Date : " />
-					
 						<p:calendar value="#{quotesController.quoteDate}"
 							pattern="dd/MM/yyyy">
 							<p:ajax event="dateSelect"
 								listener="#{quotesController.refresh()}"
 								update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 						</p:calendar>
-					<p:spacer width="20"/>
+						<p:spacer width="20" />
 						<p:outputLabel value="Quote Set : "
 							styleClass="tradista-menu-item" />
-					
 						<p:selectOneMenu value="#{quotesController.quoteSet}"
 							converter="quoteSetConverter" styleClass="tradista-menu-item"
 							autoWidth="false">
@@ -29,16 +27,13 @@
 							<p:ajax event="change" listener="#{quotesController.refresh()}"
 								update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 						</p:selectOneMenu>
-					
-					<p:spacer width="20"/>
-					
+						<p:spacer width="20" />
 						<p:toggleSwitch value="#{quotesController.realTime}"
 							styleClass="tradista-menu-item">
 							<p:outputLabel styleClass="tradista-menu-item">Real Time</p:outputLabel>
 							<p:ajax event="change"
 								update=":dashboardForm:quotesCashflowsTabs:poll" />
 						</p:toggleSwitch>
-
 					</p:column>
 				</p:row>
 			</f:facet>
@@ -101,5 +96,5 @@
 	<p:poll interval="#{quotesController.frequency}" id="poll"
 		widgetVar="poll" autoStart="false"
 		listener="#{quotesController.refresh()}"
-		update=":quotesCashflowsTabs:quotesCashflowsTabs:quotesListDataTable" />
+		update=":dashboardForm:quotesCashflowsTabs:quotesListDataTable" />
 </ui:composition>

@@ -231,6 +231,13 @@ public class SpecificRepoPricerBusinessDelegate implements Serializable {
 		return SecurityUtil.runEx(() -> specificRepoPricerService.getDelta(trade, currency, pricingDate, params));
 	}
 
+	public BigDecimal getApproximatedConvexity(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil
+				.runEx(() -> specificRepoPricerService.getApproximatedConvexity(trade, currency, pricingDate, params));
+	}
+
 	public BigDecimal getPendingCollateralValue(SpecificRepoTrade trade,
 			Map<Security, Map<Book, BigDecimal>> addedSecurities,
 			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException {

@@ -763,4 +763,41 @@ public final class RepoPricerUtil {
 		return collateralValue.add(pendingCollateralValue);
 	}
 
+	public static BigDecimal getApproximatedConvexity(RepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		if (!pricingDate.isAfter(trade.getSettlementDate())) {
+			throw new TradistaBusinessException(
+					"Convexity cannot be calculated when the pricing date is not after the repo trade settlement date");
+		}
+		if (pricingDate.isBefore(LocalDate.now())) {
+			throw new TradistaBusinessException(
+					"Convexity cannot be calculated when the pricing date is before the current date");
+		}
+		// 1. Trade currency IR curve retrieval
+		InterestRateCurve paramTradeCurrIRCurve = params.getDiscountCurves().get(trade.getCurrency());
+		if (paramTradeCurrIRCurve == null) {
+			throw new TradistaBusinessException(
+					String.format(PP_DOES_NOT_CONTAIN_DISCOUNT_CURVE, params.getName(), trade.getCurrency()));
+		}
+		// 2. Get Trade duration
+		BigDecimal tradeDuration = PricerUtil.daysToYear(trade.getSettlementDate(), trade.getEndDate());
+		// 3. Estimate the IR as of trade end date from pricing date
+		BigDecimal ir;
+		try {
+			if (!pricingDate.isAfter(LocalDate.now())) {
+				ir = PricerUtil.getDiscountFactor(paramTradeCurrIRCurve.getId(), trade.getEndDate())
+						.divide(BigDecimal.valueOf(100));
+			} else {
+				ir = PricerUtil.getForwardRate(paramTradeCurrIRCurve.getId(), pricingDate, trade.getEndDate(), null)
+						.divide(BigDecimal.valueOf(100));
+			}
+		} catch (PricerException pe) {
+			throw new TradistaBusinessException(pe);
+		}
+
+		return ((tradeDuration.multiply(tradeDuration)).add(tradeDuration)).divide(
+				(BigDecimal.ONE.add(ir)).multiply((BigDecimal.ONE.add(ir))),
+				configurationBusinessDelegate.getRoundingMode());
+	}
+
 }

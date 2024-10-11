@@ -13,6 +13,7 @@ import finance.tradista.core.legalentity.model.LegalEntity;
 import finance.tradista.core.pricing.pricer.PricingParameter;
 import finance.tradista.security.common.model.Security;
 import finance.tradista.security.gcrepo.model.GCRepoTrade;
+import finance.tradista.security.specificrepo.model.SpecificRepoTrade;
 import jakarta.ejb.Remote;
 
 /********************************************************************************
@@ -61,6 +62,9 @@ public interface GCRepoPricerService {
 
 	BigDecimal getDelta(GCRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException;
+
+	BigDecimal getApproximatedConvexity(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException;
 
 	BigDecimal getCurrentCollateralValue(GCRepoTrade trade) throws TradistaBusinessException;
 

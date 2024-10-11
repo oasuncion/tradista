@@ -116,4 +116,10 @@ public class GCRepoPricerServiceBean implements GCRepoPricerService {
 		return RepoPricerUtil.getCurrentCashValue(trade);
 	}
 
+	@Override
+	public BigDecimal getApproximatedConvexity(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		return RepoPricerUtil.getApproximatedConvexity(trade, currency, pricingDate, params);
+	}
+
 }

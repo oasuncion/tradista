@@ -64,6 +64,9 @@ public interface SpecificRepoPricerService {
 	BigDecimal getDelta(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate, PricingParameter params)
 			throws TradistaBusinessException;
 
+	BigDecimal getApproximatedConvexity(SpecificRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException;
+
 	BigDecimal getPendingCollateralValue(SpecificRepoTrade trade, Map<Security, Map<Book, BigDecimal>> addedSecurities,
 			Map<Security, Map<Book, BigDecimal>> removedSecurities) throws TradistaBusinessException;
 

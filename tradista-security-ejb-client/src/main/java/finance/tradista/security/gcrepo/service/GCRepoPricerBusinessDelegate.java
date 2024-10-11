@@ -239,4 +239,11 @@ public class GCRepoPricerBusinessDelegate implements Serializable {
 		validator.validateTrade(trade);
 		return SecurityUtil.runEx(() -> gcRepoPricerService.getCurrentCashValue(trade));
 	}
+
+	public BigDecimal getApproximatedConvexity(GCRepoTrade trade, Currency currency, LocalDate pricingDate,
+			PricingParameter params) throws TradistaBusinessException {
+		validator.validateTrade(trade);
+		return SecurityUtil
+				.runEx(() -> gcRepoPricerService.getApproximatedConvexity(trade, currency, pricingDate, params));
+	}
 }

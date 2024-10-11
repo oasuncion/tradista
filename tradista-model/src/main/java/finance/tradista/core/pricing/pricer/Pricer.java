@@ -29,8 +29,8 @@ public abstract class Pricer implements Serializable {
 	private List<PricerMeasure> productPricerMeasures;
 
 	public Pricer() {
-		pricerMeasures = new ArrayList<PricerMeasure>();
-		productPricerMeasures = new ArrayList<PricerMeasure>();
+		pricerMeasures = new ArrayList<>();
+		productPricerMeasures = new ArrayList<>();
 	}
 
 	public List<PricerMeasure> getPricerMeasures() {

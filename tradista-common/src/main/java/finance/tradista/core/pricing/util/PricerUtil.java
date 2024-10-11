@@ -385,17 +385,18 @@ public final class PricerUtil {
 	}
 
 	/**
-	 * Method to discount an amount. Works whatever the dates are.
+	 * Method to get a discount factor from a curve. Expressed as follows : 0,95 for
+	 * a discount of 5 points.
 	 * 
-	 * @param amount      the amount to discount
-	 * @param curveName   the curve used to discount
+	 * @param curveId     the id of the curve used to get the discount factor
 	 * @param pricingDate the pricing date
-	 * @param date        the date of the amount to be discounted.
+	 * @param date        the date for which we get the discount factor
 	 * @param dcc         the day count convention used for accrual factor
 	 *                    calculation (default value: ACT/365)
-	 * @return a discounted amount.
-	 * @throws PricerException           if there was a pricer exception.
-	 * @throws TradistaBusinessException if a mandatory parameter is missing.
+	 * @return a discount factor from a curve.
+	 * @throws PricerException           if the curve was not found or if there was
+	 *                                   an interpolation issue
+	 * @throws TradistaBusinessException if a mandatory parameter is missing
 	 */
 	public static BigDecimal getDiscountFactor(long curveId, LocalDate pricingDate, LocalDate date,
 			DayCountConvention dcc) throws PricerException, TradistaBusinessException {
@@ -422,7 +423,6 @@ public final class PricerUtil {
 			dcc = new DayCountConvention(DayCountConvention.ACT_365);
 		}
 		BigDecimal rateAtDate = PricerUtil.getDiscountFactor(curveId, date).divide(BigDecimal.valueOf(100),
-
 				configurationBusinessDelegate.getScale(), configurationBusinessDelegate.getRoundingMode());
 		BigDecimal rateAtPricingDate = PricerUtil.getDiscountFactor(curveId, pricingDate).divide(
 				BigDecimal.valueOf(100), configurationBusinessDelegate.getScale(),
@@ -498,13 +498,23 @@ public final class PricerUtil {
 
 	}
 
+	/**
+	 * Gets the interest rate as of given date and using given curve. Expressed as
+	 * follows: 5 for 5%
+	 * 
+	 * @param curveId the id of the curve used to get the interest rate
+	 * @param date    the date for which we get the interest rate
+	 * @return the interest rate as of given date and using given curve
+	 * @throws PricerException if the curve was not found or if there was an
+	 *                         interpolation issue
+	 */
 	public static BigDecimal getDiscountFactor(long curveId, LocalDate date) throws PricerException {
 		// get the interest rate from the curve (curve defined in the
 		// pricingparam)
 		InterestRateCurveBusinessDelegate interestRateCurveBusinessDelegate = new InterestRateCurveBusinessDelegate();
 
 		if (date == null) {
-			throw new PricerException("The date cannot be null.");
+			throw new PricerException(String.format(DATE_CANNOT_BE_NULL));
 		}
 
 		try {

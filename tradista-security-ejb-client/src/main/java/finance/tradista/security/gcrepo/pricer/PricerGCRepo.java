@@ -28,6 +28,8 @@ public class PricerGCRepo extends Pricer {
 		super();
 		getPricerMeasures().add(new PricerMeasureCOLLATERAL_MARK_TO_MARKET());
 		getPricerMeasures().add(new PricerMeasureEXPOSURE());
+		getPricerMeasures().add(new PricerMeasureDELTA());
+		getPricerMeasures().add(new PricerMeasureCONVEXITY());
 		getPricerMeasures().add(new PricerMeasureREALIZED_PNL());
 		getPricerMeasures().add(new PricerMeasureUNREALIZED_PNL());
 		getPricerMeasures().add(new PricerMeasurePNL());

@@ -18,9 +18,12 @@ html {
 	min-width: 300px;
 }
 
-.ui-selectonemenu-panel .ui-selectonemenu-items-wrapper {
-	max-width: 100%;
-	overflow: hidden !important;
+.ui-selectonemenu-items-wrapper {
+	overflow-x: hidden !important;
+}
+
+.ui-selectonemenu-items-wrapper {
+	overflow-y: scroll !important;
 }
 
 .separator {
